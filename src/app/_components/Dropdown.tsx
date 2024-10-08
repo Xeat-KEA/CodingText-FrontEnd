@@ -7,6 +7,7 @@ export default function DropDown({
   selection,
   list,
   onSelectionClick,
+  placeholder,
 }: IDropDown) {
   const [isListOpen, setIsListOpen] = useState(false);
   return (
@@ -19,8 +20,12 @@ export default function DropDown({
       <div className={`${isListOpen && "rotate-180"}`}>
         <ShowMoreIcon />
       </div>
-      <span className="grow flex justify-center text-xs text-black">
-        {selection}
+      <span
+        className={`grow flex justify-center text-xs text-black ${
+          !selection && "text-disabled"
+        }`}
+      >
+        {selection ? selection : placeholder || "선택"}
       </span>
       {/* 선택 항목 목록 */}
       {isListOpen && (
