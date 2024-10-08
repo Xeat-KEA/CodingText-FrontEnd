@@ -71,6 +71,18 @@ export interface IPost {
   content: string;
 }
 
+export interface IPostCard {
+  profileImg: string;
+  nickname: string;
+  createAt: string;
+  title: string;
+  content: string;
+  thumbnail?: string;
+  likes: number;
+  comments: number;
+  views: number;
+}
+
 // 전역 변수 관련 Interface
 export interface ITabStore {
   tab: string;

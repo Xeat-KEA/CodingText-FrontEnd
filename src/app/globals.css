@@ -93,6 +93,11 @@ textarea {
     @apply flex items-center px-4 h-8 text-xs cursor-pointer;
   }
 
+  /* 큰 버튼 (메인 페이지) */
+  .lg-btn {
+    @apply w-fit flex gap-2 px-12 py-6 bg-white rounded-full;
+  }
+
   /* 말풍선 스타일링 */
   .bubble {
     @apply flex w-fit px-3 py-3 rounded-3xl shadow-1;
