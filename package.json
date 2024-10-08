@@ -1,0 +1,39 @@
+{
+  "name": "codingtextservice-fe",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@tiptap/extension-image": "^2.8.0",
+    "@tiptap/extension-link": "^2.8.0",
+    "@tiptap/pm": "^2.8.0",
+    "@tiptap/react": "^2.8.0",
+    "@tiptap/starter-kit": "^2.8.0",
+    "@uiw/codemirror-extensions-basic-setup": "^4.23.3",
+    "@uiw/codemirror-extensions-langs": "^4.23.3",
+    "@uiw/codemirror-theme-xcode": "^4.23.3",
+    "@uiw/react-codemirror": "^4.23.3",
+    "next": "14.2.14",
+    "primereact": "^10.8.3",
+    "react": "^18",
+    "react-dom": "^18",
+    "react-hook-form": "^7.53.0",
+    "zustand": "^5.0.0-rc.2"
+  },
+  "devDependencies": {
+    "@tailwindcss/typography": "^0.5.15",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.14",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
+  }
+}
