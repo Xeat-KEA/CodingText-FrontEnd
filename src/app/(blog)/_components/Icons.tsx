@@ -80,9 +80,27 @@ export function SbNewpostIcon() {
 
     )
 }
+// 빈 하트 아이콘
+export function BpFollowerIcon1() {
+    return (
+        <svg
+            width="20"
+            height="20"
+            viewBox="0 0 20 20"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 6.41168C8.33333 2.50001 2.5 2.91668 2.5 7.91668C2.5 12.9167 10 17.0833 10 17.0833C10 17.0833 17.5 12.9167 17.5 7.91668C17.5 2.91668 11.6667 2.50001 10 6.41168Z"
+                stroke="#6B6CED"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round" />
+        </svg>
 
-// 좋아요 아이콘
-export function BpFollowerIcon() {
+    )
+}
+
+// 채워진 하트 아이콘
+export function BpFollowerIcon2() {
     return (
         <svg
             width="18"
@@ -90,7 +108,12 @@ export function BpFollowerIcon() {
             viewBox="0 0 18 15"
             fill="none"
             xmlns="http://www.w3.org/2000/svg">
-            <path d="M9 3.41166C7.33333 -0.500002 1.5 -0.0833355 1.5 4.91666C1.5 9.91666 9 14.0833 9 14.0833C9 14.0833 16.5 9.91666 16.5 4.91666C16.5 -0.0833355 10.6667 -0.500002 9 3.41166Z" fill="#6B6CED" stroke="#6B6CED" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M9 3.41166C7.33333 -0.500002 1.5 -0.0833355 1.5 4.91666C1.5 9.91666 9 14.0833 9 14.0833C9 14.0833 16.5 9.91666 16.5 4.91666C16.5 -0.0833355 10.6667 -0.500002 9 3.41166Z"
+                fill="#6B6CED"
+                stroke="#6B6CED"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round" />
         </svg>
     )
 }
@@ -104,8 +127,39 @@ export function BpReportIcon() {
             viewBox="0 0 20 20"
             fill="none"
             xmlns="http://www.w3.org/2000/svg">
-            <path d="M15 14.5833H5V8.75C5 5.98875 7.23875 3.75 10 3.75C12.7612 3.75 15 5.98875 15 8.75V14.5833Z" stroke="#D93438" stroke-width="1.5" stroke-linejoin="round" />
-            <path d="M3.33341 17.5H16.6667M1.66675 5.41667L2.91675 5.83334M5.41675 1.66667L5.83341 2.91667M4.16675 4.16667L2.91675 2.91667" stroke="#D93438" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M15 14.5833H5V8.75C5 5.98875 7.23875 3.75 10 3.75C12.7612 3.75 15 5.98875 15 8.75V14.5833Z"
+                stroke="#D93438"
+                strokeWidth="1.5"
+                strokeLinejoin="round" />
+            <path d="M3.33341 17.5H16.6667M1.66675 5.41667L2.91675 5.83334M5.41675 1.66667L5.83341 2.91667M4.16675 4.16667L2.91675 2.91667"
+                stroke="#D93438"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round" />
+        </svg>
+
+    )
+}
+
+// 편집 아이콘
+export function BpEditIcon() {
+    return (
+        <svg
+            width="17"
+            height="17"
+            viewBox="0 0 17 17"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg">
+            <path d="M3.83325 4.8335H2.99992C2.55789 4.8335 2.13397 5.00909 1.82141 5.32165C1.50885 5.63421 1.33325 6.05814 1.33325 6.50016V14.0002C1.33325 14.4422 1.50885 14.8661 1.82141 15.1787C2.13397 15.4912 2.55789 15.6668 2.99992 15.6668H10.4999C10.9419 15.6668 11.3659 15.4912 11.6784 15.1787C11.991 14.8661 12.1666 14.4422 12.1666 14.0002V13.1668"
+                stroke="#6B6CED"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round" />
+            <path d="M11.3333 3.16676L13.8333 5.66676M14.9875 4.48759C15.3157 4.15938 15.5001 3.71424 15.5001 3.25009C15.5001 2.78594 15.3157 2.34079 14.9875 2.01259C14.6593 1.68438 14.2142 1.5 13.75 1.5C13.2858 1.5 12.8407 1.68438 12.5125 2.01259L5.5 9.00009V11.5001H8L14.9875 4.48759Z"
+                stroke="#6B6CED"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round" />
         </svg>
 
     )

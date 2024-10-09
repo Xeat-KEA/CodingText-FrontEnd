@@ -34,9 +34,14 @@ export const Board_Categories:BoardCategory[] = [
 
 // 블로그 프로필
 export const Blog_Profile_Data = [{
+    profileId: 1,
     profileImage: "/profile.png",
     rank: "Junior",
-    name: "USER",
+    name: "developer",
     Intro: "안녕하세요! 개발자를 준비하고 있는 사람입니다. 잘 부탁드립니다~",
-    FollowerCount: "4",
+    FollowerCount: 4,
 }]
+
+
+export const loggedInUserId = 'user'; // 로그인 사용자 ID
+export const blogOwnerId = 'user'; // 블로그 소유자 ID
