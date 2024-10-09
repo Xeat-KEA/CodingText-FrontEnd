@@ -1,18 +1,29 @@
 "use client";
 
 import TopBar from "../_components/TopBar";
-import BannerCard from "./_components/BannerCard";
 import MainBanner from "./_components/MainBanner";
-import {
-  BANNER_CARD_LIST,
-  WEEKLY_TRENDING_POST_LIST,
-} from "./_constants/constants";
+import { WEEKLY_TRENDING_POST_LIST } from "./_constants/constants";
 import SubBanner from "./_components/SubBanner";
-import { CommentCountIcon, LikeCountIcon } from "../_components/Icons";
-import PostCard from "../_components/PostCard";
 import Footer from "./_components/Footer";
+import BannerCards from "./_components/BannerCards";
+import { useEffect, useState } from "react";
+import { usePaginationStore, useTabStore } from "../stores";
+import MainBoard from "./_components/MainBoard";
 
 export default function Home() {
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
+
+  const { tab } = useTabStore();
+  const { setPage, setLastPage } = usePaginationStore();
+
+  // 탭 변경 Handling
+  useEffect(() => {
+    // 탭 변경 시 post 필요
+
+    setPage(1);
+    setLastPage(30);
+  }, [tab]);
+
   return (
     <>
       <TopBar isLoggedIn hasNewNotice />
@@ -20,44 +31,22 @@ export default function Home() {
         {/* 메인 배너 */}
         <MainBanner />
         {/* 배너 카드 부분 */}
-        <div className="w-full bg-bg-1 py-16 flex justify-center">
-          <div className="w-full flex flex-col items-center">
-            {BANNER_CARD_LIST.map((el, index) => (
-              <BannerCard
-                key={index}
-                content={el.content}
-                bubble={el.bubble}
-                index={index}
-              />
-            ))}
-          </div>
-        </div>
+        {!isLoggedIn ? (
+          <BannerCards />
+        ) : (
+          <MainBoard
+            title="최신 게시글"
+            hasTab
+            postList={WEEKLY_TRENDING_POST_LIST}
+          />
+        )}
         {/* 서브 배너 */}
         <SubBanner />
         {/* 인기 게시글 */}
-        <div className="w-full flex justify-center">
-          <div className="max-w-1200 py-[120px] flex flex-col gap-12">
-            <span className="text-2xl text-black font-semibold">
-              이번 주 인기 게시글 Top 5
-            </span>
-            <div className="w-full border border-border-2 px-16 py-6 rounded-2xl divide-y divide-border-2">
-              {WEEKLY_TRENDING_POST_LIST.map((el, index) => (
-                <PostCard
-                  key={index}
-                  profileImg={el.profileImg}
-                  nickname={el.nickname}
-                  createAt={el.createAt}
-                  title={el.title}
-                  content={el.content}
-                  thumbnail={el.thumbnail}
-                  likes={el.likes}
-                  comments={el.comments}
-                  views={el.views}
-                />
-              ))}
-            </div>
-          </div>
-        </div>
+        <MainBoard
+          title="이번 주 인기 게시글 Top 5"
+          postList={WEEKLY_TRENDING_POST_LIST}
+        />
       </div>
       <Footer />
     </>

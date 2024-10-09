@@ -109,7 +109,15 @@ export interface ICodingTestStore {
   setMemo: (string: string) => void;
 }
 
+// 텍스트 에디터 내용 Interface
 export interface ITiptapStore {
   content: string;
   setContent: (string: string) => void;
+}
+
+export interface IPaginationStore {
+  page: number;
+  setPage: (newPage: number) => void;
+  lastPage: number;
+  setLastPage: (page: number) => void;
 }

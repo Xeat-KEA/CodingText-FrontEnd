@@ -19,6 +19,8 @@ export const BANNER_CARD_LIST = [
   },
 ];
 
+export const BOARD_TAB_LIST = ["전체", "코딩테스트", "일반"];
+
 // 인기 게시글 더미 데이터
 export const WEEKLY_TRENDING_POST_LIST = [
   {
