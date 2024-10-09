@@ -1,0 +1,96 @@
+"use client";
+
+import DropDown from "@/app/_components/Dropdown";
+import { PROGRAMMING_LANGUAGES } from "@/app/_constants/constants";
+import Image from "next/image";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import SmBackBtn from "../_components/SmBackBtn";
+import { useRouter } from "next/navigation";
+import { ISignUpForm } from "../_interfaces/interfaces";
+
+export default function SignUpPage() {
+  const router = useRouter();
+  const { register, handleSubmit, setValue } = useForm<ISignUpForm>();
+  const [selectedLang, setSelectedLang] = useState("");
+  const [profileImg, setProfileImg] = useState("");
+  const [selectedImg, setSelectedImg] = useState(0);
+
+  // 언어 선택 시 감지 후 Form Data 변경
+  useEffect(() => {
+    setValue("lang", selectedLang);
+  }, [selectedLang]);
+
+  // 기본 프로필 선택 시 Form Data 변경
+  useEffect(() => {
+    setValue("profileImg", profileImg);
+  }, [profileImg]);
+
+  const onSubmit = (data: ISignUpForm) => {
+    // 데이터 post 및 validation 필요
+    console.log(data);
+
+    router.push("/sign-up/done");
+  };
+
+  return (
+    <div className="sign-in-container">
+      <div className="flex flex-col gap-4 items-center relative">
+        <span className="sign-in-title">회원가입</span>
+        <span className="sign-in-content">
+          {"거의 다 끝났어요!\n당신의 정보를 입력해주세요"}
+        </span>
+        <SmBackBtn />
+      </div>
+      <form className="flex flex-col gap-8">
+        {/* 닉네임 입력 */}
+        <input
+          {...register("nickname", { required: true })}
+          className="sign-in-input"
+          placeholder="닉네임"
+        />
+        {/* 언어 선택 */}
+        <div className="flex flex-col gap-2">
+          <span className="text-sm text-black">기본 프로그래밍 언어</span>
+          <DropDown
+            selection={selectedLang}
+            placeholder="언어를 선택해주세요"
+            list={PROGRAMMING_LANGUAGES}
+            onSelectionClick={(selected) => setSelectedLang(selected)}
+          />
+        </div>
+        {/* 프로필 사진 선택 */}
+        <div className="flex flex-col gap-2">
+          <span className="text-sm text-black">프로필 사진 선택</span>
+          <div className="w-full px-4 py-6 grid grid-cols-3 place-items-center gap-4 border border-border-2 rounded-lg">
+            {[1, 2, 3, 4, 5, 6].map((el) => (
+              <div
+                key={el}
+                className={`flex justify-center items-center w-16 h-16 rounded-full overflow-hidden ${
+                  el === selectedImg
+                    ? "border-2 border-primary"
+                    : "border border-border-2 "
+                }`}
+                onClick={() => {
+                  setSelectedImg(el);
+                  setProfileImg(`/profileImg${el}.png`);
+                }}
+              >
+                <Image
+                  width="60"
+                  height="45"
+                  style={{ width: "60px", height: "45px" }}
+                  src={`/profileImg${el}.png`}
+                  alt={`profileImg${el}`}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+        <button onClick={handleSubmit(onSubmit)} className="btn-primary">
+          완료
+        </button>
+      </form>
+    </div>
+  );
+}
