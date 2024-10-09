@@ -26,6 +26,7 @@ export interface IDropDown {
   selection: string;
   onSelectionClick: (selected: string) => void;
   list: string[];
+  placeholder?: string;
 }
 
 export interface IDialog {
@@ -120,4 +121,13 @@ export interface IPaginationStore {
   setPage: (newPage: number) => void;
   lastPage: number;
   setLastPage: (page: number) => void;
+}
+
+// Form 관련 인터페이스
+export interface IPostForm {
+  title: string;
+  isSecret?: boolean;
+  password?: string;
+  parentCategory?: string;
+  childCategory?: string;
 }

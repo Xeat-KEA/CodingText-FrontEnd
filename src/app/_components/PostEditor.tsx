@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { LgCheckBoxIcon } from "./Icons";
 import TiptapEditor from "./TipTapEditor/TiptapEditor";
-import { IPostEditor } from "../_interfaces/interfaces";
+import { IPost, IPostEditor, IPostForm } from "../_interfaces/interfaces";
 import { useForm } from "react-hook-form";
 import { useTiptapStore } from "../stores";
 
@@ -12,10 +12,10 @@ export default function PostEditor({
   onBtnClick,
 }: IPostEditor) {
   // Form 데이터 관리
-  const { register, handleSubmit, setValue } = useForm();
+  const { register, handleSubmit, setValue } = useForm<IPostForm>();
   const { content } = useTiptapStore();
-  const onSubmit = (data: any) => {
-    const newPostForm = { ...data, content: content };
+  const onSubmit = (data: IPostForm) => {
+    const newPostForm: IPost = { ...data, content: content };
     onBtnClick(newPostForm);
   };
 

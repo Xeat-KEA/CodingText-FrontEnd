@@ -53,14 +53,24 @@ textarea {
     @apply fixed w-screen h-screen bg-black bg-opacity-20 left-0 top-0 z-50;
   }
 
+  /* 작은 버튼 추상화 */
+  .sm-btn {
+    @apply px-4 py-2 text-xs;
+  }
+
+  /* 작은 버튼 Default (소셜 로그인 버튼 등) */
+  .sm-btn-default {
+    @apply sm-btn border border-border-2 rounded-lg;
+  }
+
   /* 작은 버튼-Primary (탑바 로그인 버튼 등) */
   .sm-btn-primary {
-    @apply px-4 py-2 bg-primary text-xs text-white font-bold;
+    @apply sm-btn bg-primary text-white font-bold;
   }
 
   /* 버튼 추상화 */
   .btn {
-    @apply px-4 py-3 text-xs whitespace-nowrap;
+    @apply flex justify-center px-4 py-3 text-xs whitespace-nowrap;
   }
 
   /* 기본 버튼 */
@@ -98,6 +108,28 @@ textarea {
     @apply w-fit flex gap-2 px-12 py-6 bg-white rounded-full;
   }
 
+  /* 로그인 / 회원가입 페이지 관련 */
+  /* 로그인 / 회원가입 페이지 최상위 div */
+  .sign-in-container {
+    @apply w-full flex flex-col gap-16 py-16;
+  }
+
+  /* 정보 입력 input (회원가입, 관리자 로그인) */
+  .sign-in-input {
+    @apply w-full px-4 py-3 border border-border-2 rounded-lg;
+  }
+
+  /* 회원가입 페이지 제목 */
+  .sign-in-title {
+    @apply text-xl font-semibold text-black whitespace-pre-wrap text-center;
+  }
+
+  /* 회원가입 페이지 본문 */
+  .sign-in-content {
+    @apply whitespace-pre-wrap text-body text-center;
+  }
+
+  /* 코딩 테스트 페이지 관련 */
   /* 말풍선 스타일링 */
   .bubble {
     @apply flex w-fit px-3 py-3 rounded-3xl shadow-1;
@@ -116,7 +148,7 @@ textarea {
     @apply text-white bg-black hover:bg-black;
   }
 
-  /* 텍스트 요소 불필요한 마진 제거 */
+  /* 텍스트 에디터 내 요소 불필요한 마진 제거 */
   .prose p,
   .prose h1,
   .prose h2,
@@ -129,7 +161,7 @@ textarea {
     margin: 2rem 0;
   }
 
-  /* code 태그 css 오버라이딩 */
+  /* 텍스트 에디터 내 code 태그 css 오버라이딩 */
   .prose code::before,
   .prose code::after {
     content: none;
@@ -143,7 +175,7 @@ textarea {
     padding: 0.2em 0.4em;
   }
 
-  /* code block css 오버라이딩 */
+  /* 텍스트 에디터 내 code block css 오버라이딩 */
   .prose pre {
     background: #222222;
     border-radius: 0.5rem;
