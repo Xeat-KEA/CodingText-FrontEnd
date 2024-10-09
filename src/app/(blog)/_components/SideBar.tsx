@@ -4,27 +4,23 @@ import { useState } from "react";
 import { LogoIcon } from "@/app/_components/Icons";
 import Link from "next/link";
 import { SbGotestIcon, SbHiddenIcon, SbHomeIcon, SbMyblogIcon, SbNewpostIcon } from "./Icons";
-import { Board_Categories as initialCategories } from "../_constants/constants";
+import { loggedInUserId, blogOwnerId, Board_Categories as initialCategories } from "../_constants/constants";
 import Dialog from "@/app/_components/Dialog";
 
 export default function SideBar() {
-    const loggedInUserId = "USER"; // 실제 로그인된 유저 아이디
-    const blogOwnerId = "USER"; // 현재 블로그 주인 아이디
 
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [activeCategories, setActiveCategories] = useState<number[]>([]); // 활성화
-    const [boardCategories, setBoardCategories] = useState(initialCategories); // 카테고리 상태 관리
+    const [boardCategories, setBoardCategories] = useState(initialCategories);
     const [newSubCategoryTitle, setNewSubCategoryTitle] = useState("");
     const [newCategoryTitle, setNewCategoryTitle] = useState("");
     const [isAddingSubCategory, setIsAddingSubCategory] = useState(false);
-    const [isAddingCategory, setIsAddingCategory] = useState(false); // 상위 게시판 추가 상태 관리
+    const [isAddingCategory, setIsAddingCategory] = useState(false);
     const [hoveredCategoryId, setHoveredCategoryId] = useState<number | null>(null);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
-    const [categoryToDelete, setCategoryToDelete] = useState<number | null>(null); // 삭제할 카테고리 ID
-    const [editCategoryId, setEditCategoryId] = useState<number | null>(null); // 수정 중인 카테고리 ID
-    const [editCategoryTitle, setEditCategoryTitle] = useState(""); // 수정할 카테고리 제목
-
-
+    const [categoryToDelete, setCategoryToDelete] = useState<number | null>(null);
+    const [editCategoryId, setEditCategoryId] = useState<number | null>(null);
+    const [editCategoryTitle, setEditCategoryTitle] = useState("");
 
     const toggleSidebar = () => setIsCollapsed(!isCollapsed);
 
@@ -149,8 +145,11 @@ export default function SideBar() {
             </div>
 
             {/* 사이드바 링크 */}
-            <SidebarLink href="/" label={`${blogOwnerId}의 블로그 홈`} Icon={SbHomeIcon} />
-
+            <SidebarLink
+                href="/"
+                label={loggedInUserId === blogOwnerId ? "나의 블로그 홈" : `${blogOwnerId}의 블로그 홈`}
+                Icon={SbHomeIcon}
+            />
             {/* 게시판 목록 */}
             {!isCollapsed && (
                 <div className="w-60 mt-6">
@@ -282,7 +281,6 @@ export default function SideBar() {
                     onBtnClick={confirmDeleteCategory}
                 />
             )}
-
         </nav>
     );
 }
