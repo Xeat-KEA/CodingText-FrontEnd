@@ -28,15 +28,15 @@ export default function PostCard({
     >
       <div className="w-full flex justify-between items-center">
         {/* 사용자 정보 */}
-        <div className="flex gap-2 items-center">
-          <div
-            onClick={(e) => {
-              // 부모 요소 onClick 실행 방지
-              e.stopPropagation();
-              // 사용자 클릭 시 해당 사용자 블로그로 이동
-            }}
-            className="w-6 h-6 rounded-full overflow-hidden bg-disabled"
-          >
+        <div
+          onClick={(e) => {
+            // 부모 요소 onClick 실행 방지
+            e.stopPropagation();
+            // 사용자 클릭 시 해당 사용자 블로그로 이동
+          }}
+          className="flex gap-2 items-center"
+        >
+          <div className="w-6 h-6 rounded-full overflow-hidden flex justify-center items-center border border-border-2">
             <Image
               width="24"
               height="24"
