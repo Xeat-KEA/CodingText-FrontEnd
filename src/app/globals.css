@@ -103,6 +103,11 @@ textarea {
     @apply flex items-center px-4 h-8 text-xs cursor-pointer;
   }
 
+  /* 큰 버튼 (메인 페이지) */
+  .lg-btn {
+    @apply w-fit flex gap-2 px-12 py-6 bg-white rounded-full;
+  }
+
   /* 로그인 / 회원가입 페이지 관련 */
   /* 로그인 / 회원가입 페이지 최상위 div */
   .sign-in-container {

@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import {
   ICodingTestStore,
+  IPaginationStore,
   ITabStore,
   ITiptapStore,
 } from "./_interfaces/interfaces";
@@ -41,8 +42,16 @@ export const useTabStore = create<ITabStore>((set) => ({
   setTab: (newTab) => set({ tab: newTab }),
 }));
 
-// Tiptap Editor 내용 저장 전역번후
+// Tiptap Editor 내용 저장 전역변수
 export const useTiptapStore = create<ITiptapStore>((set) => ({
   content: "",
   setContent: (string) => set({ content: string }),
+}));
+
+// 페이지 정보 저장 전역변수
+export const usePaginationStore = create<IPaginationStore>((set) => ({
+  page: 1,
+  setPage: (newPage) => set({ page: newPage }),
+  lastPage: 0,
+  setLastPage: (page) => set({ lastPage: page }),
 }));

@@ -72,6 +72,18 @@ export interface IPost {
   content: string;
 }
 
+export interface IPostCard {
+  profileImg: string;
+  nickname: string;
+  createAt: string;
+  title: string;
+  content: string;
+  thumbnail?: string;
+  likes: number;
+  comments: number;
+  views: number;
+}
+
 // 전역 변수 관련 Interface
 export interface ITabStore {
   tab: string;
@@ -98,9 +110,17 @@ export interface ICodingTestStore {
   setMemo: (string: string) => void;
 }
 
+// 텍스트 에디터 내용 Interface
 export interface ITiptapStore {
   content: string;
   setContent: (string: string) => void;
+}
+
+export interface IPaginationStore {
+  page: number;
+  setPage: (newPage: number) => void;
+  lastPage: number;
+  setLastPage: (page: number) => void;
 }
 
 // Form 관련 인터페이스
