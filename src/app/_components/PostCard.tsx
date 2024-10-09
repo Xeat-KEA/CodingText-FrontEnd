@@ -1,6 +1,8 @@
 import Image from "next/image";
 import { IPostCard } from "../_interfaces/interfaces";
-import { CommentCountIcon, LikeCountIcon } from "./Icons";
+import { CommentCountIcon, LikeCountIcon, ReportIcon } from "./Icons";
+import { useState } from "react";
+import { useCalculateDate } from "../_hooks/useCalculateDate";
 
 export default function PostCard({
   profileImg,
@@ -13,12 +15,28 @@ export default function PostCard({
   comments,
   views,
 }: IPostCard) {
+  const [isHovered, setIsHovered] = useState(false);
+  const date = useCalculateDate(createAt);
   return (
-    <div className="w-full flex flex-col gap-2 py-6">
+    <div
+      onClick={() => {
+        console.log("clicked");
+      }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className="w-full flex flex-col gap-2 py-6 cursor-pointer"
+    >
       <div className="w-full flex justify-between items-center">
         {/* 사용자 정보 */}
         <div className="flex gap-2 items-center">
-          <div className="w-6 h-6 rounded-full overflow-hidden bg-disabled">
+          <div
+            onClick={(e) => {
+              // 부모 요소 onClick 실행 방지
+              e.stopPropagation();
+              // 사용자 클릭 시 해당 사용자 블로그로 이동
+            }}
+            className="w-6 h-6 rounded-full overflow-hidden bg-disabled"
+          >
             <Image
               width="24"
               height="24"
@@ -29,7 +47,7 @@ export default function PostCard({
           <span className="text-xs font-semibold text-body">{nickname}</span>
         </div>
         {/* 날짜 정보 (수정 필요) */}
-        <span className="text-xs text-body">2일 전</span>
+        <span className="text-xs text-body">{date}</span>
       </div>
       {/* 게시글 정보 */}
       <div className="w-full h-[120px] flex justify-between items-center gap-6">
@@ -54,7 +72,23 @@ export default function PostCard({
           </div>
         </div>
         {/* 조회수 */}
-        <span className="text-xs text-body">조회수 {views}</span>
+        {!isHovered ? (
+          <span className="text-xs text-body">조회수 {views}</span>
+        ) : (
+          // 사용자 인증 추가 후 내 게시글에는 수정 버튼 필요
+          <button
+            onClick={(e) => {
+              // 부모 요소 onClick 실행 방지
+              e.stopPropagation();
+              // 신고 로직 추가 필요
+              console.log("reported");
+            }}
+            className="flex gap-1 items-center"
+          >
+            <ReportIcon />
+            <span className="text-xs font-semibold text-red">신고</span>
+          </button>
+        )}
       </div>
     </div>
   );

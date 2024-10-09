@@ -26,7 +26,7 @@ export const WEEKLY_TRENDING_POST_LIST = [
   {
     profileImg: "/profileImg1.png",
     nickname: "사용자1",
-    createAt: "",
+    createAt: "2024-09-24 15:08",
     title: "게시글 제목1",
     content: "게시글 내용1",
     thumbnail: "",
@@ -37,7 +37,7 @@ export const WEEKLY_TRENDING_POST_LIST = [
   {
     profileImg: "/profileImg2.png",
     nickname: "사용자2",
-    createAt: "",
+    createAt: "2024-09-24 15:08",
     title: "게시글 제목2",
     content: "게시글 내용2",
     thumbnail: "",
@@ -48,7 +48,7 @@ export const WEEKLY_TRENDING_POST_LIST = [
   {
     profileImg: "/profileImg3.png",
     nickname: "사용자3",
-    createAt: "",
+    createAt: "2024-09-24 15:08",
     title: "게시글 제목3",
     content: "게시글 내용3",
     thumbnail: "",
@@ -59,7 +59,7 @@ export const WEEKLY_TRENDING_POST_LIST = [
   {
     profileImg: "/profileImg4.png",
     nickname: "사용자4",
-    createAt: "",
+    createAt: "2024-09-24 15:08",
     title: "게시글 제목4",
     content: "게시글 내용4",
     thumbnail: "",
@@ -70,7 +70,7 @@ export const WEEKLY_TRENDING_POST_LIST = [
   {
     profileImg: "/profileImg5.png",
     nickname: "사용자5",
-    createAt: "",
+    createAt: "2024-10-09 17:08",
     title: "게시글 제목5",
     content: "게시글 내용5",
     thumbnail: "",

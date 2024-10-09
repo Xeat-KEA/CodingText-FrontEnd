@@ -384,3 +384,30 @@ export function SkipNextIcon() {
     </svg>
   );
 }
+
+// 신고 버튼 아이콘
+export function ReportIcon() {
+  return (
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 20 20"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M15 14.5833H5V8.75C5 5.98875 7.23875 3.75 10 3.75C12.7612 3.75 15 5.98875 15 8.75V14.5833Z"
+        stroke="#D93438"
+        strokeWidth="1.5"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M3.33332 17.5H16.6667M1.66666 5.41663L2.91666 5.83329M5.41666 1.66663L5.83332 2.91663M4.16666 4.16663L2.91666 2.91663"
+        stroke="#D93438"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
