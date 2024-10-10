@@ -10,7 +10,7 @@ export default function TermsPage() {
         <span className="sign-in-title">{"개인정보\n처리 방침"}</span>
         <SmBackBtn />
       </div>
-      <div className="relative grow overflow-y-scroll border border-border-2 rounded-2xl">
+      <div className="relative grow overflow-y-auto border border-border-2 rounded-2xl">
         <span className="absolute text-black whitespace-pre-wrap px-4 py-3 text-xs">
           {PRIVACY_POLICY}
         </span>

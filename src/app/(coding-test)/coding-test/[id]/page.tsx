@@ -14,7 +14,7 @@ export default function CodingTestPage() {
       {/* 채팅창 공간 */}
       <SplitterPanel className="bg-bg-1 flex flex-col">
         {/* 메세지 표시 공간 */}
-        <div className="grow flex flex-col px-6 py-8 gap-6 overflow-y-scroll">
+        <div className="grow flex flex-col px-6 py-8 gap-6 overflow-y-auto">
           {dummyChats.map((chat, index) => (
             <div
               key={index}
