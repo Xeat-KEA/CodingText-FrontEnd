@@ -2,29 +2,19 @@
 
 import DropDown from "@/app/_components/Dropdown";
 import { PROGRAMMING_LANGUAGES } from "@/app/_constants/constants";
-import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import SmBackBtn from "../_components/SmBackBtn";
 import { useRouter } from "next/navigation";
 import { ISignUpForm } from "../_interfaces/interfaces";
+import ProfileImgSelection from "@/app/_components/ProfileImgSelection";
 
 export default function SignUpPage() {
   const router = useRouter();
   const { register, handleSubmit, setValue } = useForm<ISignUpForm>();
   const [selectedLang, setSelectedLang] = useState("");
-  const [profileImg, setProfileImg] = useState("");
-  const [selectedImg, setSelectedImg] = useState(0);
-
-  // 언어 선택 시 감지 후 Form Data 변경
-  useEffect(() => {
-    setValue("lang", selectedLang);
-  }, [selectedLang]);
-
-  // 기본 프로필 선택 시 Form Data 변경
-  useEffect(() => {
-    setValue("profileImg", profileImg);
-  }, [profileImg]);
+  const [selectedProfileImg, setSelectedProfileImg] =
+    useState("/profileImg1.png");
 
   const onSubmit = (data: ISignUpForm) => {
     // 데이터 post 및 validation 필요
@@ -56,36 +46,22 @@ export default function SignUpPage() {
             selection={selectedLang}
             placeholder="언어를 선택해주세요"
             list={PROGRAMMING_LANGUAGES}
-            onSelectionClick={(selected) => setSelectedLang(selected)}
+            onSelectionClick={(selected) => {
+              setSelectedLang(selected);
+              setValue("lang", selected);
+            }}
           />
         </div>
         {/* 프로필 사진 선택 */}
         <div className="flex flex-col gap-2">
           <span className="text-sm text-black">프로필 사진 선택</span>
-          <div className="w-full px-4 py-6 grid grid-cols-3 place-items-center gap-4 border border-border-2 rounded-lg">
-            {[1, 2, 3, 4, 5, 6].map((el) => (
-              <div
-                key={el}
-                className={`flex justify-center items-center w-16 h-16 rounded-full overflow-hidden ${
-                  el === selectedImg
-                    ? "border-2 border-primary"
-                    : "border border-border-2 "
-                }`}
-                onClick={() => {
-                  setSelectedImg(el);
-                  setProfileImg(`/profileImg${el}.png`);
-                }}
-              >
-                <Image
-                  width="60"
-                  height="45"
-                  style={{ width: "60px", height: "45px" }}
-                  src={`/profileImg${el}.png`}
-                  alt={`profileImg${el}`}
-                />
-              </div>
-            ))}
-          </div>
+          <ProfileImgSelection
+            seletedImg={selectedProfileImg}
+            onSelectionClick={(selected) => {
+              setSelectedProfileImg(selected);
+              setValue("profileImg", selected);
+            }}
+          />
         </div>
         <button onClick={handleSubmit(onSubmit)} className="btn-primary">
           완료

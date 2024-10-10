@@ -72,6 +72,18 @@ export interface IPost {
   content: string;
 }
 
+export interface IProfileImgSelection {
+  seletedImg: string;
+  onSelectionClick: (seleted: string) => void;
+}
+
+export interface IEditBtn {
+  isEditing: boolean;
+  onEditClick: () => void;
+  onCancelClick: () => void;
+  onSubmit: () => void;
+}
+
 // 전역 변수 관련 Interface
 export interface ITabStore {
   tab: string;
