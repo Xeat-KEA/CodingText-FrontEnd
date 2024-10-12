@@ -46,4 +46,20 @@ export const Blog_Profile_Data = [{
 export let loggedInUserId = 'user'; // 로그인 사용자 ID
 export let blogOwnerId = 'user'; // 블로그 소유자 ID
 
-export const Dummy_Data = "<div> 안녕하세요 </div><h1>안녕</h1><h2>반가워요</h2>"
+// 블로그 소개글 
+export const blog_Introduction_Data = `
+  <div>
+    <h1>안녕하세요!</h1>
+    <p><i>환영합니다! 이곳은 코딩 테스트 문제를 풀며 쌓은 경험과 학습을 공유하는 블로그입니다.</i></p>
+    <br/>
+    <h3>블로그에서 다룰 내용들</h3>
+    <ul>
+      <li>💻 코딩 테스트: 다양한 문제를 해결하면서 얻은 팁과 풀이 방법을 공유해요.</li>
+      <li>📚 공부한 내용: 알고리즘, 자료구조 등 제가 배운 내용을 정리하고 기록해요.</li>
+      <li>📝 느낀 점: 문제를 풀면서 겪은 어려움과 배운 교훈을 나누고 싶어요.</li>
+      <li>🤝 커뮤니티: 함께 공부하는 분들과의 소통과 피드백을 통해 서로 성장해요.</li>
+    </ul>
+    <br/>
+    <p>정기적으로 업데이트되는 이 공간에서 코딩에 대한 이야기를 나누고, 함께 성장해나가요!</p>
+  </div>
+`;
