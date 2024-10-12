@@ -42,6 +42,21 @@ export interface IDialog {
   onBtnClick?: () => void;
 }
 
+export interface IReportDialog {
+  icon?: JSX.Element;
+  title?: string;
+  content?: string;
+  isWarning?: boolean;
+  dropDown?: string[];
+  backBtn: string;
+  onBackBtnClick: () => void;
+  subBtn?: string;
+  onSubBtnClick?: () => void;
+  primaryBtn?: string;
+  redBtn?: string;
+  onBtnClick?: () => void;
+}
+
 export interface ICodeEditor {
   isViewer?: boolean;
   defaultValue?: string;

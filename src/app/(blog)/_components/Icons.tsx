@@ -103,17 +103,17 @@ export function BpFollowerIcon1() {
 export function BpFollowerIcon2() {
     return (
         <svg
-            width="18"
-            height="15"
-            viewBox="0 0 18 15"
+            width="20"
+            height="20"
+            viewBox="0 0 20 20"
             fill="none"
             xmlns="http://www.w3.org/2000/svg">
-            <path d="M9 3.41166C7.33333 -0.500002 1.5 -0.0833355 1.5 4.91666C1.5 9.91666 9 14.0833 9 14.0833C9 14.0833 16.5 9.91666 16.5 4.91666C16.5 -0.0833355 10.6667 -0.500002 9 3.41166Z"
+            <path d="M10 6.41168C8.33333 2.50001 2.5 2.91668 2.5 7.91668C2.5 12.9167 10 17.0833 10 17.0833C10 17.0833 17.5 12.9167 17.5 7.91668C17.5 2.91668 11.6667 2.50001 10 6.41168Z"
                 fill="#6B6CED"
                 stroke="#6B6CED"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round" />
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round" />
         </svg>
     )
 }

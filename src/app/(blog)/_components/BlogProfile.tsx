@@ -5,6 +5,7 @@ import { BpFollowerIcon1, BpFollowerIcon2, BpReportIcon } from "./Icons";
 import { use, useState } from "react"; // useState 훅 임포트
 import Dialog from "@/app/_components/Dialog";
 import { DialogCheckIcon, DialogReportIcon } from "@/app/_components/Icons";
+import ReportDialog from "@/app/_components/ReportDialog";
 
 export default function BlogProfile() {
 
@@ -13,7 +14,6 @@ export default function BlogProfile() {
     const [isReportConfirmDialogOpen, setIsReportConfirmDialogOpen] = useState(false);
 
     const handleReportBlog = (id: number) => {
-        console.log(id, "블로그 신고 요청")
         setBlogToReport(id);
         setIsReportDialogOpen(true);
     }
@@ -69,18 +69,26 @@ export default function BlogProfile() {
                             <h2 className="text-xl text-black font-semibold">{profile.name}</h2>
                             <p className="text-sm text-body font-regular mt-2">{profile.Intro}</p>
                             <div className="flex items-center gap-4 mt-2">
-                                <button className="flex items-center gap-1" onClick={handleFollowerClick}>
-                                    {isFollowerClicked ? <BpFollowerIcon2 /> : <BpFollowerIcon1 />}
-                                    <p className="text-primary xs font-semibold">{`팔로워 ${followerCount}`}</p>
-                                </button>
+
                                 {(loggedInUserId !== blogOwnerId) ? (
                                     <>
+                                        <button className="flex items-center gap-1" onClick={handleFollowerClick}>
+                                            {isFollowerClicked ? <BpFollowerIcon2 /> : <BpFollowerIcon1 />}
+                                            <p className="text-primary text-xs font-semibold">{`팔로워 ${followerCount}`}</p>
+                                        </button>
                                         <button className="flex items-center gap-1" onClick={() => handleReportBlog(profile.profileId)}>
                                             <BpReportIcon />
-                                            <p className="text-red xs font-semibold">{`신고`}</p>
+                                            <p className="text-red text-xs font-semibold">{`신고`}</p>
                                         </button>
                                     </>
-                                ) : null}
+                                ) :
+                                    <>
+                                        <button className="flex items-center gap-1">
+                                            <BpFollowerIcon2 />
+                                            <p className="text-primary text-xs font-semibold">{`팔로워 ${followerCount}`}</p>
+                                        </button>
+                                    </>
+                                }
                             </div>
                         </div>
                     </div>
@@ -90,9 +98,10 @@ export default function BlogProfile() {
 
             {/* 신고 다이얼로그 컴포넌트 */}
             {isReportDialogOpen && (
-                <Dialog
+                <ReportDialog
                     icon={<DialogReportIcon />}
                     title="이 블로그를 신고할까요?"
+                    dropDown={["스팸 및 광고", "부적절한 내용", "개인 정보 침해", "허위 사실 유포", "직접 입력"]}
                     backBtn="취소"
                     onBackBtnClick={cancelReportBlog}
                     redBtn="신고"

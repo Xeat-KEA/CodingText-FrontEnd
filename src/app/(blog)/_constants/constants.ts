@@ -6,28 +6,28 @@ export const Blog_Side_BAR_MENU = [];
 // 게시판 목록
 export const Board_Categories:BoardCategory[] = [
     {
-        id: 1,
+        id: 0,
         title: "전체",
     },
     {
-        id: 2,
+        id: 1,
         title: "코딩테스트 풀이",
         subCategories: [
-            { id: 1, title: "전체" },
-            { id: 2, title: "1단계" },
-            { id: 3, title: "2단계" },
-            { id: 4, title: "3단계" },
-            { id: 5, title: "4단계" },
-            { id: 6, title: "5단계" },
+            { id: 0, title: "전체" },
+            { id: 1, title: "1단계" },
+            { id: 2, title: "2단계" },
+            { id: 3, title: "3단계" },
+            { id: 4, title: "4단계" },
+            { id: 5, title: "5단계" },
         ],
     },
     {
-        id: 3,
+        id: 2,
         title: "배운점 정리",
         subCategories: [
-            { id: 1, title: "전체" },
-            { id: 2, title: "자유" },
-            { id: 3, title: "알고리즘 정리" },
+            { id: 0, title: "전체" },
+            { id: 1, title: "자유" },
+            { id: 2, title: "알고리즘 정리" },
         ],
     },
 ];
@@ -43,5 +43,7 @@ export const Blog_Profile_Data = [{
 }]
 
 
-export const loggedInUserId = 'user'; // 로그인 사용자 ID
-export const blogOwnerId = 'user'; // 블로그 소유자 ID
+export let loggedInUserId = 'user'; // 로그인 사용자 ID
+export let blogOwnerId = 'user'; // 블로그 소유자 ID
+
+export const Dummy_Data = "<div> 안녕하세요 </div><h1>안녕</h1><h2>반가워요</h2>"
