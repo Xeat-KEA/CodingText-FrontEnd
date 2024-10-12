@@ -24,13 +24,7 @@ export default function ProfileImgSelection({
             setProfileImg(el);
           }}
         >
-          <Image
-            width="60"
-            height="45"
-            style={{ width: "60px", height: "45px" }}
-            src={el}
-            alt={el}
-          />
+          <Image width="60" height="60" src={el} alt={el} />
         </div>
       ))}
     </div>

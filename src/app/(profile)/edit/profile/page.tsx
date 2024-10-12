@@ -3,12 +3,14 @@
 import DropDown from "@/app/_components/Dropdown";
 import EditBtn from "@/app/_components/TipTapEditor/EditBtn";
 import { PROGRAMMING_LANGUAGES } from "@/app/_constants/constants";
-import Image from "next/image";
-import { KeyboardEvent, useState } from "react";
+import { ChangeEvent, KeyboardEvent, useState } from "react";
 import { useForm } from "react-hook-form";
 import { IProfileData } from "../../_interfaces/interfaces";
 import { DUMMY_PROFILE_DATA } from "../../_constants/constants";
 import SignOutOrDeleteAccount from "../../_components/SignOut";
+import EditProfileImgDialog from "../../_components/EditProfileImgDialog";
+import { useImageHandler } from "@/app/_hooks/useImageHandler";
+import EditProfileImg from "../../_components/EditProfileImg";
 
 export default function EditProfilePage() {
   // 변경사항 전체 취소를 위한 초기값 저장
@@ -26,7 +28,7 @@ export default function EditProfilePage() {
     console.log(data);
   };
   // input 내에서 Enter가 눌렸을 경우 Submit이 일어나는 것 방지
-  const onEnterHandling = (e: KeyboardEvent<HTMLInputElement>) => {
+  const handleEnter = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       e.preventDefault();
     }
@@ -70,14 +72,30 @@ export default function EditProfilePage() {
     setValue("programmingLanguage", initialData.programmingLanguage);
     setValue("status", initialData.status);
     setData(getValues());
-    setIsEditing({ nickname: false, status: false });
+    setIsEditing({ nickname: false, status: false, profileImg: false });
   };
 
   // 정보 수정 상태 관리 state
   const [isEditing, setIsEditing] = useState({
     nickname: false,
     status: false,
+    profileImg: false,
   });
+
+  // Image 처리
+  const handleImage = async (files: FileList | null) => {
+    // 파일 업로드 취소
+    if (files === null) {
+      return;
+    }
+
+    // 이미지 업로드 및 주소 반환
+    const IMG_URL = useImageHandler(files);
+
+    // 반환받은 이미지 주소를 통해 editor에 이미지 삽입
+    setData((prev) => ({ ...prev, profileImg: IMG_URL }));
+    setValue("profileImg", IMG_URL);
+  };
 
   return (
     <>
@@ -92,7 +110,7 @@ export default function EditProfilePage() {
               </span>
             ) : (
               <input
-                onKeyDown={onEnterHandling}
+                onKeyDown={handleEnter}
                 className="sign-in-input"
                 {...register("nickname", {
                   value: data.nickname,
@@ -107,22 +125,18 @@ export default function EditProfilePage() {
             />
           </div>
           {/* 프로필 사진 변경 */}
-          <div className="flex flex-col gap-3">
-            <span className="edit-title">프로필 사진</span>
-            <div className="w-[120px] h-[120px] border border-border-2 rounded-full flex justify-center items-center overflow-hidden">
-              <Image
-                width={120}
-                height={0}
-                src="/profileImg1.png"
-                alt="myProfileImg"
-                priority
-              />
-            </div>
-            <div className="flex flex-col gap-1">
-              <button className="edit-btn-primary">기본 프로필에서 선택</button>
-              <button className="edit-btn-primary">사진 업로드</button>
-            </div>
-          </div>
+          <EditProfileImg
+            img={data.profileImg}
+            onSelectFromPreset={() =>
+              setIsEditing((prev) => ({
+                ...prev,
+                profileImg: !prev.profileImg,
+              }))
+            }
+            onUploadImg={(e: ChangeEvent<HTMLInputElement>) => {
+              handleImage(e.target.files);
+            }}
+          />
           {/* 상태 메세지 변경 */}
           <div className="flex flex-col gap-3">
             <span className="edit-title">상태 메세지</span>
@@ -130,7 +144,7 @@ export default function EditProfilePage() {
               <span className="text-black">{data.status}</span>
             ) : (
               <input
-                onKeyDown={onEnterHandling}
+                onKeyDown={handleEnter}
                 {...register("status", { value: data.status })}
                 className="sign-in-input"
               />
@@ -177,6 +191,19 @@ export default function EditProfilePage() {
         {/* 로그아웃 및 회원 탈퇴 */}
         <SignOutOrDeleteAccount />
       </div>
+      {/* 프로필 사진 변경 Dialog (기존 프로필에서 선택) */}
+      {isEditing.profileImg && (
+        <EditProfileImgDialog
+          onBackBtnClick={() =>
+            setIsEditing((prev) => ({ ...prev, profileImg: !prev.profileImg }))
+          }
+          onBtnClick={(img) => {
+            setData((prev) => ({ ...prev, profileImg: img }));
+            setIsEditing((prev) => ({ ...prev, profileImg: !prev.profileImg }));
+          }}
+          currentImg={data.profileImg}
+        />
+      )}
     </>
   );
 }
