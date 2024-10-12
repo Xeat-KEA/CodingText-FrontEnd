@@ -19,6 +19,7 @@ export default function ProfileSideBar() {
               ? "border-l-[3px] border-primary font-bold pl-[13px]"
               : "pl-4"
           }`}
+          scroll={false}
         >
           {el.content}
         </Link>

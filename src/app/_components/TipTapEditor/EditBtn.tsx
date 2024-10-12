@@ -9,15 +9,23 @@ export default function EditBtn({
   return (
     <div className="flex gap-4">
       {!isEditing ? (
-        <button onClick={onEditClick} className="edit-btn-primary">
+        <button
+          type="button"
+          onClick={onEditClick}
+          className="edit-btn-primary"
+        >
           수정
         </button>
       ) : (
         <>
-          <button onClick={onCancelClick} className="edit-btn-default">
+          <button
+            type="button"
+            onClick={onCancelClick}
+            className="edit-btn-default"
+          >
             취소
           </button>
-          <button onClick={onSubmit} className="edit-btn-primary">
+          <button type="button" onClick={onSubmit} className="edit-btn-primary">
             확인
           </button>
         </>

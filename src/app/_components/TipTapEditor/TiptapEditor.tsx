@@ -6,7 +6,7 @@ import Image from "@tiptap/extension-image";
 import { useTiptapStore } from "@/app/stores";
 
 export default function TiptapEditor() {
-  const { setContent } = useTiptapStore();
+  const { content, setContent } = useTiptapStore();
   const editor = useEditor({
     editorProps: {
       attributes: {
@@ -26,6 +26,7 @@ export default function TiptapEditor() {
       setContent(editor.getHTML());
     },
     immediatelyRender: false,
+    content: content,
   });
 
   return (

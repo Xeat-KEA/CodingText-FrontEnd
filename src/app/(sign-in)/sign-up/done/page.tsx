@@ -12,7 +12,7 @@ export default function DonePage() {
           {"회원가입이 완료되었어요!\n즉시 서비스를 이용할 수 있어요"}
         </span>
       </div>
-      <Link href="/" className="btn-primary">
+      <Link href="/" className="btn-primary" scroll={false}>
         메인 페이지로
       </Link>
     </div>
