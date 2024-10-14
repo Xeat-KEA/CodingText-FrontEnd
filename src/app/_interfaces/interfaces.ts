@@ -8,6 +8,7 @@ export interface ITopBar {
 
 export interface ISearchBar {
   isSmall?: boolean;
+  searchFilterList: string[];
 }
 
 export interface ITabBar {
@@ -22,11 +23,20 @@ export interface IToggleBtn {
 }
 
 export interface IDropDown {
+  zIndex?: number;
   isSmall?: boolean;
+  borderRight?: boolean;
   selection: string;
   onSelectionClick: (selected: string) => void;
   list: string[];
   placeholder?: string;
+}
+
+export interface IMultiSelectionDropdown {
+  placeholder: string;
+  list: string[];
+  selectedList: string[];
+  onSelectionClick: (selected: string) => void;
 }
 
 export interface IDialog {
@@ -121,6 +131,11 @@ export interface IPaginationStore {
   setPage: (newPage: number) => void;
   lastPage: number;
   setLastPage: (page: number) => void;
+}
+
+export interface ISearchFilterStore {
+  filter: string;
+  setFilter: (selected: string) => void;
 }
 
 // Form 관련 인터페이스

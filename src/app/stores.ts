@@ -2,6 +2,7 @@ import { create } from "zustand";
 import {
   ICodingTestStore,
   IPaginationStore,
+  ISearchFilterStore,
   ITabStore,
   ITiptapStore,
 } from "./_interfaces/interfaces";
@@ -54,4 +55,10 @@ export const usePaginationStore = create<IPaginationStore>((set) => ({
   setPage: (newPage) => set({ page: newPage }),
   lastPage: 0,
   setLastPage: (page) => set({ lastPage: page }),
+}));
+
+// 검색 필터 저장 전역변수
+export const useSearchFilterStore = create<ISearchFilterStore>((set) => ({
+  filter: "",
+  setFilter: (selected) => set({ filter: selected }),
 }));

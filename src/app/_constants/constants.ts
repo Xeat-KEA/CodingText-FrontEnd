@@ -33,3 +33,20 @@ export const FONT_SIZE = [
   "72px",
   "96px",
 ];
+
+export const DIFFICULTY_LIST = ["1단계", "2단계", "3단계", "4단계", "5단계"];
+
+export const ALGORITHM_LIST = [
+  "입출력",
+  "함수",
+  "재귀함수",
+  "1차원 리스트",
+  "스트링",
+  "2차원 리스트",
+  "스택, 큐, DFS, BFS",
+  "비트연산과 부분집합",
+  "정렬",
+  "순열, 조합, 백트래킹",
+  "트리, 힙",
+  "MST, 다익스트라",
+];

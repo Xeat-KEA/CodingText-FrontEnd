@@ -1,27 +1,39 @@
 import { useState } from "react";
 import { IDropDown } from "../_interfaces/interfaces";
 import { ShowMoreIcon } from "./Icons";
+import { useOutsideClick } from "../_hooks/useOutsideClick";
 
 export default function DropDown({
+  zIndex,
   isSmall,
+  borderRight,
   selection,
   list,
   onSelectionClick,
   placeholder,
 }: IDropDown) {
   const [isListOpen, setIsListOpen] = useState(false);
+  const ref = useOutsideClick(
+    () => isListOpen && setIsListOpen((prev) => !prev)
+  );
+
   return (
     <div
+      ref={ref}
       onClick={() => setIsListOpen((prev) => !prev)}
-      className={`relative flex w-full bg-white border border-border-2 rounded-lg cursor-pointer ${
-        isSmall ? "px-2 py-[6px]" : "px-4 py-2"
+      className={`relative flex items-center w-full bg-white cursor-pointer ${
+        zIndex && `z-${zIndex}`
+      } ${isSmall ? "px-2 py-[6px]" : "px-4 py-2"} ${
+        !borderRight
+          ? "border border-border-2 rounded-lg"
+          : "border-r border-border-2"
       }`}
     >
       <div className={`${isListOpen && "rotate-180"}`}>
         <ShowMoreIcon />
       </div>
       <span
-        className={`grow flex justify-center text-xs text-black ${
+        className={`grow flex justify-center text-xs text-black whitespace-nowrap ${
           !selection && "text-disabled"
         }`}
       >

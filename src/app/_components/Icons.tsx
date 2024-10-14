@@ -66,6 +66,7 @@ export function LgSearchIcon() {
   );
 }
 
+// 알림 종 아이콘
 export function NoticeIcon() {
   return (
     <svg
@@ -189,6 +190,7 @@ export function DialogXIcon() {
   );
 }
 
+// Dialog 체크 아이콘
 export function DialogCheckIcon() {
   return (
     <svg
@@ -215,6 +217,7 @@ export function DialogCheckIcon() {
   );
 }
 
+// Dialog 신고 아이콘
 export function DialogReportIcon() {
   return (
     <svg
@@ -408,6 +411,33 @@ export function ReportIcon() {
         strokeLinecap="round"
         strokeLinejoin="round"
       />
+    </svg>
+  );
+}
+
+// 다중 선택 드롭다운 체크 여부 아이콘
+export function MultiSelectionCheckIcon() {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g clipPath="url(#clip0_131_1462)">
+        <path
+          d="M12.1967 6.19678L12.1968 6.19667C12.3373 6.05605 12.4162 5.86542 12.4162 5.66667C12.4162 5.46792 12.3373 5.2773 12.1968 5.13667L12.1966 5.13645C12.056 4.996 11.8654 4.91711 11.6666 4.91711C11.4679 4.91711 11.2772 4.996 11.1366 5.13645L11.1365 5.13656L6.99994 9.27312L4.86619 7.13937C4.79818 7.06733 4.71657 7.00946 4.62605 6.96913C4.53405 6.92814 4.43473 6.9061 4.33403 6.90432C4.23333 6.90254 4.1333 6.92107 4.03991 6.95879C3.94652 6.99651 3.86169 7.05265 3.79047 7.12387C3.71925 7.19509 3.66311 7.27992 3.62539 7.37331C3.58767 7.4667 3.56914 7.56673 3.57092 7.66743C3.57269 7.76814 3.59474 7.86745 3.63573 7.95945C3.67606 8.04997 3.73393 8.13158 3.80597 8.19959L6.46983 10.8635L6.46994 10.8636C6.61057 11.004 6.80119 11.0829 6.99994 11.0829C7.19869 11.0829 7.38931 11.004 7.52994 10.8636L7.53005 10.8635L12.1967 6.19678Z"
+          fill="currentColor"
+          stroke="currentColor"
+          strokeWidth="0.5"
+        />
+      </g>
+      <defs>
+        <clipPath id="clip0_131_1462">
+          <rect width="16" height="16" fill="white" />
+        </clipPath>
+      </defs>
     </svg>
   );
 }

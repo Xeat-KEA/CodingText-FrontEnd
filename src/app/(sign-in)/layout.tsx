@@ -7,7 +7,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="w-full flex justify-center">
+    <div className="top-container">
       <div className="max-w-400 min-h-screen flex flex-col items-center justify-between py-20">
         <Link href="/">
           <LogoIcon />

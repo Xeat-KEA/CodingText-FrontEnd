@@ -6,7 +6,7 @@ import { IMainBoard } from "../_interfaces/interfaces";
 
 export default function MainBoard({ title, hasTab, postList }: IMainBoard) {
   return (
-    <div className="w-full flex justify-center">
+    <div className="top-container">
       <div className="max-w-1200 py-[120px] flex flex-col gap-12">
         {/* 게시판 제목 */}
         <span className="text-2xl text-black font-semibold">{title}</span>
