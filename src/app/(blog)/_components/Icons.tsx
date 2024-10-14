@@ -111,9 +111,9 @@ export function BpFollowerIcon2() {
             <path d="M10 6.41168C8.33333 2.50001 2.5 2.91668 2.5 7.91668C2.5 12.9167 10 17.0833 10 17.0833C10 17.0833 17.5 12.9167 17.5 7.91668C17.5 2.91668 11.6667 2.50001 10 6.41168Z"
                 fill="#6B6CED"
                 stroke="#6B6CED"
-                stroke-width="1.5"
-                stroke-linecap="round"
-                stroke-linejoin="round" />
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round" />
         </svg>
     )
 }
