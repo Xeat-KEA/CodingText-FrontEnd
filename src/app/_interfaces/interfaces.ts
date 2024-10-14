@@ -41,21 +41,7 @@ export interface IDialog {
   primaryBtn?: string;
   redBtn?: string;
   onBtnClick?: () => void;
-}
-
-export interface IReportDialog {
-  icon?: JSX.Element;
-  title?: string;
-  content?: string;
-  isWarning?: boolean;
-  dropDown?: string[];
-  backBtn: string;
-  onBackBtnClick: () => void;
-  subBtn?: string;
-  onSubBtnClick?: () => void;
-  primaryBtn?: string;
-  redBtn?: string;
-  onBtnClick?: () => void;
+  children?: React.ReactNode; // 드롭다운 추가
 }
 
 export interface ICodeEditor {
