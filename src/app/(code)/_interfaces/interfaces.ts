@@ -21,4 +21,15 @@ export interface Code {
   difficulty: number;
   participants: number;
   rate: number;
+  createdAt: string;
+}
+
+export interface History {
+  id: number | null;
+  title: string;
+  difficulty: number;
+  participants: number;
+  rate: number;
+  hasSolved: boolean;
+  createdAt: string;
 }

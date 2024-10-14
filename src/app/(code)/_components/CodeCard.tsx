@@ -41,9 +41,10 @@ export default function CodeCard({
           <span
             onClick={(e) => {
               e.stopPropagation();
+              e.preventDefault();
               router.push(`/search/${id}}`);
             }}
-            className="w-[60px] text-xs font-semibold text-primary list-text"
+            className="w-[60px] text-xs font-semibold text-primary list-text hover:underline"
           >
             #{id}
           </span>

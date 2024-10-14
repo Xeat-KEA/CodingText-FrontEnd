@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import {
+  ICodeFilterStore,
   ICodingTestStore,
   IPaginationStore,
   ISearchFilterStore,
@@ -61,4 +62,14 @@ export const usePaginationStore = create<IPaginationStore>((set) => ({
 export const useSearchFilterStore = create<ISearchFilterStore>((set) => ({
   filter: "",
   setFilter: (selected) => set({ filter: selected }),
+}));
+
+// 코드 필터 전역변수
+export const useCodeFilterStore = create<ICodeFilterStore>((set) => ({
+  difficulty: [],
+  setDifficulty: (newList) => set({ difficulty: newList }),
+  algorithm: [],
+  setAlgorithm: (newList) => set({ algorithm: newList }),
+  order: "",
+  setOrder: (selected) => set({ order: selected }),
 }));

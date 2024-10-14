@@ -1,12 +1,12 @@
 "use client";
 
-import { DUMMY_CODE_LIST } from "../../_constants/constants";
-import ListTopBar from "../../_components/ListTopBar";
-import CodeCard from "../../_components/CodeCard";
-import { useEffect } from "react";
 import { usePaginationStore } from "@/app/stores";
+import HistoryTopBar from "../../_components/HistoryTopBar";
+import { useEffect } from "react";
+import { DUMMY_CODE_HISTORY } from "../../_constants/constants";
+import HistoryCard from "../../_components/HistoryCard";
 
-export default function CodeListPage() {
+export default function CodeHistoryPage() {
   const { setPage, setLastPage } = usePaginationStore();
   useEffect(() => {
     setPage(1);
@@ -20,18 +20,19 @@ export default function CodeListPage() {
   return (
     <div className="w-full flex flex-col">
       {/* 문제 리스트 상단바 */}
-      <ListTopBar />
+      <HistoryTopBar />
       {/* 문제 */}
       <div className="w-full flex flex-col divide-y divide-border-1">
-        {DUMMY_CODE_LIST.map((el) => {
+        {DUMMY_CODE_HISTORY.map((el, index) => {
           return (
-            <CodeCard
-              key={el.id}
+            <HistoryCard
+              key={index}
               id={el.id}
               title={el.title}
               difficulty={el.difficulty}
               participants={el.participants}
               rate={el.rate}
+              hasSolved={el.hasSolved}
               createdAt={el.createdAt}
             />
           );

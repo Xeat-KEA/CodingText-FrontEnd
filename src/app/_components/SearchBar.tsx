@@ -17,7 +17,6 @@ export default function SearchBar({ isSmall, searchFilterList }: ISearchBar) {
       {searchFilterList && (
         <div className="w-[92px] shrink-0">
           <DropDown
-            zIndex={10}
             isSmall
             borderRight
             list={searchFilterList}

@@ -23,7 +23,6 @@ export interface IToggleBtn {
 }
 
 export interface IDropDown {
-  zIndex?: number;
   isSmall?: boolean;
   borderRight?: boolean;
   selection: string;
@@ -136,6 +135,15 @@ export interface IPaginationStore {
 export interface ISearchFilterStore {
   filter: string;
   setFilter: (selected: string) => void;
+}
+
+export interface ICodeFilterStore {
+  difficulty: string[];
+  setDifficulty: (newList: string[]) => void;
+  algorithm: string[];
+  setAlgorithm: (newList: string[]) => void;
+  order: string;
+  setOrder: (selected: string) => void;
 }
 
 // Form 관련 인터페이스

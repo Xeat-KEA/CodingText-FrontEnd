@@ -4,7 +4,6 @@ import { ShowMoreIcon } from "./Icons";
 import { useOutsideClick } from "../_hooks/useOutsideClick";
 
 export default function DropDown({
-  zIndex,
   isSmall,
   borderRight,
   selection,
@@ -22,8 +21,8 @@ export default function DropDown({
       ref={ref}
       onClick={() => setIsListOpen((prev) => !prev)}
       className={`relative flex items-center w-full bg-white cursor-pointer ${
-        zIndex && `z-${zIndex}`
-      } ${isSmall ? "px-2 py-[6px]" : "px-4 py-2"} ${
+        isSmall ? "px-2 py-[6px]" : "px-4 py-2"
+      } ${
         !borderRight
           ? "border border-border-2 rounded-lg"
           : "border-r border-border-2"
