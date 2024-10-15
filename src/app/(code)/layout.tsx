@@ -13,12 +13,15 @@ import DropDown from "../_components/Dropdown";
 import Pagination from "../_components/Pagination";
 import ProfileCard from "./_components/ProfileCard";
 import { useCodeFilterStore } from "../stores";
+import { usePathname } from "next/navigation";
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const pathname = usePathname();
+
   // 문제 필터링 관련 state
   const {
     difficulty,
@@ -75,11 +78,14 @@ export default function RootLayout({
                   onMultiSelectionClick(selected, algorithm, setAlgorithm)
                 }
               />
-              <DropDown
-                selection={order ? order : CODE_FILTER_LIST[2].list[0]}
-                list={CODE_FILTER_LIST[2].list}
-                onSelectionClick={(selected) => setOrder(selected)}
-              />
+              {/* 문제 목록 페이지에서만 렌더링 */}
+              {pathname === "/code/list" && (
+                <DropDown
+                  selection={order ? order : CODE_FILTER_LIST[2].list[0]}
+                  list={CODE_FILTER_LIST[2].list}
+                  onSelectionClick={(selected) => setOrder(selected)}
+                />
+              )}
             </div>
             {/* 문제 리스트 */}
             {children}

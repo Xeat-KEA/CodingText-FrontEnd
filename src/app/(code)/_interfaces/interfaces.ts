@@ -33,3 +33,9 @@ export interface History {
   hasSolved: boolean;
   createdAt: string;
 }
+
+export interface CreateCodeForm {
+  difficulty: string;
+  algorithm?: string;
+  requirement: string;
+}

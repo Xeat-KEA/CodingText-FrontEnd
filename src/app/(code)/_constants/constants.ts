@@ -23,7 +23,7 @@ export const DUMMY_CODE_LIST = [
     difficulty: 1,
     participants: 123,
     rate: 89,
-    createdAt: "2024-10-14 18:41:32",
+    createdAt: "2024-10-14T21:59:16.6362039",
   },
   {
     id: 2,
@@ -187,7 +187,7 @@ export const DUMMY_CODE_HISTORY = [
     participants: 123,
     rate: 89,
     hasSolved: true,
-    createdAt: "2024-10-14 18:41:32",
+    createdAt: "2024-10-14T21:59:16.6362039",
   },
   {
     id: null,
