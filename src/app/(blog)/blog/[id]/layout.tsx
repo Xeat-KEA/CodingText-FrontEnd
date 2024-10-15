@@ -12,7 +12,5 @@ export default function BlogLayout({
                 {children}
             </div>
         </div>
-
-
     );
 }

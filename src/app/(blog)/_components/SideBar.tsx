@@ -1,23 +1,21 @@
-// 추후 컴포넌트 분리 필요
-
 "use client";
 
 import { useState } from "react";
 import { LogoIcon } from "@/app/_components/Icons";
 import Link from "next/link";
-import { useParams } from "next/navigation"; // id 파싱
 import { SbGotestIcon, SbHiddenIcon, SbHomeIcon, SbMyblogIcon, SbNewpostIcon } from "./Icons";
 import { loggedInUserId, blogOwnerId } from "../_constants/constants";
 import Board from "./sidebar-board/Board";
+import { useBlogStore } from "@/app/stores";
 
 export default function SideBar() {
+    // 전역 변수
+    const {
+        blogId,
+        isOwnBlog,
+    } = useBlogStore();
     const [isCollapsed, setIsCollapsed] = useState(false); // 최소화
     const toggleSidebar = () => setIsCollapsed(!isCollapsed);
-    const params = useParams();
-    const blogId = Number(params.id);
-
-    // 본인 블로그 여부 판단
-    const isOwnBlog = blogId === loggedInUserId;
 
     // 사이드바 페이지 이동 컴포넌트
     const SidebarLink = ({ href, label, Icon }: { href: string; label: string; Icon: React.FC }) => (
@@ -43,13 +41,16 @@ export default function SideBar() {
                 Icon={SbHomeIcon}
             />
             {/* 게시판 목록 */}
-            <div className="max-h-[640px] overflow-y-auto">
+            <div className={`flex-1 overflow-y-auto`} style={{ maxHeight: "calc(100vh - 252px)" }}>
                 {!isCollapsed && (
-                    <Board blogId={blogId} isOwnBlog={isOwnBlog} /> )}
+                    <div className="relative">
+                        <Board />
+                    </div>
+                )}
             </div>
 
             {/* 하단 요소 */}
-            <div className="absolute bottom-2">
+            <div className="absolute bottom-2 w-full bg-white z-10">
                 <SidebarLink href="/" label="문제 풀러 가기" Icon={SbGotestIcon} />
                 {isOwnBlog ? (
                     <SidebarLink href="/" label="새 게시글" Icon={SbNewpostIcon} />
@@ -57,7 +58,6 @@ export default function SideBar() {
                     <SidebarLink href={`/blog/${loggedInUserId}`} label="내 블로그로" Icon={SbMyblogIcon} />
                 )}
             </div>
-
         </nav>
     );
 }

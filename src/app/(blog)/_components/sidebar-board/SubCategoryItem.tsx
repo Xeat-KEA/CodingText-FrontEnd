@@ -1,32 +1,35 @@
 import Link from 'next/link';
 import { SubCategoryItemProps } from '../../_interfaces/interfaces';
 import { useState } from 'react';
+import { useBlogStore } from '@/app/stores';
 
 const SubCategoryItem: React.FC<SubCategoryItemProps> = ({
     subCategory,
     category,
-    blogId,
-    isOwnBlog,
     currentPath,
     handleDeleteCategory,
-    boardCategories,
-    setBoardCategories,
 }) => {
-    const [editSubCategory, setEditSubCategory] = useState<{ [categoryId: number]: number | null }>({});
+    // 전역 변수
+    const {
+        blogId,
+        isOwnBlog,
+        boardCategories,
+        setBoardCategories
+    } = useBlogStore();
+    const [editSubCategoryId, setEditSubCategoryId] = useState<{ [categoryId: number]: number | null }>({});
     const [editSubCategoryTitle, setEditSubCategoryTitle] = useState<string>("");
-    const [hoveredSubCategoryId, setHoveredSubCategoryId] = useState<number | null>(null); // 하위
-
+    const [hoveredSubCategoryId, setHoveredSubCategoryId] = useState<Boolean>(false);
 
     // 하위 게시판 수정
     const handleEditSubCategory = (categoryId: number, subCategoryId: number, title: string) => {
-        setEditSubCategory(prevState => ({
+        setEditSubCategoryId(prevState => ({
             ...prevState,
             [categoryId]: subCategoryId,
         }));
         setEditSubCategoryTitle(title);
     };
     const cancelEditSubCategory = (categoryId: number) => {
-        setEditSubCategory(prevState => ({ ...prevState, [categoryId]: null }));
+        setEditSubCategoryId(prevState => ({ ...prevState, [categoryId]: null }));
         setEditSubCategoryTitle("");
     };
 
@@ -44,7 +47,7 @@ const SubCategoryItem: React.FC<SubCategoryItemProps> = ({
             }
             return category;
         }));
-        setEditSubCategory(prevState => ({ ...prevState, [categoryId]: null }));
+        setEditSubCategoryId(prevState => ({ ...prevState, [categoryId]: null }));
         setEditSubCategoryTitle("");
     };
 
@@ -56,11 +59,11 @@ const SubCategoryItem: React.FC<SubCategoryItemProps> = ({
         <div
             className="flex items-center relative text-xs font-regular h-8 py-2"
             key={subCategory.id}
-            onMouseEnter={() => setHoveredSubCategoryId(subCategory.id)}
-            onMouseLeave={() => setHoveredSubCategoryId(null)}
+            onMouseEnter={() => setHoveredSubCategoryId(true)}
+            onMouseLeave={() => setHoveredSubCategoryId(false)}
         >
-            {editSubCategory[category.id] === subCategory.id 
-            ? ( isOwnBlog && (
+            {editSubCategoryId[category.id] === subCategory.id
+                ? (isOwnBlog && (
                     <>
                         <input
                             type="text"
@@ -75,30 +78,30 @@ const SubCategoryItem: React.FC<SubCategoryItemProps> = ({
                         </div>
                     </>
                 )
-            ) : (
-                <>
-                    <Link href={`/blog/${blogId}/${category.id}/${subCategory.id}`}>
-                        <p className={currentPath === `/blog/${blogId}/${category.id}/${subCategory.id}` ? "font-bold" : ""}>
-                            {subCategory.title}
-                        </p>
-                    </Link>
+                ) : (
+                    <>
+                        <Link href={`/blog/${blogId}/${category.id}/${subCategory.id}`}>
+                            <p className={currentPath === `/blog/${blogId}/${category.id}/${subCategory.id}` ? "font-bold" : ""}>
+                                {subCategory.title}
+                            </p>
+                        </Link>
 
-                    {isOwnBlog && category.id !== 0 && category.id !== 1 && subCategory.id !== 0 && hoveredSubCategoryId === subCategory.id && (
-                        <div className="absolute right-3 flex text-2xs space-x-2">
-                            <button
-                                className="text-primary"
-                                onClick={() => handleEditSubCategory(category.id, subCategory.id, subCategory.title)}>
-                                수정
-                            </button>
-                            <button
-                                className="text-red"
-                                onClick={() => handleDeleteCategory(category.id, subCategory.title, true, subCategory.id)}>
-                                삭제
-                            </button>
-                        </div>
-                    )}
-                </>
-            )}
+                        {isOwnBlog && category.id !== 0 && category.id !== 1 && subCategory.id !== 0 && hoveredSubCategoryId === true && (
+                            <div className="absolute right-3 flex text-2xs space-x-2">
+                                <button
+                                    className="text-primary"
+                                    onClick={() => handleEditSubCategory(category.id, subCategory.id, subCategory.title)}>
+                                    수정
+                                </button>
+                                <button
+                                    className="text-red"
+                                    onClick={() => handleDeleteCategory(category.id, subCategory.title, true, subCategory.id)}>
+                                    삭제
+                                </button>
+                            </div>
+                        )}
+                    </>
+                )}
         </div>
     );
 };

@@ -1,36 +1,39 @@
 import Image from "next/image"; // Next.js에서 이미지 최적화 컴포넌트 사용
-import { Blog_Profile_Data, loggedInUserId } from "../_constants/constants";
-import { BpEditIcon, BpFollowerIcon1, BpFollowerIcon2, BpReportIcon } from "./Icons";
+import { Blog_Profile_Data } from "../_constants/constants";
+import { BpEditIcon, BpFollowerIcon, BpReportIcon } from "./Icons";
 import { useState } from "react"; // useState 훅 임포트
-import { useParams, usePathname } from "next/navigation";
 import Dialog from "@/app/_components/Dialog";
 import { DialogCheckIcon, DialogReportIcon } from "@/app/_components/Icons";
 import Link from "next/link";
 import DropDown from "@/app/_components/Dropdown";
+import { useBlogStore } from "@/app/stores";
+
 
 export default function BlogProfile() {
-    const params = useParams();
-    const blogId = Number(params.id);
+    // 전역 변수
+    const {
+        isOwnBlog,
+    } = useBlogStore();
+
     const [blogToReport, setBlogToReport] = useState<number | null>(null);
     const [selectedOption, setSelectedOption] = useState<string | null>(null); // 신고 사유 선택
     const [customInput, setCustomInput] = useState(""); // 신고 사유 직접 입력
     const [isReportDialogOpen, setIsReportDialogOpen] = useState(false);
     const [isReportConfirmDialogOpen, setIsReportConfirmDialogOpen] = useState(false);
 
-
-    const handleReportBlog = (id: number) => { // 신고 버튼 클릭
+    const onClickReportBlog = (id: number) => {
         setBlogToReport(id);
         setIsReportDialogOpen(true);
     }
 
-    const cancelReportBlog = () => { // 신고 취소
+    const cancelReportBlog = () => {
         setIsReportDialogOpen(false);
         setBlogToReport(null);
         setCustomInput("");
         setSelectedOption(null);
     }
 
-    const confirmReportBlog = () => { // 신고 확인
+    const confirmReportBlog = () => {
         if (blogToReport === null) return;
         setIsReportDialogOpen(false);
         setIsReportConfirmDialogOpen(true);
@@ -72,13 +75,13 @@ export default function BlogProfile() {
                                 <h2 className="text-xl text-black font-semibold">{profile.name}</h2>
                                 <p className="text-sm text-body font-regular mt-2">{profile.Intro}</p>
                                 <div className="flex items-center gap-4 mt-2">
-                                    {(loggedInUserId !== blogId) ? (
+                                    {(isOwnBlog) ? (
                                         <>
                                             <button className="flex items-center gap-1" onClick={handleFollowerClick}>
-                                                {isFollowerClicked ? <BpFollowerIcon2 /> : <BpFollowerIcon1 />}
+                                                <BpFollowerIcon isFilled={isFollowerClicked} />
                                                 <p className="text-primary text-xs font-semibold">{`팔로워 ${followerCount}`}</p>
                                             </button>
-                                            <button className="flex items-center gap-1" onClick={() => handleReportBlog(profile.profileId)}>
+                                            <button className="flex items-center gap-1" onClick={() => onClickReportBlog(profile.profileId)}>
                                                 <BpReportIcon />
                                                 <p className="text-red text-xs font-semibold">{`신고`}</p>
                                             </button>
@@ -86,7 +89,7 @@ export default function BlogProfile() {
                                     ) :
                                         <>
                                             <button className="flex items-center gap-1">
-                                                <BpFollowerIcon2 />
+                                                <BpFollowerIcon isFilled={true} />
                                                 <p className="text-primary text-xs font-semibold">{`팔로워 ${followerCount}`}</p>
                                             </button>
                                         </>
@@ -99,7 +102,7 @@ export default function BlogProfile() {
                 })}
             </div>
             {/* 사용자 정보 수정 버튼 */}
-            {(loggedInUserId === blogId) && (
+            {(isOwnBlog) && (
                 <Link href="/" className="inline-flex items-center w-auto h-5 gap-1 ml-2">
                     <BpEditIcon />
                     <p className="text-primary text-xs font-semibold">사용자 정보 수정</p>

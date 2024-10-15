@@ -1,3 +1,5 @@
+import { IBpFollowerIcon } from "../_interfaces/interfaces";
+
 // 사이드 바 최소화 아이콘
 export function SbHiddenIcon() {
     return (
@@ -80,14 +82,14 @@ export function SbNewpostIcon() {
 
     )
 }
-// 빈 하트 아이콘
-export function BpFollowerIcon1() {
+// 하트 아이콘
+export function BpFollowerIcon({ isFilled }: IBpFollowerIcon) {
     return (
         <svg
             width="20"
             height="20"
             viewBox="0 0 20 20"
-            fill="none"
+            fill={isFilled ? "#6B6CED" : "none"}
             xmlns="http://www.w3.org/2000/svg">
             <path d="M10 6.41168C8.33333 2.50001 2.5 2.91668 2.5 7.91668C2.5 12.9167 10 17.0833 10 17.0833C10 17.0833 17.5 12.9167 17.5 7.91668C17.5 2.91668 11.6667 2.50001 10 6.41168Z"
                 stroke="#6B6CED"
@@ -96,25 +98,6 @@ export function BpFollowerIcon1() {
                 strokeLinejoin="round" />
         </svg>
 
-    )
-}
-
-// 채워진 하트 아이콘
-export function BpFollowerIcon2() {
-    return (
-        <svg
-            width="20"
-            height="20"
-            viewBox="0 0 20 20"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg">
-            <path d="M10 6.41168C8.33333 2.50001 2.5 2.91668 2.5 7.91668C2.5 12.9167 10 17.0833 10 17.0833C10 17.0833 17.5 12.9167 17.5 7.91668C17.5 2.91668 11.6667 2.50001 10 6.41168Z"
-                fill="#6B6CED"
-                stroke="#6B6CED"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round" />
-        </svg>
     )
 }
 

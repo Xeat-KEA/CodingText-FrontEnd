@@ -1,10 +1,10 @@
-import { Category } from "../_interfaces/interfaces";
+import { Category } from "@/app/_interfaces/interfaces";
 
 export let loggedInUserId = 1; // 임시 로그인된 사용자 ID
 export let blogOwnerId = 'user'; // 블로그 홈 ID
 
-// 블로그 페이지 사이드바 메뉴
-export const Blog_Side_BAR_MENU = [];
+// // 블로그 페이지 사이드바 메뉴
+// export const Blog_Side_BAR_MENU = [];
 
 // 게시판 목록 (본인)
 export const Board_Categories: Category[] = [

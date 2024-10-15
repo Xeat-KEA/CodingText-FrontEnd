@@ -1,20 +1,23 @@
 // 상/하위 게시판 추가
 
-import React from "react";
+import React, { useState } from "react";
 import { AddCategoryProps } from "../../_interfaces/interfaces";
+import { useBlogStore } from "@/app/stores";
 
 const AddCategory: React.FC<AddCategoryProps> = ({
-    newCategoryTitle,
-    setNewCategoryTitle,
     handleAddCategory,
-    setIsAddingCategory,
     parentId,
     isSubCategory,
 }) => {
-
-    const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    // 전역 변수
+    const {
+        setIsAddingCategory,
+    } = useBlogStore();
+    const [newCategoryTitle, setNewCategoryTitle] = useState("");
+    const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => { // utils에 추가 예정
         if (e.key === "Enter") {
             handleAddCategory(newCategoryTitle, parentId);
+            setNewCategoryTitle("");
         }
     };
 
@@ -31,7 +34,10 @@ const AddCategory: React.FC<AddCategoryProps> = ({
             <div className="absolute right-3 flex text-2xs space-x-2">
                 <button
                     className="text-primary"
-                    onClick={() => handleAddCategory(newCategoryTitle, parentId)}
+                    onClick={() => {
+                        handleAddCategory(newCategoryTitle, parentId)
+                        setNewCategoryTitle("")
+                    }}
                 >
                     추가
                 </button>

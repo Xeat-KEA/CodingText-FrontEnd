@@ -1,41 +1,66 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import SubCategoryItem from './SubCategoryItem';
 import AddCategory from './AddCategory';
 import { CategoryItemProps } from '../../_interfaces/interfaces';
+import { useBlogStore } from '@/app/stores';
+import { useRouter } from "next/navigation";
 
 const CategoryItem: React.FC<CategoryItemProps> = ({
     category,
-    blogId,
-    isOwnBlog,
     currentPath,
     handleAddCategory,
-    handleCategoryClick,
     handleDeleteCategory,
-    boardCategories,
-    setBoardCategories,
-    activeCategories,
-    isAddingSubCategory,
-    setIsAddingSubCategory,
-    newCategoryTitle,
-    setNewCategoryTitle,
-    saveEditCategory,
-    editCategoryId,
-    setEditCategoryId,
-    editCategoryTitle,
-    setEditCategoryTitle,
 }) => {
-    const [hoveredCategoryId, setHoveredCategoryId] = useState<number | null>(null);
-
-    const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>, action: () => void) => {
-        if (e.key === "Enter") { action(); }
+    // 전역 변수
+    const {
+        blogId,
+        isOwnBlog,
+        activeCategories,
+        setActiveCategories,
+        setBoardCategories,
+        isAddingSubCategory,
+        setIsAddingSubCategory,
+    } = useBlogStore();
+    const router = useRouter();
+    const [editCategoryId, setEditCategoryId] = useState<number | null>(null);
+    const [editCategoryTitle, setEditCategoryTitle] = useState<string>("");
+    const [hoveredCategoryId, setHoveredCategoryId] = useState<boolean>(false);
+    const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => { // utils에 추가 예정
+        if (e.key === "Enter") {
+            saveEditCategory(category.id)
+        }
     };
+
+    // 상위 게시판 클릭 -> 하위 게시판 토글
+    const handleCategoryClick = useCallback((id: number) => {
+        if (id === 0) {
+            router.push(`/blog/${blogId}/0`);
+        } else {
+            setActiveCategories(prev =>
+                prev.includes(id) ? prev.filter(activeId => activeId !== id) : [...prev, id]
+            );
+        }
+    }, [blogId, router, setActiveCategories]);
+
+    // 상위 수정 저장
+    const saveEditCategory = useCallback((id: number) => {
+        // 제목의 최대 길이 설정 (임시로 10자로 제한)
+        const maxTitleLength = 10;
+        setBoardCategories(prev =>
+            prev.map(category =>
+                category.id === id ? { ...category, title: editCategoryTitle.trim().slice(0, maxTitleLength) } : category
+            )
+        );
+        setEditCategoryId(null);
+        setEditCategoryTitle("");
+    }, [editCategoryTitle, setBoardCategories]);
 
     return (
         <div className="board" key={category.id}>
             <div
-                className="flex items-center relative text-black text-sm font-regular h-10 pl-6 py-2"
-                onMouseEnter={() => setHoveredCategoryId(category.id)}
-                onMouseLeave={() => setHoveredCategoryId(null)}
+                className="flex items-center relative text-black text-sm font-regular h-10 pl-6 py-2 cursor-pointer"
+                onMouseEnter={() => setHoveredCategoryId(true)}
+                onMouseLeave={() => setHoveredCategoryId(false)}
             >
                 {editCategoryId === category.id ? (
                     isOwnBlog && (
@@ -44,7 +69,7 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
                                 type="text"
                                 value={editCategoryTitle}
                                 onChange={(e) => setEditCategoryTitle(e.target.value)}
-                                onKeyPress={(e) => handleKeyPress(e, () => saveEditCategory(category.id))}
+                                onKeyPress={handleKeyPress}
                                 className="bg-bg-1 text-body text-sm font-regular p-1 w-32"
                             />
                             <div className="absolute right-3 flex text-2xs space-x-2">
@@ -66,12 +91,12 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
                 ) : (
                     <>
                         <p
-                            className={currentPath === `/blog/${blogId}/${category.id}` ? 'font-bold' : ''}
+                            className={`${currentPath === `/blog/${blogId}/${category.id}` ? 'font-bold' : ''} cursor-pointer`}
                             onClick={() => handleCategoryClick(category.id)}
                         >
                             {category.title}
                         </p>
-                        {isOwnBlog && category.id !== 0 && category.id !== 1 && hoveredCategoryId === category.id && (
+                        {isOwnBlog && category.id !== 0 && category.id !== 1 && hoveredCategoryId === true && (
                             <div className="absolute right-3 flex text-2xs space-x-2">
                                 <button
                                     className="text-primary"
@@ -102,12 +127,8 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
                             key={subCategory.id}
                             subCategory={subCategory}
                             category={category}
-                            blogId={blogId}
-                            isOwnBlog={isOwnBlog}
                             currentPath={currentPath}
                             handleDeleteCategory={handleDeleteCategory}
-                            boardCategories={boardCategories}
-                            setBoardCategories={setBoardCategories}
                         />
                     ))}
 
@@ -116,16 +137,13 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
                         <>
                             {isAddingSubCategory[category.id] ? (
                                 <AddCategory
-                                    newCategoryTitle={newCategoryTitle}
-                                    setNewCategoryTitle={setNewCategoryTitle}
                                     handleAddCategory={handleAddCategory}
-                                    setIsAddingCategory={() => setIsAddingSubCategory((prev) => ({ ...prev, [category.id]: false }))}
                                     parentId={category.id}
                                     isSubCategory={true}
                                 />
                             ) : (
                                 <button
-                                    onClick={() => setIsAddingSubCategory((prev) => ({ ...prev, [category.id]: true }))}
+                                    onClick={() => setIsAddingSubCategory(category.id, true)}
                                     className="text-2xs text-disabled h-8 py-2"
                                 >
                                     새 하위 게시판 추가

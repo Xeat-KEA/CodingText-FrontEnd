@@ -1,13 +1,14 @@
-import { useParams } from "next/navigation";
 import DOMPurify from "isomorphic-dompurify";
 import Link from "next/link";
 import { BpEditIcon } from "./Icons";
 import { blog_Introduction_Data } from "../_constants/constants";
-import { loggedInUserId } from "../_constants/constants";
+import { useBlogStore } from "@/app/stores";
 
 export default function BlogInfo() {
-    const params = useParams();
-    const blogId = Number(params.id);
+    // 전역 변수
+    const {
+        isOwnBlog,
+    } = useBlogStore();
 
     return (
         <>
@@ -23,10 +24,12 @@ export default function BlogInfo() {
                 />
             </div>
             {/* 블로그 정보 수정 버튼 */}
-            {(loggedInUserId === blogId) && (
+            {(isOwnBlog) && (
                 <Link href="/" className="inline-flex items-center w-auto h-5 gap-1 ml-2">
                     <BpEditIcon />
-                    <p className="text-primary text-xs font-semibold">블로그 정보 수정</p>
+                    <p className="text-primary text-xs font-semibold">
+                        블로그 정보 수정
+                    </p>
                 </Link>
             )}
         </>
