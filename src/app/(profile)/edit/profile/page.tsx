@@ -11,6 +11,7 @@ import SignOutOrDeleteAccount from "../../_components/SignOut";
 import EditProfileImgDialog from "../../_components/EditProfileImgDialog";
 import { useImageHandler } from "@/app/_hooks/useImageHandler";
 import EditProfileImg from "../../_components/EditProfileImg";
+import { handleEnter } from "@/app/utils";
 
 export default function EditProfilePage() {
   // 변경사항 전체 취소를 위한 초기값 저장
@@ -26,12 +27,6 @@ export default function EditProfilePage() {
   );
   const onSubmit = (data: IProfileData) => {
     console.log(data);
-  };
-  // input 내에서 Enter가 눌렸을 경우 Submit이 일어나는 것 방지
-  const handleEnter = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-    }
   };
 
   // 수정 버튼 클릭 시
