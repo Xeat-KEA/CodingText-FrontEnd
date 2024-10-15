@@ -72,6 +72,18 @@ export interface IPost {
   content: string;
 }
 
+export interface IProfileImgSelection {
+  seletedImg: string;
+  onSelectionClick: (seleted: string) => void;
+}
+
+export interface IEditBtn {
+  isEditing: boolean;
+  onEditClick: () => void;
+  onCancelClick: () => void;
+  onSubmit: () => void;
+}
+
 export interface IPostCard {
   profileImg: string;
   nickname: string;

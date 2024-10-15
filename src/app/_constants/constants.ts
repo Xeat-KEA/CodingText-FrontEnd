@@ -15,6 +15,16 @@ export const PROFILE_MENU = [
 // 프로그래밍 언어 목록
 export const PROGRAMMING_LANGUAGES = ["java", "python", "javascript", "c"];
 
+// 기본 프로필 사진 경로 목록
+export const PROFILE_IMG_LIST = [
+  "/profileImg1.png",
+  "/profileImg2.png",
+  "/profileImg3.png",
+  "/profileImg4.png",
+  "/profileImg5.png",
+  "/profileImg6.png",
+];
+
 // 텍스트 에디터 폰트 크기 목록
 export const FONT_SIZE = [
   "8px",

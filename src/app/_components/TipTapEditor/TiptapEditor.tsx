@@ -6,7 +6,7 @@ import Image from "@tiptap/extension-image";
 import { useTiptapStore } from "@/app/stores";
 
 export default function TiptapEditor() {
-  const { setContent } = useTiptapStore();
+  const { content, setContent } = useTiptapStore();
   const editor = useEditor({
     editorProps: {
       attributes: {
@@ -26,13 +26,14 @@ export default function TiptapEditor() {
       setContent(editor.getHTML());
     },
     immediatelyRender: false,
+    content: content,
   });
 
   return (
     <div className="flex flex-col w-full h-full border border-border-2 rounded-lg overflow-hidden">
       <ToolBar editor={editor} />
       <EditorContent
-        className="w-full h-full overflow-y-scroll break-all"
+        className="w-full h-full overflow-y-auto break-all"
         editor={editor}
         // 텍스트 에디터 내 공간 클릭 시 에디터로 focus 되게 설정
         onClick={() => editor?.commands.focus()}

@@ -9,7 +9,7 @@ export default function RootLayout({
   return (
     <div className="w-full flex justify-center">
       <div className="max-w-400 min-h-screen flex flex-col items-center justify-between py-20">
-        <Link href="/">
+        <Link href="/" scroll={false}>
           <LogoIcon />
         </Link>
         {children}
