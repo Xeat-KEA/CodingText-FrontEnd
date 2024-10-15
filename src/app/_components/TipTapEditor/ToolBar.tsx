@@ -14,6 +14,7 @@ import {
   OrderedListIcon,
   StrikeIcon,
 } from "./icons";
+import { useImageHandler } from "@/app/_hooks/useImageHandler";
 
 export default function ToolBar({ editor }: IToolBar) {
   if (!editor) {
@@ -55,17 +56,12 @@ export default function ToolBar({ editor }: IToolBar) {
       return;
     }
 
-    const file = files[0];
-    const formData = new FormData();
-    formData.append("file", file);
-
-    // 백엔드에 이미지 post
-    /* const imgHash = await postManager.uploadImage(formData, accessToken); // 백엔드에게 이미지 Post요청 후 URL 받기
-    const IMG_URL = `${BASE_URL}${imgHash}`; */
+    // 이미지 업로드 및 주소 반환
+    const IMG_URL = useImageHandler(files);
 
     // 반환받은 이미지 주소를 통해 editor에 이미지 삽입
     editor.commands.setImage({
-      src: "https://picsum.photos/id/237/300/200" /* IMG_URL */,
+      src: IMG_URL,
     });
   };
 

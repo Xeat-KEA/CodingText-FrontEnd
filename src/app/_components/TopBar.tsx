@@ -49,7 +49,7 @@ export default function TopBar({ isLoggedIn, isCodingPage }: ITopBar) {
       >
         {/* 탑바 좌측 요소 */}
         <div className="flex items-center gap-14">
-          <Link href="/">
+          <Link href="/" scroll={false}>
             <LogoIcon />
           </Link>
           {/* 메뉴 */}
@@ -58,7 +58,12 @@ export default function TopBar({ isLoggedIn, isCodingPage }: ITopBar) {
               if (isLoggedIn) {
                 // 로그인 했을 시 모든 메뉴 표시
                 return (
-                  <Link key={index} href={el.url} className="top-bar-menu-btn">
+                  <Link
+                    key={index}
+                    href={el.url}
+                    className="top-bar-menu-btn"
+                    scroll={false}
+                  >
                     {el.content}
                   </Link>
                 );
@@ -70,6 +75,7 @@ export default function TopBar({ isLoggedIn, isCodingPage }: ITopBar) {
                       key={index}
                       href={el.url}
                       className="top-bar-menu-btn"
+                      scroll={false}
                     >
                       {el.content}
                     </Link>
