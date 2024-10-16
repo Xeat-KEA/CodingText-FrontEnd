@@ -3,6 +3,7 @@ import { IPostCard } from "../_interfaces/interfaces";
 import { CommentCountIcon, LikeCountIcon, ReportIcon } from "./Icons";
 import { useState } from "react";
 import { useCalculateDate } from "../_hooks/useCalculateDate";
+import { useRouter } from "next/navigation";
 
 export default function PostCard({
   profileImg,
@@ -14,7 +15,10 @@ export default function PostCard({
   likes,
   comments,
   views,
+  codeId,
 }: IPostCard) {
+  const router = useRouter();
+
   const [isHovered, setIsHovered] = useState(false);
   const date = useCalculateDate(createAt);
   return (
@@ -53,11 +57,29 @@ export default function PostCard({
       <div className="w-full h-[120px] flex justify-between items-center gap-6">
         {/* 게시글 내용 */}
         <div className="flex flex-col gap-2">
-          <span className="text-lg font-semibold text-black">{title}</span>
-          <div className="text-body min-h-[66px]">{content}</div>
+          <span className="text-lg font-semibold text-black">
+            {codeId && (
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  router.push("/search/12");
+                }}
+                className="text-lg font-bold text-primary hover:underline"
+              >
+                #{codeId}&nbsp;
+              </button>
+            )}
+            {title}
+          </span>
+          <div className="text-sm text-body h-[60px] overflow-hidden">
+            {content}
+          </div>
         </div>
         {/* 썸네일 (수정 필요) */}
-        <div className="w-[160px] h-[120px] rounded-lg bg-disabled"></div>
+        {thumbnail && (
+          <div className="w-[160px] h-[120px] rounded-lg bg-disabled shrink-0"></div>
+        )}
       </div>
       <div className="w-full flex items-center justify-between">
         {/* 좋아요 / 댓글 개수 */}

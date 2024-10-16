@@ -15,6 +15,15 @@ export interface ITabBar {
   dropDownList?: string[];
 }
 
+export interface SearchTab {
+  content: string;
+  param: string;
+}
+
+export interface SearchTabBarProps {
+  menuList: SearchTab[];
+}
+
 export interface IToggleBtn {
   content: string;
   state: boolean;
@@ -94,6 +103,7 @@ export interface IPostCard {
   likes: number;
   comments: number;
   views: number;
+  codeId?: number;
 }
 
 // 전역 변수 관련 Interface
