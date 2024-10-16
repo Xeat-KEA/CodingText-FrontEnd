@@ -4,6 +4,7 @@ import {
   IBlogStore,
   ICodingTestStore,
   IPaginationStore,
+  ISearchFilterStore,
   ITabStore,
   ITiptapStore,
 } from "./_interfaces/interfaces";
@@ -72,7 +73,7 @@ export const useBlogStore = create<IBlogStore>((set) => ({
       boardCategories:
         typeof categoriesOrFn === "function"
           ? categoriesOrFn(state.boardCategories)
-          : categoriesOrFn
+          : categoriesOrFn,
     })),
   activeCategories: [],
   setActiveCategories: (categoriesOrFn) =>
@@ -93,4 +94,3 @@ export const useBlogStore = create<IBlogStore>((set) => ({
       },
     })),
 }));
-

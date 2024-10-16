@@ -8,11 +8,17 @@ export interface ITopBar {
 
 export interface ISearchBar {
   isSmall?: boolean;
+  searchFilterList: string[];
 }
 
 export interface ITabBar {
   menuList: string[];
   dropDownList?: string[];
+}
+
+export interface SearchTab {
+  content: string;
+  param: string;
 }
 
 export interface IToggleBtn {
@@ -23,10 +29,29 @@ export interface IToggleBtn {
 
 export interface IDropDown {
   isSmall?: boolean;
+  borderRight?: boolean;
   selection: string;
   onSelectionClick: (selected: string) => void;
   list: string[];
   placeholder?: string;
+}
+
+export interface ParamDropdownProps {
+  isSmall?: boolean;
+  list: string[];
+  paramType: string;
+  placeholder?: string;
+}
+
+export interface MultiSelectionList {
+  content: string;
+  list: string[];
+}
+
+export interface IMultiSelectionDropdown {
+  placeholder: string;
+  list: string[];
+  paramType: string;
 }
 
 export interface IDialog {
@@ -134,6 +159,20 @@ export interface IPaginationStore {
   setPage: (newPage: number) => void;
   lastPage: number;
   setLastPage: (page: number) => void;
+}
+
+export interface ISearchFilterStore {
+  filter: string;
+  setFilter: (selected: string) => void;
+}
+
+export interface ICodeFilterStore {
+  difficulty: string[];
+  setDifficulty: (newList: string[]) => void;
+  algorithm: string[];
+  setAlgorithm: (newList: string[]) => void;
+  order: string;
+  setOrder: (selected: string) => void;
 }
 
 // Form 관련 인터페이스
