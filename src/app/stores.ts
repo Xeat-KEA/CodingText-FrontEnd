@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import {
-  ICodeFilterStore,
+  Category,
+  IBlogStore,
   ICodingTestStore,
   IPaginationStore,
   ISearchFilterStore,
@@ -58,18 +59,38 @@ export const usePaginationStore = create<IPaginationStore>((set) => ({
   setLastPage: (page) => set({ lastPage: page }),
 }));
 
-// 검색 필터 저장 전역변수
-export const useSearchFilterStore = create<ISearchFilterStore>((set) => ({
-  filter: "",
-  setFilter: (selected) => set({ filter: selected }),
-}));
+// 블로그 정보 저장 전역변수
+export const useBlogStore = create<IBlogStore>((set) => ({
+  blogId: 1,
+  setBlogId: (id) => set({ blogId: id }),
+  isOwnBlog: false,
+  setIsOwnBlog: (state) => set({ isOwnBlog: state }),
 
-// 코드 필터 전역변수
-export const useCodeFilterStore = create<ICodeFilterStore>((set) => ({
-  difficulty: [],
-  setDifficulty: (newList) => set({ difficulty: newList }),
-  algorithm: [],
-  setAlgorithm: (newList) => set({ algorithm: newList }),
-  order: "",
-  setOrder: (selected) => set({ order: selected }),
+  // sidebar-board 관련
+  boardCategories: [],
+  setBoardCategories: (categoriesOrFn) =>
+    set((state) => ({
+      boardCategories:
+        typeof categoriesOrFn === "function"
+          ? categoriesOrFn(state.boardCategories)
+          : categoriesOrFn,
+    })),
+  activeCategories: [],
+  setActiveCategories: (categoriesOrFn) =>
+    set((state) => ({
+      activeCategories:
+        typeof categoriesOrFn === "function"
+          ? categoriesOrFn(state.activeCategories)
+          : categoriesOrFn,
+    })),
+  isAddingCategory: false,
+  setIsAddingCategory: (state) => set({ isAddingCategory: state }),
+  isAddingSubCategory: {},
+  setIsAddingSubCategory: (parentId, isAdding) =>
+    set((state) => ({
+      isAddingSubCategory: {
+        ...state.isAddingSubCategory,
+        [parentId]: isAdding,
+      },
+    })),
 }));

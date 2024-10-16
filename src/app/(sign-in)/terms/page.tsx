@@ -10,7 +10,7 @@ export default function TermsPage() {
         <span className="sign-in-title">약관</span>
         <SmBackBtn />
       </div>
-      <div className="relative grow overflow-y-scroll border border-border-2 rounded-2xl">
+      <div className="relative grow overflow-y-auto border border-border-2 rounded-2xl">
         <span className="absolute text-black whitespace-pre-wrap px-4 py-3 text-xs">
           {TERMS}
         </span>

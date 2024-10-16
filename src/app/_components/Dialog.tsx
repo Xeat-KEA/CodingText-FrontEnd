@@ -13,6 +13,7 @@ export default function Dialog({
   primaryBtn,
   redBtn,
   onBtnClick,
+  children, // 추가
 }: IDialog) {
   const ref = useOutsideClick(onBackBtnClick);
   return (
@@ -28,14 +29,14 @@ export default function Dialog({
               {title}
             </span>
             <span
-              className={`whitespace-pre-wrap ${
-                isWarning ? "font-bold text-red" : "text-body"
-              }`}
+              className={`whitespace-pre-wrap ${isWarning ? "font-bold text-red" : "text-body"
+                }`}
             >
               {content}
             </span>
           </div>
         </div>
+        {children}
         <div className="flex gap-4">
           {/* 뒤로가기 버튼 */}
           <button onClick={onBackBtnClick} className="btn-default w-full">

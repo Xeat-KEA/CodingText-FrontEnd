@@ -60,12 +60,12 @@ textarea {
 
   /* 작은 버튼 추상화 */
   .sm-btn {
-    @apply px-4 py-2 text-xs;
+    @apply px-4 py-2 text-xs rounded-lg;
   }
 
   /* 작은 버튼 Default (소셜 로그인 버튼 등) */
   .sm-btn-default {
-    @apply sm-btn border border-border-2 rounded-lg;
+    @apply sm-btn border border-border-2;
   }
 
   /* 작은 버튼-Primary (탑바 로그인 버튼 등) */
@@ -206,5 +206,36 @@ textarea {
   }
   .list-text {
     @apply text-xs flex justify-center shrink-0;
+  }
+
+  /* 사용자 정보 수정 및 관리자 페이지 관련 */
+  /* SideBar 탭 */
+  .side-bar-tab {
+    @apply w-full h-[36px] flex items-center text-sm pr-4;
+  }
+
+  /* 정보 수정 제목 */
+  .edit-title {
+    @apply text-sm text-body;
+  }
+
+  /* 정보 수정 버튼 추상화 */
+  .edit-btn {
+    @apply w-fit text-xs;
+  }
+
+  /* 정보 수정 버튼 Default 색상 */
+  .edit-btn-default {
+    @apply edit-btn font-semibold text-disabled;
+  }
+
+  /* 정보 수정 버튼 Primary 색상 */
+  .edit-btn-primary {
+    @apply edit-btn font-semibold text-primary;
+  }
+
+  /* 정보 수정 버튼 Red 색상 */
+  .edit-btn-red {
+    @apply edit-btn font-bold text-red;
   }
 }

@@ -66,6 +66,7 @@ export interface IDialog {
   primaryBtn?: string;
   redBtn?: string;
   onBtnClick?: () => void;
+  children?: React.ReactNode; // 드롭다운 추가
 }
 
 export interface ICodeEditor {
@@ -95,6 +96,18 @@ export interface IPost {
   parentCategory?: string;
   childCategory?: string;
   content: string;
+}
+
+export interface IProfileImgSelection {
+  seletedImg: string;
+  onSelectionClick: (seleted: string) => void;
+}
+
+export interface IEditBtn {
+  isEditing: boolean;
+  onEditClick: () => void;
+  onCancelClick: () => void;
+  onSubmit: () => void;
 }
 
 export interface IPostCard {
@@ -170,3 +183,33 @@ export interface IPostForm {
   parentCategory?: string;
   childCategory?: string;
 }
+
+export interface SubCategory {
+  id: number;
+  title: string;
+}
+
+export interface Category {
+  id: number;
+  title: string;
+  subCategories?: SubCategory[];
+}
+
+// 블로그 정보 저장
+export interface IBlogStore {
+  blogId: number;
+  setBlogId: (id: number) => void;
+  isOwnBlog: boolean;
+  setIsOwnBlog: (isOwnBlog: boolean) => void;
+
+  // sidebar-board 관련 Interface
+  boardCategories: Category[];
+  setBoardCategories: (categories: Category[] | ((prev: Category[]) => Category[])) => void;
+  activeCategories: number[];
+  setActiveCategories: (categories: number[] | ((prev: number[]) => number[])) => void;
+  isAddingCategory: boolean;
+  setIsAddingCategory: (state: boolean) => void;
+  isAddingSubCategory: { [key: number]: boolean };
+  setIsAddingSubCategory: (parentId: number, isAdding: boolean) => void;
+}
+
