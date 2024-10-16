@@ -1,18 +1,33 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MultiSelectionCheckIcon, ShowMoreIcon } from "./Icons";
 import { IMultiSelectionDropdown } from "../_interfaces/interfaces";
 import { useOutsideClick } from "../_hooks/useOutsideClick";
+import { useSetParams } from "../_hooks/useSetParams";
+import { useSearchParams } from "next/navigation";
 
 export default function MultiSelectionDropdown({
   placeholder,
   list,
-  selectedList,
-  onSelectionClick,
+  paramType,
 }: IMultiSelectionDropdown) {
+  const [paramList, setParamList] = useState<string[]>([]);
+  const searchParams = useSearchParams();
+  // 파라미터 설정을 위한 custom hook 호출
+  const setParams = useSetParams();
+
   const [isListOpen, setIsListOpen] = useState(false);
   const ref = useOutsideClick(
     () => isListOpen && setIsListOpen((prev) => !prev)
   );
+
+  useEffect(() => {
+    // 파라미터 변경 시, URL의 query string에서 초기 파라미터를 가져와서 설정
+    const initialParams = searchParams.get(paramType);
+    // 초기 파라미터를 배열로 변환
+    if (initialParams) {
+      setParamList(initialParams.split(","));
+    }
+  }, [searchParams, paramType]);
 
   return (
     <div
@@ -34,13 +49,16 @@ export default function MultiSelectionDropdown({
               className="w-full flex text-xs text-black px-4 py-2 gap-2 items-center"
               onClick={(e) => {
                 e.stopPropagation();
-                onSelectionClick(el);
+                setParams(paramType, {
+                  selected: el,
+                  list: paramList,
+                });
               }}
               key={index}
             >
               <span
                 className={
-                  selectedList.indexOf(el) === -1
+                  !searchParams.get(paramType)?.includes(el)
                     ? "text-disabled"
                     : "text-primary"
                 }

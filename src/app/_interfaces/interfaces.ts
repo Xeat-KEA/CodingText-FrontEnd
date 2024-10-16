@@ -16,6 +16,11 @@ export interface ITabBar {
   dropDownList?: string[];
 }
 
+export interface SearchTab {
+  content: string;
+  param: string;
+}
+
 export interface IToggleBtn {
   content: string;
   state: boolean;
@@ -31,11 +36,22 @@ export interface IDropDown {
   placeholder?: string;
 }
 
+export interface ParamDropdownProps {
+  isSmall?: boolean;
+  list: string[];
+  paramType: string;
+  placeholder?: string;
+}
+
+export interface MultiSelectionList {
+  content: string;
+  list: string[];
+}
+
 export interface IMultiSelectionDropdown {
   placeholder: string;
   list: string[];
-  selectedList: string[];
-  onSelectionClick: (selected: string) => void;
+  paramType: string;
 }
 
 export interface IDialog {
