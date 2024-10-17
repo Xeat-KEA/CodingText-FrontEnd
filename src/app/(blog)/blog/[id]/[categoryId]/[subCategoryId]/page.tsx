@@ -2,9 +2,11 @@
 
 import { DUMMY_BLOG_POST_DATA } from "@/app/(blog)/_constants/constants";
 import { DUMMY_POST_RESULT_LIST } from "@/app/(search)/_constants/constants";
+import Pagination from "@/app/_components/Pagination";
 import PostCard from "@/app/_components/PostCard";
 import SearchBar from "@/app/_components/SearchBar";
 import { TAB_BAR_ORDER_FILTER } from "@/app/_constants/constants";
+import { usePaginationStore } from "@/app/stores";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -23,6 +25,13 @@ export default function BlogSubPage() {
       console.log(keyword);
     }
   }, [searchParams]);
+
+  const { setPage, setLastPage } = usePaginationStore();
+  useEffect(() => {
+    setPage(1);
+    setLastPage(38);
+  }, []);
+  // Page 변화 감지 후 문제 리스트 다시 GET 하는 과정 필요
 
   return (
     <div className="flex w-full justify-center">
@@ -60,6 +69,7 @@ export default function BlogSubPage() {
             />
           ))}
         </div>
+        <Pagination />
       </div>
     </div>
   );
