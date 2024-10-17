@@ -1,7 +1,10 @@
 import { create } from "zustand";
 import {
+  Category,
+  IBlogStore,
   ICodingTestStore,
   IPaginationStore,
+  ISearchFilterStore,
   ITabStore,
   ITiptapStore,
 } from "./_interfaces/interfaces";
@@ -54,4 +57,40 @@ export const usePaginationStore = create<IPaginationStore>((set) => ({
   setPage: (newPage) => set({ page: newPage }),
   lastPage: 0,
   setLastPage: (page) => set({ lastPage: page }),
+}));
+
+// 블로그 정보 저장 전역변수
+export const useBlogStore = create<IBlogStore>((set) => ({
+  blogId: 1,
+  setBlogId: (id) => set({ blogId: id }),
+  isOwnBlog: false,
+  setIsOwnBlog: (state) => set({ isOwnBlog: state }),
+
+  // sidebar-board 관련
+  boardCategories: [],
+  setBoardCategories: (categoriesOrFn) =>
+    set((state) => ({
+      boardCategories:
+        typeof categoriesOrFn === "function"
+          ? categoriesOrFn(state.boardCategories)
+          : categoriesOrFn,
+    })),
+  activeCategories: [],
+  setActiveCategories: (categoriesOrFn) =>
+    set((state) => ({
+      activeCategories:
+        typeof categoriesOrFn === "function"
+          ? categoriesOrFn(state.activeCategories)
+          : categoriesOrFn,
+    })),
+  isAddingCategory: false,
+  setIsAddingCategory: (state) => set({ isAddingCategory: state }),
+  isAddingSubCategory: {},
+  setIsAddingSubCategory: (parentId, isAdding) =>
+    set((state) => ({
+      isAddingSubCategory: {
+        ...state.isAddingSubCategory,
+        [parentId]: isAdding,
+      },
+    })),
 }));

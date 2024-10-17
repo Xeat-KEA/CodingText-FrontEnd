@@ -10,7 +10,7 @@ export default function MainBanner() {
         backgroundRepeat: "no-repeat",
         backgroundSize: "cover",
       }}
-      className="w-full flex justify-center"
+      className="top-container"
     >
       <div className="max-w-1200 py-[120px]">
         <div className="flex flex-col gap-16">
