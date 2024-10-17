@@ -12,7 +12,7 @@ export default function TabBarFilter() {
   const setFilter = (type: string, newTab: string) => {
     const newParams = new URLSearchParams(searchParams.toString());
     newParams.set(type, newTab);
-    router.push(`${pathname}?${newParams}`);
+    router.push(`${pathname}?${newParams}`, { scroll: false });
   };
 
   return (

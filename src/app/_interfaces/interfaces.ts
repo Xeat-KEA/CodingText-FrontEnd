@@ -7,8 +7,7 @@ export interface ITopBar {
 }
 
 export interface ISearchBar {
-  isSmall?: boolean;
-  searchFilterList: string[];
+  baseURL: string;
 }
 
 export interface ITabBar {
@@ -187,6 +186,11 @@ export interface IPostForm {
   password?: string;
   parentCategory?: string;
   childCategory?: string;
+}
+
+export interface SearchForm {
+  keyword: string;
+  filter?: string;
 }
 
 export interface SubCategory {

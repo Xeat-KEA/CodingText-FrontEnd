@@ -1,3 +1,5 @@
+export const SEARCH_FILTER_LIST = ["제목", "문제 번호"];
+
 // 검색 결과 탭바 메뉴
 export const SEARCH_TAB_MENU_LIST = [
   { content: "글", param: "POST" },
