@@ -5,7 +5,7 @@ export default function MainBanner() {
   return (
     <div
       style={{
-        backgroundImage: "url('mainBanner.png')",
+        backgroundImage: "url('/mainBanner.png')",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
         backgroundSize: "cover",

@@ -1,41 +1,73 @@
-import { useEffect } from "react";
-import { ISearchBar } from "../_interfaces/interfaces";
-import { useSearchFilterStore } from "../stores";
+import { useEffect, useState } from "react";
+import { ISearchBar, SearchForm } from "../_interfaces/interfaces";
+import { LgSearchIcon } from "./Icons";
+import { useForm } from "react-hook-form";
+import { useRouter, useSearchParams } from "next/navigation";
 import DropDown from "./Dropdown";
-import { LgSearchIcon, SmSearchIcon } from "./Icons";
+import { CODE_SEARCH_FILTER_LIST } from "../(code)/_constants/constants";
 
-export default function SearchBar({ isSmall, searchFilterList }: ISearchBar) {
-  const { filter, setFilter } = useSearchFilterStore();
-  // 필터 초기값 설정
-  useEffect(() => {
-    if (searchFilterList !== undefined) {
-      setFilter(searchFilterList[0]);
+export default function SearchBar({ baseURL, hasFilter }: ISearchBar) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const { register, handleSubmit, setValue } = useForm<SearchForm>();
+  const onSubmit = (data: SearchForm) => {
+    const newParams = new URLSearchParams(searchParams.toString());
+    newParams.set("keyword", data.keyword);
+    if (data.filter) {
+      newParams.set("filter", data.filter);
     }
-  }, [searchFilterList]);
+    router.push(`${baseURL}?${newParams}`, {
+      scroll: false,
+    });
+  };
+
+  // 키워드 변경 시 input 안의 값 변경
+  useEffect(() => {
+    const keyword = searchParams.get("keyword");
+    if (keyword !== null) {
+      setValue("keyword", keyword);
+    }
+  }, [searchParams]);
+
+  // 드롭다운 값 변경을 위한 state
+  const [filter, setFilter] = useState("");
+  useEffect(() => {
+    if (hasFilter) {
+      setFilter(CODE_SEARCH_FILTER_LIST[0]);
+      setValue("filter", CODE_SEARCH_FILTER_LIST[0]);
+    }
+  }, []);
+
   return (
     <div className="flex items-center gap-4">
-      {searchFilterList && (
+      {hasFilter && (
         <div className="w-[92px] shrink-0">
           <DropDown
             isSmall
             borderRight
-            list={searchFilterList}
-            selection={filter ? filter : searchFilterList[0]}
-            onSelectionClick={(selected) => setFilter(selected)}
+            list={CODE_SEARCH_FILTER_LIST}
+            selection={filter ? filter : CODE_SEARCH_FILTER_LIST[0]}
+            onSelectionClick={(selected) => {
+              setFilter(selected);
+              setValue("filter", selected);
+            }}
           />
         </div>
       )}
       <form
-        className={`flex gap-2 w-full border border-border-2 rounded-full ${
-          isSmall ? "px-4 py-2" : "px-6 py-3"
-        }`}
+        onSubmit={handleSubmit(onSubmit)}
+        className="flex gap-2 w-full border border-border-2 rounded-full px-6 py-3"
       >
         <input
-          className={`grow ${isSmall ? "text-xs" : "text-lg font-semibold"}`}
+          {...register("keyword", {
+            required: baseURL ? false : true,
+          })}
+          className="grow"
           placeholder="검색어를 입력해주세요"
         />
         <button type="submit">
-          {isSmall ? <SmSearchIcon /> : <LgSearchIcon />}
+          <LgSearchIcon />
         </button>
       </form>
     </div>

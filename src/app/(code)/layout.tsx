@@ -1,4 +1,4 @@
-import TopBar from "../_components/TopBar";
+import TopBar from "../_components/TopBar/TopBar";
 import CodeLayout from "./_components/CodeLayout";
 
 export default function RootLayout({

@@ -44,6 +44,17 @@ export const FONT_SIZE = [
   "96px",
 ];
 
+export const TAB_BAR_POST_FILTER = [
+  { content: "• 전체", state: "ALL" },
+  { content: "• 일반 게시글만", state: "NORMAL" },
+  { content: "• 코딩 테스트 게시글만", state: "CODE" },
+];
+
+export const TAB_BAR_ORDER_FILTER = [
+  { content: "• 정확도순", state: "ACCURACY" },
+  { content: "• 최신순", state: "RECENT" },
+];
+
 export const DIFFICULTY_LIST = ["1단계", "2단계", "3단계", "4단계", "5단계"];
 
 export const ALGORITHM_LIST = [
