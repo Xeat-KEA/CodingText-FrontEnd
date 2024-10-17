@@ -8,6 +8,7 @@ export interface ITopBar {
 
 export interface ISearchBar {
   baseURL: string;
+  hasFilter?: boolean;
 }
 
 export interface ITabBar {
@@ -114,8 +115,9 @@ export interface IEditBtn {
 }
 
 export interface IPostCard {
-  profileImg: string;
-  nickname: string;
+  profileImg?: string;
+  nickname?: string;
+  category?: string;
   createAt: string;
   title: string;
   content: string;

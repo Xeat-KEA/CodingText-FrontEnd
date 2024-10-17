@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import DropDown from "./Dropdown";
 import { CODE_SEARCH_FILTER_LIST } from "../(code)/_constants/constants";
 
-export default function SearchBar({ baseURL }: ISearchBar) {
+export default function SearchBar({ baseURL, hasFilter }: ISearchBar) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -30,9 +30,10 @@ export default function SearchBar({ baseURL }: ISearchBar) {
     }
   }, [searchParams]);
 
+  // 드롭다운 값 변경을 위한 state
   const [filter, setFilter] = useState("");
   useEffect(() => {
-    if (CODE_SEARCH_FILTER_LIST) {
+    if (hasFilter) {
       setFilter(CODE_SEARCH_FILTER_LIST[0]);
       setValue("filter", CODE_SEARCH_FILTER_LIST[0]);
     }
@@ -40,7 +41,7 @@ export default function SearchBar({ baseURL }: ISearchBar) {
 
   return (
     <div className="flex items-center gap-4">
-      {baseURL && (
+      {hasFilter && (
         <div className="w-[92px] shrink-0">
           <DropDown
             isSmall

@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 export default function PostCard({
   profileImg,
   nickname,
+  category,
   createAt,
   title,
   content,
@@ -31,25 +32,37 @@ export default function PostCard({
       className="w-full flex flex-col gap-2 py-6 cursor-pointer"
     >
       <div className="w-full flex justify-between items-center">
-        {/* 사용자 정보 */}
-        <div
-          onClick={(e) => {
-            // 부모 요소 onClick 실행 방지
-            e.stopPropagation();
-            // 사용자 클릭 시 해당 사용자 블로그로 이동
-          }}
-          className="flex gap-2 items-center"
-        >
-          <div className="w-6 h-6 rounded-full overflow-hidden flex justify-center items-center border border-border-2">
-            <Image
-              width="24"
-              height="24"
-              src={profileImg}
-              alt={`${nickname}-profileImg`}
-            />
-          </div>
-          <span className="text-xs font-semibold text-body">{nickname}</span>
-        </div>
+        {nickname && profileImg && (
+          <>
+            {/* 사용자 정보 */}
+            <div
+              onClick={(e) => {
+                // 부모 요소 onClick 실행 방지
+                e.stopPropagation();
+                // 사용자 클릭 시 해당 사용자 블로그로 이동
+              }}
+              className="flex gap-2 items-center"
+            >
+              <div className="w-6 h-6 rounded-full overflow-hidden flex justify-center items-center border border-border-2">
+                <Image
+                  width="24"
+                  height="24"
+                  src={profileImg}
+                  alt={`${nickname}-profileImg`}
+                />
+              </div>
+              <span className="text-xs font-semibold text-body">
+                {nickname}
+              </span>
+            </div>
+          </>
+        )}
+        {category && (
+          <>
+            {/* 위치하는 하위 게시판*/}
+            <span className="text-xs font-semibold text-body">{category}</span>
+          </>
+        )}
         {/* 날짜 정보 (수정 필요) */}
         <span className="text-xs text-body">{date}</span>
       </div>
