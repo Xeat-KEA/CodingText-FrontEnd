@@ -18,6 +18,7 @@ export default function MainBoard({ title, hasTab, postList }: IMainBoard) {
             {postList.map((el, index) => (
               <PostCard
                 key={index}
+                id={el.id}
                 profileImg={el.profileImg}
                 nickname={el.nickname}
                 createAt={el.createAt}

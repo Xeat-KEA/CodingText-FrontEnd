@@ -1,11 +1,5 @@
 import { Editor } from "@tiptap/react";
 
-export interface ITopBar {
-  isLoggedIn?: boolean;
-  isCodingPage?: boolean;
-  hasNewNotice?: boolean;
-}
-
 export interface ISearchBar {
   baseURL: string;
   hasFilter?: boolean;
@@ -115,6 +109,7 @@ export interface IEditBtn {
 }
 
 export interface IPostCard {
+  id: number;
   profileImg?: string;
   nickname?: string;
   category?: string;
@@ -136,11 +131,6 @@ export interface ITabStore {
 
 // 코딩테스트 관련 Interface
 export interface ICodingTestStore {
-  // 채팅 관련 state
-  checkAnswerOnly: boolean;
-  setCheckAnswerOnly: () => void;
-  sendWithCode: boolean;
-  setSendWithCode: () => void;
   // 코딩 관련 state
   language: string;
   setLanguage: (newLanguage: string) => void;

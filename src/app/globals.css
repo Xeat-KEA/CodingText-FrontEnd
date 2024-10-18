@@ -137,7 +137,7 @@ textarea {
   /* 코딩 테스트 페이지 관련 */
   /* 말풍선 스타일링 */
   .bubble {
-    @apply flex w-fit px-3 py-3 rounded-3xl shadow-1;
+    @apply prose p-3 rounded-3xl shadow-1 w-fit;
   }
 
   /* 게시물 작성 정보 인풋 (제목, 비밀번호 등) */
@@ -160,41 +160,28 @@ textarea {
   .prose h3,
   .prose ul,
   .prose ol {
-    margin: 0;
+    @apply m-0;
   }
   .prose hr {
-    margin: 2rem 0;
+    @apply my-8;
   }
 
   /* 텍스트 에디터 내 code 태그 css 오버라이딩 */
   .prose code::before,
   .prose code::after {
-    content: none;
+    @apply content-none;
   }
   .prose code {
-    background-color: #f0f0f0;
-    border-radius: 0.4rem;
-    color: #6b6ced;
-    font-size: 12px;
-    font-weight: 400;
-    padding: 0.2em 0.4em;
+    @apply bg-white rounded-[0.4rem] text-primary text-[12px] font-normal px-[0.4rem] py-[0.2rem] whitespace-pre-wrap break-words;
   }
 
   /* 텍스트 에디터 내 code block css 오버라이딩 */
   .prose pre {
-    background: #222222;
-    border-radius: 0.5rem;
-    color: #ffffff;
-    font-family: "JetBrainsMono", monospace;
-    margin: 1.5rem 0;
-    padding: 0.75rem 1rem;
+    @apply bg-black rounded-lg text-white my-6 py-3 px-4 whitespace-pre-wrap break-words;
+  }
 
-    code {
-      background: none;
-      color: inherit;
-      font-size: 0.8rem;
-      padding: 0;
-    }
+  .prose pre code {
+    @apply bg-transparent text-inherit text-[0.8rem] p-0 whitespace-pre-wrap break-words;
   }
 
   /* 문제 목록 페이지 관련 */

@@ -1,10 +1,7 @@
-import { NavigateOptions } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect } from "react";
 
 export const usePageHandler = () => {
-  const router = useRouter();
-
   // 새로고침, 페이지 닫기
   const handleBeforeUnload = useCallback((e: BeforeUnloadEvent) => {
     e.preventDefault();

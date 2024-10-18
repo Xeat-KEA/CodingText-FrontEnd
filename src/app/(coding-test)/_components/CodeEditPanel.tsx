@@ -5,12 +5,13 @@ import { useCodingTestStore, useTabStore } from "@/app/stores";
 import { useState } from "react";
 import Dialog from "@/app/_components/Dialog";
 import { DialogCheckIcon, DialogXIcon } from "@/app/_components/Icons";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { usePageHandler } from "@/app/_hooks/usePageHandler";
 import TabBar from "@/app/_components/TapBar/TabBar";
 
 export default function CodeEditPanel() {
   const router = useRouter();
+  const { id } = useParams();
 
   // 현재 탭 전역 변수
   const { tab } = useTabStore();
@@ -59,7 +60,14 @@ export default function CodeEditPanel() {
           >
             {CODING_BUTTONS[0].content}
           </button>
-          <button onClick={() => {}} className="btn-default">
+          <button
+            onClick={() =>
+              router.push(`${CODING_BUTTONS[1].url}&keyword=${id}`, {
+                scroll: false,
+              })
+            }
+            className="btn-default"
+          >
             {CODING_BUTTONS[1].content}
           </button>
           <button onClick={() => {}} className="btn-default">
@@ -88,7 +96,7 @@ export default function CodeEditPanel() {
           backBtn="돌아가기"
           onBackBtnClick={() => setIsDialogOpen((prev) => !prev)}
           subBtn="다른 문제 풀기"
-          onSubBtnClick={() => {}}
+          onSubBtnClick={() => router.push("/code/list")}
           primaryBtn="글 쓰기"
           onBtnClick={() => setIsPosting(true)}
         />
@@ -112,7 +120,7 @@ export default function CodeEditPanel() {
           backBtn="돌아가기"
           onBackBtnClick={() => setIsPageChanging((prev) => !prev)}
           redBtn="문제 풀이 그만두기"
-          onBtnClick={() => router.push("/")}
+          onBtnClick={() => router.push("/", { scroll: false })}
         />
       )}
     </>

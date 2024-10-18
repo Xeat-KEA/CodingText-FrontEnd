@@ -1,15 +1,14 @@
 // 탑바 메뉴
 export const TOP_BAR_MENU = [
-  { content: "코딩 테스트", url: "/" },
-  { content: "풀이 기록", url: "/" },
-  { content: "내 블로그", url: "/" },
+  { content: "코딩 테스트", url: "/code/list" },
+  { content: "풀이 기록", url: "/code/history" },
+  { content: "내 블로그", url: "/blog" },
 ];
 
 // 프로필 메뉴
 export const PROFILE_MENU = [
-  { content: "내 정보 수정", url: "/" },
-  { content: "설정", url: "/" },
-  { content: "로그아웃", url: "/" },
+  { content: "내 정보 수정", url: "/edit/profile" },
+  { content: "로그아웃" },
 ];
 
 // 프로그래밍 언어 목록
@@ -64,10 +63,10 @@ export const ALGORITHM_LIST = [
   "1차원 리스트",
   "스트링",
   "2차원 리스트",
-  "스택, 큐, DFS, BFS",
+  "스택/큐/DFS/BFS",
   "비트연산과 부분집합",
   "정렬",
-  "순열, 조합, 백트래킹",
-  "트리, 힙",
-  "MST, 다익스트라",
+  "순열/조합/백트래킹",
+  "트리/힙",
+  "MST/다익스트라",
 ];

@@ -29,6 +29,8 @@ export default function TiptapEditor() {
     content: content,
   });
 
+  console.log(content);
+
   return (
     <div className="flex flex-col w-full h-full border border-border-2 rounded-lg overflow-hidden">
       <ToolBar editor={editor} />

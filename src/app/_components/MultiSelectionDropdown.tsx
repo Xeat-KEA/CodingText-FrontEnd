@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { MouseEvent, useEffect, useState } from "react";
 import { MultiSelectionCheckIcon, ShowMoreIcon } from "./Icons";
 import { IMultiSelectionDropdown } from "../_interfaces/interfaces";
 import { useOutsideClick } from "../_hooks/useOutsideClick";
@@ -10,7 +10,6 @@ export default function MultiSelectionDropdown({
   list,
   paramType,
 }: IMultiSelectionDropdown) {
-  const [paramList, setParamList] = useState<string[]>([]);
   const searchParams = useSearchParams();
   // 파라미터 설정을 위한 custom hook 호출
   const setParams = useSetParams();
@@ -20,14 +19,17 @@ export default function MultiSelectionDropdown({
     () => isListOpen && setIsListOpen((prev) => !prev)
   );
 
-  useEffect(() => {
-    // 파라미터 변경 시, URL의 query string에서 초기 파라미터를 가져와서 설정
-    const initialParams = searchParams.get(paramType);
-    // 초기 파라미터를 배열로 변환
-    if (initialParams) {
-      setParamList(initialParams.split(","));
-    }
-  }, [searchParams, paramType]);
+  // 항목 선택 시 파라미터 수정
+  const onSelectionClick = (e: MouseEvent, selected: string) => {
+    // useOutsideClick 무시
+    e.stopPropagation();
+
+    const currentList = searchParams.get(paramType)?.split(",") || [];
+    setParams(paramType, {
+      selected,
+      list: currentList,
+    });
+  };
 
   return (
     <div
@@ -47,18 +49,15 @@ export default function MultiSelectionDropdown({
           {list.map((el, index) => (
             <li
               className="w-full flex text-xs text-black px-4 py-2 gap-2 items-center"
-              onClick={(e) => {
-                e.stopPropagation();
-                setParams(paramType, {
-                  selected: el,
-                  list: paramList,
-                });
-              }}
+              onClick={(e) => onSelectionClick(e, el)}
               key={index}
             >
               <span
                 className={
-                  !searchParams.get(paramType)?.includes(el)
+                  !searchParams
+                    .get(paramType)
+                    ?.split(",")
+                    .some((item) => item === el)
                     ? "text-disabled"
                     : "text-primary"
                 }

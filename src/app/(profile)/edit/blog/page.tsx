@@ -6,8 +6,12 @@ import { DUMMY_BLOG_DATA } from "../../_constants/constants";
 import DOMPurify from "isomorphic-dompurify";
 import TiptapEditor from "@/app/_components/TipTapEditor/TiptapEditor";
 import { useTiptapStore } from "@/app/stores";
+import { useCheckToken } from "@/app/_hooks/useCheckToken";
 
 export default function EditBlogPage() {
+  // 로그인 여부 확인
+  const {} = useCheckToken(true);
+
   // 변경 사항 취소를 위한 초기값 저장
   const initialData = DUMMY_BLOG_DATA;
   const [data, setData] = useState(DUMMY_BLOG_DATA);
