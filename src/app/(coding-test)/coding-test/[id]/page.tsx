@@ -6,6 +6,7 @@ import ChatInput from "../../_components/ChatInput";
 import CodeEditPanel from "../../_components/CodeEditPanel";
 import { useCodingTestStore } from "@/app/stores";
 import NewPostPanel from "../../_components/NewPostPanel";
+import DOMPurify from "isomorphic-dompurify";
 
 export default function CodingTestPage() {
   const { isPosting } = useCodingTestStore();
@@ -20,12 +21,14 @@ export default function CodingTestPage() {
               key={index}
               className={`bubble ${
                 chat.role === "gpt"
-                  ? "bg-white text-black"
-                  : "bg-primary text-white font-bold self-end"
+                  ? "bg-white"
+                  : "bg-primary font-bold self-end"
               }`}
-            >
-              {chat.content}
-            </div>
+              style={{ color: chat.role === "user" ? "white !important" : "" }}
+              dangerouslySetInnerHTML={{
+                __html: DOMPurify.sanitize(chat.content),
+              }}
+            />
           ))}
         </div>
         {/* 채팅 입력칸 */}

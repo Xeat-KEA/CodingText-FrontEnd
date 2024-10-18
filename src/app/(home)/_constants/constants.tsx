@@ -24,6 +24,7 @@ export const BOARD_TAB_LIST = ["전체", "코딩테스트", "일반"];
 // 인기 게시글 더미 데이터
 export const WEEKLY_TRENDING_POST_LIST = [
   {
+    id: 0,
     profileImg: "/profileImg1.png",
     nickname: "사용자1",
     createAt: "2024-09-24 15:08",
@@ -35,6 +36,7 @@ export const WEEKLY_TRENDING_POST_LIST = [
     views: 1234,
   },
   {
+    id: 1,
     profileImg: "/profileImg2.png",
     nickname: "사용자2",
     createAt: "2024-09-24 15:08",
@@ -46,6 +48,7 @@ export const WEEKLY_TRENDING_POST_LIST = [
     views: 1234,
   },
   {
+    id: 2,
     profileImg: "/profileImg3.png",
     nickname: "사용자3",
     createAt: "2024-09-24 15:08",
@@ -57,6 +60,7 @@ export const WEEKLY_TRENDING_POST_LIST = [
     views: 1234,
   },
   {
+    id: 3,
     profileImg: "/profileImg4.png",
     nickname: "사용자4",
     createAt: "2024-09-24 15:08",
@@ -68,6 +72,7 @@ export const WEEKLY_TRENDING_POST_LIST = [
     views: 1234,
   },
   {
+    id: 4,
     profileImg: "/profileImg5.png",
     nickname: "사용자5",
     createAt: "2024-10-09 17:08",

@@ -3,8 +3,10 @@ import { IPostCard } from "../_interfaces/interfaces";
 import { CommentCountIcon, LikeCountIcon, ReportIcon } from "./Icons";
 import { useState } from "react";
 import { useCalculateDate } from "../_hooks/useCalculateDate";
+import Link from "next/link";
 
 export default function PostCard({
+  id,
   profileImg,
   nickname,
   createAt,
@@ -18,10 +20,8 @@ export default function PostCard({
   const [isHovered, setIsHovered] = useState(false);
   const date = useCalculateDate(createAt);
   return (
-    <div
-      onClick={() => {
-        console.log("clicked");
-      }}
+    <Link
+      href={`/blog/0/0/0/${id}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       className="w-full flex flex-col gap-2 py-6 cursor-pointer"
@@ -90,6 +90,6 @@ export default function PostCard({
           </button>
         )}
       </div>
-    </div>
+    </Link>
   );
 }

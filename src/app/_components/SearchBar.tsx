@@ -1,11 +1,9 @@
 import { useEffect } from "react";
 import { ISearchBar } from "../_interfaces/interfaces";
-import { useSearchFilterStore } from "../stores";
 import DropDown from "./Dropdown";
 import { LgSearchIcon, SmSearchIcon } from "./Icons";
 
 export default function SearchBar({ isSmall, searchFilterList }: ISearchBar) {
-  const { filter, setFilter } = useSearchFilterStore();
   // 필터 초기값 설정
   useEffect(() => {
     if (searchFilterList !== undefined) {

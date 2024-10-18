@@ -1,17 +1,18 @@
 import { LinkArrowIcon } from "@/app/_components/Icons";
+import Image from "next/image";
 import Link from "next/link";
 
 export default function MainBanner() {
   return (
-    <div
-      style={{
-        backgroundImage: "url('mainBanner.png')",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-        backgroundSize: "cover",
-      }}
-      className="top-container"
-    >
+    <div className="top-container relative">
+      <Image
+        src="/mainBanner.png"
+        fill
+        sizes="100%"
+        alt="mainBanner"
+        className="-z-10 object-cover"
+        priority
+      />
       <div className="max-w-1200 py-[120px]">
         <div className="flex flex-col gap-16">
           <div className="flex flex-col gap-4">
@@ -32,7 +33,7 @@ export default function MainBanner() {
               ChatGPT로 원하는 코딩 문제를 만들어 풀 수 있어요!
             </span>
           </div>
-          <Link href="/" className="lg-btn text-primary">
+          <Link href="/code/list" className="lg-btn text-primary">
             <span className="text-xl font-semibold">문제 풀러 가기</span>
             <LinkArrowIcon />
           </Link>

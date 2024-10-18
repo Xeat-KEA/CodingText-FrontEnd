@@ -1,11 +1,5 @@
 import { Editor } from "@tiptap/react";
 
-export interface ITopBar {
-  isLoggedIn?: boolean;
-  isCodingPage?: boolean;
-  hasNewNotice?: boolean;
-}
-
 export interface ISearchBar {
   isSmall?: boolean;
   searchFilterList: string[];
@@ -111,6 +105,7 @@ export interface IEditBtn {
 }
 
 export interface IPostCard {
+  id: number;
   profileImg: string;
   nickname: string;
   createAt: string;
@@ -175,6 +170,13 @@ export interface ICodeFilterStore {
   setOrder: (selected: string) => void;
 }
 
+export interface LogInStore {
+  token: string;
+  setToken: (newToken: string) => void;
+  isLoaded: boolean;
+  setIsLoaded: () => void;
+}
+
 // Form 관련 인터페이스
 export interface IPostForm {
   title: string;
@@ -204,12 +206,15 @@ export interface IBlogStore {
 
   // sidebar-board 관련 Interface
   boardCategories: Category[];
-  setBoardCategories: (categories: Category[] | ((prev: Category[]) => Category[])) => void;
+  setBoardCategories: (
+    categories: Category[] | ((prev: Category[]) => Category[])
+  ) => void;
   activeCategories: number[];
-  setActiveCategories: (categories: number[] | ((prev: number[]) => number[])) => void;
+  setActiveCategories: (
+    categories: number[] | ((prev: number[]) => number[])
+  ) => void;
   isAddingCategory: boolean;
   setIsAddingCategory: (state: boolean) => void;
   isAddingSubCategory: { [key: number]: boolean };
   setIsAddingSubCategory: (parentId: number, isAdding: boolean) => void;
 }
-

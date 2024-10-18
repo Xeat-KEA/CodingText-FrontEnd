@@ -7,6 +7,7 @@ import {
   ISearchFilterStore,
   ITabStore,
   ITiptapStore,
+  LogInStore,
 } from "./_interfaces/interfaces";
 
 // 코딩테스트 관련 전역변수
@@ -93,4 +94,11 @@ export const useBlogStore = create<IBlogStore>((set) => ({
         [parentId]: isAdding,
       },
     })),
+}));
+
+export const useLogInStore = create<LogInStore>((set) => ({
+  token: "",
+  setToken: (newToken) => set({ token: newToken }),
+  isLoaded: false,
+  setIsLoaded: () => set({ isLoaded: true }),
 }));
