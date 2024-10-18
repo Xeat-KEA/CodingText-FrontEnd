@@ -36,8 +36,9 @@ export interface IDropDown {
   borderRight?: boolean;
   selection: string;
   onSelectionClick: (selected: string) => void;
-  list: string[];
+  list?: string[];
   placeholder?: string;
+  disabled?: boolean;
 }
 
 export interface ParamDropdownProps {
