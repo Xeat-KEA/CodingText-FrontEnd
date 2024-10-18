@@ -72,6 +72,7 @@ export interface IDialog {
   redBtn?: string;
   onBtnClick?: () => void;
   children?: React.ReactNode; // 드롭다운 추가
+  blockOutsideClick?: boolean;
 }
 
 export interface ICodeEditor {

@@ -104,10 +104,21 @@ export default function PostEditor({
       <div className="division" />
       {/* 하단 버튼 */}
       <div className="flex gap-4 self-end">
-        <button onClick={onCancelClick} className="btn-default">
+        <button
+          type="button"
+          onClick={(e) => {
+            e.preventDefault();
+            onCancelClick();
+          }}
+          className="btn-default"
+        >
           취소
         </button>
-        <button onClick={handleSubmit(onSubmit)} className="btn-primary">
+        <button
+          type="button"
+          onClick={handleSubmit(onSubmit)}
+          className="btn-primary"
+        >
           {!isEditing ? "새 게시글 등록" : "수정"}
         </button>
       </div>
