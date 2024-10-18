@@ -27,7 +27,8 @@ export default function CodeLayout({
           <div className="w-full pr-6 flex flex-col gap-6 border-r border-border-2">
             {/* 문제 검색바 (검색 필터링 Dropdown이 가려지지 않게 z-index 설정) */}
             <div className="z-10">
-              <SearchBar baseURL={pathname} />
+              {/* pathname을 키 값으로 설정하여 페이지 변화 시 SearchBar 초기화 */}
+              <SearchBar key={pathname} hasFilter baseURL={pathname} />
             </div>
             {/* 코드 필터링 */}
             <CodeFilter />
