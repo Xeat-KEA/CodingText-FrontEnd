@@ -4,11 +4,13 @@ import { CommentCountIcon, LikeCountIcon, ReportIcon } from "./Icons";
 import { useState } from "react";
 import { useCalculateDate } from "../_hooks/useCalculateDate";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function PostCard({
   id,
   profileImg,
   nickname,
+  category,
   createAt,
   title,
   content,
@@ -16,7 +18,10 @@ export default function PostCard({
   likes,
   comments,
   views,
+  codeId,
 }: IPostCard) {
+  const router = useRouter();
+
   const [isHovered, setIsHovered] = useState(false);
   const date = useCalculateDate(createAt);
   return (
@@ -27,25 +32,37 @@ export default function PostCard({
       className="w-full flex flex-col gap-2 py-6 cursor-pointer"
     >
       <div className="w-full flex justify-between items-center">
-        {/* 사용자 정보 */}
-        <div
-          onClick={(e) => {
-            // 부모 요소 onClick 실행 방지
-            e.stopPropagation();
-            // 사용자 클릭 시 해당 사용자 블로그로 이동
-          }}
-          className="flex gap-2 items-center"
-        >
-          <div className="w-6 h-6 rounded-full overflow-hidden flex justify-center items-center border border-border-2">
-            <Image
-              width="24"
-              height="24"
-              src={profileImg}
-              alt={`${nickname}-profileImg`}
-            />
-          </div>
-          <span className="text-xs font-semibold text-body">{nickname}</span>
-        </div>
+        {nickname && profileImg && (
+          <>
+            {/* 사용자 정보 */}
+            <div
+              onClick={(e) => {
+                // 부모 요소 onClick 실행 방지
+                e.stopPropagation();
+                // 사용자 클릭 시 해당 사용자 블로그로 이동
+              }}
+              className="flex gap-2 items-center"
+            >
+              <div className="w-6 h-6 rounded-full overflow-hidden flex justify-center items-center border border-border-2">
+                <Image
+                  width="24"
+                  height="24"
+                  src={profileImg}
+                  alt={`${nickname}-profileImg`}
+                />
+              </div>
+              <span className="text-xs font-semibold text-body">
+                {nickname}
+              </span>
+            </div>
+          </>
+        )}
+        {category && (
+          <>
+            {/* 위치하는 하위 게시판*/}
+            <span className="text-xs font-semibold text-body">{category}</span>
+          </>
+        )}
         {/* 날짜 정보 (수정 필요) */}
         <span className="text-xs text-body">{date}</span>
       </div>
@@ -53,11 +70,29 @@ export default function PostCard({
       <div className="w-full h-[120px] flex justify-between items-center gap-6">
         {/* 게시글 내용 */}
         <div className="flex flex-col gap-2">
-          <span className="text-lg font-semibold text-black">{title}</span>
-          <div className="text-body min-h-[66px]">{content}</div>
+          <span className="text-lg font-semibold text-black">
+            {codeId && (
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  router.push("/search/12");
+                }}
+                className="text-lg font-bold text-primary hover:underline"
+              >
+                #{codeId}&nbsp;
+              </button>
+            )}
+            {title}
+          </span>
+          <div className="text-sm text-body h-[60px] overflow-hidden">
+            {content}
+          </div>
         </div>
         {/* 썸네일 (수정 필요) */}
-        <div className="w-[160px] h-[120px] rounded-lg bg-disabled"></div>
+        {thumbnail && (
+          <div className="w-[160px] h-[120px] rounded-lg bg-disabled shrink-0"></div>
+        )}
       </div>
       <div className="w-full flex items-center justify-between">
         {/* 좋아요 / 댓글 개수 */}

@@ -1,15 +1,14 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { ITopBar } from "../_interfaces/interfaces";
-import { NoticeIcon, LogoIcon } from "./Icons";
-import SearchBar from "./SearchBar";
-import { PROFILE_MENU, TOP_BAR_MENU } from "../_constants/constants";
-import { useOutsideClick } from "../_hooks/useOutsideClick";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useLogInStore } from "../stores";
-import ProfilePopup from "./ProfilePopup";
+import SmSearchBar from "./SmSearchBar";
+import { useOutsideClick } from "@/app/_hooks/useOutsideClick";
+import { useLogInStore } from "@/app/stores";
+import { TOP_BAR_MENU } from "@/app/_constants/constants";
+import { LogoIcon, NoticeIcon } from "../Icons";
+import ProfilePopup from "../ProfilePopup";
 
 export default function TopBar() {
   const pathname = usePathname();
@@ -94,12 +93,13 @@ export default function TopBar() {
             </ul>
           )}
         </div>
+
         {/* 탑바 우측 요소 */}
         {isLoaded && (
           <div className="flex items-center gap-6">
             {/* 검색창 */}
             <div className="w-[240px]">
-              <SearchBar isSmall />
+              <SmSearchBar />
             </div>
             {/* 로그인 : 알림, 프로필 / 비로그인 : 로그인 버튼 */}
             {token ? (
@@ -123,7 +123,7 @@ export default function TopBar() {
                 </button>
               </>
             ) : (
-              <Link href={"/sign-in"} className="sm-btn-primary rounded-full">
+              <Link href="/sign-in" className="sm-btn-primary rounded-full">
                 로그인
               </Link>
             )}

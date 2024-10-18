@@ -1,7 +1,7 @@
+import { ITabBar } from "@/app/_interfaces/interfaces";
+import { useCodingTestStore, useTabStore } from "@/app/stores";
 import { useEffect } from "react";
-import { ITabBar } from "../_interfaces/interfaces";
-import { useCodingTestStore, useTabStore } from "../stores";
-import DropDown from "./Dropdown";
+import DropDown from "../Dropdown";
 
 export default function TabBar({ menuList, dropDownList }: ITabBar) {
   // 전역 변수
@@ -26,7 +26,8 @@ export default function TabBar({ menuList, dropDownList }: ITabBar) {
           >
             <span
               className={`flex items-center text-sm text-black  h-full ${
-                el === tab && "font-bold border-b-[3px] border-primary pt-[3px]"
+                (tab ? el === tab : el === menuList[0]) &&
+                "font-bold border-b-[3px] border-primary pt-[3px]"
               }`}
             >
               {el}

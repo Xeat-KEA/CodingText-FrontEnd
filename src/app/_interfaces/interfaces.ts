@@ -1,8 +1,8 @@
 import { Editor } from "@tiptap/react";
 
 export interface ISearchBar {
-  isSmall?: boolean;
-  searchFilterList: string[];
+  baseURL: string;
+  hasFilter?: boolean;
 }
 
 export interface ITabBar {
@@ -13,6 +13,10 @@ export interface ITabBar {
 export interface SearchTab {
   content: string;
   param: string;
+}
+
+export interface SearchTabBarProps {
+  menuList: SearchTab[];
 }
 
 export interface IToggleBtn {
@@ -106,8 +110,9 @@ export interface IEditBtn {
 
 export interface IPostCard {
   id: number;
-  profileImg: string;
-  nickname: string;
+  profileImg?: string;
+  nickname?: string;
+  category?: string;
   createAt: string;
   title: string;
   content: string;
@@ -115,6 +120,7 @@ export interface IPostCard {
   likes: number;
   comments: number;
   views: number;
+  codeId?: number;
 }
 
 // 전역 변수 관련 Interface
@@ -184,6 +190,11 @@ export interface IPostForm {
   password?: string;
   parentCategory?: string;
   childCategory?: string;
+}
+
+export interface SearchForm {
+  keyword: string;
+  filter?: string;
 }
 
 export interface SubCategory {

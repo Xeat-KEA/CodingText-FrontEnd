@@ -1,6 +1,5 @@
 "use client";
 
-import TopBar from "../_components/TopBar";
 import MainBanner from "./_components/MainBanner";
 import { WEEKLY_TRENDING_POST_LIST } from "./_constants/constants";
 import SubBanner from "./_components/SubBanner";
@@ -9,6 +8,7 @@ import BannerCards from "./_components/BannerCards";
 import { useEffect, useState } from "react";
 import { useLogInStore, usePaginationStore, useTabStore } from "../stores";
 import MainBoard from "./_components/MainBoard";
+import TopBar from "../_components/TopBar/TopBar";
 
 export default function Home() {
   // 로그인 여부 파악

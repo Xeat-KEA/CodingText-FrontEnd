@@ -60,6 +60,12 @@ export const usePaginationStore = create<IPaginationStore>((set) => ({
   setLastPage: (page) => set({ lastPage: page }),
 }));
 
+// 검색 필터 저장 전역변수
+export const useSearchFilterStore = create<ISearchFilterStore>((set) => ({
+  filter: "",
+  setFilter: (selected) => set({ filter: selected }),
+}));
+
 // 블로그 정보 저장 전역변수
 export const useBlogStore = create<IBlogStore>((set) => ({
   blogId: 1,

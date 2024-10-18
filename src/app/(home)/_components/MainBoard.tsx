@@ -1,8 +1,8 @@
 import Pagination from "@/app/_components/Pagination";
 import PostCard from "@/app/_components/PostCard";
-import TabBar from "@/app/_components/TabBar";
 import { BOARD_TAB_LIST } from "../_constants/constants";
 import { IMainBoard } from "../_interfaces/interfaces";
+import TabBar from "@/app/_components/TapBar/TabBar";
 
 export default function MainBoard({ title, hasTab, postList }: IMainBoard) {
   return (
