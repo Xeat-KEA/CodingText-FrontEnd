@@ -20,7 +20,11 @@ export default function SignUpPage() {
     // 데이터 post 및 validation 필요
     console.log(data);
 
-    router.push("/sign-up/done");
+    if (!data.lang) {
+      console.log("error");
+    } else {
+      router.push("/sign-up/done");
+    }
   };
 
   return (
@@ -38,6 +42,7 @@ export default function SignUpPage() {
           {...register("nickname", { required: true })}
           className="sign-in-input"
           placeholder="닉네임"
+          autoComplete="off"
         />
         {/* 언어 선택 */}
         <div className="flex flex-col gap-2">

@@ -1,27 +1,15 @@
 import { create } from "zustand";
 import {
-  Category,
   IBlogStore,
   ICodingTestStore,
   IPaginationStore,
   ISearchFilterStore,
   ITabStore,
   ITiptapStore,
-  LogInStore,
 } from "./_interfaces/interfaces";
 
 // 코딩테스트 관련 전역변수
 export const useCodingTestStore = create<ICodingTestStore>((set) => ({
-  // 채팅 관련 전역변수
-  // 정답 여부만 확인 토글
-  checkAnswerOnly: false,
-  setCheckAnswerOnly: () =>
-    set((state) => ({ checkAnswerOnly: !state.checkAnswerOnly })),
-  // 코드와 함께 질문 토글
-  sendWithCode: false,
-  setSendWithCode: () =>
-    set((state) => ({ sendWithCode: !state.sendWithCode })),
-
   // 코딩 관련 전역변수
   // 언어 설정
   language: "",
@@ -100,11 +88,4 @@ export const useBlogStore = create<IBlogStore>((set) => ({
         [parentId]: isAdding,
       },
     })),
-}));
-
-export const useLogInStore = create<LogInStore>((set) => ({
-  token: "",
-  setToken: (newToken) => set({ token: newToken }),
-  isLoaded: false,
-  setIsLoaded: () => set({ isLoaded: true }),
 }));

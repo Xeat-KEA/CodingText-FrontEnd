@@ -12,7 +12,7 @@ export const CODING_BUTTONS = [
 export const POSTING_TAB_BAR_MENU = ["코드 뷰어", "메모장"];
 
 // 채팅 더미 데이터
-export const dummyChats = [
+export const DUMMY_CHATS = [
   {
     role: "gpt",
     content: `<h3>문제 : 최단 거리 구하기</h3>
@@ -37,15 +37,4 @@ console.log(shortestDistance(graph, startNode)); // [0, 1, 2, 2, 1]
 </code></pre>
 <p>힌트: BFS 알고리즘을 사용하세요.</p>`,
   },
-  { role: "user", content: "내 코드가 정답인지 확인해줘" },
-  { role: "gpt", content: "네, 코드는 정답입니다!" },
-  { role: "gpt", content: "문제 내용" },
-  { role: "user", content: "내 코드가 정답인지 확인해줘" },
-  { role: "gpt", content: "네, 코드는 정답입니다!" },
-  { role: "gpt", content: "문제 내용" },
-  { role: "user", content: "내 코드가 정답인지 확인해줘" },
-  { role: "gpt", content: "네, 코드는 정답입니다!" },
-  { role: "gpt", content: "문제 내용" },
-  { role: "user", content: "내 코드가 정답인지 확인해줘" },
-  { role: "gpt", content: "네, 코드는 정답입니다!" },
 ];

@@ -29,7 +29,11 @@ export default function ProfilePopup() {
           );
         } else {
           return (
-            <button onClick={logout} className="profile-popup-menu text-red">
+            <button
+              key={index}
+              onClick={logout}
+              className="profile-popup-menu text-red"
+            >
               {el.content}
             </button>
           );

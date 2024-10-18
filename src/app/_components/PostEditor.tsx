@@ -36,6 +36,7 @@ export default function PostEditor({
           {...register("title", { required: true })}
           className="grow post-input"
           placeholder="제목을 입력해주세요"
+          autoComplete="off"
         />
         {/* 비밀글 여부 설정 */}
         <div className="flex w-[256px] items-center gap-4">
@@ -52,6 +53,7 @@ export default function PostEditor({
             className="grow w-full post-input"
             placeholder="비밀번호를 입력해주세요"
             disabled={!isSecret}
+            autoComplete="off"
           />
         </div>
       </div>

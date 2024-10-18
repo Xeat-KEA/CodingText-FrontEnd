@@ -65,6 +65,7 @@ export default function SearchBar({ baseURL, hasFilter }: ISearchBar) {
           })}
           className="grow"
           placeholder="검색어를 입력해주세요"
+          autoComplete="off"
         />
         <button type="submit">
           <LgSearchIcon />

@@ -24,6 +24,7 @@ export default function SmSearchBar() {
           })}
           className="grow text-xs"
           placeholder="검색어를 입력해주세요"
+          autoComplete="off"
         />
         <button type="submit">
           <SmSearchIcon />

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Code } from "../_interfaces/interfaces";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useCheckToken } from "@/app/_hooks/useCheckToken";
 
 export default function CodeCard({
   id,
@@ -10,6 +11,8 @@ export default function CodeCard({
   participants,
   rate,
 }: Code) {
+  const { token } = useCheckToken();
+
   const router = useRouter();
 
   const [isMounted, setisMounted] = useState(false);
@@ -34,7 +37,7 @@ export default function CodeCard({
     isMounted &&
     difficultyColor && (
       <Link
-        href={`/coding-test/${id}`}
+        href={token ? `/coding-test/${id}` : "/sign-in"}
         className="w-full px-2 py-4 flex justify-between items-center gap-4"
       >
         <div className="w-full flex gap-2 items-center">

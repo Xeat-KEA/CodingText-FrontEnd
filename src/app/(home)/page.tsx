@@ -5,21 +5,15 @@ import { WEEKLY_TRENDING_POST_LIST } from "./_constants/constants";
 import SubBanner from "./_components/SubBanner";
 import Footer from "./_components/Footer";
 import BannerCards from "./_components/BannerCards";
-import { useEffect, useState } from "react";
-import { useLogInStore, usePaginationStore, useTabStore } from "../stores";
+import { useEffect } from "react";
+import { usePaginationStore, useTabStore } from "../stores";
 import MainBoard from "./_components/MainBoard";
 import TopBar from "../_components/TopBar/TopBar";
+import { useCheckToken } from "../_hooks/useCheckToken";
 
 export default function Home() {
   // 로그인 여부 파악
-  const { token, setToken, isLoaded, setIsLoaded } = useLogInStore();
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      setToken(token);
-    }
-    setIsLoaded();
-  }, []);
+  const { token, isLoaded } = useCheckToken();
 
   const { tab } = useTabStore();
   const { setPage, setLastPage } = usePaginationStore();

@@ -9,6 +9,7 @@ import Pagination from "@/app/_components/Pagination";
 import ProfileCard from "./ProfileCard";
 import CodeFilter from "./CodeFilter";
 import { usePathname } from "next/navigation";
+import { useCheckToken } from "@/app/_hooks/useCheckToken";
 
 export default function CodeLayout({
   children,
@@ -16,6 +17,8 @@ export default function CodeLayout({
   children: React.ReactNode;
 }>) {
   const pathname = usePathname();
+  // 로그인 여부 확인 (풀이 기록 페이지에서만 로그인으로 이동)
+  const { token } = useCheckToken(pathname === "/code/history");
   return (
     <>
       <div className="top-container pt-16">
@@ -34,7 +37,7 @@ export default function CodeLayout({
           </div>
           {/* 회원 정보 부분 */}
           <div className="w-[300px] shrink-0 pl-6 relative">
-            <ProfileCard userData={DUMMY_PROFILE_DATA} />
+            <ProfileCard userData={token ? DUMMY_PROFILE_DATA : undefined} />
           </div>
         </div>
       </div>

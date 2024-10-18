@@ -5,16 +5,17 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import SmSearchBar from "./SmSearchBar";
 import { useOutsideClick } from "@/app/_hooks/useOutsideClick";
-import { useLogInStore } from "@/app/stores";
 import { TOP_BAR_MENU } from "@/app/_constants/constants";
 import { LogoIcon, NoticeIcon } from "../Icons";
 import ProfilePopup from "../ProfilePopup";
+import { useCheckToken } from "@/app/_hooks/useCheckToken";
+import Image from "next/image";
 
 export default function TopBar() {
   const pathname = usePathname();
 
   // 로그인 여부 확인
-  const { token, isLoaded } = useLogInStore();
+  const { token, isLoaded } = useCheckToken();
 
   // 팝업 상태 관리 state
   const [isPopUpOpen, setIsPopUpOpen] = useState({
@@ -116,10 +117,15 @@ export default function TopBar() {
                 </button>
                 <button
                   ref={profileRef}
-                  className="w-9 h-9 border border-border-2 rounded-full"
+                  className="w-9 h-9 border border-border-2 rounded-full overflow-hidden"
                   onClick={onProfileClicked}
                 >
-                  {/* 프로필 이미지 추가 필요 */}
+                  <Image
+                    width={36}
+                    height={36}
+                    src={"/profileImg1.png"}
+                    alt="profileImg"
+                  />
                 </button>
               </>
             ) : (

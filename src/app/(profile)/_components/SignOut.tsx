@@ -13,7 +13,7 @@ export default function SignOutOrDeleteAccount() {
       <div className="flex flex-col gap-8">
         <button
           onClick={() => {
-            // 토큰 제거 과정 추가 필요
+            localStorage.removeItem("token");
             router.push("/", { scroll: false });
           }}
           className="edit-btn-red"
@@ -37,7 +37,12 @@ export default function SignOutOrDeleteAccount() {
           backBtn="취소"
           onBackBtnClick={() => setIsDeletingAccount((prev) => !prev)}
           redBtn="회원 탈퇴"
-          onBtnClick={() => router.push("/", { scroll: false })}
+          onBtnClick={() => {
+            // 회원 탈퇴 POST 필요
+
+            localStorage.removeItem("token");
+            router.push("/", { scroll: false });
+          }}
         />
       )}
     </>

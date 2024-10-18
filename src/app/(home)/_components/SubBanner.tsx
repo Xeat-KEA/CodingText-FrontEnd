@@ -1,10 +1,9 @@
 import { LinkArrowIcon } from "@/app/_components/Icons";
-import { useLogInStore } from "@/app/stores";
-import Link from "next/link";
+import { useCheckToken } from "@/app/_hooks/useCheckToken";
 import { useRouter } from "next/navigation";
 
 export default function SubBanner() {
-  const { token } = useLogInStore();
+  const { token } = useCheckToken();
   const router = useRouter();
   return (
     <div className="w-full h-[240px] gradient flex justify-center">

@@ -12,8 +12,12 @@ import EditProfileImgDialog from "../../_components/EditProfileImgDialog";
 import { useImageHandler } from "@/app/_hooks/useImageHandler";
 import EditProfileImg from "../../_components/EditProfileImg";
 import { handleEnter } from "@/app/utils";
+import { useCheckToken } from "@/app/_hooks/useCheckToken";
 
 export default function EditProfilePage() {
+  // 로그인 여부 확인
+  const {} = useCheckToken(true);
+
   // 변경사항 전체 취소를 위한 초기값 저장
   const initialData = DUMMY_PROFILE_DATA;
   // 수정 취소를 위한 임시값 저장
@@ -110,6 +114,7 @@ export default function EditProfilePage() {
                 {...register("nickname", {
                   value: data.nickname,
                 })}
+                autoComplete="off"
               />
             )}
             <EditBtn

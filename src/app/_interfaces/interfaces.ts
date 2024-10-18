@@ -131,11 +131,6 @@ export interface ITabStore {
 
 // 코딩테스트 관련 Interface
 export interface ICodingTestStore {
-  // 채팅 관련 state
-  checkAnswerOnly: boolean;
-  setCheckAnswerOnly: () => void;
-  sendWithCode: boolean;
-  setSendWithCode: () => void;
   // 코딩 관련 state
   language: string;
   setLanguage: (newLanguage: string) => void;
@@ -174,13 +169,6 @@ export interface ICodeFilterStore {
   setAlgorithm: (newList: string[]) => void;
   order: string;
   setOrder: (selected: string) => void;
-}
-
-export interface LogInStore {
-  token: string;
-  setToken: (newToken: string) => void;
-  isLoaded: boolean;
-  setIsLoaded: () => void;
 }
 
 // Form 관련 인터페이스
