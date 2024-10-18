@@ -45,7 +45,10 @@ export default function CodeCard({
             onClick={(e) => {
               e.stopPropagation();
               e.preventDefault();
-              router.push(`/search/${id}}`);
+              router.push(
+                `/search?keyword=${id}&tab=POST&category=CODE&order=ACCURACY`,
+                { scroll: false }
+              );
             }}
             className="w-[60px] text-xs font-semibold text-primary list-text hover:underline"
           >

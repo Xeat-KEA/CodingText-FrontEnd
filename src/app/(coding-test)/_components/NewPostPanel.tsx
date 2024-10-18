@@ -92,7 +92,7 @@ export default function NewPostPanel() {
           backBtn="돌아가기"
           onBackBtnClick={() => setIsPageChanging((prev) => !prev)}
           redBtn="게시글 작성 취소"
-          onBtnClick={() => router.push("/")}
+          onBtnClick={() => router.push("/", { scroll: false })}
         />
       )}
     </>

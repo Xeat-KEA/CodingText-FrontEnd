@@ -76,7 +76,9 @@ export default function PostCard({
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
-                  router.push("/search/12");
+                  router.push(
+                    `/search?keyword=${codeId}&tab=POST&category=CODE&order=ACCURACY`
+                  );
                 }}
                 className="text-lg font-bold text-primary hover:underline"
               >

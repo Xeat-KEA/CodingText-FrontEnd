@@ -14,7 +14,7 @@ export default function SubBanner() {
         <button
           onClick={() => {
             if (token) {
-              router.push(`/blog/${token}`);
+              router.push(`/blog/${token}`, { scroll: false });
             } else {
               router.push("/sign-in");
             }

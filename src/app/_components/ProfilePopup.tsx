@@ -10,7 +10,7 @@ export default function ProfilePopup() {
     if (pathname === "/") {
       window.location.reload();
     } else {
-      router.push("/");
+      router.push("/", { scroll: false });
     }
   };
 

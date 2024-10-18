@@ -34,7 +34,10 @@ export default function HistoryCard({
                 e.stopPropagation();
                 e.preventDefault();
                 if (id !== null) {
-                  router.push(`/search/${id}}`);
+                  router.push(
+                    `/search?keyword=${id}&tab=POST&category=CODE&order=ACCURACY`,
+                    { scroll: false }
+                  );
                 }
               }}
               className="w-[60px] text-xs font-semibold text-primary list-text cursor-pointer hover:underline"
