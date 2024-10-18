@@ -5,8 +5,7 @@ import ListTopBar from "../../_components/ListTopBar";
 import CodeCard from "../../_components/CodeCard";
 import { useEffect } from "react";
 import { usePaginationStore } from "@/app/stores";
-import { useRouter } from "next/router";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 export default function CodeListPage() {
   const router = useRouter();

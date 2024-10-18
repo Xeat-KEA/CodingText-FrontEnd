@@ -14,7 +14,7 @@ export const useSetParams = () => {
     if (typeof param === "string") {
       const newParams = new URLSearchParams(searchParams.toString());
       newParams.set(paramType, param);
-      router.push(`${pathname}?${newParams}`);
+      router.push(`${pathname}?${newParams}`, { scroll: false });
     }
     if (typeof param === "object") {
       let newParamList = [...param.list];
@@ -28,7 +28,7 @@ export const useSetParams = () => {
 
       const newParams = new URLSearchParams(searchParams.toString());
       newParams.set(paramType, newParamList.join(","));
-      router.push(`${pathname}?${newParams}`);
+      router.push(`${pathname}?${newParams}`, { scroll: false });
     }
   };
 

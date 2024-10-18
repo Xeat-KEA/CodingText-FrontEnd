@@ -1,4 +1,4 @@
-import TopBar from "@/app/_components/TopBar";
+import TopBar from "@/app/_components/TopBar/TopBar";
 import ProfileSideBar from "../_components/ProfileSideBar";
 
 export default function RootLayout({

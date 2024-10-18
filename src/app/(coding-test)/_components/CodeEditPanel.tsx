@@ -1,4 +1,3 @@
-import TabBar from "@/app/_components/TabBar";
 import CodeEditor from "./CodeEditor";
 import { CODING_BUTTONS, CODING_TAB_BAR_MENU } from "../_constants/constants";
 import { PROGRAMMING_LANGUAGES } from "@/app/_constants/constants";
@@ -8,6 +7,7 @@ import Dialog from "@/app/_components/Dialog";
 import { DialogCheckIcon, DialogXIcon } from "@/app/_components/Icons";
 import { useRouter } from "next/navigation";
 import { usePageHandler } from "@/app/_hooks/usePageHandler";
+import TabBar from "@/app/_components/TapBar/TabBar";
 
 export default function CodeEditPanel() {
   const router = useRouter();

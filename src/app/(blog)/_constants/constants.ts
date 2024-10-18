@@ -1,7 +1,7 @@
 import { Category } from "@/app/_interfaces/interfaces";
 
 export let loggedInUserId = 1; // 임시 로그인된 사용자 ID
-export let blogOwnerId = 'user'; // 블로그 홈 ID
+export let blogOwnerId = "user"; // 블로그 홈 ID
 
 // // 블로그 페이지 사이드바 메뉴
 // export const Blog_Side_BAR_MENU = [];
@@ -23,7 +23,7 @@ export const Board_Categories: Category[] = [
       { id: 4, title: "4단계" },
       { id: 5, title: "5단계" },
     ],
-  }
+  },
 ];
 
 // 게시판 목록 (타인)
@@ -65,19 +65,21 @@ export const Other_Board_Categories: Category[] = [
       { id: 4, title: "데이터베이스" },
     ],
   },
-]
+];
 
 // 블로그 프로필
-export const Blog_Profile_Data = [{
-  profileId: 1,
-  profileImage: "/profile.png",
-  rank: "Junior",
-  name: "developer",
-  Intro: "안녕하세요! 개발자를 준비하고 있는 사람입니다. 잘 부탁드립니다~",
-  FollowerCount: 4,
-}]
+export const Blog_Profile_Data = [
+  {
+    profileId: 1,
+    profileImage: "/profile.png",
+    rank: "Junior",
+    name: "developer",
+    Intro: "안녕하세요! 개발자를 준비하고 있는 사람입니다. 잘 부탁드립니다~",
+    FollowerCount: 4,
+  },
+];
 
-// 블로그 소개글 
+// 블로그 소개글
 export const blog_Introduction_Data = `
   <div>
     <h1>안녕하세요!</h1>
@@ -94,3 +96,96 @@ export const blog_Introduction_Data = `
     <p>정기적으로 업데이트되는 이 공간에서 코딩에 대한 이야기를 나누고, 함께 성장해나가요!</p>
   </div>
 `;
+
+export const DUMMY_BLOG_POST_DATA = [
+  {
+    category: "하위 게시판1",
+    createdAt: "2024-10-14T21:59:16.6362039",
+    title: "게시글 제목1",
+    content: "게시글 내용 게시글 내용",
+    likes: 123,
+    comments: 123,
+    views: 1234,
+  },
+  {
+    category: "하위 게시판1",
+    createdAt: "2024-10-14T21:59:16.6362039",
+    title: "게시글 제목2",
+    content: "게시글 내용 게시글 내용",
+    likes: 123,
+    comments: 123,
+    views: 1234,
+  },
+  {
+    category: "하위 게시판2",
+    createdAt: "2024-10-14T21:59:16.6362039",
+    title: "게시글 제목3",
+    content: "게시글 내용 게시글 내용",
+    likes: 123,
+    comments: 123,
+    views: 1234,
+  },
+  {
+    category: "하위 게시판2",
+    createdAt: "2024-10-14T21:59:16.6362039",
+    title: "게시글 제목4",
+    content: "게시글 내용 게시글 내용",
+    likes: 123,
+    comments: 123,
+    views: 1234,
+  },
+  {
+    category: "하위 게시판1",
+    createdAt: "2024-10-14T21:59:16.6362039",
+    title: "게시글 제목5",
+    content: "게시글 내용 게시글 내용",
+    likes: 123,
+    comments: 123,
+    views: 1234,
+  },
+  {
+    category: "하위 게시판4",
+    createdAt: "2024-10-14T21:59:16.6362039",
+    title: "게시글 제목6",
+    content: "게시글 내용 게시글 내용",
+    likes: 123,
+    comments: 123,
+    views: 1234,
+  },
+  {
+    category: "하위 게시판1",
+    createdAt: "2024-10-14T21:59:16.6362039",
+    title: "게시글 제목7",
+    content: "게시글 내용 게시글 내용",
+    likes: 123,
+    comments: 123,
+    views: 1234,
+  },
+  {
+    category: "하위 게시판3",
+    createdAt: "2024-10-14T21:59:16.6362039",
+    title: "게시글 제목8",
+    content: "게시글 내용 게시글 내용",
+    likes: 123,
+    comments: 123,
+    views: 1234,
+  },
+  {
+    category: "하위 게시판3",
+    createdAt: "2024-10-14T21:59:16.6362039",
+    title: "게시글 제목9",
+    content: "게시글 내용 게시글 내용",
+    likes: 123,
+    comments: 123,
+    views: 1234,
+  },
+  {
+    category: "하위 게시판2",
+    createdAt: "2024-10-14T21:59:16.6362039",
+    title: "게시글 제목10",
+    content: "게시글 내용 게시글 내용",
+    likes: 123,
+    comments: 123,
+    views: 1234,
+  },
+];

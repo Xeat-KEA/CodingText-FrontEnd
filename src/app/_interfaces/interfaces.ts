@@ -7,8 +7,8 @@ export interface ITopBar {
 }
 
 export interface ISearchBar {
-  isSmall?: boolean;
-  searchFilterList: string[];
+  baseURL: string;
+  hasFilter?: boolean;
 }
 
 export interface ITabBar {
@@ -19,6 +19,10 @@ export interface ITabBar {
 export interface SearchTab {
   content: string;
   param: string;
+}
+
+export interface SearchTabBarProps {
+  menuList: SearchTab[];
 }
 
 export interface IToggleBtn {
@@ -111,8 +115,9 @@ export interface IEditBtn {
 }
 
 export interface IPostCard {
-  profileImg: string;
-  nickname: string;
+  profileImg?: string;
+  nickname?: string;
+  category?: string;
   createAt: string;
   title: string;
   content: string;
@@ -120,6 +125,7 @@ export interface IPostCard {
   likes: number;
   comments: number;
   views: number;
+  codeId?: number;
 }
 
 // 전역 변수 관련 Interface
@@ -184,6 +190,11 @@ export interface IPostForm {
   childCategory?: string;
 }
 
+export interface SearchForm {
+  keyword: string;
+  filter?: string;
+}
+
 export interface SubCategory {
   id: number;
   title: string;
@@ -204,12 +215,15 @@ export interface IBlogStore {
 
   // sidebar-board 관련 Interface
   boardCategories: Category[];
-  setBoardCategories: (categories: Category[] | ((prev: Category[]) => Category[])) => void;
+  setBoardCategories: (
+    categories: Category[] | ((prev: Category[]) => Category[])
+  ) => void;
   activeCategories: number[];
-  setActiveCategories: (categories: number[] | ((prev: number[]) => number[])) => void;
+  setActiveCategories: (
+    categories: number[] | ((prev: number[]) => number[])
+  ) => void;
   isAddingCategory: boolean;
   setIsAddingCategory: (state: boolean) => void;
   isAddingSubCategory: { [key: number]: boolean };
   setIsAddingSubCategory: (parentId: number, isAdding: boolean) => void;
 }
-
