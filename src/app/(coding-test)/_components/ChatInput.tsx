@@ -1,11 +1,11 @@
-import { MouseEvent, useEffect, useState } from "react";
+import { MouseEvent, useEffect, useRef, useState } from "react";
 import { SendMessageIcon, SettingIcon } from "./Icons";
 import ToggleBtn from "@/app/_components/ToggleBtn";
 import { useForm } from "react-hook-form";
 import { ChatInputForm, ChatInputProps } from "../_interface/interfaces";
 
 export default function ChatInput({ onSubmit }: ChatInputProps) {
-  const { register, handleSubmit, setValue } = useForm<ChatInputForm>();
+  const { register, handleSubmit, setValue, watch } = useForm<ChatInputForm>();
   const onValid = (data: ChatInputForm) => {
     onSubmit(data);
     setValue("content", "");
@@ -25,24 +25,42 @@ export default function ChatInput({ onSubmit }: ChatInputProps) {
     setValue("sendWithCode", sendWithCode);
   }, [correctOrNot, sendWithCode]);
 
+  // textarea 높이 자동 조절
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+  const content = watch("content");
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+      textareaRef.current.style.height = `${Math.min(
+        textareaRef.current.scrollHeight,
+        72
+      )}px`;
+    }
+  }, [content]);
+
   return (
     <form
       onSubmit={handleSubmit(onValid)}
-      className="relative last:w-full flex items-center px-4 py-2 gap-3 bg-white border border-border-2 rounded-full"
+      className="relative last:w-full flex px-4 py-2 gap-3 bg-white border border-border-2 rounded-[27px]"
     >
-      <button type="button" onClick={onSettingClick}>
+      <button className="self-end mb-1" type="button" onClick={onSettingClick}>
         <SettingIcon />
       </button>
-      <input
+      <textarea
         {...register("content", { required: true })}
-        className="outline-none grow text-black"
-        type="text"
-        placeholder="AI에게 궁금한 점을 자유롭게 질문해보세요!"
+        ref={(e) => {
+          // register와 ref의 충돌 방지
+          textareaRef.current = e;
+          register("content").ref(e);
+        }}
+        className="self-center resize-none grow text-black h-auto"
+        rows={1}
+        placeholder="AI에게 질문"
         autoComplete="off"
       />
       <button
         type="submit"
-        className="flex justify-center items-center w-9 h-9 rounded-full bg-primary"
+        className="self-end flex justify-center items-center w-8 h-8 rounded-full bg-primary"
       >
         <SendMessageIcon />
       </button>

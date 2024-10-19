@@ -8,6 +8,7 @@ import { DialogCheckIcon } from "@/app/_components/Icons";
 import { useRouter } from "next/navigation";
 import { usePageHandler } from "@/app/_hooks/usePageHandler";
 import TabBar from "@/app/_components/TapBar/TabBar";
+import { useBase64 } from "@/app/_hooks/useBase64";
 
 export default function NewPostPanel() {
   const router = useRouter();
@@ -54,7 +55,9 @@ export default function NewPostPanel() {
             onCancelClick={() => setIsPosting(false)}
             onBtnClick={(data) => {
               // data post 부분 작성 필요
-              console.log(data);
+              const newContent = useBase64("encode", data.content);
+              const newData = { ...data, content: newContent };
+              console.log(newData);
 
               setIsDialogOpen((prev) => !prev);
             }}

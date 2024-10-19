@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { useTiptapStore } from "../stores";
 import DropDown from "./Dropdown";
 import { Other_Board_Categories } from "../(blog)/_constants/constants";
+import { useBase64 } from "../_hooks/useBase64";
 
 export default function PostEditor({
   isCodingTest,
@@ -17,7 +18,9 @@ export default function PostEditor({
   const { register, handleSubmit, setValue } = useForm<IPostForm>();
   const { content } = useTiptapStore();
   const onSubmit = (data: IPostForm) => {
-    const newPostForm: IPost = { ...data, content: content };
+    // 텍스트 저장을 위해 base64로 인코딩
+    const newContent = useBase64("encode", content);
+    const newPostForm: IPost = { ...data, content: newContent };
     onBtnClick(newPostForm);
   };
 

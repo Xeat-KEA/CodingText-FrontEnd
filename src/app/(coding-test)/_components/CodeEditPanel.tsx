@@ -8,6 +8,7 @@ import { DialogCheckIcon, DialogXIcon } from "@/app/_components/Icons";
 import { useParams, useRouter } from "next/navigation";
 import { usePageHandler } from "@/app/_hooks/usePageHandler";
 import TabBar from "@/app/_components/TapBar/TabBar";
+import { useBase64 } from "@/app/_hooks/useBase64";
 
 export default function CodeEditPanel() {
   const router = useRouter();
@@ -15,12 +16,26 @@ export default function CodeEditPanel() {
 
   // 현재 탭 전역 변수
   const { tab } = useTabStore();
-  const { hasSolved, setHasSolved, setIsPosting, setMemo } =
+
+  // 코딩 테스트 관련 전역 변수
+  const { value, hasSolved, setHasSolved, setIsPosting, memo, setMemo } =
     useCodingTestStore();
 
   const [isCorrect, setIsCorrect] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isPageChanging, setIsPageChanging] = useState(false);
+  const [compiledResult, setCompiledResult] = useState("");
+
+  const onCodeSubmit = () => {
+    // 코드를 base64로 인코딩하여 백에 전달
+    const encodedCode = useBase64("encode", value);
+
+    // 백으로부터 전달 받은 컴파일 결과 내용을 디코딩 후 저장
+    const result = useBase64("decode", "");
+    setCompiledResult(result);
+    // 정답 여부 저장
+    setIsCorrect(true);
+  };
 
   // 새로고침, 페이지 닫기, 뒤로가기 방지
   usePageHandler();
@@ -38,21 +53,38 @@ export default function CodeEditPanel() {
           dropDownList={PROGRAMMING_LANGUAGES}
         />
         {/* 컴파일러 / 메모장 */}
-        <div className="w-full h-[200px] flex shrink-0 border border-border-2 rounded-2xl overflow-hidden">
+        <div
+          className={`w-full h-[200px] flex shrink-0 rounded-2xl overflow-hidden ${
+            tab === "메모장" && "border border-border-2"
+          }`}
+        >
           {/* 컴파일러 */}
-          <div></div>
+          {tab === "컴파일러" && (
+            <div className="prose w-full">
+              <pre className="w-full h-full !m-0">
+                <code>
+                  {/* 컴파일 결과 */}
+                  {compiledResult}
+                </code>
+              </pre>
+            </div>
+          )}
           {/* 메모장 */}
-          <textarea
-            onChange={(e) => setMemo(e.target.value)}
-            className={`${
-              tab === "메모장" ? "block" : "hidden"
-            } w-full h-full px-4 py-3 text-black resize-none`}
-          />
+          {tab === "메모장" && (
+            <textarea
+              value={memo}
+              onChange={(e) => setMemo(e.target.value)}
+              className={`${
+                tab === "메모장" ? "block" : "hidden"
+              } w-full h-full px-4 py-3 text-black resize-none`}
+            />
+          )}
         </div>
         {/* 구분선 */}
         <div className="division" />
         {/* 하단 버튼 */}
         <div className="flex gap-4 self-end">
+          {/* 글 쓰기 버튼 (정답 시에만 활성화) */}
           <button
             onClick={() => setIsPosting(true)}
             className={`${!hasSolved ? "btn-disabled" : "btn-default"}`}
@@ -60,6 +92,7 @@ export default function CodeEditPanel() {
           >
             {CODING_BUTTONS[0].content}
           </button>
+          {/* 다른 사람 풀이 보기 버튼 */}
           <button
             onClick={() =>
               router.push(`${CODING_BUTTONS[1].url}&keyword=${id}`, {
@@ -70,11 +103,15 @@ export default function CodeEditPanel() {
           >
             {CODING_BUTTONS[1].content}
           </button>
-          <button onClick={() => {}} className="btn-default">
+          {/* 코드 컴파일 후 실행 */}
+          <button onClick={onCodeSubmit} className="btn-default">
             {CODING_BUTTONS[2].content}
           </button>
+          {/* 코드 제출 */}
           <button
             onClick={() => {
+              onCodeSubmit();
+
               if (isCorrect) {
                 setHasSolved(true);
                 setIsDialogOpen((prev) => !prev);

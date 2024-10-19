@@ -13,6 +13,7 @@ export default function CodeEditor({ isViewer, defaultValue }: ICodeEditor) {
     }
   }, []);
 
+  // 언어 설정
   const [lang, setLang] = useState<any>();
   useEffect(() => {
     if (language === "java") {

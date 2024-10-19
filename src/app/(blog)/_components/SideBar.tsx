@@ -89,7 +89,11 @@ export default function SideBar() {
       <div className="absolute bottom-2 w-full bg-white z-10">
         <SidebarLink href="/" label="문제 풀러 가기" Icon={SbGotestIcon} />
         {isOwnBlog ? (
-          <SidebarLink href="/" label="새 게시글" Icon={SbNewpostIcon} />
+          <SidebarLink
+            href={`/blog/${loggedInUserId}/new-post`}
+            label="새 게시글"
+            Icon={SbNewpostIcon}
+          />
         ) : (
           <SidebarLink
             href={`/blog/${loggedInUserId}`}

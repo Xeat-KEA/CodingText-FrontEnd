@@ -60,7 +60,7 @@ export default function CodingTestPage() {
               className={`bubble ${
                 chat.role === "gpt"
                   ? "bg-white"
-                  : "bg-primary font-bold self-end !text-white"
+                  : "bg-primary font-bold self-end !text-white whitespace-pre-wrap"
               }`}
               dangerouslySetInnerHTML={{
                 __html: DOMPurify.sanitize(chat.content),
@@ -69,7 +69,7 @@ export default function CodingTestPage() {
           ))}
         </div>
         {/* 채팅 입력칸 */}
-        <div className="px-6 pb-8">
+        <div className="px-6 pb-8 pt-2">
           <ChatInput onSubmit={onSubmit} />
         </div>
       </SplitterPanel>
