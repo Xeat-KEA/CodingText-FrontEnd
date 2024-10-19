@@ -14,8 +14,9 @@ export default function Dialog({
   redBtn,
   onBtnClick,
   children, // 추가
+  blockOutsideClick,
 }: IDialog) {
-  const ref = useOutsideClick(onBackBtnClick);
+  const ref = !blockOutsideClick ? useOutsideClick(onBackBtnClick) : null;
   return (
     <div className="overlay">
       <div
@@ -29,8 +30,9 @@ export default function Dialog({
               {title}
             </span>
             <span
-              className={`whitespace-pre-wrap ${isWarning ? "font-bold text-red" : "text-body"
-                }`}
+              className={`whitespace-pre-wrap ${
+                isWarning ? "font-bold text-red" : "text-body"
+              }`}
             >
               {content}
             </span>

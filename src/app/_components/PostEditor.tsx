@@ -4,6 +4,8 @@ import TiptapEditor from "./TipTapEditor/TiptapEditor";
 import { IPost, IPostEditor, IPostForm } from "../_interfaces/interfaces";
 import { useForm } from "react-hook-form";
 import { useTiptapStore } from "../stores";
+import DropDown from "./Dropdown";
+import { Other_Board_Categories } from "../(blog)/_constants/constants";
 
 export default function PostEditor({
   isCodingTest,
@@ -27,6 +29,19 @@ export default function PostEditor({
     setValue("password", "");
     setValue("isSecret", isSecret);
   }, [isSecret]);
+
+  const [category, setCategory] = useState("");
+  const [subCategory, setSubCategory] = useState("");
+  useEffect(() => {
+    // 상위 케시판 변경 시 하위 게시판 초기화
+    setSubCategory("");
+
+    setValue("parentCategory", category);
+  }, [category]);
+
+  useEffect(() => {
+    setValue("childCategory", subCategory);
+  }, [subCategory]);
 
   return (
     <form className="w-full h-full flex flex-col gap-4">
@@ -57,18 +72,55 @@ export default function PostEditor({
           />
         </div>
       </div>
-      {/* 게시판 선택 드롭다운 추가 필요 */}
-      {!isCodingTest && <></>}
+      {/* 게시판 선택 드롭다운 */}
+      {!isCodingTest && (
+        <div className="flex gap-4">
+          <DropDown
+            placeholder="상위 게시판을 선택해주세요"
+            list={Other_Board_Categories.map(
+              (el, index) => index !== 0 && index !== 1 && el.title
+            ).filter((el) => el !== false)}
+            selection={category}
+            onSelectionClick={(selected) => setCategory(selected)}
+          />
+          <DropDown
+            placeholder="하위 게시판을 선택해주세요"
+            list={
+              category
+                ? Other_Board_Categories.filter(
+                    (el) => el.title === category
+                  )[0]
+                    .subCategories?.map((el, index) => index !== 0 && el.title)
+                    .filter((el) => el !== false)
+                : []
+            }
+            selection={subCategory}
+            onSelectionClick={(selected) => setSubCategory(selected)}
+            disabled={!category}
+          />
+        </div>
+      )}
       {/* 텍스트 에디터 */}
       <TiptapEditor />
       {/* 하단 버튼 */}
       <div className="division" />
       {/* 하단 버튼 */}
       <div className="flex gap-4 self-end">
-        <button onClick={onCancelClick} className="btn-default">
+        <button
+          type="button"
+          onClick={(e) => {
+            e.preventDefault();
+            onCancelClick();
+          }}
+          className="btn-default"
+        >
           취소
         </button>
-        <button onClick={handleSubmit(onSubmit)} className="btn-primary">
+        <button
+          type="button"
+          onClick={handleSubmit(onSubmit)}
+          className="btn-primary"
+        >
           {!isEditing ? "새 게시글 등록" : "수정"}
         </button>
       </div>

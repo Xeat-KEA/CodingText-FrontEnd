@@ -30,8 +30,9 @@ export interface IDropDown {
   borderRight?: boolean;
   selection: string;
   onSelectionClick: (selected: string) => void;
-  list: string[];
+  list?: string[];
   placeholder?: string;
+  disabled?: boolean;
 }
 
 export interface ParamDropdownProps {
@@ -65,6 +66,7 @@ export interface IDialog {
   redBtn?: string;
   onBtnClick?: () => void;
   children?: React.ReactNode; // 드롭다운 추가
+  blockOutsideClick?: boolean;
 }
 
 export interface ICodeEditor {
