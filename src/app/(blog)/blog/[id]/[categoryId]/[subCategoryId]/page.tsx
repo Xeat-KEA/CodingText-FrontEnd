@@ -59,6 +59,7 @@ export default function BlogSubPage() {
           {DUMMY_BLOG_POST_DATA.map((el, index) => (
             <PostCard
               key={index}
+              id={index}
               category={el.category}
               title={el.title}
               content={el.content}

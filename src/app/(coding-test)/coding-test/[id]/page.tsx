@@ -74,7 +74,7 @@ export default function CodingTestPage() {
         </div>
       </SplitterPanel>
       {/* 작성 관련 공간 */}
-      <SplitterPanel className="flex w-full">
+      <SplitterPanel className="flex">
         {!isPosting ? <CodeEditPanel /> : <NewPostPanel />}
       </SplitterPanel>
     </Splitter>
