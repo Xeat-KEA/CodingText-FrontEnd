@@ -8,7 +8,6 @@ export interface AddCategoryProps {
 
 export interface CategoryItemProps {
     category: Category;
-    currentPath: string;
     handleAddCategory: (title: string, parentId?: number) => void;
     handleDeleteCategory: (categoryId: number, title: string, isSub?: boolean, subCategoryId?: number) => void;
 }
@@ -16,10 +15,36 @@ export interface CategoryItemProps {
 export interface SubCategoryItemProps {
     subCategory: SubCategory;
     category: Category;
-    currentPath: string;
     handleDeleteCategory: (categoryId: number, title: string, isSub?: boolean, subCategoryId?: number) => void;
+}
+export interface BlogPost {
+    postId: number;
+    blogId: number;
+    categoryId: number;
+    subCategoryId: number;
+    title: string;
+    content: string;
+    viewCount: number;
+    isSecret: boolean;
+    isBlind: boolean;
+    password: string;
+    likeCount: number;
+    reportCount: number;
+    commentCount: number;
+    createdAt: string;
+    modifiedAt: string;
+}
+
+export interface PostProps {
+    currentPost?: BlogPost;
+    currentBoardCategory?: Category;
+    currentSubCategory?: SubCategory;
 }
 
 export interface IBpFollowerIcon {
     isFilled: Boolean;
+}
+
+export interface ISmShowMoreIcon {
+    isHidden: Boolean;
 }

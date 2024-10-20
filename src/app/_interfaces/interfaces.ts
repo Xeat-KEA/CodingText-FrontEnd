@@ -153,15 +153,46 @@ export interface SubCategory {
 export interface Category {
   id: number;
   title: string;
+  blogId?: number;
   subCategories?: SubCategory[];
+}
+
+export interface BlogProfile {
+  profileId: number;
+  profileImage?: string;
+  name: string;
+  rank: string;
+  Intro: string;
+  FollowerCount: number;
+}
+
+export interface IBackBtn {
+  title: string;
+  onClick?: () => void;
+}
+
+export interface Params {
+  id: string | string[];
+  categoryId: string | string[];
+  subCategoryId: string | string[];
+  postId: string | string[];
 }
 
 // 블로그 정보 저장
 export interface IBlogStore {
   blogId: number;
   setBlogId: (id: number) => void;
+  categoryId: number;
+  setCategoryId: (id: number) => void;
+  subCategoryId: number;
+  setSubCategoryId: (id: number) => void;
   isOwnBlog: boolean;
   setIsOwnBlog: (isOwnBlog: boolean) => void;
+  profile: BlogProfile;
+  setProfile: (profile: BlogProfile) => void;
+
+  params: Params | null; // Params 객체를 저장할 변수
+  setParams: (params: Params) => void; // params를 설정하는 함수
 
   // sidebar-board 관련 Interface
   boardCategories: Category[];
@@ -173,4 +204,3 @@ export interface IBlogStore {
   isAddingSubCategory: { [key: number]: boolean };
   setIsAddingSubCategory: (parentId: number, isAdding: boolean) => void;
 }
-

@@ -15,11 +15,9 @@ export default function Board() {
         setBoardCategories,
         isAddingCategory,
         setIsAddingCategory,
-        isAddingSubCategory,
         setIsAddingSubCategory,
     } = useBlogStore();
 
-    const currentPath = usePathname();
     const [isAddCategoryDisabled, setIsAddCategoryDisabled] = useState(false); // 게시판 추가 불가
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [categoryToDelete, setCategoryToDelete] = useState<{ categoryId: number; subCategoryId: number; isSub: boolean } | null>(null);
@@ -59,7 +57,10 @@ export default function Board() {
                 {
                     id: boardCategories.length,
                     title: trimmedTitle,
-                    subCategories: [{ id: 0, title: "전체" }]
+                    subCategories: [
+                        { id: 0, title: "전체" },
+                        { id: 1, title: "자유" }
+                    ]
                 }
             ];
         setBoardCategories(updatedCategories);
@@ -69,8 +70,6 @@ export default function Board() {
             setIsAddingCategory(false);
         }
     }, [boardCategories]);
-
-
 
     // 상/하위 게시판 삭제 함수
     const handleDeleteCategory = useCallback(
@@ -99,7 +98,6 @@ export default function Board() {
         setCategoryToDelete(null);
     }, [categoryToDelete, setBoardCategories]);
 
-
     return (
         <div className="w-60 mt-6">
             <p className="text-disabled text-xs font-regular h-10 pl-6 py-2">게시판 목록</p>
@@ -108,11 +106,8 @@ export default function Board() {
                 <CategoryItem
                     key={category.id}
                     category={category}
-                    currentPath={currentPath}
                     handleAddCategory={handleAddCategory}
                     handleDeleteCategory={handleDeleteCategory}
-                // isAddingSubCategory={isAddingSubCategory}
-                // setIsAddingSubCategory={setIsAddingSubCategory}
                 />
             ))}
 

@@ -1,4 +1,4 @@
-import { IBpFollowerIcon } from "../_interfaces/interfaces";
+import { IBpFollowerIcon, ISmShowMoreIcon } from "../_interfaces/interfaces";
 
 // 사이드 바 최소화 아이콘
 export function SbHiddenIcon() {
@@ -145,5 +145,19 @@ export function BpEditIcon() {
                 strokeLinejoin="round" />
         </svg>
 
+    )
+}
+
+// 작은 더보기 아이콘 (코드 가리기 & 보이기)
+export function SmShowMoreIcon({ isHidden }: ISmShowMoreIcon) {
+    return (
+        <svg
+            width="12"
+            height="7"
+            viewBox="0 0 12 7"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg">
+            <path d={isHidden ? "M1 6.5L6 1.5L11 6.5" : "M1 1L6 6L11 1"} stroke="#222222" strokeWidth="0.833333" />
+        </svg>
     )
 }

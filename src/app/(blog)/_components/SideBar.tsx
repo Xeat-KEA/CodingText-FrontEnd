@@ -1,21 +1,51 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { LogoIcon } from "@/app/_components/Icons";
 import Link from "next/link";
 import { SbGotestIcon, SbHiddenIcon, SbHomeIcon, SbMyblogIcon, SbNewpostIcon } from "./Icons";
-import { loggedInUserId, blogOwnerId } from "../_constants/constants";
+import { Blog_Profile_Data, Board_Categories, loggedInUserId, User_Specific_Categories,} from "../_constants/constants";
 import Board from "./sidebar-board/Board";
 import { useBlogStore } from "@/app/stores";
+import { useParams } from "next/navigation";
 
 export default function SideBar() {
     // 전역 변수
     const {
-        blogId,
+        profile,
         isOwnBlog,
+        setParams
     } = useBlogStore();
+
+    const params = useParams();
+    const blogId = Number(params.id);
+    const setProfile = useBlogStore((profile) => profile.setProfile);
+    const setBlogId = useBlogStore((state) => state.setBlogId);
+    const setIsOwnBlog = useBlogStore((state) => state.setIsOwnBlog);
+    const setBoardCategories = useBlogStore((state) => state.setBoardCategories);
+    const setActiveCategories = useBlogStore((state) => state.setActiveCategories);
+
     const [isCollapsed, setIsCollapsed] = useState(false); // 최소화
     const toggleSidebar = () => setIsCollapsed(!isCollapsed);
+
+    useEffect(() => {
+        const foundProfile = Blog_Profile_Data.find((profile) => profile.profileId === blogId);
+        const userSpecificCategories = User_Specific_Categories.filter(category => category.blogId === blogId); // 개별
+
+        setParams({
+            id: params.id,
+            categoryId: params.categoryId,
+            subCategoryId: params.subCategoryId,
+            postId: params.postId,
+        });
+        setBoardCategories([...Board_Categories, ...userSpecificCategories]);
+        setActiveCategories([]);
+        setBlogId(blogId);
+        setIsOwnBlog(blogId === loggedInUserId);
+        if (foundProfile) {
+            setProfile(foundProfile);
+        }
+    }, [blogId, setProfile]);
 
     // 사이드바 페이지 이동 컴포넌트
     const SidebarLink = ({ href, label, Icon }: { href: string; label: string; Icon: React.FC }) => (
@@ -36,8 +66,8 @@ export default function SideBar() {
             </div>
 
             <SidebarLink
-                href={`/blog/${blogId}`}
-                label={isOwnBlog ? "나의 블로그 홈" : `${blogOwnerId}의 블로그 홈`}
+                href={`/blog/${profile?.profileId}`}
+                label={isOwnBlog ? "나의 블로그 홈" : `${profile?.name}의 블로그 홈`}
                 Icon={SbHomeIcon}
             />
             {/* 게시판 목록 */}
