@@ -5,7 +5,7 @@ import { LogoIcon } from "@/app/_components/Icons";
 import Link from "next/link";
 import { SbGotestIcon, SbHiddenIcon, SbHomeIcon, SbMyblogIcon, SbNewpostIcon } from "./Icons";
 import { Blog_Profile_Data, Board_Categories, loggedInUserId, User_Specific_Categories,} from "../_constants/constants";
-import Board from "./sidebar-board/Board";
+import Board from "./Sidebar-Board/Board";
 import { useBlogStore } from "@/app/stores";
 import { useParams } from "next/navigation";
 

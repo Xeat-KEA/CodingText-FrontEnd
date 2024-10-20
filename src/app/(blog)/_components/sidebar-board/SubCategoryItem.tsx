@@ -19,7 +19,6 @@ const SubCategoryItem: React.FC<SubCategoryItemProps> = ({
         subCategoryId
     } = useBlogStore();
     
-    console.log(subCategoryId, categoryId)
     const params = useParams();
 
     const [editSubCategoryId, setEditSubCategoryId] = useState<{ [categoryId: number]: number | null }>({});

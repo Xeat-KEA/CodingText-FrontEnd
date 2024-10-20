@@ -16,7 +16,6 @@ export default function BlogProfile() {
         setProfile
     } = useBlogStore();
 
-    
     const [isFollowing, setIsFollowing] = useState<boolean>(false); // 초기값 설정
     const [blogToReport, setBlogToReport] = useState<number | null>(null);
     const [selectedOption, setSelectedOption] = useState<string | null>(null);

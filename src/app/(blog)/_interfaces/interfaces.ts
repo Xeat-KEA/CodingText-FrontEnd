@@ -37,7 +37,7 @@ export interface BlogPost {
 
 export interface PostProps {
     currentPost?: BlogPost;
-    currentBoardCategory?: Category;
+    currentCategory?: Category;
     currentSubCategory?: SubCategory;
 }
 
