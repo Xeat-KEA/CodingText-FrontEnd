@@ -1,5 +1,5 @@
 import { useOutsideClick } from "../_hooks/useOutsideClick";
-import { IDialog } from "../_interfaces/interfaces";
+import { DialogProps } from "../_interfaces/interfaces";
 
 export default function Dialog({
   icon,
@@ -15,7 +15,7 @@ export default function Dialog({
   onBtnClick,
   children, // 추가
   blockOutsideClick,
-}: IDialog) {
+}: DialogProps) {
   const ref = !blockOutsideClick ? useOutsideClick(onBackBtnClick) : null;
   return (
     <div className="overlay">

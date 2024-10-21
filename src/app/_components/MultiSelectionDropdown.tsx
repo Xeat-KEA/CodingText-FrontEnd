@@ -1,15 +1,15 @@
-import { MouseEvent, useEffect, useState } from "react";
+import { MouseEvent, useState } from "react";
 import { MultiSelectionCheckIcon, ShowMoreIcon } from "./Icons";
-import { IMultiSelectionDropdown } from "../_interfaces/interfaces";
+import { MultiSelectionDropDownProps } from "../_interfaces/interfaces";
 import { useOutsideClick } from "../_hooks/useOutsideClick";
 import { useSetParams } from "../_hooks/useSetParams";
 import { useSearchParams } from "next/navigation";
 
-export default function MultiSelectionDropdown({
+export default function MultiSelectionDropDown({
   placeholder,
   list,
   paramType,
-}: IMultiSelectionDropdown) {
+}: MultiSelectionDropDownProps) {
   const searchParams = useSearchParams();
   // 파라미터 설정을 위한 custom hook 호출
   const setParams = useSetParams();
@@ -49,7 +49,7 @@ export default function MultiSelectionDropdown({
           {list.map((el, index) => (
             <li
               className="w-full flex text-xs text-black px-4 py-2 gap-2 items-center"
-              onClick={(e) => onSelectionClick(e, el)}
+              onClick={(e) => onSelectionClick(e, el.selection)}
               key={index}
             >
               <span
@@ -57,14 +57,16 @@ export default function MultiSelectionDropdown({
                   !searchParams
                     .get(paramType)
                     ?.split(",")
-                    .some((item) => item === el)
+                    .some((item) => item === el.selection)
                     ? "text-disabled"
                     : "text-primary"
                 }
               >
                 <MultiSelectionCheckIcon />
               </span>
-              <span className="w-full grow flex justify-center">{el}</span>
+              <span className="w-full grow flex justify-center">
+                {el.content}
+              </span>
             </li>
           ))}
         </ul>

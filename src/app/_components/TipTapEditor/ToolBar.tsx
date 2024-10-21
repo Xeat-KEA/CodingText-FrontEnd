@@ -1,4 +1,4 @@
-import { IToolBar } from "@/app/_interfaces/interfaces";
+import { ToolBarProps } from "@/app/_interfaces/interfaces";
 import {
   BoldIcon,
   BulletListIcon,
@@ -16,7 +16,7 @@ import {
 } from "./icons";
 import { useImageHandler } from "@/app/_hooks/useImageHandler";
 
-export default function ToolBar({ editor }: IToolBar) {
+export default function ToolBar({ editor }: ToolBarProps) {
   if (!editor) {
     return null;
   }

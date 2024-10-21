@@ -1,4 +1,4 @@
-import { ICheckBoxIcon } from "../_interfaces/interfaces";
+import { CheckBoxIconProps } from "../_interfaces/interfaces";
 
 // codingtext 로고 아이콘
 export function LogoIcon() {
@@ -100,7 +100,7 @@ export function ShowMoreIcon() {
 }
 
 // 작은 체크박스 아이콘
-export function SmCheckBoxIcon({ isActive }: ICheckBoxIcon) {
+export function SmCheckBoxIcon({ isActive }: CheckBoxIconProps) {
   return (
     <svg
       width="16"
@@ -129,7 +129,7 @@ export function SmCheckBoxIcon({ isActive }: ICheckBoxIcon) {
 }
 
 // 큰 체크박스 아이콘
-export function LgCheckBoxIcon({ isActive }: ICheckBoxIcon) {
+export function LgCheckBoxIcon({ isActive }: CheckBoxIconProps) {
   return (
     <svg
       width="24"

@@ -1,10 +1,10 @@
 import Pagination from "@/app/_components/Pagination";
 import PostCard from "@/app/_components/PostCard";
 import { BOARD_TAB_LIST } from "../_constants/constants";
-import { IMainBoard } from "../_interfaces/interfaces";
+import { MainBoardProps } from "../_interfaces/interfaces";
 import TabBar from "@/app/_components/TapBar/TabBar";
 
-export default function MainBoard({ title, hasTab, postList }: IMainBoard) {
+export default function MainBoard({ title, hasTab, postList }: MainBoardProps) {
   return (
     <div className="top-container">
       <div className="max-w-1200 py-[120px] flex flex-col gap-12">

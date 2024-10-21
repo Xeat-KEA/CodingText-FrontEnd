@@ -1,10 +1,18 @@
-import { Category } from "@/app/_interfaces/interfaces";
+import { Category, Selection } from "@/app/_interfaces/interfaces";
 
 export let loggedInUserId = 1; // 임시 로그인된 사용자 ID
 export let blogOwnerId = "user"; // 블로그 홈 ID
 
 // // 블로그 페이지 사이드바 메뉴
 // export const Blog_Side_BAR_MENU = [];
+
+export const REPORT_REASONS: Selection[] = [
+  { content: "스팸 및 광고", selection: "spam" },
+  { content: "부적절한 내용", selection: "inappropriate" },
+  { content: "개인 정보 침해", selection: "privacy" },
+  { content: "허위 사실 유포", selection: "false-info" },
+  { content: "직접 입력", selection: "" },
+];
 
 // 게시판 목록 (본인)
 export const Board_Categories: Category[] = [

@@ -1,4 +1,4 @@
-export interface ISignUpForm {
+export interface SignUpForm {
   nickname: string;
   lang: string;
   profileImg: string;

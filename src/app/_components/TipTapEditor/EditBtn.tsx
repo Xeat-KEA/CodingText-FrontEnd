@@ -1,11 +1,11 @@
-import { IEditBtn } from "@/app/_interfaces/interfaces";
+import { EditBtnProps } from "@/app/_interfaces/interfaces";
 
 export default function EditBtn({
   isEditing,
   onEditClick,
   onCancelClick,
   onSubmit,
-}: IEditBtn) {
+}: EditBtnProps) {
   return (
     <div className="flex gap-4">
       {!isEditing ? (

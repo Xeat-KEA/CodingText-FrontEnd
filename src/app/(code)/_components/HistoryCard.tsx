@@ -64,7 +64,7 @@ export default function HistoryCard({
                 onClick={() => {
                   // AI 문제의 경우 다른 로직 필요
 
-                  router.push(`/coding-test/${id}`);
+                  router.push(`/coding-test/${id}`, { scroll: false });
                 }}
                 className="text-xs text-black font-semibold whitespace-nowrap"
               >

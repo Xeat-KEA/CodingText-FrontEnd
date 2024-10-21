@@ -42,10 +42,10 @@ export default function BlogSubPage() {
           <div className="flex gap-3 items-center">
             {TAB_BAR_ORDER_FILTER.map((el) => (
               <button
-                key={el.state}
-                onClick={() => setFilter(el.state)}
+                key={el.selection}
+                onClick={() => setFilter(el.selection)}
                 className={`text-xs ${
-                  filter === el.state
+                  filter === el.selection
                     ? "text-primary font-semibold"
                     : "text-disabled"
                 }`}

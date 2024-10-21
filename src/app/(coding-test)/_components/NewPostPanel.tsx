@@ -1,6 +1,5 @@
 import { POSTING_TAB_BAR_MENU } from "../_constants/constants";
 import { useCodingTestStore, useTabStore } from "@/app/stores";
-import PostEditor from "@/app/_components/PostEditor";
 import CodeEditor from "./CodeEditor";
 import { useState } from "react";
 import Dialog from "@/app/_components/Dialog";
@@ -9,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { usePageHandler } from "@/app/_hooks/usePageHandler";
 import TabBar from "@/app/_components/TapBar/TabBar";
 import { useBase64 } from "@/app/_hooks/useBase64";
+import PostEditor from "@/app/_components/PostEditor/PostEditor";
 
 export default function NewPostPanel() {
   const router = useRouter();

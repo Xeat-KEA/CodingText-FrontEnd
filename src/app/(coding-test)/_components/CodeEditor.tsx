@@ -1,4 +1,4 @@
-import { ICodeEditor } from "@/app/_interfaces/interfaces";
+import { CodeEditorProps } from "@/app/_interfaces/interfaces";
 import { useCodingTestStore } from "@/app/stores";
 import { Extension } from "@uiw/react-codemirror";
 import dynamic from "next/dynamic";
@@ -9,7 +9,10 @@ const ReactCodeMirror = dynamic(() => import("@uiw/react-codemirror"), {
   ssr: false,
 });
 
-export default function CodeEditor({ isViewer, defaultValue }: ICodeEditor) {
+export default function CodeEditor({
+  isViewer,
+  defaultValue,
+}: CodeEditorProps) {
   const { value, setValue, language } = useCodingTestStore();
   useEffect(() => {
     if (defaultValue !== undefined) {
@@ -30,13 +33,13 @@ export default function CodeEditor({ isViewer, defaultValue }: ICodeEditor) {
       const { EditorView } = await import("@uiw/react-codemirror");
 
       // 언어 설정
-      if (language === "java") {
+      if (language?.selection === "java") {
         setLang(langs.java());
-      } else if (language === "python") {
+      } else if (language?.selection === "python") {
         setLang(langs.python());
-      } else if (language === "javascript") {
+      } else if (language?.selection === "javascript") {
         setLang(langs.javascript());
-      } else if (language === "c") {
+      } else if (language?.selection === "c") {
         setLang(langs.cpp());
       }
 

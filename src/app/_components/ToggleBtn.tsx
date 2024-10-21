@@ -1,6 +1,6 @@
-import { IToggleBtn } from "../_interfaces/interfaces";
+import { ToggleBtnProps } from "../_interfaces/interfaces";
 
-export default function ToggleBtn({ content, state, onClick }: IToggleBtn) {
+export default function ToggleBtn({ content, state, onClick }: ToggleBtnProps) {
   return (
     <div className="flex gap-4 items-center">
       <span className="text-xs text-black">{content}</span>

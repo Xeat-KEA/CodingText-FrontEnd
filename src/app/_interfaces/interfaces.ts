@@ -1,41 +1,41 @@
 import { Editor } from "@tiptap/react";
 
-export interface ISearchBar {
+export interface SearchBarProps {
   baseURL: string;
   hasFilter?: boolean;
 }
 
-export interface ITabBar {
+export interface TabBarProps {
   menuList: string[];
-  dropDownList?: string[];
+  dropDownList?: Selection[];
 }
 
-export interface SearchTab {
+export interface Selection {
   content: string;
-  param: string;
+  selection: string;
 }
 
-export interface SearchTabBarProps {
-  menuList: SearchTab[];
+export interface SelectionBarProps {
+  menuList: Selection[];
 }
 
-export interface IToggleBtn {
+export interface ToggleBtnProps {
   content: string;
   state: boolean;
   onClick: () => void;
 }
 
-export interface IDropDown {
+export interface DropDownProps {
   isSmall?: boolean;
   borderRight?: boolean;
   selection: string;
-  onSelectionClick: (selected: string) => void;
-  list?: string[];
+  onSelectionClick: (selected: Selection) => void;
+  list?: Selection[];
   placeholder?: string;
   disabled?: boolean;
 }
 
-export interface ParamDropdownProps {
+export interface ParamDropDownProps {
   isSmall?: boolean;
   list: string[];
   paramType: string;
@@ -47,13 +47,13 @@ export interface MultiSelectionList {
   list: string[];
 }
 
-export interface IMultiSelectionDropdown {
+export interface MultiSelectionDropDownProps {
   placeholder: string;
-  list: string[];
+  list: Selection[];
   paramType: string;
 }
 
-export interface IDialog {
+export interface DialogProps {
   icon?: JSX.Element;
   title?: string;
   content?: string;
@@ -69,48 +69,55 @@ export interface IDialog {
   blockOutsideClick?: boolean;
 }
 
-export interface ICodeEditor {
+export interface CodeEditorProps {
   isViewer?: boolean;
   defaultValue?: string;
 }
 
-export interface IToolBar {
+export interface ToolBarProps {
   editor: Editor | null;
 }
 
-export interface IPostEditor {
+export interface PostEditorProps {
   isCodingTest?: boolean;
   isEditing?: boolean;
   onCancelClick: () => void;
-  onBtnClick: (data: IPost) => void;
+  onBtnClick: (data: Post) => void;
 }
 
-export interface ICheckBoxIcon {
+export interface CategoryDropDownProps {
+  list: Category[] | undefined;
+  selection: Category | undefined;
+  onSelectionClick: (selected: Category) => void;
+  placeholder?: string;
+}
+
+export interface CheckBoxIconProps {
   isActive?: boolean;
 }
 
-export interface IPost {
+export interface Post {
   title: string;
   isSecret?: boolean;
   password?: string;
-  parentCategory?: string;
-  childCategory?: string;
+  parentCategory?: number;
+  childCategory?: number;
   content: string;
 }
 
-export interface IProfileImgSelection {
+export interface ProfileImgSelectionProps {
   seletedImg: string;
   onSelectionClick: (seleted: string) => void;
 }
 
-export interface IEditBtn {
+export interface EditBtnProps {
   isEditing: boolean;
   onEditClick: () => void;
   onCancelClick: () => void;
   onSubmit: () => void;
 }
 
-export interface IPostCard {
+export interface PostCardProps {
   id: number;
   profileImg?: string;
   nickname?: string;
@@ -126,16 +133,16 @@ export interface IPostCard {
 }
 
 // 전역 변수 관련 Interface
-export interface ITabStore {
+export interface TabStore {
   tab: string;
   setTab: (newTab: string) => void;
 }
 
 // 코딩테스트 관련 Interface
-export interface ICodingTestStore {
+export interface CodingTestStore {
   // 코딩 관련 state
-  language: string;
-  setLanguage: (newLanguage: string) => void;
+  language: Selection | undefined;
+  setLanguage: (newLanguage: Selection) => void;
   hasSolved: boolean;
   setHasSolved: (isCorrect: boolean) => void;
   isPosting: boolean;
@@ -147,24 +154,24 @@ export interface ICodingTestStore {
 }
 
 // 텍스트 에디터 내용 Interface
-export interface ITiptapStore {
+export interface TiptapStore {
   content: string;
   setContent: (string: string) => void;
 }
 
-export interface IPaginationStore {
+export interface PaginationStore {
   page: number;
   setPage: (newPage: number) => void;
   lastPage: number;
   setLastPage: (page: number) => void;
 }
 
-export interface ISearchFilterStore {
+export interface SearchFilterStore {
   filter: string;
   setFilter: (selected: string) => void;
 }
 
-export interface ICodeFilterStore {
+export interface CodeFilterStore {
   difficulty: string[];
   setDifficulty: (newList: string[]) => void;
   algorithm: string[];
@@ -174,12 +181,12 @@ export interface ICodeFilterStore {
 }
 
 // Form 관련 인터페이스
-export interface IPostForm {
+export interface PostForm {
   title: string;
   isSecret?: boolean;
   password?: string;
-  parentCategory?: string;
-  childCategory?: string;
+  parentCategory?: number;
+  childCategory?: number;
 }
 
 export interface SearchForm {
@@ -199,7 +206,7 @@ export interface Category {
 }
 
 // 블로그 정보 저장
-export interface IBlogStore {
+export interface BlogStore {
   blogId: number;
   setBlogId: (id: number) => void;
   isOwnBlog: boolean;

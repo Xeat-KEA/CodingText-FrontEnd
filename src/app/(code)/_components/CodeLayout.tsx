@@ -1,10 +1,7 @@
 "use client";
 
 import SearchBar from "@/app/_components/SearchBar";
-import {
-  CODE_SEARCH_FILTER_LIST,
-  DUMMY_PROFILE_DATA,
-} from "../_constants/constants";
+import { DUMMY_PROFILE_DATA } from "../_constants/constants";
 import Pagination from "@/app/_components/Pagination";
 import ProfileCard from "./ProfileCard";
 import CodeFilter from "./CodeFilter";
@@ -25,7 +22,7 @@ export default function CodeLayout({
         <div className="max-w-1200 flex py-12">
           {/* 문제 목록 부분 */}
           <div className="w-full pr-6 flex flex-col gap-6 border-r border-border-2">
-            {/* 문제 검색바 (검색 필터링 Dropdown이 가려지지 않게 z-index 설정) */}
+            {/* 문제 검색바 (검색 필터링 DropDown이 가려지지 않게 z-index 설정) */}
             <div className="z-10">
               {/* pathname을 키 값으로 설정하여 페이지 변화 시 SearchBar 초기화 */}
               <SearchBar key={pathname} hasFilter baseURL={pathname} />

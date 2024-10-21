@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ParamDropdownProps } from "../_interfaces/interfaces";
+import { ParamDropDownProps } from "../_interfaces/interfaces";
 import { ShowMoreIcon } from "./Icons";
 import { useOutsideClick } from "../_hooks/useOutsideClick";
 import { useSearchParams } from "next/navigation";
@@ -10,7 +10,7 @@ export default function ParamDropDown({
   list,
   paramType,
   placeholder,
-}: ParamDropdownProps) {
+}: ParamDropDownProps) {
   const searchParams = useSearchParams();
   // 파라미터 설정을 위한 custom hook 호출
   const setParams = useSetParams();

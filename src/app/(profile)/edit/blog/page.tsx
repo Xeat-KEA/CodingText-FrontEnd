@@ -13,7 +13,6 @@ export default function EditBlogPage() {
   const {} = useCheckToken(true);
 
   // 변경 사항 취소를 위한 초기값 저장
-  const initialData = DUMMY_BLOG_DATA;
   const [data, setData] = useState(DUMMY_BLOG_DATA);
   const [isIntroEditing, setIsIntroEditing] = useState(false);
   const { content, setContent } = useTiptapStore();

@@ -1,12 +1,12 @@
 import Image from "next/image";
-import { IProfileCard } from "../_interfaces/interfaces";
 import ProfileInfo from "./ProfileInfo";
 import { useState } from "react";
 import ChatGPTDialog from "./ChatGPTDialog";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { ProfileCardProps } from "../_interfaces/interfaces";
 
-export default function ProfileCard({ userData }: IProfileCard) {
+export default function ProfileCard({ userData }: ProfileCardProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const pathname = usePathname();
   return (

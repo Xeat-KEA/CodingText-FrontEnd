@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { IPostCard } from "../_interfaces/interfaces";
+import { PostCardProps } from "../_interfaces/interfaces";
 import { CommentCountIcon, LikeCountIcon, ReportIcon } from "./Icons";
 import { useState } from "react";
 import { useCalculateDate } from "../_hooks/useCalculateDate";
@@ -19,7 +19,7 @@ export default function PostCard({
   comments,
   views,
   codeId,
-}: IPostCard) {
+}: PostCardProps) {
   const router = useRouter();
 
   const [isHovered, setIsHovered] = useState(false);
@@ -77,7 +77,8 @@ export default function PostCard({
                   e.preventDefault();
                   e.stopPropagation();
                   router.push(
-                    `/search?keyword=${codeId}&tab=POST&category=CODE&order=ACCURACY`
+                    `/search?keyword=${codeId}&tab=POST&category=CODE&order=ACCURACY`,
+                    { scroll: false }
                   );
                 }}
                 className="text-lg font-bold text-primary hover:underline"

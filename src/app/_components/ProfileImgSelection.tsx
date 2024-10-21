@@ -1,12 +1,12 @@
 import Image from "next/image";
 import { useState } from "react";
-import { IProfileImgSelection } from "../_interfaces/interfaces";
+import { ProfileImgSelectionProps } from "../_interfaces/interfaces";
 import { PROFILE_IMG_LIST } from "../_constants/constants";
 
 export default function ProfileImgSelection({
   seletedImg,
   onSelectionClick,
-}: IProfileImgSelection) {
+}: ProfileImgSelectionProps) {
   const [profileImg, setProfileImg] = useState(seletedImg);
 
   return (

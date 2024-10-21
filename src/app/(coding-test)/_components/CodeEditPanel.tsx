@@ -133,7 +133,7 @@ export default function CodeEditPanel() {
           backBtn="돌아가기"
           onBackBtnClick={() => setIsDialogOpen((prev) => !prev)}
           subBtn="다른 문제 풀기"
-          onSubBtnClick={() => router.push("/code/list")}
+          onSubBtnClick={() => router.push("/code/list", { scroll: false })}
           primaryBtn="글 쓰기"
           onBtnClick={() => setIsPosting(true)}
         />
