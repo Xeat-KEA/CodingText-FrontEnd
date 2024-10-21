@@ -69,8 +69,24 @@ export const useSearchFilterStore = create<ISearchFilterStore>((set) => ({
 export const useBlogStore = create<IBlogStore>((set) => ({
   blogId: 1,
   setBlogId: (id) => set({ blogId: id }),
+  categoryId: 0,
+  setCategoryId: (id) => set({categoryId: id}),
+  subCategoryId: 0,
+  setSubCategoryId: (id) => set({subCategoryId: id}),
   isOwnBlog: false,
   setIsOwnBlog: (state) => set({ isOwnBlog: state }),
+  profile: {
+    profileId: 0,
+    name: 'Anonymous',
+    rank: 'Newbie',
+    Intro: 'No introduction provided.',
+    FollowerCount: 0,
+    profileImage: '',
+  },
+  setProfile: (profile) => set({ profile }),
+
+  params: null, // 초기값 설정
+  setParams: (params) => set({ params }), // params 설정 함수
 
   // sidebar-board 관련
   boardCategories: [],
@@ -98,5 +114,5 @@ export const useBlogStore = create<IBlogStore>((set) => ({
         ...state.isAddingSubCategory,
         [parentId]: isAdding,
       },
-    })),
+    })),    
 }));

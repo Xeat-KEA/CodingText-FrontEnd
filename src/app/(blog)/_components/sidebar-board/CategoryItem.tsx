@@ -3,11 +3,10 @@ import SubCategoryItem from './SubCategoryItem';
 import AddCategory from './AddCategory';
 import { CategoryItemProps } from '../../_interfaces/interfaces';
 import { useBlogStore } from '@/app/stores';
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 const CategoryItem: React.FC<CategoryItemProps> = ({
     category,
-    currentPath,
     handleAddCategory,
     handleDeleteCategory,
 }) => {
@@ -21,6 +20,8 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
         isAddingSubCategory,
         setIsAddingSubCategory,
     } = useBlogStore();
+    const params = useParams();
+    const catId = Number(params.categoryId);
     const router = useRouter();
     const [editCategoryId, setEditCategoryId] = useState<number | null>(null);
     const [editCategoryTitle, setEditCategoryTitle] = useState<string>("");
@@ -34,7 +35,7 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
     // 상위 게시판 클릭 -> 하위 게시판 토글
     const handleCategoryClick = useCallback((id: number) => {
         if (id === 0) {
-            router.push(`/blog/${blogId}/0`);
+            router.push(`/blog/${blogId}/0/0`);
         } else {
             setActiveCategories(prev =>
                 prev.includes(id) ? prev.filter(activeId => activeId !== id) : [...prev, id]
@@ -91,8 +92,7 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
                 ) : (
                     <>
                         <p
-                            className={`${currentPath === `/blog/${blogId}/${category.id}` ? 'font-bold' : ''} cursor-pointer`}
-                            onClick={() => handleCategoryClick(category.id)}
+                            className={`${catId === category.id && catId === 0 ? 'font-bold' : ''} cursor-pointer`} onClick={() => handleCategoryClick(category.id)}
                         >
                             {category.title}
                         </p>
@@ -127,7 +127,6 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
                             key={subCategory.id}
                             subCategory={subCategory}
                             category={category}
-                            currentPath={currentPath}
                             handleDeleteCategory={handleDeleteCategory}
                         />
                     ))}
