@@ -1,13 +1,12 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { ITopBar } from "../_interfaces/interfaces";
-import { NoticeIcon, LogoIcon } from "./Icons";
-import SearchBar from "./SearchBar";
-import { PROFILE_MENU, TOP_BAR_MENU } from "../_constants/constants";
-import { useRouter } from "next/navigation";
-import { useOutsideClick } from "../_hooks/useOutsideClick";
 import Link from "next/link";
+import { ITopBar } from "@/app/_interfaces/interfaces";
+import { useOutsideClick } from "@/app/_hooks/useOutsideClick";
+import { PROFILE_MENU, TOP_BAR_MENU } from "@/app/_constants/constants";
+import SmSearchBar from "./SmSearchBar";
+import { LogoIcon, NoticeIcon } from "../Icons";
 
 export default function TopBar({ isLoggedIn, isCodingPage }: ITopBar) {
   // 팝업 상태 관리 state
@@ -89,7 +88,7 @@ export default function TopBar({ isLoggedIn, isCodingPage }: ITopBar) {
         <div className="flex items-center gap-6">
           {/* 검색창 */}
           <div className="w-[240px]">
-            <SearchBar isSmall />
+            <SmSearchBar />
           </div>
           {/* 로그인 : 알림, 프로필 / 비로그인 : 로그인 버튼 */}
           {isLoggedIn ? (

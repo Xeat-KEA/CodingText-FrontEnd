@@ -4,6 +4,7 @@ import {
   IBlogStore,
   ICodingTestStore,
   IPaginationStore,
+  ISearchFilterStore,
   ITabStore,
   ITiptapStore,
 } from "./_interfaces/interfaces";
@@ -58,6 +59,12 @@ export const usePaginationStore = create<IPaginationStore>((set) => ({
   setLastPage: (page) => set({ lastPage: page }),
 }));
 
+// 검색 필터 저장 전역변수
+export const useSearchFilterStore = create<ISearchFilterStore>((set) => ({
+  filter: "",
+  setFilter: (selected) => set({ filter: selected }),
+}));
+
 // 블로그 정보 저장 전역변수
 export const useBlogStore = create<IBlogStore>((set) => ({
   blogId: 1,
@@ -88,7 +95,7 @@ export const useBlogStore = create<IBlogStore>((set) => ({
       boardCategories:
         typeof categoriesOrFn === "function"
           ? categoriesOrFn(state.boardCategories)
-          : categoriesOrFn
+          : categoriesOrFn,
     })),
   activeCategories: [],
   setActiveCategories: (categoriesOrFn) =>
@@ -109,4 +116,3 @@ export const useBlogStore = create<IBlogStore>((set) => ({
       },
     })),    
 }));
-

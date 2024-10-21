@@ -55,15 +55,30 @@ export default function SideBar() {
         </Link>
     );
 
-    return (
-        <nav className={`fixed top-0 left-0 h-screen bg-white border-r transition-all duration-150 z-20 ${isCollapsed ? "w-10" : "w-60"}`}>
-            {/* 사이드바 상단 요소 */}
-            <div className={`flex items-center h-8 mt-5 mb-3 mr-2 ${isCollapsed ? "justify-center w-6 ml-2" : "justify-between w-52 ml-6"}`}>
-                {!isCollapsed && <Link href="/"><LogoIcon /></Link>}
-                <button onClick={toggleSidebar} className="focus:outline-none">
-                    <SbHiddenIcon />
-                </button>
-            </div>
+  return (
+    <nav
+      className={`fixed top-0 left-0 h-screen bg-white border-r transition-all duration-150 z-20 ${
+        isCollapsed ? "w-10" : "w-60"
+      }`}
+    >
+      {/* 사이드바 상단 요소 */}
+      <div
+        className={`flex items-center h-8 mt-5 mb-3 mr-2 ${
+          isCollapsed ? "justify-center w-6 ml-2" : "justify-between w-52 ml-6"
+        }`}
+      >
+        {!isCollapsed && (
+          <Link href="/">
+            <LogoIcon />
+          </Link>
+        )}
+        <button
+          onClick={toggleSidebar}
+          className={`focus:outline-none ${isCollapsed && "rotate-180"}`}
+        >
+          <SbHiddenIcon />
+        </button>
+      </div>
 
             <SidebarLink
                 href={`/blog/${profile?.profileId}`}
@@ -79,15 +94,19 @@ export default function SideBar() {
                 )}
             </div>
 
-            {/* 하단 요소 */}
-            <div className="absolute bottom-2 w-full bg-white z-10">
-                <SidebarLink href="/" label="문제 풀러 가기" Icon={SbGotestIcon} />
-                {isOwnBlog ? (
-                    <SidebarLink href="/" label="새 게시글" Icon={SbNewpostIcon} />
-                ) : (
-                    <SidebarLink href={`/blog/${loggedInUserId}`} label="내 블로그로" Icon={SbMyblogIcon} />
-                )}
-            </div>
-        </nav>
-    );
+      {/* 하단 요소 */}
+      <div className="absolute bottom-2 w-full bg-white z-10">
+        <SidebarLink href="/" label="문제 풀러 가기" Icon={SbGotestIcon} />
+        {isOwnBlog ? (
+          <SidebarLink href="/" label="새 게시글" Icon={SbNewpostIcon} />
+        ) : (
+          <SidebarLink
+            href={`/blog/${loggedInUserId}`}
+            label="내 블로그로"
+            Icon={SbMyblogIcon}
+          />
+        )}
+      </div>
+    </nav>
+  );
 }

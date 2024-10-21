@@ -1,12 +1,12 @@
 import Pagination from "@/app/_components/Pagination";
 import PostCard from "@/app/_components/PostCard";
-import TabBar from "@/app/_components/TabBar";
 import { BOARD_TAB_LIST } from "../_constants/constants";
 import { IMainBoard } from "../_interfaces/interfaces";
+import TabBar from "@/app/_components/TapBar/TabBar";
 
 export default function MainBoard({ title, hasTab, postList }: IMainBoard) {
   return (
-    <div className="w-full flex justify-center">
+    <div className="top-container">
       <div className="max-w-1200 py-[120px] flex flex-col gap-12">
         {/* 게시판 제목 */}
         <span className="text-2xl text-black font-semibold">{title}</span>

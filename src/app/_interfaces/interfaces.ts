@@ -7,12 +7,22 @@ export interface ITopBar {
 }
 
 export interface ISearchBar {
-  isSmall?: boolean;
+  baseURL: string;
+  hasFilter?: boolean;
 }
 
 export interface ITabBar {
   menuList: string[];
   dropDownList?: string[];
+}
+
+export interface SearchTab {
+  content: string;
+  param: string;
+}
+
+export interface SearchTabBarProps {
+  menuList: SearchTab[];
 }
 
 export interface IToggleBtn {
@@ -23,10 +33,30 @@ export interface IToggleBtn {
 
 export interface IDropDown {
   isSmall?: boolean;
+  borderRight?: boolean;
   selection: string;
   onSelectionClick: (selected: string) => void;
-  list: string[];
+  list?: string[];
   placeholder?: string;
+  disabled?: boolean;
+}
+
+export interface ParamDropdownProps {
+  isSmall?: boolean;
+  list: string[];
+  paramType: string;
+  placeholder?: string;
+}
+
+export interface MultiSelectionList {
+  content: string;
+  list: string[];
+}
+
+export interface IMultiSelectionDropdown {
+  placeholder: string;
+  list: string[];
+  paramType: string;
 }
 
 export interface IDialog {
@@ -42,6 +72,7 @@ export interface IDialog {
   redBtn?: string;
   onBtnClick?: () => void;
   children?: React.ReactNode; // 드롭다운 추가
+  blockOutsideClick?: boolean;
 }
 
 export interface ICodeEditor {
@@ -86,8 +117,9 @@ export interface IEditBtn {
 }
 
 export interface IPostCard {
-  profileImg: string;
-  nickname: string;
+  profileImg?: string;
+  nickname?: string;
+  category?: string;
   createAt: string;
   title: string;
   content: string;
@@ -95,6 +127,7 @@ export interface IPostCard {
   likes: number;
   comments: number;
   views: number;
+  codeId?: number;
 }
 
 // 전역 변수 관련 Interface
@@ -136,6 +169,20 @@ export interface IPaginationStore {
   setLastPage: (page: number) => void;
 }
 
+export interface ISearchFilterStore {
+  filter: string;
+  setFilter: (selected: string) => void;
+}
+
+export interface ICodeFilterStore {
+  difficulty: string[];
+  setDifficulty: (newList: string[]) => void;
+  algorithm: string[];
+  setAlgorithm: (newList: string[]) => void;
+  order: string;
+  setOrder: (selected: string) => void;
+}
+
 // Form 관련 인터페이스
 export interface IPostForm {
   title: string;
@@ -143,6 +190,11 @@ export interface IPostForm {
   password?: string;
   parentCategory?: string;
   childCategory?: string;
+}
+
+export interface SearchForm {
+  keyword: string;
+  filter?: string;
 }
 
 export interface SubCategory {
@@ -196,9 +248,13 @@ export interface IBlogStore {
 
   // sidebar-board 관련 Interface
   boardCategories: Category[];
-  setBoardCategories: (categories: Category[] | ((prev: Category[]) => Category[])) => void;
+  setBoardCategories: (
+    categories: Category[] | ((prev: Category[]) => Category[])
+  ) => void;
   activeCategories: number[];
-  setActiveCategories: (categories: number[] | ((prev: number[]) => number[])) => void;
+  setActiveCategories: (
+    categories: number[] | ((prev: number[]) => number[])
+  ) => void;
   isAddingCategory: boolean;
   setIsAddingCategory: (state: boolean) => void;
   isAddingSubCategory: { [key: number]: boolean };

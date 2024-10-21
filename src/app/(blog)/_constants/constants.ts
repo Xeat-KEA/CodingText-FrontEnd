@@ -20,7 +20,7 @@ export const Board_Categories: Category[] = [
       { id: 4, title: "4단계" },
       { id: 5, title: "5단계" },
     ],
-  }
+  },
 ];
 
 // 게시판 목록 (개별)
@@ -176,7 +176,98 @@ export const Blog_Introduction_Data = [
   </div>`
   }
 ]
-
+export const DUMMY_BLOG_POST_DATA = [
+  {
+    category: "하위 게시판1",
+    createdAt: "2024-10-14T21:59:16.6362039",
+    title: "게시글 제목1",
+    content: "게시글 내용 게시글 내용",
+    likes: 123,
+    comments: 123,
+    views: 1234,
+  },
+  {
+    category: "하위 게시판1",
+    createdAt: "2024-10-14T21:59:16.6362039",
+    title: "게시글 제목2",
+    content: "게시글 내용 게시글 내용",
+    likes: 123,
+    comments: 123,
+    views: 1234,
+  },
+  {
+    category: "하위 게시판2",
+    createdAt: "2024-10-14T21:59:16.6362039",
+    title: "게시글 제목3",
+    content: "게시글 내용 게시글 내용",
+    likes: 123,
+    comments: 123,
+    views: 1234,
+  },
+  {
+    category: "하위 게시판2",
+    createdAt: "2024-10-14T21:59:16.6362039",
+    title: "게시글 제목4",
+    content: "게시글 내용 게시글 내용",
+    likes: 123,
+    comments: 123,
+    views: 1234,
+  },
+  {
+    category: "하위 게시판1",
+    createdAt: "2024-10-14T21:59:16.6362039",
+    title: "게시글 제목5",
+    content: "게시글 내용 게시글 내용",
+    likes: 123,
+    comments: 123,
+    views: 1234,
+  },
+  {
+    category: "하위 게시판4",
+    createdAt: "2024-10-14T21:59:16.6362039",
+    title: "게시글 제목6",
+    content: "게시글 내용 게시글 내용",
+    likes: 123,
+    comments: 123,
+    views: 1234,
+  },
+  {
+    category: "하위 게시판1",
+    createdAt: "2024-10-14T21:59:16.6362039",
+    title: "게시글 제목7",
+    content: "게시글 내용 게시글 내용",
+    likes: 123,
+    comments: 123,
+    views: 1234,
+  },
+  {
+    category: "하위 게시판3",
+    createdAt: "2024-10-14T21:59:16.6362039",
+    title: "게시글 제목8",
+    content: "게시글 내용 게시글 내용",
+    likes: 123,
+    comments: 123,
+    views: 1234,
+  },
+  {
+    category: "하위 게시판3",
+    createdAt: "2024-10-14T21:59:16.6362039",
+    title: "게시글 제목9",
+    content: "게시글 내용 게시글 내용",
+    likes: 123,
+    comments: 123,
+    views: 1234,
+  },
+  {
+    category: "하위 게시판2",
+    createdAt: "2024-10-14T21:59:16.6362039",
+    title: "게시글 제목10",
+    content: "게시글 내용 게시글 내용",
+    likes: 123,
+    comments: 123,
+    views: 1234,
+  },
+];
 // 일반 게시물 내용
 export const Blog_Post_Data = [
   {

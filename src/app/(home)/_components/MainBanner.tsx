@@ -5,12 +5,12 @@ export default function MainBanner() {
   return (
     <div
       style={{
-        backgroundImage: "url('mainBanner.png')",
+        backgroundImage: "url('/mainBanner.png')",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
         backgroundSize: "cover",
       }}
-      className="w-full flex justify-center"
+      className="top-container"
     >
       <div className="max-w-1200 py-[120px]">
         <div className="flex flex-col gap-16">
