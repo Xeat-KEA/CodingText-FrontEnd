@@ -1,4 +1,4 @@
-import Image from "next/image"; // Next.js에서 이미지 최적화 컴포넌트 사용
+import Image from "next/image";
 import { BpEditIcon, BpFollowerIcon, BpReportIcon } from "./Icons";
 import { useState } from "react"; // useState 훅 임포트
 import Dialog from "@/app/_components/Dialog";
