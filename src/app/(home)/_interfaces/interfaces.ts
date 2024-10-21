@@ -1,13 +1,13 @@
-import { IPostCard } from "@/app/_interfaces/interfaces";
+import { PostCardProps } from "@/app/_interfaces/interfaces";
 
-export interface IBannerCard {
+export interface BannerCardProps {
   content: string;
   bubble: JSX.Element;
   index: number;
 }
 
-export interface IMainBoard {
+export interface MainBoardProps {
   title: string;
   hasTab?: boolean;
-  postList: IPostCard[];
+  postList: PostCardProps[];
 }

@@ -7,7 +7,7 @@ export default function SmSearchBar() {
   const router = useRouter();
 
   const { register, handleSubmit, setValue } = useForm<SearchForm>();
-  const onSubmit = ({ keyword }: { keyword: string }) => {
+  const onValid = ({ keyword }: { keyword: string }) => {
     router.push(`/search?keyword=${keyword}`, { scroll: false });
     setValue("keyword", "");
   };
@@ -15,7 +15,7 @@ export default function SmSearchBar() {
   return (
     <div className="flex items-center gap-4">
       <form
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit(onValid)}
         className="flex gap-2 w-full border border-border-2 rounded-full px-4 py-2"
       >
         <input
@@ -24,6 +24,7 @@ export default function SmSearchBar() {
           })}
           className="grow text-xs"
           placeholder="검색어를 입력해주세요"
+          autoComplete="off"
         />
         <button type="submit">
           <SmSearchIcon />

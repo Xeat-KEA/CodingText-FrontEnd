@@ -2,8 +2,8 @@
 
 import Dialog from "@/app/_components/Dialog";
 import { DialogCheckIcon } from "@/app/_components/Icons";
-import PostEditor from "@/app/_components/PostEditor";
-import { IPost } from "@/app/_interfaces/interfaces";
+import PostEditor from "@/app/_components/PostEditor/PostEditor";
+import { Post } from "@/app/_interfaces/interfaces";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -11,7 +11,7 @@ export default function NewPostPage() {
   const router = useRouter();
   const { id } = useParams();
 
-  const [newPost, setNewPost] = useState<IPost>();
+  const [newPost, setNewPost] = useState<Post>();
   const [newPostId, setNewPostId] = useState<number>();
 
   const [isCancelDialogOpen, setIsCancelDialogOpen] = useState(false);
@@ -52,9 +52,9 @@ export default function NewPostPage() {
           title="게시글이 등록되었어요!"
           content="작성된 게시글을 확인해보세요"
           backBtn="내 블로그 홈으로"
-          onBackBtnClick={() => router.push(`/blog/${id}`)}
+          onBackBtnClick={() => router.push(`/blog/${id}`, { scroll: false })}
           primaryBtn="게시글 페이지로"
-          onBtnClick={() => router.push(`/blog/${id}/1/1/1`)}
+          onBtnClick={() => router.push(`/blog/${id}/1/1/1`, { scroll: false })}
           blockOutsideClick
         />
       )}

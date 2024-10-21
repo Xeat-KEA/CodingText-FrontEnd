@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
-import { IProfileInfo } from "../_interfaces/interfaces";
+import { ProfileInfoProps } from "../_interfaces/interfaces";
 
-export default function ProfileInfo({ category, content }: IProfileInfo) {
+export default function ProfileInfo({ category, content }: ProfileInfoProps) {
   // 제목, 단위 설정
   const returnInfo = (isUnit?: boolean) => {
     if (category === "solved") {
@@ -14,6 +13,7 @@ export default function ProfileInfo({ category, content }: IProfileInfo) {
       return !isUnit ? "등수" : "등";
     }
   };
+
   return (
     <div className="flex w-full justify-between items-center">
       <span className="text-xs text-black">{returnInfo()}</span>

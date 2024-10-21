@@ -1,4 +1,4 @@
-export interface IProfileCard {
+export interface ProfileCardProps {
   userData?: {
     profileImg: string;
     rank: string;
@@ -10,7 +10,7 @@ export interface IProfileCard {
   };
 }
 
-export interface IProfileInfo {
+export interface ProfileInfoProps {
   category: string;
   content: number;
 }

@@ -1,31 +1,36 @@
 "use client";
 
-import DropDown from "@/app/_components/Dropdown";
+import DropDown from "@/app/_components/DropDown";
 import EditBtn from "@/app/_components/TipTapEditor/EditBtn";
 import { PROGRAMMING_LANGUAGES } from "@/app/_constants/constants";
-import { ChangeEvent, KeyboardEvent, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { useForm } from "react-hook-form";
-import { IProfileData } from "../../_interfaces/interfaces";
+import { ProfileData } from "../../_interfaces/interfaces";
 import { DUMMY_PROFILE_DATA } from "../../_constants/constants";
 import SignOutOrDeleteAccount from "../../_components/SignOut";
 import EditProfileImgDialog from "../../_components/EditProfileImgDialog";
 import { useImageHandler } from "@/app/_hooks/useImageHandler";
 import EditProfileImg from "../../_components/EditProfileImg";
 import { handleEnter } from "@/app/utils";
+import { useCheckToken } from "@/app/_hooks/useCheckToken";
 
 export default function EditProfilePage() {
+  // 로그인 여부 확인
+  const {} = useCheckToken(true);
+
   // 변경사항 전체 취소를 위한 초기값 저장
   const initialData = DUMMY_PROFILE_DATA;
   // 수정 취소를 위한 임시값 저장
   const [tempData, setTempData] = useState({ nickname: "", status: "" });
   // 화면 갱신을 위한 현재 데이터 state
-  const [data, setData] = useState<IProfileData>(DUMMY_PROFILE_DATA);
+  const [data, setData] = useState<ProfileData>(DUMMY_PROFILE_DATA);
 
   // React Hook Form
-  const { register, handleSubmit, setValue, getValues } = useForm<IProfileData>(
-    { mode: "onSubmit", defaultValues: initialData }
-  );
-  const onSubmit = (data: IProfileData) => {
+  const { register, handleSubmit, setValue, getValues } = useForm<ProfileData>({
+    mode: "onSubmit",
+    defaultValues: initialData,
+  });
+  const onValid = (data: ProfileData) => {
     console.log(data);
   };
 
@@ -95,7 +100,7 @@ export default function EditProfilePage() {
   return (
     <>
       <div className="w-full flex flex-col gap-16 px-6 pt-2 overflow-y-auto">
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-8">
+        <form onSubmit={handleSubmit(onValid)} className="flex flex-col gap-8">
           {/* 닉네임 변경 */}
           <div className="flex flex-col gap-3">
             <span className="edit-title">닉네임</span>
@@ -110,6 +115,7 @@ export default function EditProfilePage() {
                 {...register("nickname", {
                   value: data.nickname,
                 })}
+                autoComplete="off"
               />
             )}
             <EditBtn
@@ -158,10 +164,10 @@ export default function EditProfilePage() {
               <DropDown
                 list={PROGRAMMING_LANGUAGES}
                 onSelectionClick={(selected) => {
-                  setValue("programmingLanguage", selected);
+                  setValue("programmingLanguage", selected.selection);
                   setData((prev) => ({
                     ...prev,
-                    programmingLanguage: selected,
+                    programmingLanguage: selected.selection,
                   }));
                 }}
                 selection={data.programmingLanguage}

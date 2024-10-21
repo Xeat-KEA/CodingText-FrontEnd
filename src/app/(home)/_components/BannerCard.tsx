@@ -1,6 +1,10 @@
-import { IBannerCard } from "../_interfaces/interfaces";
+import { BannerCardProps } from "../_interfaces/interfaces";
 
-export default function BannerCard({ content, bubble, index }: IBannerCard) {
+export default function BannerCard({
+  content,
+  bubble,
+  index,
+}: BannerCardProps) {
   return (
     <div
       className={`max-w-1000 h-[480px] flex justify-between items-center ${

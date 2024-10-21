@@ -1,6 +1,6 @@
 import { useOutsideClick } from "@/app/_hooks/useOutsideClick";
 import { ChatGPTIcon } from "./Icons";
-import DropDown from "@/app/_components/Dropdown";
+import DropDown from "@/app/_components/DropDown";
 import { ALGORITHM_LIST, DIFFICULTY_LIST } from "@/app/_constants/constants";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -19,7 +19,7 @@ export default function ChatGPTDialog({
   const [algorithm, setAlgorithm] = useState("");
 
   const { register, handleSubmit, setValue } = useForm<CreateCodeForm>();
-  const onSubmit = (data: CreateCodeForm) => {
+  const onValid = (data: CreateCodeForm) => {
     if (!data.difficulty) {
       console.log("error");
     } else {
@@ -36,7 +36,7 @@ export default function ChatGPTDialog({
         className="absolute flex left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] bg-white p-6 rounded-2xl shadow-1"
       >
         <form
-          onSubmit={handleSubmit(onSubmit)}
+          onSubmit={handleSubmit(onValid)}
           className="flex flex-col gap-6 w-full"
         >
           <div className="flex flex-col items-center gap-4 py-6">
@@ -51,8 +51,8 @@ export default function ChatGPTDialog({
               list={DIFFICULTY_LIST}
               selection={difficulty}
               onSelectionClick={(selected) => {
-                setDifficulty(selected);
-                setValue("difficulty", selected);
+                setDifficulty(selected.content);
+                setValue("difficulty", selected.selection);
               }}
             />
             <DropDown
@@ -60,8 +60,8 @@ export default function ChatGPTDialog({
               list={ALGORITHM_LIST}
               selection={algorithm}
               onSelectionClick={(selected) => {
-                setAlgorithm(selected);
-                setValue("algorithm", selected);
+                setAlgorithm(selected.content);
+                setValue("algorithm", selected.selection);
               }}
             />
             <textarea

@@ -5,8 +5,12 @@ import HistoryTopBar from "../../_components/HistoryTopBar";
 import { useEffect } from "react";
 import { DUMMY_CODE_HISTORY } from "../../_constants/constants";
 import HistoryCard from "../../_components/HistoryCard";
+import { useCheckToken } from "@/app/_hooks/useCheckToken";
 
 export default function CodeHistoryPage() {
+  // 로그인 여부 확인
+  const {} = useCheckToken(true);
+
   const { setPage, setLastPage } = usePaginationStore();
   useEffect(() => {
     setPage(1);

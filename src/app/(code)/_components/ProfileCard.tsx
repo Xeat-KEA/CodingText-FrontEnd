@@ -1,11 +1,14 @@
 import Image from "next/image";
-import { IProfileCard } from "../_interfaces/interfaces";
 import ProfileInfo from "./ProfileInfo";
 import { useState } from "react";
 import ChatGPTDialog from "./ChatGPTDialog";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { ProfileCardProps } from "../_interfaces/interfaces";
 
-export default function ProfileCard({ userData }: IProfileCard) {
+export default function ProfileCard({ userData }: ProfileCardProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const pathname = usePathname();
   return (
     <>
       <div className="w-full flex flex-col items-center p-6 gap-4 border border-border-2 rounded-2xl sticky top-28">
@@ -14,8 +17,9 @@ export default function ProfileCard({ userData }: IProfileCard) {
             <span className="text-black text-lg font-semibold text-center py-6 whitespace-pre-wrap">
               {"로그인이 필요한\n서비스에요"}
             </span>
-            <button className="btn-default w-full">로그인</button>
-            <button className="btn-primary w-full">회원가입</button>
+            <Link href="/sign-in" className="btn-primary w-full">
+              로그인
+            </Link>
           </>
         ) : (
           <>
@@ -52,7 +56,14 @@ export default function ProfileCard({ userData }: IProfileCard) {
             >
               ChatGPT로 나만의 문제 만들기
             </button>
-            <button className="btn-default w-full">다른 문제 풀러 가기</button>
+            <Link
+              href={pathname === "/code/list" ? "/code/history" : "/code/list"}
+              className="btn-default w-full"
+            >
+              {pathname === "/code/list"
+                ? "문제 풀이 기록 보러 가기"
+                : "다른 문제 풀러 가기"}
+            </Link>
           </>
         )}
       </div>

@@ -1,16 +1,14 @@
+import { useOutsideClick } from "@/app/_hooks/useOutsideClick";
+import { CategoryDropDownProps } from "@/app/_interfaces/interfaces";
 import { useState } from "react";
-import { ShowMoreIcon } from "./Icons";
-import { useOutsideClick } from "../_hooks/useOutsideClick";
-import { DropDownProps } from "../_interfaces/interfaces";
+import { ShowMoreIcon } from "../Icons";
 
-export default function DropDown({
-  isSmall,
-  borderRight,
-  selection,
+export default function CategoryDropDown({
   list,
+  selection,
   onSelectionClick,
   placeholder,
-}: DropDownProps) {
+}: CategoryDropDownProps) {
   const [isListOpen, setIsListOpen] = useState(false);
   const ref = useOutsideClick(
     () => isListOpen && setIsListOpen((prev) => !prev)
@@ -19,16 +17,10 @@ export default function DropDown({
   return (
     <div
       ref={ref}
-      onClick={() => list?.length !== 0 && setIsListOpen((prev) => !prev)}
-      className={`relative flex items-center w-full ${
-        isSmall ? "px-2 py-[6px]" : "px-4 py-2"
-      } ${
-        !borderRight
-          ? "border border-border-2 rounded-lg"
-          : "border-r border-border-2"
-      } ${isListOpen && "z-10"} ${
-        list?.length === 0 ? "bg-bg-1" : "bg-white cursor-pointer"
-      }`}
+      onClick={() => list && setIsListOpen((prev) => !prev)}
+      className={`relative flex items-center w-full px-4 py-2 border border-border-2 rounded-lg ${
+        isListOpen && "z-10"
+      } ${!list ? "bg-bg-1" : "bg-white cursor-pointer"}`}
     >
       <div className={`${isListOpen && "rotate-180"}`}>
         <ShowMoreIcon />
@@ -38,7 +30,7 @@ export default function DropDown({
           !selection && "text-disabled"
         }`}
       >
-        {selection ? selection : placeholder || "선택"}
+        {selection ? selection.title : placeholder || "선택"}
       </span>
       {/* 선택 항목 목록 */}
       {isListOpen && (
@@ -46,13 +38,11 @@ export default function DropDown({
           {list &&
             list.map((el, index) => (
               <li
-                className={`w-full flex justify-center text-xs text-black ${
-                  isSmall ? "px-2 py-[6px]" : "px-4 py-2"
-                }`}
+                className="w-full flex justify-center text-xs text-black px-4 py-2"
                 onClick={() => onSelectionClick(el)}
                 key={index}
               >
-                {el.content}
+                {el.title}
               </li>
             ))}
         </ul>

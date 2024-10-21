@@ -1,7 +1,8 @@
+import { Suspense } from "react";
 import TopBar from "../_components/TopBar/TopBar";
-import CodeLayout from "./_components/CodeLayout";
+import CodeLayoutContainer from "./_components/CodeLayoutContainer";
 
-export default function RootLayout({
+export default function CodeLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -9,7 +10,10 @@ export default function RootLayout({
   return (
     <>
       <TopBar />
-      <CodeLayout>{children}</CodeLayout>
+      {/* useSearchParams()를 클라이언트 사이드에서 작동하도록 함 */}
+      <Suspense>
+        <CodeLayoutContainer>{children}</CodeLayoutContainer>
+      </Suspense>
     </>
   );
 }

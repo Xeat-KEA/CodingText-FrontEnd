@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@next/bundle-analyzer": "^14.2.15",
     "@tiptap/extension-image": "^2.8.0",
     "@tiptap/extension-link": "^2.8.0",
     "@tiptap/pm": "^2.8.0",
@@ -18,8 +19,8 @@
     "@uiw/codemirror-extensions-langs": "^4.23.3",
     "@uiw/codemirror-theme-xcode": "^4.23.3",
     "@uiw/react-codemirror": "^4.23.3",
-    "isomorphic-dompurify": "^2.16.0",
     "dayjs": "^1.11.13",
+    "isomorphic-dompurify": "^2.16.0",
     "next": "14.2.14",
     "primereact": "^10.8.3",
     "react": "^18",
