@@ -1,15 +1,15 @@
 import DOMPurify from "isomorphic-dompurify";
-import { PostProps } from "../../_interfaces/interfaces";
-import { IsCoding_Data } from "../../_constants/constants";
-import ReactCodeMirror, { EditorView } from "@uiw/react-codemirror";
+import { SmShowMoreIcon } from "../Icons";
+import { useState } from "react";
+import { PostProps } from "../../_interfaces/interfaces"; // 게시물 내용 받기
+import { IsCoding_Data } from "../../_constants/constants"; // 코딩데이터인지 -> 관련 데이터
+import ReactCodeMirror from "@uiw/react-codemirror";
 import { xcodeDark } from "@uiw/codemirror-theme-xcode";
 
-import { javascript } from "@codemirror/lang-javascript";
+import { javascript } from "@codemirror/lang-javascript"; // 언어 구분 -> 다른 방식 가능하면 수정
 import { python } from "@codemirror/lang-python";
 import { java } from "@codemirror/lang-java";
 import { cpp } from "@codemirror/lang-cpp";
-import { SmShowMoreIcon } from "../Icons";
-import { useState } from "react";
 
 
 const PostContent: React.FC<PostProps> = ({
@@ -61,6 +61,7 @@ const PostContent: React.FC<PostProps> = ({
             {isCodingPost ? (
                 <>
                     {/* 코딩 게시물 */}
+                    {/* 1 */}
                     {renderToggleSection("문제", visibleSections.codeContent, "codeContent", (
                         <div className="w-full text-black border border-border2 rounded-xl mb-6 p-4">
                             <div
@@ -71,18 +72,23 @@ const PostContent: React.FC<PostProps> = ({
                             />
                         </div>
                     ))}
-
+                    {/* 2 */}
                     {renderToggleSection("코드", visibleSections.writtenCode, "writtenCode", (
-                        <ReactCodeMirror
-                            className="w-full mb-6"
-                            value={currentCodingPost?.writtenCode}
-                            theme={xcodeDark}
-                            basicSetup={{ autocompletion: false }}
-                            extensions={[getLanguageExtension()]}
-                            editable={false}
-                        />
-                    ))}
+                        <div className="w-full mb-6">
+                            <div className="rounded-xl overflow-hidden">
+                                <ReactCodeMirror
+                                    className="w-full"
+                                    value={currentCodingPost?.writtenCode}
+                                    theme={xcodeDark}
+                                    basicSetup={{ autocompletion: false }}
+                                    extensions={[getLanguageExtension()]}
+                                    editable={false}
+                                />
+                            </div>
+                        </div>
 
+                    ))}
+                    {/* 3 */}
                     {renderToggleSection("본문", visibleSections.postContent, "postContent", (
                         <div className="w-full text-black border border-border2 rounded-xl p-4">
                             <div

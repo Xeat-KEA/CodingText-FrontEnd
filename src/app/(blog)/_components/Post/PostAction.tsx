@@ -100,6 +100,7 @@ const PostAction: React.FC<PostProps> = ({
                 </button>
                 {isOwnBlog ? (
                     <>
+                    {/* 수정을 위해 필요한 ? currentPost 넘겨주기..?  경로 수정 필요*/}
                         <Link href="/" className="flex items-center gap-1">
                             <BpEditIcon />
                             <p className="text-primary text-xs font-semibold">{`수정`}</p>

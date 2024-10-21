@@ -1,9 +1,7 @@
 import { Category } from "@/app/_interfaces/interfaces";
+import { IComment } from "../_interfaces/interfaces";
 
 export let loggedInUserId = 1; // 임시 로그인된 사용자 ID
-
-// // 블로그 페이지 사이드바 메뉴
-// export const Blog_Side_BAR_MENU = [];
 
 // 게시판 목록 (공통)
 export const Board_Categories: Category[] = [
@@ -558,3 +556,106 @@ export const IsCoding_Data = [
     }`
   }
 ];
+
+export const Comment_Data: IComment[] = [
+  {
+    replyId: 1,
+    postId: 1,
+    userId: 3,
+    mentionId: null,
+    parentReplyId: null,
+    content: "첫 번째 게시물에 대한 첫 번째 댓글입니다.",
+    createdAt: "2024-10-19 14:32:00",
+    modifiedAt: "2024-10-19 14:32:00"
+  },
+  {
+    replyId: 2,
+    postId: 1,
+    userId: 1,
+    mentionId: null,
+    parentReplyId: null,
+    content: "정말 좋은 글이에요! 잘 읽었습니다.",
+    createdAt: "2024-10-19 15:10:00",
+    modifiedAt: "2024-10-19 15:12:00"
+  },
+  {
+    replyId: 3,
+    postId: 1,
+    userId: 4,
+    mentionId: null,
+    parentReplyId: null,
+    content: "이 주제에 대해 궁금한 점이 있어요.",
+    createdAt: "2024-10-19 15:45:00",
+    modifiedAt: "2024-10-19 15:45:00"
+  },
+  {
+    replyId: 4,
+    postId: 1,
+    userId: 2,
+    mentionId: 1,
+    parentReplyId: 1,
+    content: "유익한 내용을 공유해주셔서 감사합니다.",
+    createdAt: "2024-10-19 16:00:00",
+    modifiedAt: "2024-10-19 16:00:00"
+  },
+  {
+    replyId: 5,
+    postId: 1,
+    userId: 4,
+    mentionId: 1,
+    parentReplyId: 1,
+    content: "첫 번째 댓글에 동의합니다! 정말 좋은 의견이에요.",
+    createdAt: "2024-10-19 16:30:00",
+    modifiedAt: "2024-10-19 16:30:00"
+  },
+  {
+    replyId: 6,
+    postId: 2,
+    userId: 3,
+    mentionId: null,
+    parentReplyId: null,
+    content: "이 글에서 많은 도움을 받았어요. 감사합니다!",
+    createdAt: "2024-10-19 17:00:00",
+    modifiedAt: "2024-10-19 17:00:00"
+  },
+  {
+    replyId: 7,
+    postId: 3,
+    userId: 1,
+    mentionId: null,
+    parentReplyId: null,
+    content: "이 주제에 대한 추가 정보가 필요해요.",
+    createdAt: "2024-10-19 17:30:00",
+    modifiedAt: "2024-10-19 17:30:00"
+  },
+  {
+    replyId: 8,
+    postId: 4,
+    userId: 2,
+    mentionId: null,
+    parentReplyId: null,
+    content: "정말 잘 쓰신 글이에요! 덕분에 많은 것을 배웠습니다.",
+    createdAt: "2024-10-19 18:00:00",
+    modifiedAt: "2024-10-19 18:00:00"
+  },
+  {
+    replyId: 9,
+    postId: 1,
+    userId: 1,
+    mentionId: 2,
+    parentReplyId: 2,
+    content: "이 부분은 좀 더 설명이 필요할 것 같아요.",
+    createdAt: "2024-10-19 18:30:00",
+    modifiedAt: "2024-10-19 18:30:00"
+  },
+  {
+    replyId: 10,
+    postId: 3,
+    userId: 4,
+    mentionId: null,
+    parentReplyId: null,
+    content: "이 글을 통해 많은 것을 생각하게 되었어요.",
+    createdAt: "2024-10-19 19:00:00",
+    modifiedAt: "2024-10-19 19:00:00"
+  }
+]

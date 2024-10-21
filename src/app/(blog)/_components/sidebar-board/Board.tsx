@@ -18,8 +18,8 @@ export default function Board() {
         setIsAddingSubCategory,
     } = useBlogStore();
 
-    const [isAddCategoryDisabled, setIsAddCategoryDisabled] = useState(false); // 게시판 추가 불가
-    const [isInsufficientSubCategories, setIsInsufficientSubCategories] = useState(false); // 부족한 하위 게시판 알림
+    const [isAddCategoryDisabled, setIsAddCategoryDisabled] = useState(false);
+    const [isInsufficientSubCategories, setIsInsufficientSubCategories] = useState(false); 
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [categoryToDelete, setCategoryToDelete] = useState<{ categoryId: number; subCategoryId: number; isSub: boolean } | null>(null);
     const [deletCategoryTitle, setDeleteCategoryTitle] = useState("");

@@ -35,6 +35,29 @@ export interface BlogPost {
     modifiedAt: string;
 }
 
+export interface IComment {
+    replyId: number;
+    postId: number;
+    userId: number;
+    mentionId: number | null;
+    parentReplyId: number | null;
+    content: string;
+    createdAt: string;
+    modifiedAt: string;
+}
+
+export interface CommentProps {
+    replyId: number;
+    userId: number;
+    mentionId: number | null;
+    content: string;
+    createdAt: string;
+    isOwnComment: boolean;
+    onReplyClick: (replyId : number, userId: number) => void;
+    onDelete: (replyId: number) => void;
+    onReport: (replyId: number) => void;
+}
+
 export interface PostProps {
     currentPost?: BlogPost;
     currentCategory?: Category;
@@ -47,4 +70,11 @@ export interface IBpFollowerIcon {
 
 export interface ISmShowMoreIcon {
     isHidden: Boolean;
+}
+
+export interface ICommentInput {
+    target?: string;
+    mentionId: number | null;
+    onSubmit: (data: { comment: string }) => void;
+    onCancel?: () => void; 
 }

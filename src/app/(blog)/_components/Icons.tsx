@@ -152,13 +152,16 @@ export function BpEditIcon() {
 export function SmShowMoreIcon({ isHidden }: ISmShowMoreIcon) {
     return (
         <svg
-            width="12"
-            height="7"
-            viewBox="0 0 12 7"
+            width="20"
+            height="21"
+            viewBox="0 0 20 21"
             fill="none"
             xmlns="http://www.w3.org/2000/svg">
-            <path d={isHidden ? "M1 6.5L6 1.5L11 6.5" : "M1 1L6 6L11 1"} stroke="#222222" strokeWidth="0.833333" />
+            <path d={isHidden ? "M7.5 15.5L12.5 10.5L7.5 5.5" : "M5 8L10 13L15 8"} 
+                stroke="#222222"
+                strokeWidth="0.833333" />
         </svg>
+
     )
 }
 
@@ -195,3 +198,21 @@ export function SmDeleteIcon() {
     )
 }
 
+// 답글 아이콘
+export function ReplyIcon() {
+    return (
+        <svg
+            width="14"
+            height="10"
+            viewBox="0 0 14 10"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg">
+            <path d="M0.75 5.00016L4.91667 0.833496M0.75 5.00016L4.91667 9.16683M0.75 5.00016H9.08333C10.4725 5.00016 13.25 5.8335 13.25 9.16683"
+                stroke="#222222"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round" />
+        </svg>
+
+    )
+}
