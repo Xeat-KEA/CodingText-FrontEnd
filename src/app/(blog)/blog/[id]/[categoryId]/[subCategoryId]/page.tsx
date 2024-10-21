@@ -1,7 +1,6 @@
 "use client";
 
 import { DUMMY_BLOG_POST_DATA } from "@/app/(blog)/_constants/constants";
-import { DUMMY_POST_RESULT_LIST } from "@/app/(search)/_constants/constants";
 import Pagination from "@/app/_components/Pagination";
 import PostCard from "@/app/_components/PostCard";
 import SearchBar from "@/app/_components/SearchBar";

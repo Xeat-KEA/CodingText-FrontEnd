@@ -1,12 +1,10 @@
-import DropDown from "@/app/_components/DropDown";
-import MultiSelectionDropDown from "@/app/_components/MultiSelectionDropDown";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { CODE_FILTER_LIST } from "../_constants/constants";
 import { ALGORITHM_LIST, DIFFICULTY_LIST } from "@/app/_constants/constants";
 import ParamDropDown from "@/app/_components/ParamDropDown";
+import MultiSelectionDropDown from "@/app/_components/MultiSelectionDropdown";
 
 export default function CodeFilter() {
-  const searchParams = useSearchParams();
   const pathname = usePathname();
 
   return (

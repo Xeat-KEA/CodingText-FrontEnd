@@ -8,16 +8,18 @@ export const useCheckToken = (guard?: boolean) => {
   const router = useRouter();
 
   useEffect(() => {
-    const storedToken = localStorage.getItem("token");
-    if (storedToken) {
-      setToken(storedToken);
-    }
-    if (guard) {
-      if (!storedToken) {
-        router.push("/sign-in");
+    if (typeof window !== undefined) {
+      const storedToken = localStorage.getItem("token");
+      if (storedToken) {
+        setToken(storedToken);
       }
+      if (guard) {
+        if (!storedToken) {
+          router.push("/sign-in");
+        }
+      }
+      setIsLoaded(true);
     }
-    setIsLoaded(true);
   }, []);
 
   return { token, isLoaded };

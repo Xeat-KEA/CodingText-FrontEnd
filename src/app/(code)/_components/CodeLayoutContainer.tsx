@@ -8,7 +8,7 @@ import CodeFilter from "./CodeFilter";
 import { usePathname } from "next/navigation";
 import { useCheckToken } from "@/app/_hooks/useCheckToken";
 
-export default function CodeLayout({
+export default function CodeLayoutContainer({
   children,
 }: Readonly<{
   children: React.ReactNode;
