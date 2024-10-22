@@ -118,9 +118,9 @@ export interface EditBtnProps {
 }
 
 export interface PostCardProps {
-  id: number;
+  articleId: number;
   profileImg?: string;
-  nickname?: string;
+  nickName?: string;
   category?: string;
   createAt: string;
   title: string;
@@ -129,7 +129,7 @@ export interface PostCardProps {
   likes: number;
   comments: number;
   views: number;
-  codeId?: number;
+  codeId: number | null;
 }
 
 // 전역 변수 관련 Interface

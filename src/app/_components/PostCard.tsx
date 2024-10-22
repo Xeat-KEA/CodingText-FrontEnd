@@ -5,11 +5,13 @@ import { useState } from "react";
 import { useCalculateDate } from "../_hooks/useCalculateDate";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useBase64 } from "../_hooks/useBase64";
+import DOMPurify from "isomorphic-dompurify";
 
 export default function PostCard({
-  id,
+  articleId,
   profileImg,
-  nickname,
+  nickName,
   category,
   createAt,
   title,
@@ -24,15 +26,18 @@ export default function PostCard({
 
   const [isHovered, setIsHovered] = useState(false);
   const date = useCalculateDate(createAt);
+
+  const decodedContent = useBase64("decode", content);
+
   return (
     <Link
-      href={`/blog/1/post/${id}`}
+      href={`/blog/1/post/${articleId}`} // 블로그 Id 수정 필요
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       className="w-full flex flex-col gap-2 py-6 cursor-pointer"
     >
       <div className="w-full flex justify-between items-center">
-        {nickname && profileImg && (
+        {nickName && profileImg && (
           <>
             {/* 사용자 정보 */}
             <div
@@ -48,11 +53,11 @@ export default function PostCard({
                   width="24"
                   height="24"
                   src={profileImg}
-                  alt={`${nickname}-profileImg`}
+                  alt={`${nickName}-profileImg`}
                 />
               </div>
               <span className="text-xs font-semibold text-body">
-                {nickname}
+                {nickName}
               </span>
             </div>
           </>
@@ -88,9 +93,12 @@ export default function PostCard({
             )}
             {title}
           </span>
-          <div className="text-sm text-body h-[60px] overflow-hidden">
-            {content}
-          </div>
+          <div
+            className="text-sm text-body h-[60px] overflow-hidden"
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(decodedContent),
+            }}
+          />
         </div>
         {/* 썸네일 (수정 필요) */}
         {thumbnail && (
