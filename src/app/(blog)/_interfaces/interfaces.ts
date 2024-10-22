@@ -47,7 +47,7 @@ export interface BlogPost {
   modifiedAt: string;
 }
 
-export interface Comment {
+export interface CommentForm {
   replyId: number;
   postId: number;
   userId: number;

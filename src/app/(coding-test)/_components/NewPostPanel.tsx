@@ -70,19 +70,9 @@ export default function NewPostPanel() {
           title="게시글이 등록되었어요!"
           content="작성된 게시글을 확인해보세요"
           backBtn="문제 목록 페이지로"
-          onBackBtnClick={
-            () =>
-              setIsDialogOpen(
-                (prev) => !prev
-              ) /* 이후 routing 기능으로 대체 필요 */
-          }
+          onBackBtnClick={() => router.push("/code/list", { scroll: false })}
           primaryBtn="게시글 페이지로"
-          onBtnClick={
-            () =>
-              setIsDialogOpen(
-                (prev) => !prev
-              ) /* 이후 routing 기능으로 대체 필요 */
-          }
+          onBtnClick={() => router.push("/blog/1/post/1")} // 링크 수정 필요
         />
       )}
       {isPageChanging && (

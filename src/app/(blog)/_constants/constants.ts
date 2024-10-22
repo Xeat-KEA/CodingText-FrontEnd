@@ -1,5 +1,5 @@
 import { Category, Selection } from "@/app/_interfaces/interfaces";
-import { Comment } from "../_interfaces/interfaces";
+import { CommentForm } from "../_interfaces/interfaces";
 
 export let loggedInUserId = 1; // 임시 로그인된 사용자 ID
 
@@ -655,7 +655,7 @@ export const IsCoding_Data = [
   },
 ];
 
-export const Comment_Data: Comment[] = [
+export const Comment_Data: CommentForm[] = [
   {
     replyId: 1,
     postId: 1,

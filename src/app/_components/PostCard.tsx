@@ -26,7 +26,7 @@ export default function PostCard({
   const date = useCalculateDate(createAt);
   return (
     <Link
-      href={`/blog/0/0/0/${id}`}
+      href={`/blog/1/post/${id}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       className="w-full flex flex-col gap-2 py-6 cursor-pointer"

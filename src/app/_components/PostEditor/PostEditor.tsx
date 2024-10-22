@@ -11,7 +11,7 @@ import { useForm } from "react-hook-form";
 import { LgCheckBoxIcon } from "../Icons";
 import TiptapEditor from "../TipTapEditor/TiptapEditor";
 import CategoryDropDown from "./CategoryDropDown";
-import { Other_Board_Categories } from "@/app/(blog)/_constants/constants";
+import { User_Specific_Categories } from "@/app/(blog)/_constants/constants";
 
 export default function PostEditor({
   isCodingTest,
@@ -42,7 +42,7 @@ export default function PostEditor({
   const [categoryList, setCategoryList] = useState<Category[]>();
   useEffect(() => {
     // 전체, 코딩테스트 풀이 게시판 제외
-    setCategoryList(Other_Board_Categories.filter((_, index) => index > 1));
+    setCategoryList(User_Specific_Categories.filter((_, index) => index > 1));
   }, []);
 
   // 게시판 저장을 위한 state 선언
