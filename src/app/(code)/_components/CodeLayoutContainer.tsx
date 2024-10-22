@@ -1,12 +1,14 @@
 "use client";
 
 import SearchBar from "@/app/_components/SearchBar";
-import { DUMMY_PROFILE_DATA } from "../_constants/constants";
 import Pagination from "@/app/_components/Pagination";
 import ProfileCard from "./ProfileCard";
 import CodeFilter from "./CodeFilter";
 import { usePathname } from "next/navigation";
 import { useCheckToken } from "@/app/_hooks/useCheckToken";
+import { useEffect, useState } from "react";
+import api from "@/app/_api/config";
+import { ProfileData } from "@/app/_interfaces/interfaces";
 
 export default function CodeLayoutContainer({
   children,
@@ -16,6 +18,20 @@ export default function CodeLayoutContainer({
   const pathname = usePathname();
   // 로그인 여부 확인 (풀이 기록 페이지에서만 로그인으로 이동)
   const { token } = useCheckToken(pathname === "/code/history");
+
+  // 프로토타입 API 사용자 정보 GET
+  const [data, setData] = useState<ProfileData>();
+  useEffect(() => {
+    api.get("/my-page/1").then((res) => {
+      const result: ProfileData = {
+        ...res.data.data,
+        // 이미지 받아 오게 되면 수정 필요
+        profileImg: "/profileImg1.png",
+      };
+      setData(result);
+    });
+  }, []);
+
   return (
     <>
       <div className="top-container pt-16">
@@ -35,7 +51,21 @@ export default function CodeLayoutContainer({
           </div>
           {/* 회원 정보 부분 */}
           <div className="w-[300px] shrink-0 pl-6 relative">
-            <ProfileCard userData={token ? DUMMY_PROFILE_DATA : undefined} />
+            <ProfileCard
+              userData={
+                token
+                  ? {
+                      profileImg: data?.profileImg!,
+                      rank: "Junior",
+                      nickname: data?.nickName!,
+                      solved: 10,
+                      registered: 2,
+                      score: 1200,
+                      ranking: 60,
+                    }
+                  : undefined
+              }
+            />
           </div>
         </div>
       </div>

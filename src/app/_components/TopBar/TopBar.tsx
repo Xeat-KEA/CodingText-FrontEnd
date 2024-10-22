@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import SmSearchBar from "./SmSearchBar";
@@ -10,6 +10,8 @@ import { LogoIcon, NoticeIcon } from "../Icons";
 import ProfilePopup from "../ProfilePopup";
 import { useCheckToken } from "@/app/_hooks/useCheckToken";
 import Image from "next/image";
+import { ProfileData } from "@/app/_interfaces/interfaces";
+import api from "@/app/_api/config";
 
 export default function TopBar() {
   const pathname = usePathname();
@@ -46,6 +48,12 @@ export default function TopBar() {
     () => setIsPopUpOpen((prev) => ({ ...prev, profile: false })),
     profileRef
   );
+
+  // 프로토타입 API 사용자 정보 GET
+  const [profileInfo, setProfileInfo] = useState<ProfileData>();
+  useEffect(() => {
+    api.get("/my-page/1").then((res) => setProfileInfo(res.data.data));
+  }, []);
 
   return (
     <nav className="fixed w-full h-16 bg-white border-b border-border-1 flex justify-center z-50">
@@ -153,7 +161,9 @@ export default function TopBar() {
             {/* 사용자 정보 */}
             <div className="flex flex-col gap-[2px] px-6 py-4">
               <span className="text-body text-xs font-bold">Junior</span>
-              <span className="text-base font-bold text-black">사용자123</span>
+              <span className="text-base font-bold text-black">
+                {profileInfo?.nickName}
+              </span>
             </div>
             {/* 프로필 메뉴 */}
             <ProfilePopup />

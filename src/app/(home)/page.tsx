@@ -37,7 +37,7 @@ export default function Home() {
       );
       setResult(sortedData.slice(0, 5));
     });
-  });
+  }, []);
 
   return (
     <>

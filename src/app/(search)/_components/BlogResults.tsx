@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { DUMMY_BLOG_RESULT_LIST } from "../_constants/constants";
 import BlogCard from "./BlogCard";
 import api from "@/app/_api/config";
 import { BlogResult } from "../_interfaces/interfaces";

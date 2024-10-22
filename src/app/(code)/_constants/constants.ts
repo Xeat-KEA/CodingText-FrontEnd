@@ -11,16 +11,6 @@ export const CODE_FILTER_LIST: MultiSelectionList[] = [
   { content: "정렬", list: ["최신순", "난이도순", "참여자순"] },
 ];
 
-export const DUMMY_PROFILE_DATA = {
-  profileImg: "/profileImg1.png",
-  rank: "Junior",
-  nickname: "사용자123",
-  solved: 123,
-  registered: 12,
-  score: 1234,
-  ranking: 123,
-};
-
 export const DUMMY_CODE_LIST = [
   {
     id: 1,
