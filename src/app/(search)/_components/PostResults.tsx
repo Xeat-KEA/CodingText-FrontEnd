@@ -11,6 +11,7 @@ export default function PostResults() {
             className={`${index >= 2 && "border-t border-border2"}`}
           >
             <PostCard
+              id={index}
               profileImg={el.profileImg}
               nickname={el.nickname}
               createAt={el.createAt}

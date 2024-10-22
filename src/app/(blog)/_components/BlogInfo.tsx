@@ -5,40 +5,40 @@ import { Blog_Introduction_Data } from "../_constants/constants";
 import { useBlogStore } from "@/app/stores";
 
 export default function BlogInfo() {
-    // 전역 변수
-    const {
-        isOwnBlog,
-        profile
-    } = useBlogStore();
+  // 전역 변수
+  const { isOwnBlog, profile } = useBlogStore();
 
-    const blogIntro = Blog_Introduction_Data.find(data => data.profileId === profile?.profileId)?.blogIntro;
+  const blogIntro = Blog_Introduction_Data.find(
+    (data) => data.profileId === profile?.profileId
+  )?.blogIntro;
 
-    return (
+  return (
+    <>
+      {profile && blogIntro && (
         <>
-            {profile && blogIntro && (
-                <>
-                    {/* 블로그 소개글 */}
-                    <div className="w-226 h-[442px] border border-border2 rounded-xl mb-6 p-4">
-                        <div
-                            className="prose"
-                            dangerouslySetInnerHTML={
-                                {
-                                    __html: DOMPurify.sanitize(String(blogIntro))
-                                }
-                            }
-                        />
-                    </div>
-                    {/* 블로그 정보 수정 버튼 */}
-                    {(isOwnBlog) && (
-                        <Link href="/" className="inline-flex items-center w-auto h-5 gap-1 ml-2">
-                            <BpEditIcon />
-                            <p className="text-primary text-xs font-semibold">
-                                블로그 정보 수정
-                            </p>
-                        </Link>
-                    )}
-                </>
-            )}
+          {/* 블로그 소개글 */}
+          <div className="w-226 h-[442px] border border-border2 rounded-xl mb-6 p-4">
+            <div
+              className="prose"
+              dangerouslySetInnerHTML={{
+                __html: DOMPurify.sanitize(String(blogIntro)),
+              }}
+            />
+          </div>
+          {/* 블로그 정보 수정 버튼 */}
+          {isOwnBlog && (
+            <Link
+              href="/"
+              className="inline-flex items-center w-auto h-5 gap-1 ml-2"
+            >
+              <BpEditIcon />
+              <p className="text-primary text-xs font-semibold">
+                블로그 정보 수정
+              </p>
+            </Link>
+          )}
         </>
-    )
+      )}
+    </>
+  );
 }

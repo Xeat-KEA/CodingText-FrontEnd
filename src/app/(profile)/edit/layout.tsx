@@ -1,7 +1,7 @@
 import TopBar from "@/app/_components/TopBar/TopBar";
 import ProfileSideBar from "../_components/ProfileSideBar";
 
-export default function RootLayout({
+export default function ProfileLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;

@@ -1,6 +1,5 @@
 import { POSTING_TAB_BAR_MENU } from "../_constants/constants";
 import { useCodingTestStore, useTabStore } from "@/app/stores";
-import PostEditor from "@/app/_components/PostEditor";
 import CodeEditor from "./CodeEditor";
 import { useState } from "react";
 import Dialog from "@/app/_components/Dialog";
@@ -8,6 +7,8 @@ import { DialogCheckIcon } from "@/app/_components/Icons";
 import { useRouter } from "next/navigation";
 import { usePageHandler } from "@/app/_hooks/usePageHandler";
 import TabBar from "@/app/_components/TapBar/TabBar";
+import { useBase64 } from "@/app/_hooks/useBase64";
+import PostEditor from "@/app/_components/PostEditor/PostEditor";
 
 export default function NewPostPanel() {
   const router = useRouter();
@@ -54,7 +55,9 @@ export default function NewPostPanel() {
             onCancelClick={() => setIsPosting(false)}
             onBtnClick={(data) => {
               // data post 부분 작성 필요
-              console.log(data);
+              const newContent = useBase64("encode", data.content);
+              const newData = { ...data, content: newContent };
+              console.log(newData);
 
               setIsDialogOpen((prev) => !prev);
             }}
@@ -67,19 +70,9 @@ export default function NewPostPanel() {
           title="게시글이 등록되었어요!"
           content="작성된 게시글을 확인해보세요"
           backBtn="문제 목록 페이지로"
-          onBackBtnClick={
-            () =>
-              setIsDialogOpen(
-                (prev) => !prev
-              ) /* 이후 routing 기능으로 대체 필요 */
-          }
+          onBackBtnClick={() => router.push("/code/list", { scroll: false })}
           primaryBtn="게시글 페이지로"
-          onBtnClick={
-            () =>
-              setIsDialogOpen(
-                (prev) => !prev
-              ) /* 이후 routing 기능으로 대체 필요 */
-          }
+          onBtnClick={() => router.push("/blog/1/post/1")} // 링크 수정 필요
         />
       )}
       {isPageChanging && (
@@ -92,7 +85,7 @@ export default function NewPostPanel() {
           backBtn="돌아가기"
           onBackBtnClick={() => setIsPageChanging((prev) => !prev)}
           redBtn="게시글 작성 취소"
-          onBtnClick={() => router.push("/")}
+          onBtnClick={() => router.push("/", { scroll: false })}
         />
       )}
     </>

@@ -1,29 +1,18 @@
 import { create } from "zustand";
 import {
-  Category,
-  IBlogStore,
-  ICodingTestStore,
-  IPaginationStore,
-  ISearchFilterStore,
-  ITabStore,
-  ITiptapStore,
+  BlogStore,
+  CodingTestStore,
+  PaginationStore,
+  SearchFilterStore,
+  TabStore,
+  TiptapStore,
 } from "./_interfaces/interfaces";
 
 // 코딩테스트 관련 전역변수
-export const useCodingTestStore = create<ICodingTestStore>((set) => ({
-  // 채팅 관련 전역변수
-  // 정답 여부만 확인 토글
-  checkAnswerOnly: false,
-  setCheckAnswerOnly: () =>
-    set((state) => ({ checkAnswerOnly: !state.checkAnswerOnly })),
-  // 코드와 함께 질문 토글
-  sendWithCode: false,
-  setSendWithCode: () =>
-    set((state) => ({ sendWithCode: !state.sendWithCode })),
-
+export const useCodingTestStore = create<CodingTestStore>((set) => ({
   // 코딩 관련 전역변수
   // 언어 설정
-  language: "",
+  language: undefined,
   setLanguage: (newLanguage) => set({ language: newLanguage }),
   // 정답 제출 여부
   hasSolved: false,
@@ -40,19 +29,19 @@ export const useCodingTestStore = create<ICodingTestStore>((set) => ({
 }));
 
 // 탭바 메뉴 관련 전역변수
-export const useTabStore = create<ITabStore>((set) => ({
+export const useTabStore = create<TabStore>((set) => ({
   tab: "", // 현재 선택된 탭
   setTab: (newTab) => set({ tab: newTab }),
 }));
 
 // Tiptap Editor 내용 저장 전역변수
-export const useTiptapStore = create<ITiptapStore>((set) => ({
+export const useTiptapStore = create<TiptapStore>((set) => ({
   content: "",
   setContent: (string) => set({ content: string }),
 }));
 
 // 페이지 정보 저장 전역변수
-export const usePaginationStore = create<IPaginationStore>((set) => ({
+export const usePaginationStore = create<PaginationStore>((set) => ({
   page: 1,
   setPage: (newPage) => set({ page: newPage }),
   lastPage: 0,
@@ -60,13 +49,13 @@ export const usePaginationStore = create<IPaginationStore>((set) => ({
 }));
 
 // 검색 필터 저장 전역변수
-export const useSearchFilterStore = create<ISearchFilterStore>((set) => ({
+export const useSearchFilterStore = create<SearchFilterStore>((set) => ({
   filter: "",
   setFilter: (selected) => set({ filter: selected }),
 }));
 
 // 블로그 정보 저장 전역변수
-export const useBlogStore = create<IBlogStore>((set) => ({
+export const useBlogStore = create<BlogStore>((set) => ({
   blogId: 1,
   setBlogId: (id) => set({ blogId: id }),
   categoryId: 0,

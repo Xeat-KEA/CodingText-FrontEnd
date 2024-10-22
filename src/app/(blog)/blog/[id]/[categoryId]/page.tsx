@@ -41,10 +41,10 @@ export default function BlogAllListPage() {
           <div className="flex gap-3 items-center">
             {TAB_BAR_ORDER_FILTER.map((el) => (
               <button
-                key={el.state}
-                onClick={() => setFilter(el.state)}
+                key={el.selection}
+                onClick={() => setFilter(el.selection)}
                 className={`text-xs ${
-                  filter === el.state
+                  filter === el.selection
                     ? "text-primary font-semibold"
                     : "text-disabled"
                 }`}
@@ -58,6 +58,7 @@ export default function BlogAllListPage() {
           {DUMMY_BLOG_POST_DATA.map((el, index) => (
             <PostCard
               key={index}
+              id={index}
               category={el.category}
               title={el.title}
               content={el.content}

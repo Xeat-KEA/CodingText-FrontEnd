@@ -1,26 +1,30 @@
 "use client";
 
-import DropDown from "@/app/_components/Dropdown";
+import DropDown from "@/app/_components/DropDown";
 import { PROGRAMMING_LANGUAGES } from "@/app/_constants/constants";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import SmBackBtn from "../_components/SmBackBtn";
 import { useRouter } from "next/navigation";
-import { ISignUpForm } from "../_interfaces/interfaces";
 import ProfileImgSelection from "@/app/_components/ProfileImgSelection";
+import { SignUpForm } from "../_interfaces/interfaces";
 
 export default function SignUpPage() {
   const router = useRouter();
-  const { register, handleSubmit, setValue } = useForm<ISignUpForm>();
+  const { register, handleSubmit, setValue } = useForm<SignUpForm>();
   const [selectedLang, setSelectedLang] = useState("");
   const [selectedProfileImg, setSelectedProfileImg] =
     useState("/profileImg1.png");
 
-  const onSubmit = (data: ISignUpForm) => {
+  const onValid = (data: SignUpForm) => {
     // 데이터 post 및 validation 필요
     console.log(data);
 
-    router.push("/sign-up/done");
+    if (!data.lang) {
+      console.log("error");
+    } else {
+      router.push("/sign-up/done");
+    }
   };
 
   return (
@@ -32,12 +36,13 @@ export default function SignUpPage() {
         </span>
         <SmBackBtn />
       </div>
-      <form className="flex flex-col gap-8">
+      <form onSubmit={handleSubmit(onValid)} className="flex flex-col gap-8">
         {/* 닉네임 입력 */}
         <input
           {...register("nickname", { required: true })}
           className="sign-in-input"
           placeholder="닉네임"
+          autoComplete="off"
         />
         {/* 언어 선택 */}
         <div className="flex flex-col gap-2">
@@ -47,8 +52,8 @@ export default function SignUpPage() {
             placeholder="언어를 선택해주세요"
             list={PROGRAMMING_LANGUAGES}
             onSelectionClick={(selected) => {
-              setSelectedLang(selected);
-              setValue("lang", selected);
+              setSelectedLang(selected.content);
+              setValue("lang", selected.selection);
             }}
           />
         </div>
@@ -63,7 +68,7 @@ export default function SignUpPage() {
             }}
           />
         </div>
-        <button onClick={handleSubmit(onSubmit)} className="btn-primary">
+        <button type="submit" className="btn-primary">
           완료
         </button>
       </form>

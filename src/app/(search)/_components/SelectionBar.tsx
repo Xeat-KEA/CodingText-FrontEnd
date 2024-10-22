@@ -1,9 +1,9 @@
-import { SearchTabBarProps } from "@/app/_interfaces/interfaces";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import TabBarFilter from "./TabBarFilter";
 import { useSetParams } from "@/app/_hooks/useSetParams";
+import { SelectionBarProps } from "@/app/_interfaces/interfaces";
 
-export default function SearchTabBar({ menuList }: SearchTabBarProps) {
+export default function SelectionBar({ menuList }: SelectionBarProps) {
   const searchParams = useSearchParams();
   const setParams = useSetParams();
 
@@ -15,11 +15,11 @@ export default function SearchTabBar({ menuList }: SearchTabBarProps) {
           <div
             key={index}
             className={`pr-4 cursor-pointer ${index !== 0 && "pl-4"}`}
-            onClick={() => setParams("tab", el.param)}
+            onClick={() => setParams("tab", el.selection)}
           >
             <span
               className={`flex items-center text-sm text-black  h-full ${
-                searchParams.get("tab") === el.param &&
+                searchParams.get("tab") === el.selection &&
                 "font-bold border-b-[3px] border-primary pt-[3px]"
               }`}
             >

@@ -5,14 +5,10 @@ import { useEffect } from "react";
 import Pagination from "@/app/_components/Pagination";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import SearchBar from "@/app/_components/SearchBar";
-import {
-  SEARCH_FILTER_LIST,
-  SEARCH_TAB_MENU_LIST,
-} from "../_constants/constants";
-import SearchTabBar from "../_components/SearchTabBar";
+import { SEARCH_TAB_MENU_LIST } from "../_constants/constants";
 import PostResults from "../_components/PostResults";
 import BlogResults from "../_components/BlogResults";
-import TopBar from "@/app/_components/TopBar/TopBar";
+import SelectionBar from "../_components/SelectionBar";
 
 export default function SearchPage() {
   const router = useRouter();
@@ -53,12 +49,11 @@ export default function SearchPage() {
 
   return (
     <>
-      <TopBar />
       <div className="w-full flex justify-center pt-16">
         <div className="max-w-1200 flex p-12">
           <div className="flex flex-col w-full gap-6">
             <SearchBar baseURL={pathname} />
-            <SearchTabBar menuList={SEARCH_TAB_MENU_LIST} />
+            <SelectionBar menuList={SEARCH_TAB_MENU_LIST} />
             {/* 검색 결과 목록 */}
             {searchParams.get("tab") === "POST" ? (
               <PostResults />

@@ -1,5 +1,5 @@
 import { useOutsideClick } from "@/app/_hooks/useOutsideClick";
-import { IEditProfileImgDialog } from "../_interfaces/interfaces";
+import { EditProfileImgDialogProps } from "../_interfaces/interfaces";
 import ProfileImgSelection from "@/app/_components/ProfileImgSelection";
 import { useState } from "react";
 
@@ -7,7 +7,7 @@ export default function EditProfileImgDialog({
   onBackBtnClick,
   onBtnClick,
   currentImg,
-}: IEditProfileImgDialog) {
+}: EditProfileImgDialogProps) {
   const ref = useOutsideClick(onBackBtnClick);
   const [selectedImg, setSelectedImg] = useState(currentImg);
   return (

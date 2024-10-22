@@ -1,9 +1,9 @@
-import { ITabBar } from "@/app/_interfaces/interfaces";
 import { useCodingTestStore, useTabStore } from "@/app/stores";
 import { useEffect } from "react";
-import DropDown from "../Dropdown";
+import DropDown from "../DropDown";
+import { TabBarProps } from "@/app/_interfaces/interfaces";
 
-export default function TabBar({ menuList, dropDownList }: ITabBar) {
+export default function TabBar({ menuList, dropDownList }: TabBarProps) {
   // 전역 변수
   const { tab, setTab } = useTabStore();
   const { language, setLanguage } = useCodingTestStore();
@@ -39,7 +39,7 @@ export default function TabBar({ menuList, dropDownList }: ITabBar) {
       {dropDownList && (
         <div className="w-[120px]">
           <DropDown
-            selection={language}
+            selection={language?.content!}
             onSelectionClick={(selected) => setLanguage(selected)}
             list={dropDownList}
             isSmall

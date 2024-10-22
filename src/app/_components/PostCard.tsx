@@ -1,11 +1,13 @@
 import Image from "next/image";
-import { IPostCard } from "../_interfaces/interfaces";
+import { PostCardProps } from "../_interfaces/interfaces";
 import { CommentCountIcon, LikeCountIcon, ReportIcon } from "./Icons";
 import { useState } from "react";
 import { useCalculateDate } from "../_hooks/useCalculateDate";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 export default function PostCard({
+  id,
   profileImg,
   nickname,
   category,
@@ -17,16 +19,14 @@ export default function PostCard({
   comments,
   views,
   codeId,
-}: IPostCard) {
+}: PostCardProps) {
   const router = useRouter();
 
   const [isHovered, setIsHovered] = useState(false);
   const date = useCalculateDate(createAt);
   return (
-    <div
-      onClick={() => {
-        console.log("clicked");
-      }}
+    <Link
+      href={`/blog/1/post/${id}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       className="w-full flex flex-col gap-2 py-6 cursor-pointer"
@@ -76,7 +76,10 @@ export default function PostCard({
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
-                  router.push("/search/12");
+                  router.push(
+                    `/search?keyword=${codeId}&tab=POST&category=CODE&order=ACCURACY`,
+                    { scroll: false }
+                  );
                 }}
                 className="text-lg font-bold text-primary hover:underline"
               >
@@ -125,6 +128,6 @@ export default function PostCard({
           </button>
         )}
       </div>
-    </div>
+    </Link>
   );
 }

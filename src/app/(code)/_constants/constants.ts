@@ -1,10 +1,8 @@
-import { MultiSelectionList } from "@/app/_interfaces/interfaces";
+import { MultiSelectionList, Selection } from "@/app/_interfaces/interfaces";
 
-export const CODE_SEARCH_FILTER_LIST = ["제목", "문제 번호"];
-
-export const SEARCH_CODE_FILTER_LIST = [
-  { content: "제목", param: "TITLE" },
-  { content: "문제 번호", param: "CODE_NUM" },
+export const CODE_SEARCH_FILTER_LIST: Selection[] = [
+  { content: "제목", selection: "TITLE" },
+  { content: "문제 번호", selection: "CODE_NUM" },
 ];
 
 export const CODE_FILTER_LIST: MultiSelectionList[] = [

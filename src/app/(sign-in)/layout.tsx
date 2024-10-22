@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { LogoIcon } from "../_components/Icons";
 
-export default function RootLayout({
+export default function SignInLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;

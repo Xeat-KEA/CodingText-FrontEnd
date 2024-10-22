@@ -1,17 +1,17 @@
 import { useEffect, useState } from "react";
-import { ISearchBar, SearchForm } from "../_interfaces/interfaces";
+import { SearchBarProps, SearchForm } from "../_interfaces/interfaces";
 import { LgSearchIcon } from "./Icons";
 import { useForm } from "react-hook-form";
 import { useRouter, useSearchParams } from "next/navigation";
-import DropDown from "./Dropdown";
+import DropDown from "./DropDown";
 import { CODE_SEARCH_FILTER_LIST } from "../(code)/_constants/constants";
 
-export default function SearchBar({ baseURL, hasFilter }: ISearchBar) {
+export default function SearchBar({ baseURL, hasFilter }: SearchBarProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
   const { register, handleSubmit, setValue } = useForm<SearchForm>();
-  const onSubmit = (data: SearchForm) => {
+  const onValid = (data: SearchForm) => {
     const newParams = new URLSearchParams(searchParams.toString());
     newParams.set("keyword", data.keyword);
     if (data.filter) {
@@ -34,8 +34,8 @@ export default function SearchBar({ baseURL, hasFilter }: ISearchBar) {
   const [filter, setFilter] = useState("");
   useEffect(() => {
     if (hasFilter) {
-      setFilter(CODE_SEARCH_FILTER_LIST[0]);
-      setValue("filter", CODE_SEARCH_FILTER_LIST[0]);
+      setFilter(CODE_SEARCH_FILTER_LIST[0].content);
+      setValue("filter", CODE_SEARCH_FILTER_LIST[0].selection);
     }
   }, []);
 
@@ -47,16 +47,16 @@ export default function SearchBar({ baseURL, hasFilter }: ISearchBar) {
             isSmall
             borderRight
             list={CODE_SEARCH_FILTER_LIST}
-            selection={filter ? filter : CODE_SEARCH_FILTER_LIST[0]}
+            selection={filter ? filter : CODE_SEARCH_FILTER_LIST[0].content}
             onSelectionClick={(selected) => {
-              setFilter(selected);
-              setValue("filter", selected);
+              setFilter(selected.content);
+              setValue("filter", selected.selection);
             }}
           />
         </div>
       )}
       <form
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit(onValid)}
         className="flex gap-2 w-full border border-border-2 rounded-full px-6 py-3"
       >
         <input
@@ -65,6 +65,7 @@ export default function SearchBar({ baseURL, hasFilter }: ISearchBar) {
           })}
           className="grow"
           placeholder="검색어를 입력해주세요"
+          autoComplete="off"
         />
         <button type="submit">
           <LgSearchIcon />

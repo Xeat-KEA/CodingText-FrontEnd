@@ -1,23 +1,31 @@
+import { useBase64 } from "@/app/_hooks/useBase64";
+import {
+  Category,
+  Post,
+  PostEditorProps,
+  PostForm,
+} from "@/app/_interfaces/interfaces";
+import { useTiptapStore } from "@/app/stores";
 import { useEffect, useState } from "react";
-import { LgCheckBoxIcon } from "./Icons";
-import TiptapEditor from "./TipTapEditor/TiptapEditor";
-import { IPost, IPostEditor, IPostForm } from "../_interfaces/interfaces";
 import { useForm } from "react-hook-form";
-import { useTiptapStore } from "../stores";
-import DropDown from "./Dropdown";
-import { Other_Board_Categories } from "../(blog)/_constants/constants";
+import { LgCheckBoxIcon } from "../Icons";
+import TiptapEditor from "../TipTapEditor/TiptapEditor";
+import CategoryDropDown from "./CategoryDropDown";
+import { User_Specific_Categories } from "@/app/(blog)/_constants/constants";
 
 export default function PostEditor({
   isCodingTest,
   isEditing,
   onCancelClick,
   onBtnClick,
-}: IPostEditor) {
+}: PostEditorProps) {
   // Form 데이터 관리
-  const { register, handleSubmit, setValue } = useForm<IPostForm>();
+  const { register, handleSubmit, setValue } = useForm<PostForm>();
   const { content } = useTiptapStore();
-  const onSubmit = (data: IPostForm) => {
-    const newPostForm: IPost = { ...data, content: content };
+  const onValid = (data: PostForm) => {
+    // 텍스트 저장을 위해 base64로 인코딩
+    const newContent = useBase64("encode", content);
+    const newPostForm: Post = { ...data, content: newContent };
     onBtnClick(newPostForm);
   };
 
@@ -30,27 +38,47 @@ export default function PostEditor({
     setValue("isSecret", isSecret);
   }, [isSecret]);
 
-  const [category, setCategory] = useState("");
-  const [subCategory, setSubCategory] = useState("");
+  // 사용자 게시판 저장
+  const [categoryList, setCategoryList] = useState<Category[]>();
+  useEffect(() => {
+    // 전체, 코딩테스트 풀이 게시판 제외
+    setCategoryList(User_Specific_Categories.filter((_, index) => index > 1));
+  }, []);
+
+  // 게시판 저장을 위한 state 선언
+  const [category, setCategory] = useState<Category>();
+  const [subCategory, setSubCategory] = useState<Category>();
+  const [subCategoryList, setSubCategoryList] = useState<Category[]>();
   useEffect(() => {
     // 상위 케시판 변경 시 하위 게시판 초기화
-    setSubCategory("");
+    setSubCategory(undefined);
+    if (category) {
+      setSubCategoryList(
+        category.subCategories?.filter((_, index) => index > 0)
+      );
+    }
 
-    setValue("parentCategory", category);
+    // 상위 게시판 저장
+    setValue("parentCategory", category?.id);
   }, [category]);
 
+  // 하위 게시판 저장
   useEffect(() => {
-    setValue("childCategory", subCategory);
+    setValue("childCategory", subCategory?.id);
   }, [subCategory]);
 
   return (
-    <form className="w-full h-full flex flex-col gap-4">
+    <form
+      onSubmit={handleSubmit(onValid)}
+      className="w-full h-full flex flex-col gap-4"
+    >
       <div className="flex gap-4">
         {/* 제목 입력 */}
         <input
           {...register("title", { required: true })}
           className="grow post-input"
           placeholder="제목을 입력해주세요"
+          autoComplete="off"
         />
         {/* 비밀글 여부 설정 */}
         <div className="flex w-[256px] items-center gap-4">
@@ -67,34 +95,24 @@ export default function PostEditor({
             className="grow w-full post-input"
             placeholder="비밀번호를 입력해주세요"
             disabled={!isSecret}
+            autoComplete="off"
           />
         </div>
       </div>
       {/* 게시판 선택 드롭다운 */}
       {!isCodingTest && (
         <div className="flex gap-4">
-          <DropDown
-            placeholder="상위 게시판을 선택해주세요"
-            list={Other_Board_Categories.map(
-              (el, index) => index !== 0 && index !== 1 && el.title
-            ).filter((el) => el !== false)}
+          <CategoryDropDown
+            list={categoryList}
             selection={category}
             onSelectionClick={(selected) => setCategory(selected)}
+            placeholder="상위 게시판 선택"
           />
-          <DropDown
-            placeholder="하위 게시판을 선택해주세요"
-            list={
-              category
-                ? Other_Board_Categories.filter(
-                    (el) => el.title === category
-                  )[0]
-                    .subCategories?.map((el, index) => index !== 0 && el.title)
-                    .filter((el) => el !== false)
-                : []
-            }
+          <CategoryDropDown
+            list={subCategoryList}
             selection={subCategory}
             onSelectionClick={(selected) => setSubCategory(selected)}
-            disabled={!category}
+            placeholder="하위 게시판 선택"
           />
         </div>
       )}
@@ -104,21 +122,10 @@ export default function PostEditor({
       <div className="division" />
       {/* 하단 버튼 */}
       <div className="flex gap-4 self-end">
-        <button
-          type="button"
-          onClick={(e) => {
-            e.preventDefault();
-            onCancelClick();
-          }}
-          className="btn-default"
-        >
+        <button type="button" onClick={onCancelClick} className="btn-default">
           취소
         </button>
-        <button
-          type="button"
-          onClick={handleSubmit(onSubmit)}
-          className="btn-primary"
-        >
+        <button type="submit" className="btn-primary">
           {!isEditing ? "새 게시글 등록" : "수정"}
         </button>
       </div>

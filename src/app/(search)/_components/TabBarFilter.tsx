@@ -19,10 +19,10 @@ export default function TabBarFilter() {
     <div className="flex gap-3 items-center">
       {TAB_BAR_POST_FILTER.map((el) => (
         <button
-          key={el.state}
-          onClick={() => setFilter("category", el.state)}
+          key={el.selection}
+          onClick={() => setFilter("category", el.selection)}
           className={`text-xs ${
-            searchParams.get("category") === el.state
+            searchParams.get("category") === el.selection
               ? "text-primary font-semibold"
               : "text-disabled"
           }`}
@@ -33,10 +33,10 @@ export default function TabBarFilter() {
       <div className="w-[1px] h-3 bg-border-2" />
       {TAB_BAR_ORDER_FILTER.map((el) => (
         <button
-          key={el.state}
-          onClick={() => setFilter("order", el.state)}
+          key={el.selection}
+          onClick={() => setFilter("order", el.selection)}
           className={`text-xs ${
-            searchParams.get("order") === el.state
+            searchParams.get("order") === el.selection
               ? "text-primary font-semibold"
               : "text-disabled"
           }`}

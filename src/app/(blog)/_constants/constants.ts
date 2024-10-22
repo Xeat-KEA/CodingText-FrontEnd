@@ -1,9 +1,20 @@
-import { Category } from "@/app/_interfaces/interfaces";
-import { IComment } from "../_interfaces/interfaces";
+import { Category, Selection } from "@/app/_interfaces/interfaces";
+import { CommentForm } from "../_interfaces/interfaces";
 
 export let loggedInUserId = 1; // 임시 로그인된 사용자 ID
 
-// 게시판 목록 (공통)
+// // 블로그 페이지 사이드바 메뉴
+// export const Blog_Side_BAR_MENU = [];
+
+export const REPORT_REASONS: Selection[] = [
+  { content: "스팸 및 광고", selection: "spam" },
+  { content: "부적절한 내용", selection: "inappropriate" },
+  { content: "개인 정보 침해", selection: "privacy" },
+  { content: "허위 사실 유포", selection: "false-info" },
+  { content: "직접 입력", selection: "" },
+];
+
+// 게시판 목록 (본인)
 export const Board_Categories: Category[] = [
   {
     id: 0,
@@ -69,7 +80,7 @@ export const User_Specific_Categories: Category[] = [
       { id: 2, title: "데이터 분석" },
     ],
   },
-]
+];
 
 // 블로그 프로필
 export const Blog_Profile_Data = [
@@ -105,9 +116,9 @@ export const Blog_Profile_Data = [
     Intro: "I'm 개발자예요. 데일리 스크럼 가시죠. 린하게 하자요",
     FollowerCount: 529,
   },
-]
+];
 
-// 블로그 소개글 
+// 블로그 소개글
 export const Blog_Introduction_Data = [
   {
     profileId: 1,
@@ -124,7 +135,7 @@ export const Blog_Introduction_Data = [
     </ul>
     <br/>
     <p>정기적으로 업데이트되는 이 공간에서 코딩에 대한 이야기를 나누고, 함께 성장해나가요!</p>
-  </div>`
+  </div>`,
   },
   {
     profileId: 2,
@@ -141,7 +152,7 @@ export const Blog_Introduction_Data = [
     </ul>
     <br/>
     <p>이 블로그에서 여러분과 함께 성장하며 배우고, 다양한 개발 이야기를 나누고 싶습니다!</p>
-  </div>`
+  </div>`,
   },
   {
     profileId: 3,
@@ -158,7 +169,7 @@ export const Blog_Introduction_Data = [
     </ul>
     <br/>
     <p>여러분과 함께 성장하는 블로그가 되길 바라요. 많이 방문해주세요!</p>
-  </div>`
+  </div>`,
   },
   {
     profileId: 4,
@@ -173,9 +184,9 @@ export const Blog_Introduction_Data = [
     </ul>
     <br/>
     <p>이 블로그에서는 판교 개발자의 일상을 린하게, 애자일하게 담아내고 있습니다. 함께 판교사투리 배워보자요~!</p>
-  </div>`
-  }
-]
+  </div>`,
+  },
+];
 export const DUMMY_BLOG_POST_DATA = [
   {
     category: "하위 게시판1",
@@ -455,9 +466,9 @@ export const IsCoding_Data = [
   {
     codePostId: 100,
     postId: 1,
-    difficulty: '1단계',
+    difficulty: "1단계",
     codeId: 1000,
-    language: 'javascript',
+    language: "javascript",
     codeContent: `
       <h3>문제: 홀수 짝수 구분하기</h3>
       <p>사용자로부터 정수를 입력받아서, 그 숫자가 홀수인지 짝수인지 출력하는 프로그램을 작성하세요.</p>
@@ -473,21 +484,20 @@ export const IsCoding_Data = [
         <li>입력: 10</li>
         <li>출력: "짝수"</li>
       </ul>`,
-    writtenCode:
-      `function checkOddEven(num) {
+    writtenCode: `function checkOddEven(num) {
       if (num % 2 === 0) {
         return "짝수";
       } else {
         return "홀수";
       }
-    }`
+    }`,
   },
   {
     codePostId: 200,
     postId: 2,
-    difficulty: '3단계',
+    difficulty: "3단계",
     codeId: 2000,
-    language: 'python',
+    language: "python",
     codeContent: `
       <h3>문제: 배열에서 최대값 찾기</h3>
       <p>주어진 배열에서 가장 큰 값을 찾는 함수를 작성하세요.</p>
@@ -501,14 +511,14 @@ export const IsCoding_Data = [
         <li>입력: [1, 2, 3, 4, 5]</li>
         <li>출력: 5</li>
       </ul>`,
-    writtenCode: `def find_max(arr): return max(arr)`
+    writtenCode: `def find_max(arr): return max(arr)`,
   },
   {
     codePostId: 300,
     postId: 3,
-    difficulty: '2단계',
+    difficulty: "2단계",
     codeId: 3000,
-    language: 'javascript',
+    language: "javascript",
     codeContent: `
       <h3>문제: 이진 탐색 알고리즘 구현</h3>
       <p>정렬된 배열에서 목표 숫자를 찾는 이진 탐색 알고리즘을 구현하세요.</p>
@@ -522,8 +532,7 @@ export const IsCoding_Data = [
         <li>입력: [1, 2, 3, 4, 5], 3</li>
         <li>출력: 2</li>
       </ul>`,
-    writtenCode:
-      `function binarySearch(arr, target) {
+    writtenCode: `function binarySearch(arr, target) {
       let left = 0, right = arr.length - 1;
       while (left <= right) {
         const mid = Math.floor((left + right) / 2);
@@ -532,14 +541,14 @@ export const IsCoding_Data = [
         else right = mid - 1;
       }
       return -1;
-    }`
+    }`,
   },
   {
     codePostId: 400,
     postId: 4,
-    difficulty: '4단계',
+    difficulty: "4단계",
     codeId: 4000,
-    language: 'java',
+    language: "java",
     codeContent: `
       <h3>문제: 이진 탐색 알고리즘 구현</h3>
       <p>정렬된 배열에서 목표 숫자를 찾는 이진 탐색 알고리즘을 구현하세요.</p>
@@ -553,8 +562,7 @@ export const IsCoding_Data = [
         <li>입력: [1, 2, 3, 4, 5], 3</li>
         <li>출력: 2</li>
       </ul>`,
-    writtenCode:
-      `public class BinarySearch {
+    writtenCode: `public class BinarySearch {
 
       // 이진 탐색 알고리즘 구현
       public static int binarySearch(int[] sortedArray, int target) {
@@ -587,14 +595,14 @@ export const IsCoding_Data = [
           int index = binarySearch(sortedArray, target);
           System.out.println("목표 숫자 " + target + "의 인덱스: " + index);
       }
-  }`
+  }`,
   },
   {
     codePostId: 500,
     postId: 5,
-    difficulty: '5단계',
+    difficulty: "5단계",
     codeId: 5000,
-    language: 'cpp',
+    language: "cpp",
     codeContent: `
       <h3>문제: 문자열 회문 확인</h3>
       <p>주어진 문자열이 회문인지 확인하는 프로그램을 작성하세요.</p>
@@ -610,8 +618,7 @@ export const IsCoding_Data = [
         <li>입력: "hello"</li>
         <li>출력: "회문이 아님"</li>
       </ul>`,
-    writtenCode:
-      `#include <iostream>
+    writtenCode: `#include <iostream>
     #include <string>
     
     using namespace std;
@@ -644,11 +651,11 @@ export const IsCoding_Data = [
         cout << "입력: \"" << input2 << "\" -> 출력: " << isPalindrome(input2) << endl;
     
         return 0;
-    }`
-  }
+    }`,
+  },
 ];
 
-export const Comment_Data: IComment[] = [
+export const Comment_Data: CommentForm[] = [
   {
     replyId: 1,
     postId: 1,
@@ -657,7 +664,7 @@ export const Comment_Data: IComment[] = [
     parentReplyId: null,
     content: "첫 번째 게시물에 대한 첫 번째 댓글입니다.",
     createdAt: "2024-10-19 14:32:00",
-    modifiedAt: "2024-10-19 14:32:00"
+    modifiedAt: "2024-10-19 14:32:00",
   },
   {
     replyId: 2,
@@ -667,7 +674,7 @@ export const Comment_Data: IComment[] = [
     parentReplyId: null,
     content: "정말 좋은 글이에요! 잘 읽었습니다.",
     createdAt: "2024-10-19 15:10:00",
-    modifiedAt: "2024-10-19 15:12:00"
+    modifiedAt: "2024-10-19 15:12:00",
   },
   {
     replyId: 3,
@@ -677,7 +684,7 @@ export const Comment_Data: IComment[] = [
     parentReplyId: null,
     content: "이 주제에 대해 궁금한 점이 있어요.",
     createdAt: "2024-10-19 15:45:00",
-    modifiedAt: "2024-10-19 15:45:00"
+    modifiedAt: "2024-10-19 15:45:00",
   },
   {
     replyId: 4,
@@ -687,7 +694,7 @@ export const Comment_Data: IComment[] = [
     parentReplyId: 1,
     content: "유익한 내용을 공유해주셔서 감사합니다.",
     createdAt: "2024-10-19 16:00:00",
-    modifiedAt: "2024-10-19 16:00:00"
+    modifiedAt: "2024-10-19 16:00:00",
   },
   {
     replyId: 5,
@@ -697,7 +704,7 @@ export const Comment_Data: IComment[] = [
     parentReplyId: 1,
     content: "첫 번째 댓글에 동의합니다! 정말 좋은 의견이에요.",
     createdAt: "2024-10-19 16:30:00",
-    modifiedAt: "2024-10-19 16:30:00"
+    modifiedAt: "2024-10-19 16:30:00",
   },
   {
     replyId: 6,
@@ -707,7 +714,7 @@ export const Comment_Data: IComment[] = [
     parentReplyId: null,
     content: "이 글에서 많은 도움을 받았어요. 감사합니다!",
     createdAt: "2024-10-19 17:00:00",
-    modifiedAt: "2024-10-19 17:00:00"
+    modifiedAt: "2024-10-19 17:00:00",
   },
   {
     replyId: 7,
@@ -717,7 +724,7 @@ export const Comment_Data: IComment[] = [
     parentReplyId: null,
     content: "이 주제에 대한 추가 정보가 필요해요.",
     createdAt: "2024-10-19 17:30:00",
-    modifiedAt: "2024-10-19 17:30:00"
+    modifiedAt: "2024-10-19 17:30:00",
   },
   {
     replyId: 8,
@@ -727,7 +734,7 @@ export const Comment_Data: IComment[] = [
     parentReplyId: null,
     content: "정말 잘 쓰신 글이에요! 덕분에 많은 것을 배웠습니다.",
     createdAt: "2024-10-19 18:00:00",
-    modifiedAt: "2024-10-19 18:00:00"
+    modifiedAt: "2024-10-19 18:00:00",
   },
   {
     replyId: 9,
@@ -737,7 +744,7 @@ export const Comment_Data: IComment[] = [
     parentReplyId: 2,
     content: "이 부분은 좀 더 설명이 필요할 것 같아요.",
     createdAt: "2024-10-19 18:30:00",
-    modifiedAt: "2024-10-19 18:30:00"
+    modifiedAt: "2024-10-19 18:30:00",
   },
   {
     replyId: 10,
@@ -747,6 +754,6 @@ export const Comment_Data: IComment[] = [
     parentReplyId: null,
     content: "이 글을 통해 많은 것을 생각하게 되었어요.",
     createdAt: "2024-10-19 19:00:00",
-    modifiedAt: "2024-10-19 19:00:00"
-  }
-]
+    modifiedAt: "2024-10-19 19:00:00",
+  },
+];

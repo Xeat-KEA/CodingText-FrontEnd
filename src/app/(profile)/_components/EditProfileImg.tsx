@@ -1,11 +1,11 @@
 import Image from "next/image";
-import { IEditProfileImg } from "../_interfaces/interfaces";
+import { EditProfileImgProps } from "../_interfaces/interfaces";
 
 export default function EditProfileImg({
   img,
   onSelectFromPreset,
   onUploadImg,
-}: IEditProfileImg) {
+}: EditProfileImgProps) {
   return (
     <div className="flex flex-col gap-3">
       <span className="edit-title">프로필 사진</span>
