@@ -18,16 +18,16 @@ export default function MainBoard({ title, hasTab, postList }: MainBoardProps) {
             {postList.map((el, index) => (
               <PostCard
                 key={index}
-                id={el.id}
-                profileImg={el.profileImg}
-                nickname={el.nickname}
+                articleId={el.articleId}
+                profileImg={`/profileImg${(el.articleId % 6) + 1}.png`}
+                nickName={el.nickName}
                 createAt={el.createAt}
                 title={el.title}
                 content={el.content}
-                thumbnail={el.thumbnail}
-                likes={el.likes}
-                comments={el.comments}
-                views={el.views}
+                likes={el.likeCount}
+                comments={el.replyCount}
+                views={el.replyCount} // 조회수 추가 후 수정 필요
+                codeId={el.codeId}
               />
             ))}
           </div>

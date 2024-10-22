@@ -3,13 +3,13 @@ import { BlogCardProps } from "../_interfaces/interfaces";
 import Link from "next/link";
 
 export default function BlogCard({
-  id,
+  userId,
   profileImg,
   nickname,
   status,
 }: BlogCardProps) {
   return (
-    <Link href={`/blog/${id}`} className="flex gap-6 items-center py-6">
+    <Link href={`/blog/${userId}`} className="flex gap-6 items-center py-6">
       <div className="relative w-16 h-16 rounded-full border border-border-2 overflow-hidden shrink-0">
         <Image
           fill

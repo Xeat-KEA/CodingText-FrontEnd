@@ -1,15 +1,16 @@
 "use client";
 
 import MainBanner from "./_components/MainBanner";
-import { WEEKLY_TRENDING_POST_LIST } from "./_constants/constants";
 import SubBanner from "./_components/SubBanner";
 import Footer from "./_components/Footer";
 import BannerCards from "./_components/BannerCards";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { usePaginationStore, useTabStore } from "../stores";
 import MainBoard from "./_components/MainBoard";
 import TopBar from "../_components/TopBar/TopBar";
 import { useCheckToken } from "../_hooks/useCheckToken";
+import api from "../_api/config";
+import { PostResult } from "../(search)/_interfaces/interfaces";
 
 export default function Home() {
   // 로그인 여부 파악
@@ -26,6 +27,18 @@ export default function Home() {
     setLastPage(30);
   }, [tab]);
 
+  const [result, setResult] = useState<PostResult[]>([]);
+  // 프로토타입 API 게시글 목록 GET
+  useEffect(() => {
+    api.get("/article-list").then((res) => {
+      // 날짜 내림차순
+      const sortedData = res.data.data.sort((a: PostResult, b: PostResult) =>
+        a.createAt > b.createAt ? -1 : 1
+      );
+      setResult(sortedData.slice(0, 5));
+    });
+  });
+
   return (
     <>
       <TopBar />
@@ -34,21 +47,14 @@ export default function Home() {
         <MainBanner />
         {/* 배너 카드 부분 */}
         {isLoaded && token ? (
-          <MainBoard
-            title="최신 게시글"
-            hasTab
-            postList={WEEKLY_TRENDING_POST_LIST}
-          />
+          <MainBoard title="최신 게시글" hasTab postList={result} />
         ) : (
           <BannerCards />
         )}
         {/* 서브 배너 */}
         <SubBanner />
         {/* 인기 게시글 */}
-        <MainBoard
-          title="이번 주 인기 게시글 Top 5"
-          postList={WEEKLY_TRENDING_POST_LIST}
-        />
+        <MainBoard title="이번 주 인기 게시글 Top 5" postList={result} />
       </div>
       <Footer />
     </>

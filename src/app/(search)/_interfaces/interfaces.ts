@@ -1,5 +1,5 @@
 export interface BlogCardProps {
-  id: number;
+  userId: number;
   profileImg: string;
   nickname: string;
   status: string;
@@ -14,4 +14,10 @@ export interface PostResult {
   createAt: string;
   nickName: string;
   codeId: number | null;
+}
+
+export interface BlogResult {
+  userId: number;
+  nickName: string;
+  profileMessage: string;
 }
