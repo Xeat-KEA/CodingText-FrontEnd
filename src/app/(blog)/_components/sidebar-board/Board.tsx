@@ -15,12 +15,11 @@ export default function Board() {
         setBoardCategories,
         isAddingCategory,
         setIsAddingCategory,
-        isAddingSubCategory,
         setIsAddingSubCategory,
     } = useBlogStore();
 
-    const currentPath = usePathname();
-    const [isAddCategoryDisabled, setIsAddCategoryDisabled] = useState(false); // 게시판 추가 불가
+    const [isAddCategoryDisabled, setIsAddCategoryDisabled] = useState(false);
+    const [isInsufficientSubCategories, setIsInsufficientSubCategories] = useState(false); 
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [categoryToDelete, setCategoryToDelete] = useState<{ categoryId: number; subCategoryId: number; isSub: boolean } | null>(null);
     const [deletCategoryTitle, setDeleteCategoryTitle] = useState("");
@@ -59,7 +58,10 @@ export default function Board() {
                 {
                     id: boardCategories.length,
                     title: trimmedTitle,
-                    subCategories: [{ id: 0, title: "전체" }]
+                    subCategories: [
+                        { id: 0, title: "전체" },
+                        { id: 1, title: "자유" }
+                    ]
                 }
             ];
         setBoardCategories(updatedCategories);
@@ -69,8 +71,6 @@ export default function Board() {
             setIsAddingCategory(false);
         }
     }, [boardCategories]);
-
-
 
     // 상/하위 게시판 삭제 함수
     const handleDeleteCategory = useCallback(
@@ -86,6 +86,17 @@ export default function Board() {
         if (!categoryToDelete) return;
         const { categoryId, subCategoryId, isSub } = categoryToDelete;
 
+        if (isSub) {
+            const parentCategory = boardCategories.find(category => category.id === categoryId);
+            if (parentCategory) {
+                const remainingSubCategories = parentCategory.subCategories?.filter(sub => sub.id !== 0).length || 0;
+                if (remainingSubCategories <= 1) {
+                    setIsInsufficientSubCategories(true);
+                    setIsDialogOpen(false);
+                    return;
+                }
+            }
+        }
         setBoardCategories(prev =>
             isSub
                 ? prev.map(category =>
@@ -97,7 +108,7 @@ export default function Board() {
         );
         setIsDialogOpen(false);
         setCategoryToDelete(null);
-    }, [categoryToDelete, setBoardCategories]);
+    }, [categoryToDelete, setBoardCategories, boardCategories]);
 
 
     return (
@@ -108,11 +119,8 @@ export default function Board() {
                 <CategoryItem
                     key={category.id}
                     category={category}
-                    currentPath={currentPath}
                     handleAddCategory={handleAddCategory}
                     handleDeleteCategory={handleDeleteCategory}
-                // isAddingSubCategory={isAddingSubCategory}
-                // setIsAddingSubCategory={setIsAddingSubCategory}
                 />
             ))}
 
@@ -158,6 +166,18 @@ export default function Board() {
                     }}
                     redBtn={isAddCategoryDisabled ? "" : "삭제"}
                     onBtnClick={confirmDeleteCategory}
+                />
+            )}
+            {isInsufficientSubCategories && (
+                <Dialog
+                    icon={<FailIcon />}
+                    title="게시판을 삭제할 수 없어요"
+                    content="하위 게시판은 최소 1개 이상 있어야 해요"
+                    isWarning
+                    backBtn="확인"
+                    onBackBtnClick={() => {
+                        setIsInsufficientSubCategories(false);
+                    }}
                 />
             )}
         </div>

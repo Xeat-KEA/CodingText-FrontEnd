@@ -60,7 +60,7 @@ export default function CodeEditPanel() {
         >
           {/* 컴파일러 */}
           {tab === "컴파일러" && (
-            <div className="prose w-full">
+            <div className="prose w-full max-w-none">
               <pre className="w-full h-full !m-0">
                 <code>
                   {/* 컴파일 결과 */}

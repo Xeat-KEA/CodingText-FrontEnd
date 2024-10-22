@@ -2,11 +2,11 @@ import Link from 'next/link';
 import { SubCategoryItemProps } from '../../_interfaces/interfaces';
 import { useState } from 'react';
 import { useBlogStore } from '@/app/stores';
+import { useParams } from 'next/navigation';
 
 const SubCategoryItem: React.FC<SubCategoryItemProps> = ({
     subCategory,
     category,
-    currentPath,
     handleDeleteCategory,
 }) => {
     // 전역 변수
@@ -14,8 +14,13 @@ const SubCategoryItem: React.FC<SubCategoryItemProps> = ({
         blogId,
         isOwnBlog,
         boardCategories,
-        setBoardCategories
+        setBoardCategories,
+        categoryId,
+        subCategoryId
     } = useBlogStore();
+    
+    const params = useParams();
+
     const [editSubCategoryId, setEditSubCategoryId] = useState<{ [categoryId: number]: number | null }>({});
     const [editSubCategoryTitle, setEditSubCategoryTitle] = useState<string>("");
     const [hoveredSubCategoryId, setHoveredSubCategoryId] = useState<Boolean>(false);
@@ -81,7 +86,11 @@ const SubCategoryItem: React.FC<SubCategoryItemProps> = ({
                 ) : (
                     <>
                         <Link href={`/blog/${blogId}/${category.id}/${subCategory.id}`}>
-                            <p className={currentPath === `/blog/${blogId}/${category.id}/${subCategory.id}` ? "font-bold" : ""}>
+                            <p className={
+                                Number(params.categoryId) == category.id && Number(params.subCategoryId) == subCategory.id
+                                ||
+                                params.postId && Number(categoryId) == category.id && Number(subCategoryId) == subCategory.id
+                                ? "font-bold" : ""}>
                                 {subCategory.title}
                             </p>
                         </Link>
