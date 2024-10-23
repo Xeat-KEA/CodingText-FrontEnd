@@ -69,6 +69,7 @@ export default function PostPage() {
     api.get(`/article/${articleId}`).then((res) => {
       const data = res.data.data
       if(data){
+        // api 분리 후 수정 필요
         const completeArticle: CompleteArticle = {
           postId: articleId,
           blogId: blogUserId,

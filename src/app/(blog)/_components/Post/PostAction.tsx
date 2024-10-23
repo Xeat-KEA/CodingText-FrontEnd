@@ -17,7 +17,7 @@ import { REPORT_REASONS } from "../../_constants/constants";
 
 const PostAction: React.FC<PostProps> = ({ currentPost }) => {
   // 전역 변수
-  const { isOwnBlog, params } = useBlogStore();
+  const { blogId, isOwnBlog, params } = useBlogStore();
 
   const router = useRouter();
   const [isLiking, setIsLiking] = useState<boolean>(false);
@@ -101,8 +101,8 @@ const PostAction: React.FC<PostProps> = ({ currentPost }) => {
         </button>
         {isOwnBlog ? (
           <>
-            {/* 수정을 위해 필요한 ? currentPost 넘겨주기..?  경로 수정 필요*/}
-            <Link href="/" className="flex items-center gap-1">
+            {/* 수정할 postId 전달 필요 (예시 - /blog/${blogId}/new-post/${currentPost.postId} */}
+            <Link href={`/blog/${blogId}/new-post`} className="flex items-center gap-1">
               <BpEditIcon />
               <p className="text-primary text-xs font-semibold">{`수정`}</p>
             </Link>

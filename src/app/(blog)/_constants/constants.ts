@@ -10,7 +10,7 @@ export const REPORT_REASONS: Selection[] = [
   { content: "직접 입력", selection: "" },
 ];
 
-// 게시판 목록 (본인)
+// 게시판 목록 (기본)
 export const Board_Categories: Category[] = [
   {
     id: 0,
@@ -42,5 +42,5 @@ export const User_Specific_Categories: Category[] = [
       { id: 2, title: "동아리" },
       { id: 3, title: "스터디 그룹" },
     ],
-  },
+  }
 ];

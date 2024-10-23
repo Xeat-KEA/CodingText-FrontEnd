@@ -3,6 +3,9 @@ import { useBlogStore } from "@/app/stores";
 import { CommentProps } from "../../_interfaces/interfaces";
 import { useCalculateDate } from "@/app/_hooks/useCalculateDate";
 import { BpReportIcon, ReplyIcon, SmDeleteIcon } from "../Icons";
+import api from "@/app/_api/config";
+import { useEffect, useState } from "react";
+import { BlogProfile } from "@/app/_interfaces/interfaces";
 
 const Comment: React.FC<CommentProps> = ({
   replyId,
@@ -15,20 +18,24 @@ const Comment: React.FC<CommentProps> = ({
   onDelete,
   onReport,
 }) => {
-  // 전역 변수
-  const { profile } = useBlogStore();
+  const [profileData, setProfileData] = useState<BlogProfile[]>([]);
 
+  useEffect(() => {
+    api.get(`/user-list`).then((res) => {
+      const userData = res.data.data
+      setProfileData(userData);
+    })
+  }, [])
+  
   // 댓글 작성자의 프로필
-  // const userProfile = Blog_Profile_Data.find(
-  //   (profile) => profile.profileId === userId
-  // );
-  const userProfile = profile;
+  const userProfile = profileData.find(
+    (profile) => profile.userId === userId
+  );
 
-  // 언급된 사용자의 프로필
-  // const mentionProfile = Blog_Profile_Data.find(
-  //   (profile) => profile.profileId === mentionId
-  // );
-  const mentionProfile = profile;
+  // // 언급된 사용자의 프로필
+  const mentionProfile = profileData.find(
+    (profile) => profile.userId === mentionId
+  );
 
   return (
     <div className={`${mentionId ? "pl-12" : ""}`}>
@@ -36,10 +43,11 @@ const Comment: React.FC<CommentProps> = ({
         <div className="flex w-full justify-between items-center">
           <div className="flex gap-2 items-center">
             {/* 프로필 이미지 */}
-            {userProfile?.profileImage && (
+            {/* 수정 필요 - userProfile.profileImg && */}
+            {userProfile && (
               <div className="profile-image w-120 h-120 relative">
                 <Image
-                  src={userProfile?.profileImage}
+                  src="/profileImg2.png"
                   alt={`${userProfile?.nickName}의 프로필 이미지`}
                   width={24}
                   height={24}

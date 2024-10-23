@@ -42,13 +42,14 @@ export default function PostEditor({
   const [categoryList, setCategoryList] = useState<Category[]>();
   useEffect(() => {
     // 전체, 코딩테스트 풀이 게시판 제외
-    setCategoryList(User_Specific_Categories.filter((_, index) => index > 1));
+    setCategoryList(User_Specific_Categories);
   }, []);
 
   // 게시판 저장을 위한 state 선언
   const [category, setCategory] = useState<Category>();
   const [subCategory, setSubCategory] = useState<Category>();
   const [subCategoryList, setSubCategoryList] = useState<Category[]>();
+
   useEffect(() => {
     // 상위 케시판 변경 시 하위 게시판 초기화
     setSubCategory(undefined);

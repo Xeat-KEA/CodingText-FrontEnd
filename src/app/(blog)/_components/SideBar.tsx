@@ -30,9 +30,7 @@ export default function SideBar() {
   const setBlogId = useBlogStore((state) => state.setBlogId);
   const setIsOwnBlog = useBlogStore((state) => state.setIsOwnBlog);
   const setBoardCategories = useBlogStore((state) => state.setBoardCategories);
-  const setActiveCategories = useBlogStore(
-    (state) => state.setActiveCategories
-  );
+  const setActiveCategories = useBlogStore((state) => state.setActiveCategories);
 
   const [isCollapsed, setIsCollapsed] = useState(false); // 최소화
   const toggleSidebar = () => setIsCollapsed(!isCollapsed);
@@ -41,7 +39,7 @@ export default function SideBar() {
     // 프로토타입 더미데이터 GET
     api.get(`/blog/${blogId}`).then((res) => {
       const profileData = res.data.data
- 
+
       // 추후에 정보 전달 내용 수정 필요
       const completeProfile = {
         userId: profileData.userId,
@@ -52,6 +50,7 @@ export default function SideBar() {
         profileImage: '/profileImg2.png',
         blogProfile: profileData.blogProfile,
       };
+
       setProfile(completeProfile);
     })
 
@@ -84,8 +83,8 @@ export default function SideBar() {
     <Link
       href={href}
       className={`flex items-center h-6 py-6 text-black ${isCollapsed
-          ? "justify-center w-6 ml-2"
-          : "justify-between w-60 pl-6 pr-2"
+        ? "justify-center w-6 ml-2"
+        : "justify-between w-60 pl-6 pr-2"
         }`}
     >
       {!isCollapsed && <p className="text-xs">{label}</p>}
