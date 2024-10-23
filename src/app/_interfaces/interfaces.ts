@@ -140,6 +140,12 @@ export interface ProfileData {
   codeLanguage: string;
 }
 
+export interface NoticeCardProps {
+  category: string;
+  blogId: number;
+  userId: number;
+}
+
 // 전역 변수 관련 Interface
 export interface TabStore {
   tab: string;
