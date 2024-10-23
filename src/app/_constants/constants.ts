@@ -55,16 +55,16 @@ export const DIFFICULTY_LIST: Selection[] = [
 
 // 알고리즘 목록
 export const ALGORITHM_LIST: Selection[] = [
-  { content: "입출력", selection: "1" },
-  { content: "함수", selection: "2" },
-  { content: "재귀함수", selection: "3" },
-  { content: "1차원 리스트", selection: "4" },
-  { content: "스트링", selection: "5" },
-  { content: "2차원 리스트", selection: "6" },
-  { content: "스택/큐/DFS/BFS", selection: "7" },
-  { content: "비트연산과 부분집합", selection: "8" },
-  { content: "정렬", selection: "9" },
-  { content: "순열/조합/백트래킹", selection: "10" },
-  { content: "트리/힙", selection: "11" },
-  { content: "MST/다익스트라", selection: "12" },
+  { content: "입출력", selection: "입출력" },
+  { content: "함수", selection: "함수" },
+  { content: "재귀함수", selection: "재귀함수" },
+  { content: "1차원 리스트", selection: "1차원 리스트" },
+  { content: "스트링", selection: "스트링" },
+  { content: "2차원 리스트", selection: "2차원 리스트" },
+  { content: "스택/큐/DFS/BFS", selection: "스택/큐/DFS/BFS" },
+  { content: "비트연산과 부분집합", selection: "비트연산과 부분집합" },
+  { content: "정렬", selection: "정렬" },
+  { content: "순열/조합/백트래킹", selection: "순열/조합/백트래킹" },
+  { content: "트리/힙", selection: "트리/힙" },
+  { content: "MST/다익스트라", selection: "MST/다익스트라" },
 ];

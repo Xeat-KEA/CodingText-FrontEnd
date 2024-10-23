@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { CreateCodeForm } from "../_interfaces/interfaces";
+import { useBase64 } from "@/app/_hooks/useBase64";
 
 export default function ChatGPTDialog({
   onBackBtnClick,
@@ -21,14 +22,18 @@ export default function ChatGPTDialog({
   const { register, handleSubmit, setValue } = useForm<CreateCodeForm>();
   const onValid = (data: CreateCodeForm) => {
     if (!data.difficulty) {
+      // 난이도 설정 필요
       console.log("error");
     } else {
-      console.log(data);
-      // ChatGPT를 통해 문제를 생성하는 POST 로직 추가 필요
-
-      router.push("/coding-test/ai", { scroll: false });
+      const chatMessage = `난이도:${data.difficulty}
+      ${data.algorithm ? `,알고리즘:${data.algorithm}` : ""}
+      ${data.requirement ? `,요구사항:${data.requirement}` : ""}
+      다음과 같은 내용으로 코딩 테스트 문제를 만들어줘`;
+      const encodedMessage = useBase64("encode", chatMessage);
+      router.push(`/coding-test/ai?chatMessage=${encodedMessage}`);
     }
   };
+
   return (
     <div className="overlay">
       <div
