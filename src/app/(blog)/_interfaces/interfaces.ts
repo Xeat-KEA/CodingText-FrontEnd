@@ -71,7 +71,7 @@ export interface CommentProps {
 }
 
 export interface PostProps {
-  currentPost?: BlogPost;
+  currentPost: CompleteArticle;
   currentCategory?: Category;
   currentSubCategory?: SubCategory;
 }
@@ -89,4 +89,25 @@ export interface CommentInputProps {
   mentionId: number | null;
   onSubmit: (data: { comment: string }) => void;
   onCancel?: () => void;
+}
+
+export interface CompleteArticle {
+  postId: number;
+  blogId: number;
+  categoryId: number;
+  subCategoryId: number;
+  language: string;
+  title: string;
+  content: string;
+  viewCount: number;
+  reportCount: number;
+  codeContent: string;
+  codeId: number;
+  createAt: string;
+  likeCount: number;
+  nickName: string;
+  commentCount: number;
+  writtenCode: string;
+  createdAt: string;
+  modifiedAt: string;
 }

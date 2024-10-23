@@ -54,7 +54,7 @@ export default function NewPostPage() {
           backBtn="내 블로그 홈으로"
           onBackBtnClick={() => router.push(`/blog/${id}`, { scroll: false })}
           primaryBtn="게시글 페이지로"
-          onBtnClick={() => router.push(`/blog/${id}/1/1/1`, { scroll: false })}
+          onBtnClick={() => router.push(`/blog/${id}/post/1`, { scroll: false })}
           blockOutsideClick
         />
       )}

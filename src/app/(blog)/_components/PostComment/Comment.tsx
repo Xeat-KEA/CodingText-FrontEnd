@@ -1,7 +1,6 @@
 import Image from "next/image";
 import { useBlogStore } from "@/app/stores";
 import { CommentProps } from "../../_interfaces/interfaces";
-import { Blog_Profile_Data } from "../../_constants/constants";
 import { useCalculateDate } from "@/app/_hooks/useCalculateDate";
 import { BpReportIcon, ReplyIcon, SmDeleteIcon } from "../Icons";
 
@@ -17,17 +16,19 @@ const Comment: React.FC<CommentProps> = ({
   onReport,
 }) => {
   // 전역 변수
-  const {} = useBlogStore();
+  const { profile } = useBlogStore();
 
   // 댓글 작성자의 프로필
-  const userProfile = Blog_Profile_Data.find(
-    (profile) => profile.profileId === userId
-  );
+  // const userProfile = Blog_Profile_Data.find(
+  //   (profile) => profile.profileId === userId
+  // );
+  const userProfile = profile;
 
   // 언급된 사용자의 프로필
-  const mentionProfile = Blog_Profile_Data.find(
-    (profile) => profile.profileId === mentionId
-  );
+  // const mentionProfile = Blog_Profile_Data.find(
+  //   (profile) => profile.profileId === mentionId
+  // );
+  const mentionProfile = profile;
 
   return (
     <div className={`${mentionId ? "pl-12" : ""}`}>
@@ -39,7 +40,7 @@ const Comment: React.FC<CommentProps> = ({
               <div className="profile-image w-120 h-120 relative">
                 <Image
                   src={userProfile?.profileImage}
-                  alt={`${userProfile?.name}의 프로필 이미지`}
+                  alt={`${userProfile?.nickName}의 프로필 이미지`}
                   width={24}
                   height={24}
                   className="rounded-full"
@@ -48,7 +49,7 @@ const Comment: React.FC<CommentProps> = ({
               </div>
             )}
             <p className="text-xs text-body font-semibold">
-              {userProfile?.name}
+              {userProfile?.nickName}
             </p>
           </div>
           <p className="text-xs text-body font-body">
@@ -59,7 +60,7 @@ const Comment: React.FC<CommentProps> = ({
         <div className="text-sm text-body font-regular">
           {mentionProfile && (
             <p className="text-sm text-primary font-semibold">
-              @{mentionProfile.name}
+              @{mentionProfile.nickName}
             </p>
           )}
           {content}

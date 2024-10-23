@@ -21,7 +21,7 @@ const PostAction: React.FC<PostProps> = ({ currentPost }) => {
 
   const router = useRouter();
   const [isLiking, setIsLiking] = useState<boolean>(false);
-  const [newLikeCount, setNewLikeCount] = useState(0);
+  const [newLikeCount, setNewLikeCount] = useState<number>(Number(currentPost.likeCount))
   const [isShareDialogOpen, setIsShareDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [postToDelete, setPostToDelete] = useState<number | null>(null);
@@ -29,18 +29,15 @@ const PostAction: React.FC<PostProps> = ({ currentPost }) => {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [customInput, setCustomInput] = useState("");
   const [isReportDialogOpen, setIsReportDialogOpen] = useState(false);
-  const [isReportConfirmDialogOpen, setIsReportConfirmDialogOpen] =
-    useState(false);
-
-  useEffect(() => {
-    setNewLikeCount(Number(currentPost?.likeCount));
-  }, [currentPost]);
+  const [isReportConfirmDialogOpen, setIsReportConfirmDialogOpen] = useState(false);
 
   const onClickLike = () => {
     if (!currentPost) return;
-    const updatedLikeCount = isLiking ? newLikeCount - 1 : newLikeCount + 1;
-    setNewLikeCount(updatedLikeCount);
-    setIsLiking(!isLiking);
+    setIsLiking((prev) => {
+      const updatedLikeCount = prev ? newLikeCount - 1 : newLikeCount + 1;
+      setNewLikeCount(updatedLikeCount);
+      return !prev;
+    });
   };
   // 현재 URL 복사 -> 추후 공유 방법 수정
   const onClickCopyLink = () => {

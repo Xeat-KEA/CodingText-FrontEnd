@@ -2,7 +2,6 @@
 
 import { useCalculateDate } from "@/app/_hooks/useCalculateDate";
 import { PostProps } from "../../_interfaces/interfaces";
-import { IsCoding_Data } from "../../_constants/constants";
 
 const PostHeader: React.FC<PostProps> = ({
     currentPost,
@@ -11,7 +10,7 @@ const PostHeader: React.FC<PostProps> = ({
 }) => {
     
     const isCodingPost = Number(currentCategory?.id) === 1;
-    const currentCodingPost = IsCoding_Data.find(post => post.postId === Number(currentPost?.postId));
+    // const currentCodingPost = IsCoding_Data.find(post => post.postId === Number(currentPost?.postId));
 
     return (
         <div className="flex flex-col w-full h-[90px] justify-center gap-2">
@@ -29,7 +28,7 @@ const PostHeader: React.FC<PostProps> = ({
             <div className="flex w-full text-xl font-semibold">
                 <p className="text-black line-clamp-2">
                     {isCodingPost && (
-                        <span className="text-primary">#{currentCodingPost?.codeId} </span>
+                        <span className="text-primary">#{currentPost.postId} </span>
                     )}
                     {currentPost?.title}
                 </p>

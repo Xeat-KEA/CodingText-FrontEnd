@@ -2,7 +2,7 @@ import { usePathname } from "next/navigation";
 import { CODE_FILTER_LIST } from "../_constants/constants";
 import { ALGORITHM_LIST, DIFFICULTY_LIST } from "@/app/_constants/constants";
 import ParamDropDown from "@/app/_components/ParamDropDown";
-import MultiSelectionDropDown from "@/app/_components/MultiSelectionDropdown";
+import MultiSelectionDropDown from "@/app/_components/MultiSelectionDropDown";
 
 export default function CodeFilter() {
   const pathname = usePathname();
