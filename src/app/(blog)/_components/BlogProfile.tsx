@@ -11,14 +11,12 @@ import { REPORT_REASONS } from "../_constants/constants";
 export default function BlogProfile() {
   // 전역 변수
   const { isOwnBlog, profile, setProfile } = useBlogStore();
-
   const [isFollowing, setIsFollowing] = useState<boolean>(false); // 초기값 설정
   const [blogToReport, setBlogToReport] = useState<number | null>(null);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [customInput, setCustomInput] = useState("");
   const [isReportDialogOpen, setIsReportDialogOpen] = useState(false);
-  const [isReportConfirmDialogOpen, setIsReportConfirmDialogOpen] =
-    useState(false);
+  const [isReportConfirmDialogOpen, setIsReportConfirmDialogOpen] = useState(false);
 
   const onClickFollow = () => {
     if (!profile) return;
@@ -62,7 +60,7 @@ export default function BlogProfile() {
               <div className="profile-image w-120 h-120 relative">
                 <Image
                   src={profile.profileImage}
-                  alt={`${profile.name}의 프로필 이미지`}
+                  alt={`${profile.nickName}의 프로필 이미지`}
                   width={120}
                   height={120}
                   className="rounded-full"
@@ -75,10 +73,10 @@ export default function BlogProfile() {
             <div className="profile-info w-[428px] h-26">
               <p className="text-body text-xs font-bold">{profile.rank}</p>
               <h2 className="text-xl text-black font-semibold">
-                {profile.name}
+                {profile.nickName}
               </h2>
               <p className="text-sm text-body font-regular mt-2">
-                {profile.Intro}
+                {profile.profileMessage}
               </p>
               <div className="flex items-center gap-4 mt-2">
                 {!isOwnBlog ? (
@@ -92,7 +90,7 @@ export default function BlogProfile() {
                     </button>
                     <button
                       className="flex items-center gap-1"
-                      onClick={() => onClickReportBlog(profile.profileId)}
+                      onClick={() => onClickReportBlog(profile.userId)}
                     >
                       <BpReportIcon />
                       <p className="text-red text-xs font-semibold">{`신고`}</p>
