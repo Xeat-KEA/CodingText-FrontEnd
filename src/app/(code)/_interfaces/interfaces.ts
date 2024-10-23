@@ -38,5 +38,5 @@ export interface History {
 export interface CreateCodeForm {
   difficulty: string;
   algorithm?: string;
-  requirement: string;
+  requirement?: string;
 }
