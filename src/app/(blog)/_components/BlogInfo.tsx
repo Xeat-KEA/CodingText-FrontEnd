@@ -1,16 +1,15 @@
 import DOMPurify from "isomorphic-dompurify";
 import Link from "next/link";
 import { BpEditIcon } from "./Icons";
-import { Blog_Introduction_Data } from "../_constants/constants";
 import { useBlogStore } from "@/app/stores";
+import { useBase64 } from "@/app/_hooks/useBase64";
 
 export default function BlogInfo() {
   // 전역 변수
   const { isOwnBlog, profile } = useBlogStore();
 
-  const blogIntro = Blog_Introduction_Data.find(
-    (data) => data.profileId === profile?.profileId
-  )?.blogIntro;
+  // 소개글 디코딩
+  const blogIntro =  useBase64("decode", profile.blogProfile);
 
   return (
     <>

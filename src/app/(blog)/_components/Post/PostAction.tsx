@@ -16,12 +16,11 @@ import DropDown from "@/app/_components/DropDown";
 import { REPORT_REASONS } from "../../_constants/constants";
 
 const PostAction: React.FC<PostProps> = ({ currentPost }) => {
-  // 전역 변수
-  const { isOwnBlog, params } = useBlogStore();
+  const { blogId, isOwnBlog, params } = useBlogStore();
 
   const router = useRouter();
   const [isLiking, setIsLiking] = useState<boolean>(false);
-  const [newLikeCount, setNewLikeCount] = useState(0);
+  const [newLikeCount, setNewLikeCount] = useState<number>(Number(currentPost.likeCount))
   const [isShareDialogOpen, setIsShareDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [postToDelete, setPostToDelete] = useState<number | null>(null);
@@ -29,18 +28,15 @@ const PostAction: React.FC<PostProps> = ({ currentPost }) => {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [customInput, setCustomInput] = useState("");
   const [isReportDialogOpen, setIsReportDialogOpen] = useState(false);
-  const [isReportConfirmDialogOpen, setIsReportConfirmDialogOpen] =
-    useState(false);
-
-  useEffect(() => {
-    setNewLikeCount(Number(currentPost?.likeCount));
-  }, [currentPost]);
+  const [isReportConfirmDialogOpen, setIsReportConfirmDialogOpen] = useState(false);
 
   const onClickLike = () => {
     if (!currentPost) return;
-    const updatedLikeCount = isLiking ? newLikeCount - 1 : newLikeCount + 1;
-    setNewLikeCount(updatedLikeCount);
-    setIsLiking(!isLiking);
+    setIsLiking((prev) => {
+      const updatedLikeCount = prev ? newLikeCount - 1 : newLikeCount + 1;
+      setNewLikeCount(updatedLikeCount);
+      return !prev;
+    });
   };
   // 현재 URL 복사 -> 추후 공유 방법 수정
   const onClickCopyLink = () => {
@@ -104,8 +100,8 @@ const PostAction: React.FC<PostProps> = ({ currentPost }) => {
         </button>
         {isOwnBlog ? (
           <>
-            {/* 수정을 위해 필요한 ? currentPost 넘겨주기..?  경로 수정 필요*/}
-            <Link href="/" className="flex items-center gap-1">
+            {/* 전달 사항 수정 필요 */}
+            <Link href={`/blog/${blogId}/edit-post/${currentPost.postId}`} className="flex items-center gap-1">
               <BpEditIcon />
               <p className="text-primary text-xs font-semibold">{`수정`}</p>
             </Link>

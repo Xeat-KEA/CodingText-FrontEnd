@@ -4,7 +4,6 @@ import PostAction from "@/app/(blog)/_components/Post/PostAction";
 import PostContent from "@/app/(blog)/_components/Post/PostContent";
 import PostHeader from "@/app/(blog)/_components/Post/PostHeader";
 import {
-  Blog_Post_Data,
   REPORT_REASONS,
 } from "@/app/(blog)/_constants/constants";
 import BackBtn from "@/app/_components/BackBtn";
@@ -12,24 +11,21 @@ import { useBlogStore } from "@/app/stores";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { loggedInUserId } from "@/app/(blog)/_constants/constants";
-import { Comment_Data } from "@/app/(blog)/_constants/constants";
 import Dialog from "@/app/_components/Dialog";
 import { DialogCheckIcon, DialogReportIcon } from "@/app/_components/Icons";
-import { CommentForm } from "@/app/(blog)/_interfaces/interfaces";
+import { CommentForm, CompleteArticle } from "@/app/(blog)/_interfaces/interfaces";
 import Comment from "@/app/(blog)/_components/PostComment/Comment";
 import DropDown from "@/app/_components/DropDown";
+import api from "@/app/_api/config";
 
 export default function PostPage() {
   //  전역변수
-  const { params, boardCategories } = useBlogStore();
+  const { blogId, params, boardCategories, categoryId, subCategoryId } = useBlogStore();
   const router = useRouter();
+  const articleId = Number(params?.postId || 0)
+  const [blogUserId, setBlogUserId] = useState<number>(1);
 
-  // 현재 게시글 정보
-  const currentPost = Blog_Post_Data.find(
-    (post) =>
-      post.postId === Number(params?.postId) &&
-      post.blogId === Number(params?.id)
-  );
+  const [currentPost, setCurrentPost] = useState<CompleteArticle | null>(null);
 
   // 현재 게시물의 상/하위 게시판 정보 -> 전역 저장
   const currentCategory = boardCategories.find(
@@ -41,7 +37,7 @@ export default function PostPage() {
   const setCategoryId = useBlogStore((state) => state.setCategoryId);
   const setSubCategoryId = useBlogStore((state) => state.setSubCategoryId);
 
-  const [comments, setComments] = useState<CommentForm[]>(Comment_Data || []);
+  const [comments, setComments] = useState<CommentForm[]>([]);
   const [replyParentId, setReplyParentId] = useState<number | null>(null);
   const [mentionId, setMentionId] = useState<number | null>(null);
 
@@ -52,8 +48,56 @@ export default function PostPage() {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [customInput, setCustomInput] = useState("");
   const [isReportDialogOpen, setIsReportDialogOpen] = useState(false);
-  const [isReportConfirmDialogOpen, setIsReportConfirmDialogOpen] =
-    useState(false);
+  const [isReportConfirmDialogOpen, setIsReportConfirmDialogOpen] = useState(false);
+
+  
+  useEffect(() => {
+    if (articleId === 3) {
+      setCategoryId(1);
+      setSubCategoryId(1);
+      setBlogUserId(2);
+    } else if (articleId === 1) {
+      setCategoryId(2);
+      setSubCategoryId(2);
+      setBlogUserId(1);
+    } else {
+      setCategoryId(0);
+      setSubCategoryId(0);
+      setBlogUserId(3);
+    }
+
+    // 프로토타입 더미 데이터 GET
+    api.get(`/article/${articleId}`).then((res) => {
+      const data = res.data.data
+      if(data){
+        // api 분리 후 수정 필요
+        const completeArticle: CompleteArticle = {
+          postId: articleId,
+          blogId: blogUserId,
+          categoryId: categoryId,
+          subCategoryId: subCategoryId, 
+          language: "java",
+          title: data.title,
+          content: data.content,
+          viewCount: 15,
+          reportCount: 0,
+          codeContent: data.codeContent,
+          codeId: data.codeId,
+          createAt: data.createAt,
+          likeCount: data.likeCount,
+          nickName: data.nickName,
+          commentCount: data.replyCount,
+          writtenCode: data.writtenCode,
+          createdAt: "2024-01-15 10:00",
+          modifiedAt: "2024-01-15 12:00",
+        }
+        setCurrentPost(completeArticle);
+      } else {
+        setCurrentPost(null);
+      }
+      
+    })
+  }, [currentPost, params]);
 
   // 답글 버튼 클릭
   const onClickReply = (commentId: number | null, userId: number | null) => {
@@ -122,29 +166,6 @@ export default function PostPage() {
     setSelectedOption(null);
   };
 
-  // // 비밀번호 상태
-  // const [password, setPassword] = useState(currentPost?.isSecret);
-  // const [isPasswordCorrect, setIsPasswordCorrect] = useState(false);
-  // const correctPassword = currentPost?.password;
-
-  // const passwordSubmit = (event: React.FormEvent) => {
-  //     event.preventDefault();
-  //     if (password === correctPassword) {
-  //         setIsPasswordCorrect(true);
-  //     } else {
-  //         alert("비밀번호가 틀립니다.");
-  //     }
-  // };
-
-  useEffect(() => {
-    // sidebar 현재 서브카테고리 bold 처리 위함
-    setCategoryId(Number(currentCategory?.id));
-    setSubCategoryId(Number(currentSubCategory?.id));
-    setComments(
-      Comment_Data.filter((comment) => comment.postId === currentPost?.postId)
-    );
-  }, [currentPost]);
-
   return (
     <div className="flex w-full justify-center">
       <div className="max-w-800 min-h-screen flex flex-col gap-6 py-12">
@@ -162,11 +183,15 @@ export default function PostPage() {
 
         {/* 게시물 헤더 */}
         <div className="w-full">
-          <PostHeader
-            currentPost={currentPost}
-            currentCategory={currentCategory}
-            currentSubCategory={currentSubCategory}
-          />
+          {currentPost ? (
+            <PostHeader
+              currentPost={currentPost}
+              currentCategory={currentCategory}
+              currentSubCategory={currentSubCategory}
+            />
+          ) : (
+            <p>게시물을 불러오는 중입니다.</p>
+          )}
         </div>
 
         {/* 구분선 */}
@@ -174,12 +199,18 @@ export default function PostPage() {
 
         {/* 게시물 내용 */}
         <div className="w-full">
-          <PostContent currentPost={currentPost} />
+          {currentPost && (
+            <PostContent currentPost={currentPost} />
+
+          )}
         </div>
 
         {/* 게시물 버튼 - PostAction */}
         <div className="w-full h-5">
-          <PostAction currentPost={currentPost} />
+          {currentPost && (
+            <PostAction currentPost={currentPost} />
+
+          )}
         </div>
 
         {/* 구분선 */}

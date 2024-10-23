@@ -11,14 +11,14 @@ import {
   SbNewpostIcon,
 } from "./Icons";
 import {
-  Blog_Profile_Data,
   Board_Categories,
   loggedInUserId,
   User_Specific_Categories,
 } from "../_constants/constants";
 import { useBlogStore } from "@/app/stores";
 import { useParams } from "next/navigation";
-import Board from "./sidebar-board/Board";
+import Board from "./Sidebar-Board/Board";
+import api from "@/app/_api/config";
 
 export default function SideBar() {
   // 전역 변수
@@ -30,17 +30,30 @@ export default function SideBar() {
   const setBlogId = useBlogStore((state) => state.setBlogId);
   const setIsOwnBlog = useBlogStore((state) => state.setIsOwnBlog);
   const setBoardCategories = useBlogStore((state) => state.setBoardCategories);
-  const setActiveCategories = useBlogStore(
-    (state) => state.setActiveCategories
-  );
+  const setActiveCategories = useBlogStore((state) => state.setActiveCategories);
 
   const [isCollapsed, setIsCollapsed] = useState(false); // 최소화
   const toggleSidebar = () => setIsCollapsed(!isCollapsed);
 
   useEffect(() => {
-    const foundProfile = Blog_Profile_Data.find(
-      (profile) => profile.profileId === blogId
-    );
+    // 프로토타입 더미데이터 GET
+    api.get(`/blog/${blogId}`).then((res) => {
+      const profileData = res.data.data
+
+      // 추후에 정보 전달 내용 수정 필요
+      const completeProfile = {
+        userId: profileData.userId,
+        nickName: profileData.nickName,
+        rank: 'sophomore',
+        profileMessage: profileData.profileMessage,
+        FollowerCount: 3,
+        profileImage: '/profileImg2.png',
+        blogProfile: profileData.blogProfile,
+      };
+
+      setProfile(completeProfile);
+    })
+
     const userSpecificCategories = User_Specific_Categories.filter(
       (category) => category.blogId === blogId
     ); // 개별
@@ -55,9 +68,6 @@ export default function SideBar() {
     setActiveCategories([]);
     setBlogId(blogId);
     setIsOwnBlog(blogId === loggedInUserId);
-    if (foundProfile) {
-      setProfile(foundProfile);
-    }
   }, [blogId, setProfile]);
 
   // 사이드바 페이지 이동 컴포넌트
@@ -72,11 +82,10 @@ export default function SideBar() {
   }) => (
     <Link
       href={href}
-      className={`flex items-center h-6 py-6 text-black ${
-        isCollapsed
-          ? "justify-center w-6 ml-2"
-          : "justify-between w-60 pl-6 pr-2"
-      }`}
+      className={`flex items-center h-6 py-6 text-black ${isCollapsed
+        ? "justify-center w-6 ml-2"
+        : "justify-between w-60 pl-6 pr-2"
+        }`}
     >
       {!isCollapsed && <p className="text-xs">{label}</p>}
       <Icon />
@@ -85,15 +94,13 @@ export default function SideBar() {
 
   return (
     <nav
-      className={`fixed top-0 left-0 h-screen bg-white border-r transition-all duration-150 z-20 ${
-        isCollapsed ? "w-10" : "w-60"
-      }`}
+      className={`fixed top-0 left-0 h-screen bg-white border-r transition-all duration-150 z-20 ${isCollapsed ? "w-10" : "w-60"
+        }`}
     >
       {/* 사이드바 상단 요소 */}
       <div
-        className={`flex items-center h-8 mt-5 mb-3 mr-2 ${
-          isCollapsed ? "justify-center w-6 ml-2" : "justify-between w-52 ml-6"
-        }`}
+        className={`flex items-center h-8 mt-5 mb-3 mr-2 ${isCollapsed ? "justify-center w-6 ml-2" : "justify-between w-52 ml-6"
+          }`}
       >
         {!isCollapsed && (
           <Link href="/">
@@ -109,8 +116,8 @@ export default function SideBar() {
       </div>
 
       <SidebarLink
-        href={`/blog/${profile?.profileId}`}
-        label={isOwnBlog ? "나의 블로그 홈" : `${profile?.name}의 블로그 홈`}
+        href={`/blog/${profile?.userId}`}
+        label={isOwnBlog ? "나의 블로그 홈" : `${profile?.nickName}의 블로그 홈`}
         Icon={SbHomeIcon}
       />
       {/* 게시판 목록 */}

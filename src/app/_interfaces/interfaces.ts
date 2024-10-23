@@ -83,6 +83,7 @@ export interface PostEditorProps {
   isEditing?: boolean;
   onCancelClick: () => void;
   onBtnClick: (data: Post) => void;
+  initialData?: Post; // 초기 게시글 데이터
 }
 
 export interface CategoryDropDownProps {
@@ -221,12 +222,13 @@ export interface Category {
 }
 
 export interface BlogProfile {
-  profileId: number;
+  userId: number;
   profileImage?: string;
-  name: string;
+  nickName: string;
   rank: string;
-  Intro: string;
+  profileMessage: string;
   FollowerCount: number;
+  blogProfile: string;
 }
 
 export interface IBackBtn {

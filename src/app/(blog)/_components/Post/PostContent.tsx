@@ -2,7 +2,6 @@ import DOMPurify from "isomorphic-dompurify";
 import { SmShowMoreIcon } from "../Icons";
 import { useState } from "react";
 import { PostProps } from "../../_interfaces/interfaces"; // 게시물 내용 받기
-import { IsCoding_Data } from "../../_constants/constants"; // 코딩데이터인지 -> 관련 데이터
 import ReactCodeMirror from "@uiw/react-codemirror";
 import { xcodeDark } from "@uiw/codemirror-theme-xcode";
 
@@ -11,14 +10,13 @@ import { python } from "@codemirror/lang-python";
 import { java } from "@codemirror/lang-java";
 import { cpp } from "@codemirror/lang-cpp";
 
+import { useBase64 } from "@/app/_hooks/useBase64";
+
 const PostContent: React.FC<PostProps> = ({ currentPost }) => {
-  const isCodingPost =
-    currentPost !== undefined && currentPost.categoryId === 1;
-  const currentCodingPost = IsCoding_Data.find(
-    (post) => post.postId === Number(currentPost?.postId)
-  );
-  const postContent =
-    currentPost?.content || "<p>게시물이 존재하지 않습니다.</p>";
+  const isCodingPost = currentPost !== undefined && currentPost.categoryId === 1;
+  const codeContentDe = useBase64("decode", currentPost.codeContent || "");
+  const writtenCodeDe = useBase64("decode", currentPost.writtenCode || "");
+  const contentDe = useBase64("decode", currentPost.content || "");
 
   const [visibleSections, setVisibleSections] = useState({
     codeContent: false,
@@ -51,7 +49,7 @@ const PostContent: React.FC<PostProps> = ({ currentPost }) => {
   );
 
   const getLanguageExtension = () => {
-    switch (currentCodingPost?.language) {
+    switch (currentPost?.language) {
       case "javascript":
         return javascript();
       case "java":
@@ -69,8 +67,7 @@ const PostContent: React.FC<PostProps> = ({ currentPost }) => {
     <div>
       {isCodingPost ? (
         <>
-          {/* 코딩 게시물 */}
-          {/* 1 */}
+          {/* 코딩 게시글 */}
           {renderToggleSection(
             "문제",
             visibleSections.codeContent,
@@ -80,13 +77,12 @@ const PostContent: React.FC<PostProps> = ({ currentPost }) => {
                 className="prose"
                 dangerouslySetInnerHTML={{
                   __html: DOMPurify.sanitize(
-                    String(currentCodingPost?.codeContent)
+                    String(codeContentDe)
                   ),
                 }}
               />
             </div>
           )}
-          {/* 2 */}
           {renderToggleSection(
             "코드",
             visibleSections.writtenCode,
@@ -95,7 +91,7 @@ const PostContent: React.FC<PostProps> = ({ currentPost }) => {
               <div className="rounded-xl overflow-hidden">
                 <ReactCodeMirror
                   className="w-full"
-                  value={currentCodingPost?.writtenCode}
+                  value={writtenCodeDe}
                   theme={xcodeDark}
                   basicSetup={{ autocompletion: false }}
                   extensions={[getLanguageExtension()]}
@@ -104,7 +100,6 @@ const PostContent: React.FC<PostProps> = ({ currentPost }) => {
               </div>
             </div>
           )}
-          {/* 3 */}
           {renderToggleSection(
             "본문",
             visibleSections.postContent,
@@ -113,7 +108,7 @@ const PostContent: React.FC<PostProps> = ({ currentPost }) => {
               <div
                 className="prose"
                 dangerouslySetInnerHTML={{
-                  __html: DOMPurify.sanitize(String(postContent)),
+                  __html: DOMPurify.sanitize(String(contentDe)),
                 }}
               />
             </div>
@@ -121,12 +116,12 @@ const PostContent: React.FC<PostProps> = ({ currentPost }) => {
         </>
       ) : (
         <>
-          {/* 일반 게시물 */}
+          {/* 일반 게시글 */}
           <div className="w-full text-black border border-border2 rounded-xl mb-6 p-4">
             <div
               className="prose"
               dangerouslySetInnerHTML={{
-                __html: DOMPurify.sanitize(String(postContent)),
+                __html: DOMPurify.sanitize(String(contentDe)),
               }}
             />
           </div>
