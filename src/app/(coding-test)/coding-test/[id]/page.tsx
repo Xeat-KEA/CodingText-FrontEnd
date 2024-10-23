@@ -1,7 +1,6 @@
 "use client";
 
 import { Splitter, SplitterPanel } from "primereact/splitter";
-import { DUMMY_CHATS } from "../../_constants/constants";
 import ChatInput from "../../_components/ChatInput";
 import CodeEditPanel from "../../_components/CodeEditPanel";
 import { useCodingTestStore } from "@/app/stores";
@@ -10,6 +9,8 @@ import DOMPurify from "isomorphic-dompurify";
 import { useEffect, useRef, useState } from "react";
 import { Chat, ChatInputForm } from "../../_interface/interfaces";
 import { useCheckToken } from "@/app/_hooks/useCheckToken";
+import api from "@/app/_api/config";
+import { useBase64 } from "@/app/_hooks/useBase64";
 
 export default function CodingTestPage() {
   // 로그인 여부 확인
@@ -18,19 +19,40 @@ export default function CodingTestPage() {
   const { isPosting } = useCodingTestStore();
   const [chatData, setChatData] = useState<Chat[]>([]);
 
-  // 채팅 기록 초기 불러오기
+  // 프로토타입 API 문제 정보 GET
   useEffect(() => {
-    setChatData(DUMMY_CHATS);
+    api.get("/code/1").then((res) => {
+      const result = res.data.data;
+      const decodedResult = useBase64("decode", result.content);
+      setChatData((prev) => {
+        // 초기 채팅 데이터가 React Strict Mode로 인해 2번 들어가는 것을 방지
+        if (prev.length === 0) {
+          return [...prev, { role: "gpt", content: decodedResult }];
+        } else {
+          return prev;
+        }
+      });
+    });
   }, []);
 
   // 유저 채팅 입력 시 GPT에게 POST
   const onSubmit = (data: ChatInputForm) => {
-    // ChatGPT에 POST
+    setChatData((prev) => [...prev, { role: "user", content: data.content }]);
+
+    // ChatGPT에 조건에 맞게 POST
     if (data.correctOrNot) {
     } else if (data.sendWithCode) {
     }
 
-    setChatData((prev) => [...prev, { role: "user", content: data.content }]);
+    // ChatGPT에서 받아온 결과 채팅에 반영
+    setChatData((prev) => [
+      ...prev,
+      {
+        role: "gpt",
+        content:
+          "Python에서는 자바의 System.out.println()과 동일한 기능을 하는 문법으로 print() 함수를 사용하면 됩니다.",
+      },
+    ]);
   };
 
   // 채팅 입력 시 채팅창 아래로 이동

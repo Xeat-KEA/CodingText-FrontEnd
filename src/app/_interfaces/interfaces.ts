@@ -132,6 +132,20 @@ export interface PostCardProps {
   codeId: number | null;
 }
 
+export interface ProfileData {
+  userId: number;
+  nickName: string;
+  profileImg: string;
+  profileMessage: string;
+  codeLanguage: string;
+}
+
+export interface NoticeCardProps {
+  category: string;
+  blogId: number;
+  userId: number;
+}
+
 // 전역 변수 관련 Interface
 export interface TabStore {
   tab: string;

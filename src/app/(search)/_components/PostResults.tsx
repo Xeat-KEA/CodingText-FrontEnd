@@ -2,6 +2,7 @@ import PostCard from "@/app/_components/PostCard";
 import { useEffect, useState } from "react";
 import { PostResult } from "../_interfaces/interfaces";
 import api from "@/app/_api/config";
+import { usePaginationStore } from "@/app/stores";
 
 export default function PostResults() {
   const [result, setResult] = useState<PostResult[]>([]);
@@ -13,14 +14,22 @@ export default function PostResults() {
       const sortedData = res.data.data.sort((a: PostResult, b: PostResult) =>
         a.createAt > b.createAt ? -1 : 1
       );
-      setResult(sortedData.slice(0, 20));
+      setResult(sortedData);
     });
   }, []);
+
+  // 페이지네이션
+  const { page, setPage, setLastPage } = usePaginationStore();
+  // 첫 페이지 초기화
+  useEffect(() => {
+    setPage(1);
+    setLastPage(Math.ceil(result.length / 10));
+  }, [result]);
 
   return (
     <div className="relative grid grid-cols-2 gap-x-[96px]">
       {result.length !== 0 ? (
-        result.map((el, index) => (
+        result.slice((page - 1) * 10, page * 10).map((el, index) => (
           <div
             key={index}
             className={`${index >= 2 && "border-t border-border2"}`}

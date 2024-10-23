@@ -1,19 +1,30 @@
 "use client";
 
 import EditBtn from "@/app/_components/TipTapEditor/EditBtn";
-import { useState } from "react";
-import { DUMMY_BLOG_DATA } from "../../_constants/constants";
+import { useEffect, useState } from "react";
 import DOMPurify from "isomorphic-dompurify";
 import TiptapEditor from "@/app/_components/TipTapEditor/TiptapEditor";
 import { useTiptapStore } from "@/app/stores";
 import { useCheckToken } from "@/app/_hooks/useCheckToken";
+import api from "@/app/_api/config";
+import { useBase64 } from "@/app/_hooks/useBase64";
 
 export default function EditBlogPage() {
   // 로그인 여부 확인
   const {} = useCheckToken(true);
 
+  // 프로토타입 API 블로그 정보 GET
+  useEffect(() => {
+    api.get("/blog/1").then((res) => {
+      const blogProfile = res.data.data.blogProfile;
+      console.log(blogProfile);
+      const decodedContent = useBase64("decode", blogProfile);
+      setData(decodedContent);
+    });
+  }, []);
+
   // 변경 사항 취소를 위한 초기값 저장
-  const [data, setData] = useState(DUMMY_BLOG_DATA);
+  const [data, setData] = useState("");
   const [isIntroEditing, setIsIntroEditing] = useState(false);
   const { content, setContent } = useTiptapStore();
 
@@ -30,7 +41,7 @@ export default function EditBlogPage() {
             <div
               className="prose"
               dangerouslySetInnerHTML={{
-                __html: DOMPurify.sanitize(String(data.intro)),
+                __html: DOMPurify.sanitize(data),
               }}
             />
           ) : (
@@ -40,7 +51,7 @@ export default function EditBlogPage() {
         <EditBtn
           isEditing={isIntroEditing}
           onEditClick={() => {
-            setContent(data.intro);
+            setContent(data);
             setIsIntroEditing((prev) => !prev);
           }}
           onCancelClick={() => {
@@ -48,7 +59,7 @@ export default function EditBlogPage() {
           }}
           onSubmit={() => {
             if (content !== "<p></p>") {
-              setData({ intro: content });
+              setData(content);
               setIsIntroEditing((prev) => !prev);
             }
           }}

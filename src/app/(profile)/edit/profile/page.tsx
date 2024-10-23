@@ -3,27 +3,58 @@
 import DropDown from "@/app/_components/DropDown";
 import EditBtn from "@/app/_components/TipTapEditor/EditBtn";
 import { PROGRAMMING_LANGUAGES } from "@/app/_constants/constants";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { ProfileData } from "../../_interfaces/interfaces";
-import { DUMMY_PROFILE_DATA } from "../../_constants/constants";
 import SignOutOrDeleteAccount from "../../_components/SignOut";
 import EditProfileImgDialog from "../../_components/EditProfileImgDialog";
 import { useImageHandler } from "@/app/_hooks/useImageHandler";
 import EditProfileImg from "../../_components/EditProfileImg";
 import { handleEnter } from "@/app/utils";
 import { useCheckToken } from "@/app/_hooks/useCheckToken";
+import { ProfileData } from "@/app/_interfaces/interfaces";
+import api from "@/app/_api/config";
 
 export default function EditProfilePage() {
   // 로그인 여부 확인
   const {} = useCheckToken(true);
 
+  // 화면 갱신을 위한 현재 데이터 state 및 초기값 설정
+  const [data, setData] = useState<ProfileData>({
+    userId: -1,
+    nickName: "",
+    codeLanguage: "",
+    profileMessage: "",
+    profileImg: "/profileImg1.png", // 실제 이미지 받게 되면 수정 필요
+  });
   // 변경사항 전체 취소를 위한 초기값 저장
-  const initialData = DUMMY_PROFILE_DATA;
+  const [initialData, setInitialData] = useState<ProfileData>();
+
+  // 프로토타입 API 내 정보 수정 GET
+  useEffect(() => {
+    api.get("/my-page/1").then((res) => {
+      const resultData: ProfileData = {
+        ...res.data.data,
+        profileImg: "/profileImg1.png",
+      };
+      // 실제 이미지 받게 되면 수정 필요
+      setData(resultData);
+      setInitialData(resultData);
+      setValues(resultData);
+    });
+  }, []);
+
+  // 정보 수정 상태 관리 state
+  const [isEditing, setIsEditing] = useState({
+    nickName: false,
+    profileMessage: false,
+    profileImg: false,
+  });
+
   // 수정 취소를 위한 임시값 저장
-  const [tempData, setTempData] = useState({ nickname: "", status: "" });
-  // 화면 갱신을 위한 현재 데이터 state
-  const [data, setData] = useState<ProfileData>(DUMMY_PROFILE_DATA);
+  const [tempData, setTempData] = useState({
+    nickName: "",
+    profileMessage: "",
+  });
 
   // React Hook Form
   const { register, handleSubmit, setValue, getValues } = useForm<ProfileData>({
@@ -35,7 +66,7 @@ export default function EditProfilePage() {
   };
 
   // 수정 버튼 클릭 시
-  const onEditClick = (type: "nickname" | "status") => {
+  const onEditClick = (type: "nickName" | "profileMessage") => {
     setTempData((prev) => ({
       ...prev,
       [type]: getValues(type),
@@ -44,14 +75,14 @@ export default function EditProfilePage() {
   };
 
   // 취소 버튼 클릭 시
-  const onCancelClick = (type: "nickname" | "status") => {
+  const onCancelClick = (type: "nickName" | "profileMessage") => {
     setValue(type, tempData[type]);
     setData((prev) => ({ ...prev, [type]: tempData[type] }));
     setIsEditing((prev) => ({ ...prev, [type]: !prev[type] }));
   };
 
   // 확인 버튼 클릭 시
-  const onSubmitClick = (type: "nickname" | "status") => {
+  const onSubmitClick = (type: "nickName" | "profileMessage") => {
     if (getValues(type) !== "") {
       setValue(type, getValues(type));
       setData((prev) => ({
@@ -67,20 +98,25 @@ export default function EditProfilePage() {
 
   // 변경 사항 취소
   const onEditCancel = () => {
-    setValue("nickname", initialData.nickname);
-    setValue("profileImg", initialData.profileImg);
-    setValue("programmingLanguage", initialData.programmingLanguage);
-    setValue("status", initialData.status);
-    setData(getValues());
-    setIsEditing({ nickname: false, status: false, profileImg: false });
+    if (initialData) {
+      setValues(initialData);
+      setData(getValues());
+      setIsEditing({
+        nickName: false,
+        profileMessage: false,
+        profileImg: false,
+      });
+    }
   };
 
-  // 정보 수정 상태 관리 state
-  const [isEditing, setIsEditing] = useState({
-    nickname: false,
-    status: false,
-    profileImg: false,
-  });
+  // 전체 ProfileData setValue 사용 함수
+  const setValues = (data: ProfileData) => {
+    setValue("userId", data.userId);
+    setValue("nickName", data.nickName);
+    setValue("profileImg", data.profileImg);
+    setValue("codeLanguage", data.codeLanguage);
+    setValue("profileMessage", data.profileMessage);
+  };
 
   // Image 처리
   const handleImage = async (files: FileList | null) => {
@@ -104,25 +140,25 @@ export default function EditProfilePage() {
           {/* 닉네임 변경 */}
           <div className="flex flex-col gap-3">
             <span className="edit-title">닉네임</span>
-            {!isEditing.nickname ? (
+            {!isEditing.nickName ? (
               <span className="text-xl font-semibold text-black">
-                {data.nickname}
+                {data?.nickName}
               </span>
             ) : (
               <input
                 onKeyDown={handleEnter}
                 className="sign-in-input"
-                {...register("nickname", {
-                  value: data.nickname,
+                {...register("nickName", {
+                  value: data?.nickName,
                 })}
                 autoComplete="off"
               />
             )}
             <EditBtn
-              isEditing={isEditing.nickname}
-              onEditClick={() => onEditClick("nickname")}
-              onCancelClick={() => onCancelClick("nickname")}
-              onSubmit={() => onSubmitClick("nickname")}
+              isEditing={isEditing.nickName}
+              onEditClick={() => onEditClick("nickName")}
+              onCancelClick={() => onCancelClick("nickName")}
+              onSubmit={() => onSubmitClick("nickName")}
             />
           </div>
           {/* 프로필 사진 변경 */}
@@ -141,20 +177,20 @@ export default function EditProfilePage() {
           {/* 상태 메세지 변경 */}
           <div className="flex flex-col gap-3">
             <span className="edit-title">상태 메세지</span>
-            {!isEditing.status ? (
-              <span className="text-black">{data.status}</span>
+            {!isEditing.profileMessage ? (
+              <span className="text-black">{data?.profileMessage}</span>
             ) : (
               <input
                 onKeyDown={handleEnter}
-                {...register("status", { value: data.status })}
+                {...register("profileMessage", { value: data?.profileMessage })}
                 className="sign-in-input"
               />
             )}
             <EditBtn
-              isEditing={isEditing.status}
-              onEditClick={() => onEditClick("status")}
-              onCancelClick={() => onCancelClick("status")}
-              onSubmit={() => onSubmitClick("status")}
+              isEditing={isEditing.profileMessage}
+              onEditClick={() => onEditClick("profileMessage")}
+              onCancelClick={() => onCancelClick("profileMessage")}
+              onSubmit={() => onSubmitClick("profileMessage")}
             />
           </div>
           {/* 기본 프로그래밍 언어 변경 */}
@@ -164,13 +200,13 @@ export default function EditProfilePage() {
               <DropDown
                 list={PROGRAMMING_LANGUAGES}
                 onSelectionClick={(selected) => {
-                  setValue("programmingLanguage", selected.selection);
+                  setValue("codeLanguage", selected.selection);
                   setData((prev) => ({
                     ...prev,
-                    programmingLanguage: selected.selection,
+                    codeLanguage: selected.content,
                   }));
                 }}
-                selection={data.programmingLanguage}
+                selection={data?.codeLanguage}
                 isSmall
               />
             </div>
@@ -202,7 +238,7 @@ export default function EditProfilePage() {
             setData((prev) => ({ ...prev, profileImg: img }));
             setIsEditing((prev) => ({ ...prev, profileImg: !prev.profileImg }));
           }}
-          currentImg={data.profileImg}
+          currentImg={data?.profileImg!}
         />
       )}
     </>

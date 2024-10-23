@@ -1,12 +1,5 @@
 import { ChangeEvent } from "react";
 
-export interface ProfileData {
-  nickname: string;
-  profileImg: string;
-  status: string;
-  programmingLanguage: string;
-}
-
 export interface EditProfileImgProps {
   img: string;
   onSelectFromPreset: () => void;
