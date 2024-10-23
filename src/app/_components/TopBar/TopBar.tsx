@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import SmSearchBar from "./SmSearchBar";
@@ -10,6 +10,9 @@ import { LogoIcon, NoticeIcon } from "../Icons";
 import ProfilePopup from "../ProfilePopup";
 import { useCheckToken } from "@/app/_hooks/useCheckToken";
 import Image from "next/image";
+import { ProfileData } from "@/app/_interfaces/interfaces";
+import api from "@/app/_api/config";
+import NoticeCard from "./NoticeCard";
 
 export default function TopBar() {
   const pathname = usePathname();
@@ -23,9 +26,19 @@ export default function TopBar() {
     profile: false,
   });
 
+  // 알림 읽음 여부 확인
+  const [hasNoticeRead, setHasNoticeRead] = useState(false);
+  useEffect(() => {
+    // 이후 API를 통해 새로운 알림 있는지 조건문으로 판단
+    if (true) {
+      setHasNoticeRead((prev) => !prev);
+    }
+  }, []);
+
   // 알람 아이콘 클릭 시
   const onNoticeClicked = () => {
     setIsPopUpOpen((prev) => ({ ...prev, notice: !prev.notice }));
+    setHasNoticeRead(true);
   };
 
   // 내 프로필 클릭 시
@@ -46,6 +59,12 @@ export default function TopBar() {
     () => setIsPopUpOpen((prev) => ({ ...prev, profile: false })),
     profileRef
   );
+
+  // 프로토타입 API 사용자 정보 GET
+  const [profileInfo, setProfileInfo] = useState<ProfileData>();
+  useEffect(() => {
+    api.get("/my-page/1").then((res) => setProfileInfo(res.data.data));
+  }, []);
 
   return (
     <nav className="fixed w-full h-16 bg-white border-b border-border-1 flex justify-center z-50">
@@ -110,9 +129,9 @@ export default function TopBar() {
                   className="relative"
                   onClick={onNoticeClicked}
                 >
-                  {
+                  {!hasNoticeRead && (
                     <div className="absolute w-1 h-1 rounded-full bg-red right-[2px] top-[2px]"></div>
-                  }
+                  )}
                   <NoticeIcon />
                 </button>
                 <button
@@ -139,9 +158,11 @@ export default function TopBar() {
         {isPopUpOpen.notice && (
           <div
             ref={noticePopupRef}
-            className="absolute bg-white right-0 top-[calc(100%+8px)] w-[396px] h-[300px] flex flex-col rounded-lg shadow-1 divide-y divide-border-1"
+            className="absolute bg-white right-0 top-[calc(100%+8px)] w-[396px] h-[300px] flex flex-col rounded-lg shadow-1 divide-y divide-border-1 overflow-y-auto"
           >
-            {/* 알림 내용 추가 필요 */}
+            {[1, 2, 3, 4, 5].map((el) => (
+              <NoticeCard key={el} category="시스템" blogId={el} userId={el} />
+            ))}
           </div>
         )}
         {/* 프로필 팝업 */}
@@ -153,7 +174,9 @@ export default function TopBar() {
             {/* 사용자 정보 */}
             <div className="flex flex-col gap-[2px] px-6 py-4">
               <span className="text-body text-xs font-bold">Junior</span>
-              <span className="text-base font-bold text-black">사용자123</span>
+              <span className="text-base font-bold text-black">
+                {profileInfo?.nickName}
+              </span>
             </div>
             {/* 프로필 메뉴 */}
             <ProfilePopup />

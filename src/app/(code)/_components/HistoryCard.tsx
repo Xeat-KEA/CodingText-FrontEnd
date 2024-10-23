@@ -6,10 +6,14 @@ import Dialog from "@/app/_components/Dialog";
 import { DialogCheckIcon } from "@/app/_components/Icons";
 
 export default function HistoryCard({
-  id,
-  title,
-  hasSolved,
+  historyId,
   createdAt,
+  title,
+  isCorrect,
+  registerStatus,
+  isAI,
+  codeId,
+  userId,
 }: History) {
   const router = useRouter();
 
@@ -33,22 +37,20 @@ export default function HistoryCard({
               onClick={(e) => {
                 e.stopPropagation();
                 e.preventDefault();
-                if (id !== null) {
-                  router.push(
-                    `/search?keyword=${id}&tab=POST&category=CODE&order=ACCURACY`,
-                    { scroll: false }
-                  );
-                }
+                router.push(
+                  `/search?keyword=${codeId}&tab=POST&category=CODE&order=ACCURACY`,
+                  { scroll: false }
+                );
               }}
               className="w-[60px] text-xs font-semibold text-primary list-text cursor-pointer hover:underline"
             >
-              {id !== null ? `#${id}` : "AI 생성"}
+              {!isAI ? `#${codeId}` : "AI 생성"}
             </span>
             <div className="w-full grow text-sm text-black">{title}</div>
           </div>
           <div className="flex">
             <div className="flex gap-2">
-              {id === null && (
+              {isAI && registerStatus && (
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
@@ -64,7 +66,7 @@ export default function HistoryCard({
                 onClick={() => {
                   // AI 문제의 경우 다른 로직 필요
 
-                  router.push(`/coding-test/${id}`, { scroll: false });
+                  router.push(`/coding-test/${codeId}`, { scroll: false });
                 }}
                 className="text-xs text-black font-semibold whitespace-nowrap"
               >
@@ -73,10 +75,10 @@ export default function HistoryCard({
             </div>
             <div
               className={`w-12 text-xs font-bold list-text ${
-                hasSolved ? "text-green" : "text-red"
+                isCorrect ? "text-green" : "text-red"
               }`}
             >
-              {hasSolved ? "정답" : "오답"}
+              {isCorrect ? "정답" : "오답"}
             </div>
           </div>
         </div>

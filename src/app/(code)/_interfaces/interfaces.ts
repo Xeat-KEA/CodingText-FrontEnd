@@ -16,22 +16,23 @@ export interface ProfileInfoProps {
 }
 
 export interface Code {
-  id: number;
+  codeId: number;
   title: string;
   difficulty: number;
   participants: number;
   rate: number;
-  createdAt: string;
+  createdAt?: string;
 }
 
 export interface History {
-  id: number | null;
-  title: string;
-  difficulty: number;
-  participants: number;
-  rate: number;
-  hasSolved: boolean;
+  historyId: number;
   createdAt: string;
+  title: string;
+  isCorrect: boolean;
+  registerStatus: boolean;
+  isAI: boolean;
+  codeId: number;
+  userId: number;
 }
 
 export interface CreateCodeForm {

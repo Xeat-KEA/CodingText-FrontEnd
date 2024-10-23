@@ -1,31 +1,56 @@
 import PostCard from "@/app/_components/PostCard";
-import { DUMMY_POST_RESULT_LIST } from "../_constants/constants";
+import { useEffect, useState } from "react";
+import { PostResult } from "../_interfaces/interfaces";
+import api from "@/app/_api/config";
+import { usePaginationStore } from "@/app/stores";
 
 export default function PostResults() {
+  const [result, setResult] = useState<PostResult[]>([]);
+
+  // 프로토타입 더미 데이터 GET
+  useEffect(() => {
+    api.get("/article-list").then((res) => {
+      // 날짜 내림차순
+      const sortedData = res.data.data.sort((a: PostResult, b: PostResult) =>
+        a.createAt > b.createAt ? -1 : 1
+      );
+      setResult(sortedData);
+    });
+  }, []);
+
+  // 페이지네이션
+  const { page, setPage, setLastPage } = usePaginationStore();
+  // 첫 페이지 초기화
+  useEffect(() => {
+    setPage(1);
+    setLastPage(Math.ceil(result.length / 10));
+  }, [result]);
+
   return (
     <div className="relative grid grid-cols-2 gap-x-[96px]">
-      {DUMMY_POST_RESULT_LIST.map((el, index) => {
-        return (
+      {result.length !== 0 ? (
+        result.slice((page - 1) * 10, page * 10).map((el, index) => (
           <div
             key={index}
             className={`${index >= 2 && "border-t border-border2"}`}
           >
             <PostCard
-              id={index}
-              profileImg={el.profileImg}
-              nickname={el.nickname}
+              articleId={el.articleId}
+              profileImg={`/profileImg${(el.articleId % 6) + 1}.png`}
+              nickName={el.nickName}
               createAt={el.createAt}
               title={el.title}
               content={el.content}
-              thumbnail={el.thumbnail}
-              likes={el.likes}
-              comments={el.comments}
-              views={el.views}
+              likes={el.likeCount}
+              comments={el.replyCount}
+              views={el.replyCount} // 조회수 추가 후 수정 필요
               codeId={el.codeId}
             />
           </div>
-        );
-      })}
+        ))
+      ) : (
+        <div>{/* 스켈레톤 UI 구성 예정 */}</div>
+      )}
       {/* 가운데 구분선 */}
       <div className="w-[1px] h-[calc(100%-48px)] bg-border-2 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
     </div>

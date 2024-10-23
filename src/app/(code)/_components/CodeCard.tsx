@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useCheckToken } from "@/app/_hooks/useCheckToken";
 
 export default function CodeCard({
-  id,
+  codeId,
   title,
   difficulty,
   participants,
@@ -20,15 +20,15 @@ export default function CodeCard({
   // 난이도 별 text 색상 변경
   const [difficultyColor, setDifficultyColor] = useState("");
   useEffect(() => {
-    if (difficulty === 1) {
+    if (Number(difficulty) === 1) {
       setDifficultyColor("text-blue");
-    } else if (difficulty === 2) {
+    } else if (Number(difficulty) === 2) {
       setDifficultyColor("text-green");
-    } else if (difficulty === 3) {
+    } else if (Number(difficulty) === 3) {
       setDifficultyColor("text-yellow");
-    } else if (difficulty === 4) {
+    } else if (Number(difficulty) === 4) {
       setDifficultyColor("text-orange");
-    } else if (difficulty === 5) {
+    } else if (Number(difficulty) === 5) {
       setDifficultyColor("text-red");
     }
     setisMounted(true);
@@ -37,7 +37,7 @@ export default function CodeCard({
     isMounted &&
     difficultyColor && (
       <Link
-        href={token ? `/coding-test/${id}` : "/sign-in"}
+        href={token ? `/coding-test/${codeId}` : "/sign-in"}
         className="w-full px-2 py-4 flex justify-between items-center gap-4"
       >
         <div className="w-full flex gap-2 items-center">
@@ -46,13 +46,13 @@ export default function CodeCard({
               e.stopPropagation();
               e.preventDefault();
               router.push(
-                `/search?keyword=${id}&tab=POST&category=CODE&order=ACCURACY`,
+                `/search?keyword=${codeId}&tab=POST&category=CODE&order=ACCURACY`,
                 { scroll: false }
               );
             }}
             className="w-[60px] text-xs font-semibold text-primary list-text hover:underline"
           >
-            #{id}
+            #{codeId}
           </span>
           <div className="w-full grow text-sm text-black">{title}</div>
         </div>

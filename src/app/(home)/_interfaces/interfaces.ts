@@ -1,4 +1,4 @@
-import { PostCardProps } from "@/app/_interfaces/interfaces";
+import { PostResult } from "@/app/(search)/_interfaces/interfaces";
 
 export interface BannerCardProps {
   content: string;
@@ -9,5 +9,5 @@ export interface BannerCardProps {
 export interface MainBoardProps {
   title: string;
   hasTab?: boolean;
-  postList: PostCardProps[];
+  postList: PostResult[];
 }

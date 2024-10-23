@@ -15,12 +15,6 @@ export default function SearchPage() {
   const searchParams = useSearchParams();
   const pathname = usePathname();
 
-  const { setPage, setLastPage } = usePaginationStore();
-  useEffect(() => {
-    setPage(1);
-    setLastPage(36);
-  }, []);
-
   // 기본 query parameters 설정
   useEffect(() => {
     const currentParams = new URLSearchParams(searchParams.toString());
