@@ -17,6 +17,7 @@ export default function EditBlogPage() {
   useEffect(() => {
     api.get("/blog/1").then((res) => {
       const blogProfile = res.data.data.blogProfile;
+      console.log(blogProfile);
       const decodedContent = useBase64("decode", blogProfile);
       setData(decodedContent);
     });
