@@ -1,6 +1,5 @@
 "use client";
 
-import { DUMMY_CODE_LIST } from "../../_constants/constants";
 import ListTopBar from "../../_components/ListTopBar";
 import CodeCard from "../../_components/CodeCard";
 import { useEffect, useState } from "react";
