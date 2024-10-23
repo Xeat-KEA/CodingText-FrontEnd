@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useBase64 } from "../_hooks/useBase64";
 import DOMPurify from "isomorphic-dompurify";
+import { useBlogStore } from "../stores";
 
 export default function PostCard({
   articleId,
@@ -29,9 +30,11 @@ export default function PostCard({
 
   const decodedContent = useBase64("decode", content);
 
+  const {blogId} = useBlogStore();
+  
   return (
     <Link
-      href={`/blog/1/post/${articleId}`} // 블로그 Id 수정 필요
+      href={`/blog/${blogId}/post/${articleId}`} // 블로그 Id 수정 필요
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       className="w-full flex flex-col gap-2 py-6 cursor-pointer"

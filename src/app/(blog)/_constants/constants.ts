@@ -42,5 +42,16 @@ export const User_Specific_Categories: Category[] = [
       { id: 2, title: "동아리" },
       { id: 3, title: "스터디 그룹" },
     ],
+  },
+  {
+    id: 2,
+    title: "배운점 정리",
+    blogId: 2,
+    subCategories: [
+      { id: 0, title: "전체" },
+      { id: 1, title: "자유" },
+      { id: 2, title: "동아리" },
+      { id: 3, title: "스터디 그룹" },
+    ],
   }
 ];

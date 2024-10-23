@@ -83,6 +83,7 @@ export interface PostEditorProps {
   isEditing?: boolean;
   onCancelClick: () => void;
   onBtnClick: (data: Post) => void;
+  initialData?: Post; // 초기 게시글 데이터
 }
 
 export interface CategoryDropDownProps {

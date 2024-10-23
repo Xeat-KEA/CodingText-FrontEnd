@@ -14,14 +14,24 @@ import CategoryDropDown from "./CategoryDropDown";
 import { User_Specific_Categories } from "@/app/(blog)/_constants/constants";
 
 export default function PostEditor({
+  initialData,
   isCodingTest,
   isEditing,
   onCancelClick,
   onBtnClick,
 }: PostEditorProps) {
   // Form 데이터 관리
-  const { register, handleSubmit, setValue } = useForm<PostForm>();
-  const { content } = useTiptapStore();
+  const { register, handleSubmit, setValue } = useForm<PostForm>({
+    defaultValues: initialData && isEditing ? {
+      title: initialData.title,
+      password: '',
+      isSecret: false,
+      parentCategory: initialData.parentCategory || 2,
+      childCategory: initialData.childCategory || 1,
+    } : {},
+  });
+  
+  const { content, setContent } = useTiptapStore();
   const onValid = (data: PostForm) => {
     // 텍스트 저장을 위해 base64로 인코딩
     const newContent = useBase64("encode", content);
@@ -68,6 +78,16 @@ export default function PostEditor({
     setValue("childCategory", subCategory?.id);
   }, [subCategory]);
 
+  useEffect(() => {
+    if (isEditing && initialData) {
+      setIsSecret(!!initialData.password);
+      setValue("title", initialData.title);
+      setValue("parentCategory", 2);
+      setValue("childCategory", 1);
+      const decodedContent = useBase64("decode", initialData.content);
+      setContent(decodedContent); // Tiptap 에디터의 내용 설정
+    }
+  }, [isEditing, initialData, setValue]);
   return (
     <form
       onSubmit={handleSubmit(onValid)}
@@ -106,7 +126,7 @@ export default function PostEditor({
           <CategoryDropDown
             list={categoryList}
             selection={category}
-            onSelectionClick={(selected) => setCategory(selected)}
+            onSelectionClick={(selected) => {setCategory(selected)}}
             placeholder="상위 게시판 선택"
           />
           <CategoryDropDown

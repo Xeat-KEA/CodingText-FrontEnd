@@ -16,7 +16,6 @@ import DropDown from "@/app/_components/DropDown";
 import { REPORT_REASONS } from "../../_constants/constants";
 
 const PostAction: React.FC<PostProps> = ({ currentPost }) => {
-  // 전역 변수
   const { blogId, isOwnBlog, params } = useBlogStore();
 
   const router = useRouter();
@@ -101,8 +100,8 @@ const PostAction: React.FC<PostProps> = ({ currentPost }) => {
         </button>
         {isOwnBlog ? (
           <>
-            {/* 수정할 postId 전달 필요 (예시 - /blog/${blogId}/new-post/${currentPost.postId} */}
-            <Link href={`/blog/${blogId}/new-post`} className="flex items-center gap-1">
+            {/* 전달 사항 수정 필요 */}
+            <Link href={`/blog/${blogId}/edit-post/${currentPost.postId}`} className="flex items-center gap-1">
               <BpEditIcon />
               <p className="text-primary text-xs font-semibold">{`수정`}</p>
             </Link>

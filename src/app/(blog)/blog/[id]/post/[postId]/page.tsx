@@ -50,6 +50,7 @@ export default function PostPage() {
   const [isReportDialogOpen, setIsReportDialogOpen] = useState(false);
   const [isReportConfirmDialogOpen, setIsReportConfirmDialogOpen] = useState(false);
 
+  
   useEffect(() => {
     if (articleId === 3) {
       setCategoryId(1);

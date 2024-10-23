@@ -4,11 +4,12 @@ import Dialog from "@/app/_components/Dialog";
 import { DialogCheckIcon } from "@/app/_components/Icons";
 import PostEditor from "@/app/_components/PostEditor/PostEditor";
 import { Post } from "@/app/_interfaces/interfaces";
-import { useParams, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function NewPostPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { id } = useParams();
 
   const [newPost, setNewPost] = useState<Post>();
@@ -16,6 +17,9 @@ export default function NewPostPage() {
 
   const [isCancelDialogOpen, setIsCancelDialogOpen] = useState(false);
   const [isPostedDialogOpen, setIsPostedDialogOpen] = useState(false);
+
+  const isEditing = searchParams.get("isEditing") === "true";
+
 
   return (
     <>
@@ -32,6 +36,7 @@ export default function NewPostPage() {
               setIsPostedDialogOpen((prev) => !prev);
             }}
             onCancelClick={() => setIsCancelDialogOpen((prev) => !prev)}
+            isEditing={isEditing}
           />
         </div>
       </div>
@@ -49,8 +54,8 @@ export default function NewPostPage() {
       {isPostedDialogOpen && (
         <Dialog
           icon={<DialogCheckIcon />}
-          title="게시글이 등록되었어요!"
-          content="작성된 게시글을 확인해보세요"
+          title="게시글이 수정되었어요!"
+          content="수정된 게시글을 확인해보세요"
           backBtn="내 블로그 홈으로"
           onBackBtnClick={() => router.push(`/blog/${id}`, { scroll: false })}
           primaryBtn="게시글 페이지로"
