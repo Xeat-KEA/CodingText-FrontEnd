@@ -11,7 +11,7 @@ import { REPORT_REASONS } from "../_constants/constants";
 export default function BlogProfile() {
   // 전역 변수
   const { isOwnBlog, profile, setProfile } = useBlogStore();
-  const [isFollowing, setIsFollowing] = useState<boolean>(false); // 초기값 설정
+  const [isFollowing, setIsFollowing] = useState(false); // 초기값 설정
   const [blogToReport, setBlogToReport] = useState<number | null>(null);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [customInput, setCustomInput] = useState("");

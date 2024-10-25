@@ -175,7 +175,8 @@ export default function PostPage() {
             title="목록으로"
             onClick={() =>
               router.push(
-                `/blog/${params?.id}/${currentCategory?.id}/${currentSubCategory?.id}`
+                `/blog/${params?.id}/${currentCategory?.id}/${currentSubCategory?.id}`,
+                {scroll : false}
               )
             }
           />
