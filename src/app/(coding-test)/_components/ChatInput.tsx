@@ -39,45 +39,51 @@ export default function ChatInput({ onSubmit }: ChatInputProps) {
   }, [content]);
 
   return (
-    <form
-      onSubmit={handleSubmit(onValid)}
-      className="relative last:w-full flex px-4 py-2 gap-3 bg-white border border-border-2 rounded-[27px]"
-    >
-      <button className="self-end mb-1" type="button" onClick={onSettingClick}>
-        <SettingIcon />
-      </button>
-      <textarea
-        {...register("content", { required: true })}
-        ref={(e) => {
-          // register와 ref의 충돌 방지
-          textareaRef.current = e;
-          register("content").ref(e);
-        }}
-        className="self-center resize-none grow text-black h-auto"
-        rows={1}
-        placeholder="AI에게 질문"
-        autoComplete="off"
-      />
-      <button
-        type="submit"
-        className="self-end flex justify-center items-center w-8 h-8 rounded-full bg-primary"
+    <div className="px-6 pb-8 pt-2">
+      <form
+        onSubmit={handleSubmit(onValid)}
+        className="relative last:w-full flex px-4 py-2 gap-3 bg-white border border-border-2 rounded-[27px]"
       >
-        <SendMessageIcon />
-      </button>
-      {isSettingOpen && (
-        <div className="flex flex-col gap-3 px-5 py-4 rounded-lg shadow-1 bg-white absolute left-0 bottom-[calc(100%+8px)]">
-          <ToggleBtn
-            content="정답 여부만 확인"
-            state={correctOrNot}
-            onClick={() => setCorrectOrNot((prev) => !prev)}
-          />
-          <ToggleBtn
-            content="코드와 함께 질문"
-            state={sendWithCode}
-            onClick={() => setSendWithCode((prev) => !prev)}
-          />
-        </div>
-      )}
-    </form>
+        <button
+          className="self-end mb-1"
+          type="button"
+          onClick={onSettingClick}
+        >
+          <SettingIcon />
+        </button>
+        <textarea
+          {...register("content", { required: true })}
+          ref={(e) => {
+            // register와 ref의 충돌 방지
+            textareaRef.current = e;
+            register("content").ref(e);
+          }}
+          className="self-center resize-none grow text-black h-auto"
+          rows={1}
+          placeholder="AI에게 질문"
+          autoComplete="off"
+        />
+        <button
+          type="submit"
+          className="self-end flex justify-center items-center w-8 h-8 rounded-full bg-primary"
+        >
+          <SendMessageIcon />
+        </button>
+        {isSettingOpen && (
+          <div className="flex flex-col gap-3 px-5 py-4 rounded-lg shadow-1 bg-white absolute left-0 bottom-[calc(100%+8px)]">
+            <ToggleBtn
+              content="정답 여부만 확인"
+              state={correctOrNot}
+              onClick={() => setCorrectOrNot((prev) => !prev)}
+            />
+            <ToggleBtn
+              content="코드와 함께 질문"
+              state={sendWithCode}
+              onClick={() => setSendWithCode((prev) => !prev)}
+            />
+          </div>
+        )}
+      </form>
+    </div>
   );
 }
