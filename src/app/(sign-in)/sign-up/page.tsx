@@ -11,6 +11,7 @@ export default function SignUpPage() {
         content={"거의 다 끝났어요!\n당신의 정보를 입력해주세요"}
         hasBackBtn
       />
+      {/* 회원가입 정보 기입 Form */}
       <SignUpFormContainer />
     </div>
   );

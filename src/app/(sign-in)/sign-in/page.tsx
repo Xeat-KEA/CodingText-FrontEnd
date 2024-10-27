@@ -8,6 +8,7 @@ export default function SignInPage() {
   return (
     <div className="sign-in-container">
       <SignInTitle title="로그인" />
+      {/* 소셜 로그인 버튼 */}
       <div className="flex flex-col gap-4">
         {SOCIAL_LOGIN_BUTTON_LIST.map((el, index) => (
           <SignInBtn
