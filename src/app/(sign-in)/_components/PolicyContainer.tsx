@@ -7,7 +7,7 @@ export default function PolicyContainer({
 }: PolicyContainerProps) {
   return (
     <div className="flex flex-col grow py-16 gap-8 w-full">
-      <div className="w-full flex justify-center relative">
+      <div className="top-container relative">
         <span className="sign-in-title">{title}</span>
         <SmBackBtn />
       </div>

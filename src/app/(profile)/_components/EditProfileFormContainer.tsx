@@ -2,7 +2,7 @@ import EditBtn from "@/app/_components/TipTapEditor/EditBtn";
 import { useImageHandler } from "@/app/_hooks/useImageHandler";
 import { ProfileData } from "@/app/_interfaces/interfaces";
 import { handleEnter } from "@/app/utils";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import EditProfileImg from "./EditProfileImg";
 import { PROGRAMMING_LANGUAGES } from "@/app/_constants/constants";
 import DropDown from "@/app/_components/DropDown";

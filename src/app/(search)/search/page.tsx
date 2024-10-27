@@ -1,6 +1,5 @@
 "use client";
 
-import { usePaginationStore } from "@/app/stores";
 import { useEffect } from "react";
 import Pagination from "@/app/_components/Pagination";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -43,7 +42,7 @@ export default function SearchPage() {
 
   return (
     <>
-      <div className="w-full flex justify-center pt-16">
+      <div className="top-container pt-16">
         <div className="max-w-1200 flex p-12">
           <div className="flex flex-col w-full gap-6">
             <SearchBar baseURL={pathname} />
