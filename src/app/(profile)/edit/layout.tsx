@@ -9,7 +9,7 @@ export default function ProfileLayout({
   return (
     <>
       <TopBar />
-      <div className="w-full flex justify-center h-screen pt-16 overflow-hidden">
+      <div className="top-container h-screen pt-16 overflow-hidden">
         <div className="max-w-1200 flex p-12">
           <ProfileSideBar />
           {children}

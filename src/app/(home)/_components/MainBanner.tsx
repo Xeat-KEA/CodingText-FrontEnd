@@ -5,6 +5,7 @@ import Link from "next/link";
 export default function MainBanner() {
   return (
     <div className="top-container relative">
+      {/* 배너 배경 사진 */}
       <Image
         src="/mainBanner.png"
         fill

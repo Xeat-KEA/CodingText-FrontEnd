@@ -3,9 +3,7 @@ import CommentInput from "@/app/(blog)/_components/PostComment/CommentInput";
 import PostAction from "@/app/(blog)/_components/Post/PostAction";
 import PostContent from "@/app/(blog)/_components/Post/PostContent";
 import PostHeader from "@/app/(blog)/_components/Post/PostHeader";
-import {
-  REPORT_REASONS,
-} from "@/app/(blog)/_constants/constants";
+import { REPORT_REASONS } from "@/app/(blog)/_constants/constants";
 import BackBtn from "@/app/_components/BackBtn";
 import { useBlogStore } from "@/app/stores";
 import { useRouter } from "next/navigation";
@@ -13,16 +11,20 @@ import { useEffect, useState } from "react";
 import { loggedInUserId } from "@/app/(blog)/_constants/constants";
 import Dialog from "@/app/_components/Dialog";
 import { DialogCheckIcon, DialogReportIcon } from "@/app/_components/Icons";
-import { CommentForm, CompleteArticle } from "@/app/(blog)/_interfaces/interfaces";
+import {
+  CommentForm,
+  CompleteArticle,
+} from "@/app/(blog)/_interfaces/interfaces";
 import Comment from "@/app/(blog)/_components/PostComment/Comment";
 import DropDown from "@/app/_components/DropDown";
 import api from "@/app/_api/config";
 
 export default function PostPage() {
   //  전역변수
-  const { blogId, params, boardCategories, categoryId, subCategoryId } = useBlogStore();
+  const { blogId, params, boardCategories, categoryId, subCategoryId } =
+    useBlogStore();
   const router = useRouter();
-  const articleId = Number(params?.postId || 0)
+  const articleId = Number(params?.postId || 0);
   const [blogUserId, setBlogUserId] = useState<number>(1);
 
   const [currentPost, setCurrentPost] = useState<CompleteArticle | null>(null);
@@ -48,9 +50,9 @@ export default function PostPage() {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [customInput, setCustomInput] = useState("");
   const [isReportDialogOpen, setIsReportDialogOpen] = useState(false);
-  const [isReportConfirmDialogOpen, setIsReportConfirmDialogOpen] = useState(false);
+  const [isReportConfirmDialogOpen, setIsReportConfirmDialogOpen] =
+    useState(false);
 
-  
   useEffect(() => {
     if (articleId === 3) {
       setCategoryId(1);
@@ -68,14 +70,14 @@ export default function PostPage() {
 
     // 프로토타입 더미 데이터 GET
     api.get(`/article/${articleId}`).then((res) => {
-      const data = res.data.data
-      if(data){
+      const data = res.data.data;
+      if (data) {
         // api 분리 후 수정 필요
         const completeArticle: CompleteArticle = {
           postId: articleId,
           blogId: blogUserId,
           categoryId: categoryId,
-          subCategoryId: subCategoryId, 
+          subCategoryId: subCategoryId,
           language: "java",
           title: data.title,
           content: data.content,
@@ -90,13 +92,12 @@ export default function PostPage() {
           writtenCode: data.writtenCode,
           createdAt: "2024-01-15 10:00",
           modifiedAt: "2024-01-15 12:00",
-        }
+        };
         setCurrentPost(completeArticle);
       } else {
         setCurrentPost(null);
       }
-      
-    })
+    });
   }, [currentPost, params]);
 
   // 답글 버튼 클릭
@@ -167,7 +168,7 @@ export default function PostPage() {
   };
 
   return (
-    <div className="flex w-full justify-center">
+    <div className="top-container">
       <div className="max-w-800 min-h-screen flex flex-col gap-6 py-12">
         {/* 목록으로 버튼*/}
         <div className="w-full">
@@ -199,18 +200,12 @@ export default function PostPage() {
 
         {/* 게시물 내용 */}
         <div className="w-full">
-          {currentPost && (
-            <PostContent currentPost={currentPost} />
-
-          )}
+          {currentPost && <PostContent currentPost={currentPost} />}
         </div>
 
         {/* 게시물 버튼 - PostAction */}
         <div className="w-full h-5">
-          {currentPost && (
-            <PostAction currentPost={currentPost} />
-
-          )}
+          {currentPost && <PostAction currentPost={currentPost} />}
         </div>
 
         {/* 구분선 */}

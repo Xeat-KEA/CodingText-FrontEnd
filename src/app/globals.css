@@ -16,21 +16,19 @@ textarea {
 }
 
 @layer utilities {
+  /* 글로벌 클래스 */
   /* 최상위 컨테이너 */
   .top-container {
     @apply w-full flex justify-center;
   }
-
   /* 그라데이션 색상 */
   .gradient {
     background: linear-gradient(90deg, #764ba2 0%, #667eea 100%);
   }
-
   /* 그림자 */
   .shadow-1 {
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   }
-
   /* max-width 400px인 컨테이너 (로그인, 회원가입 등) */
   .max-w-400 {
     @apply w-full max-w-[400px] px-12;
@@ -47,67 +45,56 @@ textarea {
   .max-w-1200 {
     @apply w-full max-w-[1200px] px-12;
   }
-
   /* 1px 가로줄 */
   .division {
     @apply w-full h-[1px] bg-border-2 shrink-0;
   }
-
   /* 팝업 시 오버레이 */
   .overlay {
     @apply fixed w-screen h-screen bg-black bg-opacity-20 left-0 top-0 z-50;
   }
 
+  /* 버튼 관련 클래스 */
   /* 작은 버튼 추상화 */
   .sm-btn {
     @apply px-4 py-2 text-xs rounded-lg;
   }
-
   /* 작은 버튼 Default (소셜 로그인 버튼 등) */
   .sm-btn-default {
     @apply sm-btn border border-border-2;
   }
-
   /* 작은 버튼-Primary (탑바 로그인 버튼 등) */
   .sm-btn-primary {
     @apply sm-btn bg-primary text-white font-bold;
   }
-
   /* 버튼 추상화 */
   .btn {
     @apply flex justify-center px-4 py-3 text-xs whitespace-nowrap;
   }
-
   /* 기본 버튼 */
   .btn-default {
     @apply btn border text-black border-border-2 rounded-lg;
   }
-
   /* Primary 색상 버튼 */
   .btn-primary {
     @apply btn bg-primary rounded-lg text-white font-bold;
   }
-
-  /* red 색상 버튼 */
+  /* Red 색상 버튼 */
   .btn-red {
     @apply btn bg-red rounded-lg text-white font-bold;
   }
-
   /* 비활성화 버튼 */
   .btn-disabled {
     @apply btn bg-bg-1 border border-border-2 rounded-lg text-disabled;
   }
-
   /* 탑바 메뉴 버튼 */
   .top-bar-menu-btn {
     @apply flex items-center px-2 h-full cursor-pointer text-base font-semibold text-black whitespace-nowrap;
   }
-
   /* 프로필 메뉴 버튼 */
   .profile-popup-menu {
     @apply flex items-center px-4 h-8 text-xs cursor-pointer;
   }
-
   /* 큰 버튼 (메인 페이지) */
   .lg-btn {
     @apply w-fit flex gap-2 px-12 py-6 bg-white rounded-full;
@@ -118,41 +105,36 @@ textarea {
   .sign-in-container {
     @apply w-full flex flex-col gap-16 py-16;
   }
-
   /* 정보 입력 input (회원가입, 관리자 로그인) */
   .sign-in-input {
     @apply w-full px-4 py-3 border border-border-2 rounded-lg;
   }
-
   /* 회원가입 페이지 제목 */
   .sign-in-title {
     @apply text-xl font-semibold text-black whitespace-pre-wrap text-center;
   }
-
   /* 회원가입 페이지 본문 */
   .sign-in-content {
     @apply whitespace-pre-wrap text-body text-center;
   }
 
-  /* 코딩 테스트 페이지 관련 */
+  /* 코딩 테스트 페이지 관련 클래스 */
   /* 말풍선 스타일링 */
   .bubble {
     @apply prose p-3 rounded-3xl shadow-1 w-fit;
   }
-
   /* 게시물 작성 정보 인풋 (제목, 비밀번호 등) */
   .post-input {
     @apply px-4 py-2 text-sm text-black border-b border-border-2;
   }
 
-  /* 텍스트 에디터 관련 스타일링 */
+  /* 텍스트 에디터 관련 클래스 */
   .toolbar-btn {
     @apply px-1 py-[2px] rounded-lg text-black hover:bg-bg-1;
   }
   .is-active {
     @apply text-white bg-black hover:bg-black;
   }
-
   /* 텍스트 에디터 내 요소 불필요한 마진 제거 */
   .prose p,
   .prose h1,
@@ -165,7 +147,6 @@ textarea {
   .prose hr {
     @apply my-8;
   }
-
   /* 텍스트 에디터 내 code 태그 css 오버라이딩 */
   .prose code::before,
   .prose code::after {
@@ -174,7 +155,6 @@ textarea {
   .prose code {
     @apply bg-white rounded-[0.4rem] text-primary text-[12px] font-normal px-[0.4rem] py-[0.2rem] whitespace-pre-wrap break-words;
   }
-
   /* 텍스트 에디터 내 code block css 오버라이딩 */
   .prose pre {
     @apply bg-black rounded-lg text-white my-6 py-3 px-4 whitespace-pre-wrap break-words;
@@ -185,12 +165,15 @@ textarea {
   }
 
   /* 문제 목록 페이지 관련 */
+  /* 목록 탑바 텍스트 */
   .list-topbar-text {
     @apply text-xs font-bold text-body;
   }
+  /* 목록 탑바 항목 */
   .list-topbar-tab {
     @apply list-topbar-text flex justify-center shrink-0;
   }
+  /* 목록 텍스트 */
   .list-text {
     @apply text-xs flex justify-center shrink-0;
   }
@@ -200,27 +183,22 @@ textarea {
   .side-bar-tab {
     @apply w-full h-[36px] flex items-center text-sm pr-4;
   }
-
   /* 정보 수정 제목 */
   .edit-title {
     @apply text-sm text-body;
   }
-
   /* 정보 수정 버튼 추상화 */
   .edit-btn {
     @apply w-fit text-xs;
   }
-
   /* 정보 수정 버튼 Default 색상 */
   .edit-btn-default {
     @apply edit-btn font-semibold text-disabled;
   }
-
   /* 정보 수정 버튼 Primary 색상 */
   .edit-btn-primary {
     @apply edit-btn font-semibold text-primary;
   }
-
   /* 정보 수정 버튼 Red 색상 */
   .edit-btn-red {
     @apply edit-btn font-bold text-red;
