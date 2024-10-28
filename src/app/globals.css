@@ -183,6 +183,10 @@ textarea {
   .side-bar-tab {
     @apply w-full h-[36px] flex items-center text-sm pr-4;
   }
+  /* 정보 수정 항목 */
+  .edit-container {
+    @apply flex flex-col gap-3;
+  }
   /* 정보 수정 제목 */
   .edit-title {
     @apply text-sm text-body;

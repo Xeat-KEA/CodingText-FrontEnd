@@ -1,14 +1,14 @@
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import { SearchForm } from "@/app/_interfaces/interfaces";
-import { SmSearchIcon } from "../Icons";
+import { SearchBarProps, SearchForm } from "@/app/_interfaces/interfaces";
+import { SmSearchIcon } from "./Icons";
 
-export default function SmSearchBar() {
+export default function SmSearchBar({ baseURL, placeholder }: SearchBarProps) {
   const router = useRouter();
 
   const { register, handleSubmit, setValue } = useForm<SearchForm>();
   const onValid = ({ keyword }: { keyword: string }) => {
-    router.push(`/search?keyword=${keyword}`, { scroll: false });
+    router.push(`${baseURL}?keyword=${keyword}`, { scroll: false });
     setValue("keyword", "");
   };
 
@@ -23,7 +23,7 @@ export default function SmSearchBar() {
             required: true,
           })}
           className="grow text-xs"
-          placeholder="검색어를 입력해주세요"
+          placeholder={placeholder || "검색어를 입력해주세요"}
           autoComplete="off"
         />
         <button type="submit">

@@ -3,6 +3,7 @@ import { Editor } from "@tiptap/react";
 export interface SearchBarProps {
   baseURL: string;
   hasFilter?: boolean;
+  placeholder?: string;
 }
 
 export interface TabBarProps {
@@ -145,6 +146,20 @@ export interface NoticeCardProps {
   category: string;
   blogId: number;
   userId: number;
+}
+
+export interface ProfileTab {
+  content: string;
+  url: string;
+}
+
+export interface ProfileSideBarProps {
+  menuList: ProfileTab[];
+}
+
+export interface SmBackBtnProps {
+  content: string;
+  onClick: () => void;
 }
 
 // 전역 변수 관련 Interface
