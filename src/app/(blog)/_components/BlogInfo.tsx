@@ -27,7 +27,8 @@ export default function BlogInfo() {
           {/* 블로그 정보 수정 버튼 */}
           {isOwnBlog && (
             <Link
-              href="/"
+            // 경로 수정 필요
+              href="/edit/blog"
               className="inline-flex items-center w-auto h-5 gap-1 ml-2"
             >
               <BpEditIcon />
