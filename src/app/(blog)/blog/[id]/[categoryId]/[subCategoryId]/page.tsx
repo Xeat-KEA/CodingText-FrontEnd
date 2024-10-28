@@ -49,7 +49,7 @@ export default function BlogSubPage() {
   // Page 변화 감지 후 문제 리스트 다시 GET 하는 과정 필요
 
   return (
-    <div className="flex w-full justify-center">
+    <div className="top-container">
       <div className="max-w-1000 min-h-screen flex flex-col gap-6 py-12">
         <SearchBar baseURL={pathname} />
         {/* 필터링 */}

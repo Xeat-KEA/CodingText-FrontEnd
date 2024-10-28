@@ -1,29 +1,23 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { AppleIcon, GoogleIcon, KakaoIcon } from "../_components/Icons";
+import SignInTitle from "../_components/SignInTitle";
+import { SOCIAL_LOGIN_BUTTON_LIST } from "../_constants/constants";
+import SignInBtn from "../_components/SignInBtn";
 
 export default function SignInPage() {
-  const router = useRouter();
   return (
     <div className="sign-in-container">
-      <span className="sign-in-title self-center">로그인</span>
+      <SignInTitle title="로그인" />
+      {/* 소셜 로그인 버튼 */}
       <div className="flex flex-col gap-4">
-        <button
-          onClick={() => router.push("/sign-up")}
-          className="sm-btn-default flex justify-center items-center gap-4"
-        >
-          <GoogleIcon />
-          <span>Google 계정으로 로그인</span>
-        </button>
-        <button className="sm-btn-default flex justify-center items-center gap-4">
-          <AppleIcon />
-          <span>Apple 계정으로 로그인</span>
-        </button>
-        <button className="sm-btn-default flex justify-center items-center gap-4">
-          <KakaoIcon />
-          <span>카카오 계정으로 로그인</span>
-        </button>
+        {SOCIAL_LOGIN_BUTTON_LIST.map((el, index) => (
+          <SignInBtn
+            key={index}
+            icon={el.icon}
+            service={el.service}
+            redirectionURL={el.redirectionURL}
+          />
+        ))}
       </div>
     </div>
   );

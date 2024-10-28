@@ -45,7 +45,7 @@ export default function Home() {
       <div className="relative flex flex-col w-full pt-16">
         {/* 메인 배너 */}
         <MainBanner />
-        {/* 배너 카드 부분 */}
+        {/* 비로그인 : 홍보 배너 / 로그인 : 최신 게시글 */}
         {isLoaded && token ? (
           <MainBoard title="최신 게시글" hasTab postList={result} />
         ) : (
