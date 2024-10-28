@@ -6,7 +6,11 @@ import { useRouter, useSearchParams } from "next/navigation";
 import DropDown from "./DropDown";
 import { CODE_SEARCH_FILTER_LIST } from "../(code)/_constants/constants";
 
-export default function SearchBar({ baseURL, hasFilter }: SearchBarProps) {
+export default function SearchBar({
+  baseURL,
+  hasFilter,
+  placeholder,
+}: SearchBarProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -64,7 +68,7 @@ export default function SearchBar({ baseURL, hasFilter }: SearchBarProps) {
             required: baseURL ? false : true,
           })}
           className="grow"
-          placeholder="검색어를 입력해주세요"
+          placeholder={placeholder || "검색어를 입력해주세요"}
           autoComplete="off"
         />
         <button type="submit">

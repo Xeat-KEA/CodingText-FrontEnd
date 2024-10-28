@@ -128,7 +128,7 @@ export default function EditProfileFormContainer() {
     <>
       <form onSubmit={handleSubmit(onValid)} className="flex flex-col gap-8">
         {/* 닉네임 변경 */}
-        <div className="flex flex-col gap-3">
+        <div className="edit-container">
           <span className="edit-title">닉네임</span>
           {!isEditing.nickName ? (
             <span className="text-xl font-semibold text-black">
@@ -165,7 +165,7 @@ export default function EditProfileFormContainer() {
           }}
         />
         {/* 상태 메세지 변경 */}
-        <div className="flex flex-col gap-3">
+        <div className="edit-container">
           <span className="edit-title">상태 메세지</span>
           {!isEditing.profileMessage ? (
             <span className="text-black">{userData?.profileMessage}</span>
@@ -186,7 +186,7 @@ export default function EditProfileFormContainer() {
           />
         </div>
         {/* 기본 프로그래밍 언어 변경 */}
-        <div className="flex flex-col gap-3">
+        <div className="edit-container">
           <span className="edit-title">기본 프로그래밍 언어</span>
           <div className="w-[120px]">
             <DropDown
