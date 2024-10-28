@@ -250,19 +250,17 @@ export function SmDeleteIcon() {
 export function ReplyIcon() {
   return (
     <svg
-      width="14"
-      height="10"
-      viewBox="0 0 14 10"
+      width="20"
+      height="20"
+      viewBox="0 0 20 20"
       fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M0.75 5.00016L4.91667 0.833496M0.75 5.00016L4.91667 9.16683M0.75 5.00016H9.08333C10.4725 5.00016 13.25 5.8335 13.25 9.16683"
+      xmlns="http://www.w3.org/2000/svg">
+      <path d="M3.75 9.99967L7.91667 5.83301M3.75 9.99967L7.91667 14.1663M3.75 9.99967H12.0833C13.4725 9.99967 16.25 10.833 16.25 14.1663"
         stroke="#222222"
         strokeWidth="1.5"
         strokeLinecap="round"
-        strokeLinejoin="round"
-      />
+        strokeLinejoin="round" />
     </svg>
+
   );
 }

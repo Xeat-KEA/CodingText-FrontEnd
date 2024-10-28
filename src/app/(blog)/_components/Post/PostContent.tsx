@@ -2,21 +2,14 @@ import DOMPurify from "isomorphic-dompurify";
 import { SmShowMoreIcon } from "../Icons";
 import { useState } from "react";
 import { PostProps } from "../../_interfaces/interfaces"; // 게시물 내용 받기
-import ReactCodeMirror from "@uiw/react-codemirror";
-import { xcodeDark } from "@uiw/codemirror-theme-xcode";
-
-import { javascript } from "@codemirror/lang-javascript"; // 언어 구분 -> 다른 방식 가능하면 수정
-import { python } from "@codemirror/lang-python";
-import { java } from "@codemirror/lang-java";
-import { cpp } from "@codemirror/lang-cpp";
 
 import { useBase64 } from "@/app/_hooks/useBase64";
 
 const PostContent: React.FC<PostProps> = ({ currentPost }) => {
   const isCodingPost = currentPost !== undefined && currentPost.categoryId === 1;
-  const codeContentDe = useBase64("decode", currentPost.codeContent || "");
-  const writtenCodeDe = useBase64("decode", currentPost.writtenCode || "");
-  const contentDe = useBase64("decode", currentPost.content || "");
+  const codeContentDe = useBase64("decode", currentPost.codeContent);
+  const writtenCodeDe = useBase64("decode", currentPost.writtenCode);
+  const contentDe = useBase64("decode", currentPost.content);
 
   const [visibleSections, setVisibleSections] = useState({
     codeContent: false,
@@ -48,21 +41,6 @@ const PostContent: React.FC<PostProps> = ({ currentPost }) => {
     </>
   );
 
-  const getLanguageExtension = () => {
-    switch (currentPost?.language) {
-      case "javascript":
-        return javascript();
-      case "java":
-        return java();
-      case "cpp":
-        return cpp();
-      case "python":
-        return python();
-      default:
-        return javascript();
-    }
-  };
-
   return (
     <div>
       {isCodingPost ? (
@@ -88,16 +66,9 @@ const PostContent: React.FC<PostProps> = ({ currentPost }) => {
             visibleSections.writtenCode,
             "writtenCode",
             <div className="w-full mb-6">
-              <div className="rounded-xl overflow-hidden">
-                <ReactCodeMirror
-                  className="w-full"
-                  value={writtenCodeDe}
-                  theme={xcodeDark}
-                  basicSetup={{ autocompletion: false }}
-                  extensions={[getLanguageExtension()]}
-                  editable={false}
-                />
-              </div>
+                <pre className="rounded-xl overflow-hidden w-full">
+                  <code className="text-black">{writtenCodeDe}</code>
+                </pre>
             </div>
           )}
           {renderToggleSection(
