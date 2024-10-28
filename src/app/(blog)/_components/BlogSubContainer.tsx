@@ -1,4 +1,3 @@
-
 import { PostResult } from "@/app/(search)/_interfaces/interfaces";
 import api from "@/app/_api/config";
 import Pagination from "@/app/_components/Pagination";
@@ -9,7 +8,7 @@ import { usePaginationStore } from "@/app/stores";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
-export default function BlogListContainer() {
+export default function BlogSubContainer() {
     const pathname = usePathname();
     const searchParams = useSearchParams();
     const [filter, setFilter] = useState("ACCURACY");
@@ -96,5 +95,5 @@ export default function BlogListContainer() {
                 <Pagination />
             </div>
         </div>
-    );
+    )
 }

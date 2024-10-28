@@ -13,7 +13,7 @@ export default function PostContainer() {
     //  전역변수
     const { blogId, params, boardCategories, categoryId, subCategoryId } = useBlogStore();
     const router = useRouter();
-    const articleId = Number(params?.postId || 0)
+    const articleId = Number(params?.postId || 0);
     const [blogUserId, setBlogUserId] = useState(1);
 
     const [currentPost, setCurrentPost] = useState<CompleteArticle | null>(null);
@@ -82,7 +82,7 @@ export default function PostContainer() {
     }, [currentPost, params]);
 
     return (
-        <div className="flex w-full justify-center">
+        <div className="top-container">
             <div className="max-w-800 min-h-screen flex flex-col gap-6 py-12">
                 {/* 목록으로 버튼*/}
                 <div className="w-full">
@@ -115,18 +115,12 @@ export default function PostContainer() {
 
                 {/* 게시물 내용 */}
                 <div className="w-full">
-                    {currentPost && (
-                        <PostContent currentPost={currentPost} />
-
-                    )}
+                    {currentPost && <PostContent currentPost={currentPost} />}
                 </div>
 
                 {/* 게시물 버튼 - PostAction */}
                 <div className="w-full h-5">
-                    {currentPost && (
-                        <PostAction currentPost={currentPost} />
-
-                    )}
+                    {currentPost && <PostAction currentPost={currentPost} />}
                 </div>
 
                 {/* 구분선 */}

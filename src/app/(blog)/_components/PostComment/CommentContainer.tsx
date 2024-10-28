@@ -1,6 +1,12 @@
 import { useState } from "react";
-import { CommentForm, CompleteArticle } from "@/app/(blog)/_interfaces/interfaces";
-import { loggedInUserId, REPORT_REASONS, } from "@/app/(blog)/_constants/constants";
+import { 
+    CommentForm, 
+    CompleteArticle 
+} from "@/app/(blog)/_interfaces/interfaces";
+import { 
+    loggedInUserId, 
+    REPORT_REASONS, 
+} from "@/app/(blog)/_constants/constants";
 import CommentInput from "@/app/(blog)/_components/PostComment/CommentInput";
 import Comment from "@/app/(blog)/_components/PostComment/Comment";
 import Dialog from "@/app/_components/Dialog";
