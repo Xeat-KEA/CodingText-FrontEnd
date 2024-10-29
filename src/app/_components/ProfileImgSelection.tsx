@@ -14,7 +14,7 @@ export default function ProfileImgSelection({
       {PROFILE_IMG_LIST.map((el) => (
         <div
           key={el}
-          className={`flex justify-center items-center w-16 h-16 rounded-full overflow-hidden cursor-pointer ${
+          className={`flex-center w-16 h-16 rounded-full overflow-hidden cursor-pointer ${
             el === profileImg
               ? "border-2 border-primary"
               : "border border-border-2 "

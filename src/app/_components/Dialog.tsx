@@ -19,7 +19,7 @@ export default function Dialog({
   const ref = !blockOutsideClick ? useOutsideClick(onBackBtnClick) : null;
   return (
     <div className="overlay">
-      <div className="absolute w-full h-full px-12 flex justify-center items-center">
+      <div className="absolute w-full h-full px-12 flex-center">
         <div
           ref={ref}
           className="w-full max-w-[400px] flex flex-col gap-6 bg-white p-6 rounded-2xl shadow-1"

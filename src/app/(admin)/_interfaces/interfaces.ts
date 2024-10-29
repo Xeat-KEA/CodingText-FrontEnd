@@ -8,3 +8,12 @@ export interface SignUpForm {
   password: string;
   verify: string;
 }
+
+export interface UserListCardProps {
+  userId: number;
+  nickname: string;
+  email: string;
+  rank: string;
+  signedUpAt: string;
+  onClick: () => void;
+}

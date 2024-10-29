@@ -131,9 +131,7 @@ export default function EditProfileFormContainer() {
         <div className="edit-container">
           <span className="edit-title">닉네임</span>
           {!isEditing.nickName ? (
-            <span className="text-xl font-semibold text-black">
-              {userData?.nickName}
-            </span>
+            <span className="edit-xl-content">{userData?.nickName}</span>
           ) : (
             <input
               onKeyDown={handleEnter}
@@ -168,7 +166,7 @@ export default function EditProfileFormContainer() {
         <div className="edit-container">
           <span className="edit-title">상태 메세지</span>
           {!isEditing.profileMessage ? (
-            <span className="text-black">{userData?.profileMessage}</span>
+            <span className="edit-sm-content">{userData?.profileMessage}</span>
           ) : (
             <input
               onKeyDown={handleEnter}

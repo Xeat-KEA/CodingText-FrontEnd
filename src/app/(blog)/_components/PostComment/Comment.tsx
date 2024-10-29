@@ -22,15 +22,13 @@ const Comment: React.FC<CommentProps> = ({
 
   useEffect(() => {
     api.get(`/user-list`).then((res) => {
-      const userData = res.data.data
+      const userData = res.data.data;
       setProfileData(userData);
-    })
-  }, [])
-  
+    });
+  }, []);
+
   // 댓글 작성자의 프로필
-  const userProfile = profileData.find(
-    (profile) => profile.userId === userId
-  );
+  const userProfile = profileData.find((profile) => profile.userId === userId);
 
   // // 언급된 사용자의 프로필
   const mentionProfile = profileData.find(

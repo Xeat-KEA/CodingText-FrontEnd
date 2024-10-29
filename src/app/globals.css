@@ -53,6 +53,10 @@ textarea {
   .overlay {
     @apply fixed w-screen h-screen bg-black bg-opacity-20 left-0 top-0 z-50;
   }
+  /* flex 중앙 정렬 */
+  .flex-center {
+    @apply flex justify-center items-center;
+  }
 
   /* 버튼 관련 클래스 */
   /* 작은 버튼 추상화 */
@@ -190,6 +194,14 @@ textarea {
   /* 정보 수정 제목 */
   .edit-title {
     @apply text-sm text-body;
+  }
+  /* 정보 수정 작은 내용 */
+  .edit-sm-content {
+    @apply text-sm text-black;
+  }
+  /* 정보 수정 큰 내용 */
+  .edit-xl-content {
+    @apply text-xl font-semibold text-black;
   }
   /* 정보 수정 버튼 추상화 */
   .edit-btn {

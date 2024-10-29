@@ -7,7 +7,7 @@ export default function AdminSignInLayout({
 }>) {
   return (
     <div className="top-container">
-      <div className="relative max-w-400 min-h-screen flex justify-center items-center">
+      <div className="relative max-w-400 min-h-screen flex-center">
         <div className="absolute top-20">
           <LogoIcon />
         </div>

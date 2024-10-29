@@ -24,7 +24,7 @@ export default function AdminLayoutContainer({
           <div className="">
             <SmBackBtn content="로그아웃" onClick={onClick} />
           </div>
-          <div className="h-full flex">
+          <div className="h-full flex overflow-hidden">
             <ProfileSideBar menuList={ADMIN_TAB_LIST} />
             <div className="w-full flex flex-col gap-8 px-6 overflow-y-auto">
               {children}

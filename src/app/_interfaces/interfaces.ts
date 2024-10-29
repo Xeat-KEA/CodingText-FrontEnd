@@ -98,6 +98,18 @@ export interface CheckBoxIconProps {
   isActive?: boolean;
 }
 
+export interface ProfileImgContainerProps {
+  width: number;
+  height: number;
+  src?: string;
+}
+
+export interface EditOrCancelBtnProps {
+  editBtn: string;
+  onEdit: () => void;
+  onCancel: () => void;
+}
+
 export interface Post {
   title: string;
   isSecret?: boolean;

@@ -5,6 +5,7 @@ import ChatGPTDialog from "./ChatGPTDialog";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ProfileCardProps } from "../_interfaces/interfaces";
+import ProfileImgContainer from "@/app/_components/ProfileImgContainer";
 
 export default function ProfileCard({ userData }: ProfileCardProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -23,16 +24,11 @@ export default function ProfileCard({ userData }: ProfileCardProps) {
           </>
         ) : (
           <>
-            <div className="relative w-[120px] h-[120px] rounded-full border border-border-2 overflow-hidden">
-              <Image
-                fill
-                sizes="100%"
-                src="/profileImg1.png"
-                alt="profileImg"
-                priority
-                className="object-cover"
-              />
-            </div>
+            <ProfileImgContainer
+              width={120}
+              height={120}
+              src="/profileImg1.png"
+            />
             <div className="flex flex-col items-center">
               <span className="text-xs font-bold text-body">
                 {userData.rank}

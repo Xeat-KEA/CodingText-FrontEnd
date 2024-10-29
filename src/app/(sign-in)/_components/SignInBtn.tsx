@@ -11,7 +11,7 @@ export default function SignInBtn({
   return (
     <button
       onClick={() => router.push(redirectionURL)}
-      className="sm-btn-default flex justify-center items-center gap-4"
+      className="sm-btn-default flex-center gap-4"
     >
       {icon}
       <span>{service} 계정으로 로그인</span>
