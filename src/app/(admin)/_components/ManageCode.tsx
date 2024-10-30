@@ -77,7 +77,8 @@ export default function ManageCode({ codeId }: ManageCodeProps) {
       // 초기값 설정 끝난 뒤 isLoaded 설정
       setIsLoaded(true);
     } else {
-      // 문제 생성일 경우 초기값 설정 없이 isLoaded 설정
+      // 문제 생성일 경우 초기값 전부 초기화 후 isLoaded 설정
+      initiateEditor("both");
       setIsLoaded(true);
     }
   }, []);
