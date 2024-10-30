@@ -17,3 +17,12 @@ export interface UserListCardProps {
   signedUpAt: string;
   onClick: () => void;
 }
+
+export interface AdminListCardProps {
+  email: string;
+  role: string;
+}
+
+export interface AdminRequestCardProps {
+  email: string;
+}

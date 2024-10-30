@@ -9,3 +9,5 @@ export const ADMIN_TAB_LIST: ProfileTab[] = [
   { content: "공지사항", url: "/admin/notice" },
   { content: "클라우드 사용량", url: "/admin/billing" },
 ];
+
+export const ADMIN_MANAGEMENT_TAB = ["관리자", "승인 대기"];

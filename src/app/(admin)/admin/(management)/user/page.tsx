@@ -22,7 +22,7 @@ export default function UserManagementPage() {
   }, []);
 
   return (
-    <div className="flex flex-col gap-8 pt-2 h-full overflow-y-auto">
+    <div className="flex flex-col gap-8 pt-2 h-full">
       {/* 사용자 검색창 */}
       <UserSearch />
       {/* 검색 결과 */}

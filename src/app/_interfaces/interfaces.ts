@@ -57,6 +57,7 @@ export interface MultiSelectionDropDownProps {
 export interface DialogProps {
   icon?: JSX.Element;
   title?: string;
+  isTitleSm?: boolean;
   content?: string;
   isWarning?: boolean;
   backBtn: string;

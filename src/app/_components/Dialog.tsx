@@ -4,6 +4,7 @@ import { DialogProps } from "../_interfaces/interfaces";
 export default function Dialog({
   icon,
   title,
+  isTitleSm,
   content,
   isWarning,
   backBtn,
@@ -27,7 +28,11 @@ export default function Dialog({
           <div className="flex flex-col items-center gap-4 py-6">
             {icon && icon}
             <div className="flex flex-col gap-2 text-center">
-              <span className="whitespace-pre-wrap text-black text-xl font-semibold">
+              <span
+                className={`whitespace-pre-wrap text-black font-semibold ${
+                  isTitleSm ? "text-lg" : "text-xl"
+                }`}
+              >
                 {title}
               </span>
               <span
