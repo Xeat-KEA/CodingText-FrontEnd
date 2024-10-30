@@ -41,6 +41,8 @@ export default function CodeEditor({
         setLang(langs.javascript());
       } else if (language?.selection === "c") {
         setLang(langs.cpp());
+      } else if (language?.selection === "json") {
+        setLang(langs.json());
       }
 
       setTheme(xcodeDark);

@@ -22,15 +22,18 @@ export default function PostEditor({
 }: PostEditorProps) {
   // Form 데이터 관리
   const { register, handleSubmit, setValue } = useForm<PostForm>({
-    defaultValues: initialData && isEditing ? {
-      title: initialData.title,
-      password: '',
-      isSecret: false,
-      parentCategory: initialData.parentCategory || 2,
-      childCategory: initialData.childCategory || 1,
-    } : {},
+    defaultValues:
+      initialData && isEditing
+        ? {
+            title: initialData.title,
+            password: "",
+            isSecret: false,
+            parentCategory: initialData.parentCategory || 2,
+            childCategory: initialData.childCategory || 1,
+          }
+        : {},
   });
-  
+
   const { content, setContent } = useTiptapStore();
   const onValid = (data: PostForm) => {
     // 텍스트 저장을 위해 base64로 인코딩
@@ -126,7 +129,9 @@ export default function PostEditor({
           <CategoryDropDown
             list={categoryList}
             selection={category}
-            onSelectionClick={(selected) => {setCategory(selected)}}
+            onSelectionClick={(selected) => {
+              setCategory(selected);
+            }}
             placeholder="상위 게시판 선택"
           />
           <CategoryDropDown

@@ -26,3 +26,7 @@ export interface AdminListCardProps {
 export interface AdminRequestCardProps {
   email: string;
 }
+
+export interface ManageCodeProps {
+  codeId?: number;
+}

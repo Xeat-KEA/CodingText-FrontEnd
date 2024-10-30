@@ -21,18 +21,16 @@ export default function EditProfileFormContainer() {
     queryKey: ["UserData"],
     queryFn: fetchUserData,
   });
-  // 실제 API 호출 후 initialData 대체 가능
 
-  // 화면 갱신을 위한 현재 데이터 state 및 초기값 설정
-  const [userData, setUserData] = useState<ProfileData>({
-    userId: -1,
-    nickName: "",
-    codeLanguage: "",
-    profileMessage: "",
-    profileImg: "/profileImg1.png", // 실제 이미지 받게 되면 수정 필요
-  });
+  // 실제 API 호출 후 initialData 대체 가능
   // 변경사항 전체 취소를 위한 초기값 저장
-  const [initialData, setInitialData] = useState<ProfileData>();
+  const [initialData, setInitialData] = useState<ProfileData>({
+    nickName: "사용자",
+    profileImg: "/profileImg3.png",
+    profileMessage: "안녕하세요",
+    codeLanguage: "Java",
+    userId: 1,
+  });
 
   // 정보 수정 상태 관리 state
   const [isEditing, setIsEditing] = useState({
@@ -48,10 +46,11 @@ export default function EditProfileFormContainer() {
   });
 
   // React Hook Form
-  const { register, handleSubmit, setValue, getValues } = useForm<ProfileData>({
-    mode: "onSubmit",
-    defaultValues: initialData,
-  });
+  const { register, handleSubmit, setValue, getValues, watch } =
+    useForm<ProfileData>({
+      mode: "onSubmit",
+      defaultValues: initialData,
+    });
   const onValid = (data: ProfileData) => {
     console.log(data);
   };
@@ -68,7 +67,6 @@ export default function EditProfileFormContainer() {
   // 취소 버튼 클릭 시
   const onCancelClick = (type: "nickName" | "profileMessage") => {
     setValue(type, tempData[type]);
-    setUserData((prev) => ({ ...prev, [type]: tempData[type] }));
     setIsEditing((prev) => ({ ...prev, [type]: !prev[type] }));
   };
 
@@ -92,7 +90,6 @@ export default function EditProfileFormContainer() {
     const IMG_URL = useImageHandler(files);
 
     // 반환받은 이미지 주소를 통해 editor에 이미지 삽입
-    setUserData((prev) => ({ ...prev, profileImg: IMG_URL }));
     setValue("profileImg", IMG_URL);
   };
 
@@ -100,7 +97,6 @@ export default function EditProfileFormContainer() {
   const onEditCancel = () => {
     if (initialData) {
       setValues(initialData);
-      setUserData(getValues());
       setIsEditing({
         nickName: false,
         profileMessage: false,
@@ -113,10 +109,6 @@ export default function EditProfileFormContainer() {
   const onSubmitClick = (type: "nickName" | "profileMessage") => {
     if (getValues(type) !== "") {
       setValue(type, getValues(type));
-      setUserData((prev) => ({
-        ...prev,
-        [type]: getValues(type),
-      }));
       setIsEditing((prev) => ({
         ...prev,
         [type]: !prev[type],
@@ -131,14 +123,12 @@ export default function EditProfileFormContainer() {
         <div className="edit-container">
           <span className="edit-title">닉네임</span>
           {!isEditing.nickName ? (
-            <span className="edit-xl-content">{userData?.nickName}</span>
+            <span className="edit-xl-content">{watch("nickName")}</span>
           ) : (
             <input
               onKeyDown={handleEnter}
               className="sign-in-input"
-              {...register("nickName", {
-                value: userData?.nickName,
-              })}
+              {...register("nickName")}
               autoComplete="off"
             />
           )}
@@ -151,7 +141,7 @@ export default function EditProfileFormContainer() {
         </div>
         {/* 프로필 사진 변경 */}
         <EditProfileImg
-          img={userData.profileImg}
+          img={watch("profileImg")}
           onSelectFromPreset={() =>
             setIsEditing((prev) => ({
               ...prev,
@@ -166,13 +156,11 @@ export default function EditProfileFormContainer() {
         <div className="edit-container">
           <span className="edit-title">상태 메세지</span>
           {!isEditing.profileMessage ? (
-            <span className="edit-sm-content">{userData?.profileMessage}</span>
+            <span className="edit-sm-content">{watch("profileMessage")}</span>
           ) : (
             <input
               onKeyDown={handleEnter}
-              {...register("profileMessage", {
-                value: userData?.profileMessage,
-              })}
+              {...register("profileMessage")}
               className="sign-in-input"
             />
           )}
@@ -190,13 +178,9 @@ export default function EditProfileFormContainer() {
             <DropDown
               list={PROGRAMMING_LANGUAGES}
               onSelectionClick={(selected) => {
-                setValue("codeLanguage", selected.selection);
-                setUserData((prev) => ({
-                  ...prev,
-                  codeLanguage: selected.content,
-                }));
+                setValue("codeLanguage", selected.content);
               }}
-              selection={userData?.codeLanguage}
+              selection={watch("codeLanguage")}
               isSmall
             />
           </div>
@@ -222,10 +206,10 @@ export default function EditProfileFormContainer() {
             setIsEditing((prev) => ({ ...prev, profileImg: !prev.profileImg }))
           }
           onBtnClick={(img) => {
-            setUserData((prev) => ({ ...prev, profileImg: img }));
+            setValue("profileImg", img);
             setIsEditing((prev) => ({ ...prev, profileImg: !prev.profileImg }));
           }}
-          currentImg={userData?.profileImg!}
+          currentImg={watch("profileImg")}
         />
       )}
     </>

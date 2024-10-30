@@ -44,7 +44,9 @@ export default function CodeLayoutContainer({
               <SearchBar key={pathname} hasFilter baseURL={pathname} />
             </div>
             {/* 코드 필터링 */}
-            <CodeFilter />
+            <div className="flex gap-4">
+              <CodeFilter hasOrder={pathname.startsWith("/code/list")} />
+            </div>
             {/* 문제 리스트 */}
             {children}
             <Pagination />

@@ -105,9 +105,8 @@ export interface ProfileImgContainerProps {
   src?: string;
 }
 
-export interface EditOrCancelBtnProps {
-  editBtn: string;
-  onEdit: () => void;
+export interface SaveOrCancelBtnProps {
+  saveBtn: string;
   onCancel: () => void;
 }
 
@@ -173,6 +172,19 @@ export interface ProfileSideBarProps {
 export interface SmBackBtnProps {
   content: string;
   onClick: () => void;
+}
+
+export interface IconBtnProps {
+  type: "edit" | "delete" | "report";
+  content: string;
+  onClick: () => void;
+}
+
+export interface CodeDetail {
+  difficulty: string;
+  algorithm: string;
+  content: string;
+  testcase: any;
 }
 
 // 전역 변수 관련 Interface

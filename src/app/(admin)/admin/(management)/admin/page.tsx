@@ -29,13 +29,15 @@ export default function AdminManagementPage() {
     <div className="flex flex-col">
       <TabBar menuList={ADMIN_MANAGEMENT_TAB} />
       <AdminListTopBar tab={tab || "관리자"} />
-      {tab === "관리자" || !tab
-        ? dummyAdmin.map((el, index) => (
-            <AdminListCard key={index} email={el.email} role={el.role} />
-          ))
-        : dummyRequest.map((el, index) => (
-            <AdminRequestCard key={index} email={el.email} />
-          ))}
+      <div className="flex flex-col divide-y divide-border-2">
+        {tab === "관리자" || !tab
+          ? dummyAdmin.map((el, index) => (
+              <AdminListCard key={index} email={el.email} role={el.role} />
+            ))
+          : dummyRequest.map((el, index) => (
+              <AdminRequestCard key={index} email={el.email} />
+            ))}
+      </div>
     </div>
   );
 }

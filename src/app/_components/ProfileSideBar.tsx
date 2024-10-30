@@ -15,7 +15,7 @@ export default function ProfileSideBar({ menuList }: ProfileSideBarProps) {
           key={index}
           href={el.url}
           className={`side-bar-tab ${
-            el.url === pathname
+            pathname.startsWith(el.url)
               ? "border-l-[3px] border-primary font-bold pl-[13px]"
               : "pl-4"
           }`}
