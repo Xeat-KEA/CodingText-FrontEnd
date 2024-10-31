@@ -30,3 +30,16 @@ export interface AdminRequestCardProps {
 export interface ManageCodeProps {
   codeId?: number;
 }
+
+export interface RegisterCardProps {
+  createdAt: string;
+  nickName: string;
+  title: string;
+  content: string;
+  testcase: string;
+}
+
+export interface RegisterStore {
+  isRegistering: boolean;
+  setIsRegistering: (state: boolean) => void;
+}

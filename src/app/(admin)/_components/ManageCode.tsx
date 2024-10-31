@@ -8,7 +8,11 @@ import { ALGORITHM_LIST, DIFFICULTY_LIST } from "@/app/_constants/constants";
 import { useForm } from "react-hook-form";
 import { CodeDetail } from "@/app/_interfaces/interfaces";
 import CodeEditor from "@/app/(coding-test)/_components/CodeEditor";
-import { useCodingTestStore, useTiptapStore } from "@/app/stores";
+import {
+  useCodingTestStore,
+  useRegisterStore,
+  useTiptapStore,
+} from "@/app/stores";
 import Dialog from "@/app/_components/Dialog";
 import { DialogCheckIcon } from "@/app/_components/Icons";
 import api from "@/app/_api/config";
@@ -18,10 +22,11 @@ import { useInitiateEditor } from "@/app/_hooks/useInitiateEditor";
 export default function ManageCode({ codeId }: ManageCodeProps) {
   const router = useRouter();
 
-  const { handleSubmit, setValue, watch } = useForm<CodeDetail>();
+  const { register, handleSubmit, setValue, watch } = useForm<CodeDetail>();
   const onValid = (data: CodeDetail) => {
     // 빈 값 필터링
     if (
+      data.title &&
       data.difficulty &&
       data.algorithm &&
       content !== "<p></p>" &&
@@ -47,6 +52,7 @@ export default function ManageCode({ codeId }: ManageCodeProps) {
   };
   const { data } = useQuery({ queryKey: ["codeDetail"], queryFn: fetchData });
   const dummy: CodeDetail = {
+    title: "문제 제목",
     difficulty: "1",
     algorithm: "입출력",
     content: `<h3>문제 : 최단 거리 구하기</h3>
@@ -62,19 +68,25 @@ export default function ManageCode({ codeId }: ManageCodeProps) {
 
   // 에디터 초기값 설정
   const { content } = useTiptapStore();
-  const { setLanguage, value } = useCodingTestStore();
+  const { title, setLanguage, value } = useCodingTestStore();
   const initiateEditor = useInitiateEditor();
   const [isLoaded, setIsLoaded] = useState(false);
+  const { isRegistering } = useRegisterStore();
   useEffect(() => {
     // 코드 에디터 언어 JSON으로 설정
     setLanguage({ content: "json", selection: "json" });
     if (codeId) {
       // 문제 수정일 경우 초기값 설정
+      setValue("title", dummy.title);
       setValue("difficulty", dummy.difficulty);
       setValue("algorithm", dummy.algorithm);
       initiateEditor("text", dummy.content);
       initiateEditor("code", JSON.stringify(dummy.testcase));
       // 초기값 설정 끝난 뒤 isLoaded 설정
+      setIsLoaded(true);
+    } else if (isRegistering) {
+      // 건의된 문제를 등록할 때는 제목만 수동 설정 (내용은 전역 변수로 제어)
+      setValue("title", title);
       setIsLoaded(true);
     } else {
       // 문제 생성일 경우 초기값 전부 초기화 후 isLoaded 설정
@@ -88,6 +100,11 @@ export default function ManageCode({ codeId }: ManageCodeProps) {
   return (
     <>
       <form onSubmit={handleSubmit(onValid)} className="flex flex-col gap-8">
+        <input
+          {...register("title")}
+          className="post-input"
+          placeholder="제목을 입력해주세요"
+        />
         {/* 난이도 / 알고리즘 설정 */}
         <div className="edit-container">
           <span className="edit-title">분류</span>
@@ -97,7 +114,7 @@ export default function ManageCode({ codeId }: ManageCodeProps) {
                 watch("difficulty") ? `${watch("difficulty")}단계` : ""
               }
               onSelectionClick={(selected) =>
-                setValue("difficulty", selected.content)
+                setValue("difficulty", selected.selection)
               }
               placeholder="난이도"
               list={DIFFICULTY_LIST}

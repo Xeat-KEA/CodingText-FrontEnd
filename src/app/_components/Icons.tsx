@@ -273,6 +273,27 @@ export function LinkArrowIcon() {
   );
 }
 
+// 작은 바로가기 링크용 화살표 아이콘
+export function SmLinkArrowIcon() {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M12.667 8L3.33366 8M12.667 8L8.66699 12M12.667 8L8.66699 4"
+        stroke="#6B6CED"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 // 좋아요 개수 아이콘
 export function LikeCountIcon() {
   return (
@@ -460,7 +481,7 @@ export function FailIcon() {
         strokeWidth="0.5"
       />
     </svg>
-  )
+  );
 }
 
 // 큰 뒤로가기 아이콘 {24*24}
@@ -471,14 +492,15 @@ export function LgBackIcon() {
       height="24"
       viewBox="0 0 24 24"
       fill="none"
-      xmlns="http://www.w3.org/2000/svg">
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <path
         d="M5 12L19 12M5 12L11 18M5 12L11 6"
         stroke="#666666"
         strokeWidth="1.5"
         strokeLinecap="round"
-        strokeLinejoin="round" />
+        strokeLinejoin="round"
+      />
     </svg>
-
-  )
+  );
 }

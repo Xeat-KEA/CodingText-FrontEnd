@@ -6,7 +6,9 @@ import CodeListTopBar from "@/app/(code)/_components/CodeListTopBar";
 import Pagination from "@/app/_components/Pagination";
 import SearchBar from "@/app/_components/SearchBar";
 import { ALGORITHM_LIST } from "@/app/_constants/constants";
+import { useRegisterStore } from "@/app/stores";
 import Link from "next/link";
+import { useEffect } from "react";
 
 const dummy = [
   { codeId: 1, title: "문제 1", difficulty: 1, algorithm: ALGORITHM_LIST[0] },
@@ -17,6 +19,12 @@ const dummy = [
 ];
 
 export default function AdminCodePage() {
+  // 건의된 문제 생성 여부 state 설정
+  const { setIsRegistering } = useRegisterStore();
+  useEffect(() => {
+    setIsRegistering(false);
+  }, []);
+
   return (
     <div className="flex flex-col gap-6">
       <SearchBar baseURL="/admin/code" hasFilter />

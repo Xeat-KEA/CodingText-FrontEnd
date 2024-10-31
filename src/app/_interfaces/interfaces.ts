@@ -181,6 +181,7 @@ export interface IconBtnProps {
 }
 
 export interface CodeDetail {
+  title: string;
   difficulty: string;
   algorithm: string;
   content: string;
@@ -196,6 +197,8 @@ export interface TabStore {
 // 코딩테스트 관련 Interface
 export interface CodingTestStore {
   // 코딩 관련 state
+  title: string;
+  setTitle: (newTitle: string) => void;
   language: Selection | undefined;
   setLanguage: (newLanguage: Selection) => void;
   hasSolved: boolean;

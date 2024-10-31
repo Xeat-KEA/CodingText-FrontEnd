@@ -66,7 +66,7 @@ export default function ToolBar({ editor }: ToolBarProps) {
   };
 
   return (
-    <div className="border-b border-border-2 w-full h-[44px] shrink-0 overflow-x-auto relative">
+    <div className="border-b border-border-2 w-full h-[44px] shrink-0 overflow-x-auto overflow-y-hidden relative">
       <div className="absolute top-0 left-0 flex items-center gap-4 p-2">
         <div className="flex gap-2">
           <button
