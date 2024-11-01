@@ -52,7 +52,7 @@ export default function NoticePage() {
 
   return (
     <>
-      <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-8 pt-2">
         <ManageReceiver
           isAll={isAll}
           onAllClick={onAllClick}
