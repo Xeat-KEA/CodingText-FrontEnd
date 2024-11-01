@@ -180,6 +180,11 @@ export interface IconBtnProps {
   onClick: () => void;
 }
 
+export interface SmCheckBoxBtnProps {
+  isActive: boolean;
+  onClick: () => void;
+}
+
 export interface CodeDetail {
   title: string;
   difficulty: string;
