@@ -34,12 +34,12 @@ export default function NoticePage() {
   const [isError, setIsError] = useState("");
   const [isDone, setIsDone] = useState(false);
 
-  // 공지사항 전달
+  // 알림 전달
   const onSubmit = (nickName: string) => {
     if (!isAll && receivers.length === 0) {
       setIsError("emptyReceiver");
     } else {
-      // API로 공지사항 POST 필요
+      // API로 알림 POST 필요
 
       // 완료 state 설정
       setIsDone((prev) => !prev);
@@ -60,7 +60,7 @@ export default function NoticePage() {
           onAddUser={onAddUser}
           receivers={receivers}
         />
-        {/* 공지사항 입력칸 */}
+        {/* 알림 입력칸 */}
         <NoticeFormContainer onSubmit={onSubmit} isDone={isDone} />
       </div>
       {isError === "sameNickname" && (

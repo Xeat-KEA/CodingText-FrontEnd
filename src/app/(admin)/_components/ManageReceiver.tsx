@@ -12,7 +12,7 @@ export default function ManageReceiver({
   return (
     <div className="flex flex-col gap-4">
       <div className="edit-container">
-        <span className="edit-title">공지사항 수신자 추가</span>
+        <span className="edit-title">알림 수신자 추가</span>
         <SmCheckBoxBtn isActive={isAll} onClick={onAllClick} />
       </div>
       {/* 사용자 추가 입력칸 */}
