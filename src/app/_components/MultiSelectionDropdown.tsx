@@ -37,10 +37,10 @@ export default function MultiSelectionDropDown({
       onClick={() => setIsListOpen((prev) => !prev)}
       className="relative flex w-full bg-white cursor-pointer px-4 py-2 border border-border-2 rounded-lg text-black"
     >
-      <div className={`${isListOpen && "rotate-180"}`}>
+      <div className={`flex items-center ${isListOpen && "rotate-180"}`}>
         <ShowMoreIcon />
       </div>
-      <span className="grow flex justify-center text-xs text-black whitespace-nowrap">
+      <span className="grow flex justify-center items-center text-xs text-black whitespace-nowrap">
         {placeholder}
       </span>
       {/* 선택 항목 목록 */}

@@ -36,10 +36,10 @@ export default function TabBar({ menuList, dropDownList }: TabBarProps) {
         ))}
       </nav>
       {/* 드롭다운 */}
-      {dropDownList && (
+      {dropDownList && language && (
         <div className="w-[120px]">
           <DropDown
-            selection={language?.content!}
+            selection={language.content}
             onSelectionClick={(selected) => setLanguage(selected)}
             list={dropDownList}
             isSmall

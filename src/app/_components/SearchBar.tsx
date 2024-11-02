@@ -6,11 +6,15 @@ import { useRouter, useSearchParams } from "next/navigation";
 import DropDown from "./DropDown";
 import { CODE_SEARCH_FILTER_LIST } from "../(code)/_constants/constants";
 
-export default function SearchBar({ baseURL, hasFilter }: SearchBarProps) {
+export default function SearchBar({
+  baseURL,
+  hasFilter,
+  placeholder,
+}: SearchBarProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const { register, handleSubmit, setValue } = useForm<SearchForm>();
+  const { register, handleSubmit, setValue, watch } = useForm<SearchForm>();
   const onValid = (data: SearchForm) => {
     const newParams = new URLSearchParams(searchParams.toString());
     newParams.set("keyword", data.keyword);
@@ -31,11 +35,9 @@ export default function SearchBar({ baseURL, hasFilter }: SearchBarProps) {
   }, [searchParams]);
 
   // 드롭다운 값 변경을 위한 state
-  const [filter, setFilter] = useState("");
   useEffect(() => {
     if (hasFilter) {
-      setFilter(CODE_SEARCH_FILTER_LIST[0].content);
-      setValue("filter", CODE_SEARCH_FILTER_LIST[0].selection);
+      setValue("filter", CODE_SEARCH_FILTER_LIST[0].content);
     }
   }, []);
 
@@ -47,10 +49,9 @@ export default function SearchBar({ baseURL, hasFilter }: SearchBarProps) {
             isSmall
             borderRight
             list={CODE_SEARCH_FILTER_LIST}
-            selection={filter ? filter : CODE_SEARCH_FILTER_LIST[0].content}
+            selection={watch("filter") || "제목"}
             onSelectionClick={(selected) => {
-              setFilter(selected.content);
-              setValue("filter", selected.selection);
+              setValue("filter", selected.content);
             }}
           />
         </div>
@@ -64,7 +65,7 @@ export default function SearchBar({ baseURL, hasFilter }: SearchBarProps) {
             required: baseURL ? false : true,
           })}
           className="grow"
-          placeholder="검색어를 입력해주세요"
+          placeholder={placeholder || "검색어를 입력해주세요"}
           autoComplete="off"
         />
         <button type="submit">

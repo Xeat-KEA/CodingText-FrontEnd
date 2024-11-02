@@ -10,12 +10,10 @@ export default function EditProfilePage() {
 
   return (
     <>
-      <div className="w-full flex flex-col gap-16 px-6 pt-2 overflow-y-auto">
-        {/* 사용자 정보 변경 Form */}
-        <EditProfileFormContainer />
-        {/* 로그아웃 및 회원 탈퇴 */}
-        <SignOutOrDeleteAccount />
-      </div>
+      {/* 사용자 정보 변경 Form */}
+      <EditProfileFormContainer />
+      {/* 로그아웃 및 회원 탈퇴 */}
+      <SignOutOrDeleteAccount />
     </>
   );
 }

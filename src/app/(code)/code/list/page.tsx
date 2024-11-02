@@ -1,12 +1,12 @@
 "use client";
 
-import ListTopBar from "../../_components/ListTopBar";
 import CodeCard from "../../_components/CodeCard";
 import { useEffect, useState } from "react";
 import { usePaginationStore } from "@/app/stores";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import api from "@/app/_api/config";
 import { Code } from "../../_interfaces/interfaces";
+import CodeListTopBar from "../../_components/CodeListTopBar";
 
 export default function CodeListPage() {
   const router = useRouter();
@@ -55,7 +55,7 @@ export default function CodeListPage() {
   return (
     <div className="w-full flex flex-col">
       {/* 문제 리스트 상단바 */}
-      <ListTopBar />
+      <CodeListTopBar />
       {/* 문제 */}
       <div className="w-full flex flex-col divide-y divide-border-1">
         {data.slice((page - 1) * 10, page * 10).map((el) => (

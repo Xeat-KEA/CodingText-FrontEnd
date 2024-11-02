@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { PostCardProps } from "../_interfaces/interfaces";
 import { CommentCountIcon, LikeCountIcon, ReportIcon } from "./Icons";
 import { useState } from "react";
@@ -8,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { useBase64 } from "../_hooks/useBase64";
 import DOMPurify from "isomorphic-dompurify";
 import { useBlogStore } from "../stores";
+import ProfileImgContainer from "./ProfileImgContainer";
 
 export default function PostCard({
   articleId,
@@ -30,8 +30,8 @@ export default function PostCard({
 
   const decodedContent = useBase64("decode", content);
 
-  const {blogId} = useBlogStore();
-  
+  const { blogId } = useBlogStore();
+
   return (
     <Link
       href={`/blog/${blogId}/post/${articleId}`} // 블로그 Id 수정 필요
@@ -51,14 +51,7 @@ export default function PostCard({
               }}
               className="flex gap-2 items-center"
             >
-              <div className="w-6 h-6 rounded-full overflow-hidden flex justify-center items-center border border-border-2">
-                <Image
-                  width="24"
-                  height="24"
-                  src={profileImg}
-                  alt={`${nickName}-profileImg`}
-                />
-              </div>
+              <ProfileImgContainer width={24} height={24} src={profileImg} />
               <span className="text-xs font-semibold text-body">
                 {nickName}
               </span>

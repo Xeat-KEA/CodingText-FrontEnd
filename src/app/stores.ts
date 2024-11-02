@@ -7,10 +7,14 @@ import {
   TabStore,
   TiptapStore,
 } from "./_interfaces/interfaces";
+import { RegisterStore } from "./(admin)/_interfaces/interfaces";
 
 // 코딩테스트 관련 전역변수
 export const useCodingTestStore = create<CodingTestStore>((set) => ({
   // 코딩 관련 전역변수
+  // 문제 제목
+  title: "",
+  setTitle: (newTitle) => set({ title: newTitle }),
   // 언어 설정
   language: undefined,
   setLanguage: (newLanguage) => set({ language: newLanguage }),
@@ -59,16 +63,16 @@ export const useBlogStore = create<BlogStore>((set) => ({
   blogId: 1,
   setBlogId: (id) => set({ blogId: id }),
   categoryId: 0,
-  setCategoryId: (id) => set({categoryId: id}),
+  setCategoryId: (id) => set({ categoryId: id }),
   subCategoryId: 0,
-  setSubCategoryId: (id) => set({subCategoryId: id}),
+  setSubCategoryId: (id) => set({ subCategoryId: id }),
   isOwnBlog: false,
   setIsOwnBlog: (state) => set({ isOwnBlog: state }),
   profile: {
     userId: 0,
-    nickName: 'Anonymous',
-    rank: 'sophomore',
-    profileMessage: 'No introduction provided.',
+    nickName: "Anonymous",
+    rank: "sophomore",
+    profileMessage: "No introduction provided.",
     FollowerCount: 3,
     profileImage: "/profileImg2.png",
     blogProfile: "",
@@ -104,5 +108,11 @@ export const useBlogStore = create<BlogStore>((set) => ({
         ...state.isAddingSubCategory,
         [parentId]: isAdding,
       },
-    })),    
+    })),
+}));
+
+// 문제 등록 여부 저장 전역변수
+export const useRegisterStore = create<RegisterStore>((set) => ({
+  isRegistering: false,
+  setIsRegistering: (state) => set({ isRegistering: state }),
 }));

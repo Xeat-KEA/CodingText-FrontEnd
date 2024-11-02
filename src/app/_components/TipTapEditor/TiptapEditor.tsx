@@ -30,7 +30,7 @@ export default function TiptapEditor() {
   });
 
   return (
-    <div className="flex flex-col w-full h-full border border-border-2 rounded-lg overflow-hidden">
+    <div className="flex flex-col w-full h-full border border-border-2 rounded-lg overflow-hidden cursor-text">
       <ToolBar editor={editor} />
       <EditorContent
         className="w-full h-full overflow-y-auto break-all"

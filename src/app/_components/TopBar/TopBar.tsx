@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import SmSearchBar from "./SmSearchBar";
 import { useOutsideClick } from "@/app/_hooks/useOutsideClick";
 import { TOP_BAR_MENU } from "@/app/_constants/constants";
 import { LogoIcon, NoticeIcon } from "../Icons";
@@ -13,6 +12,8 @@ import Image from "next/image";
 import { ProfileData } from "@/app/_interfaces/interfaces";
 import api from "@/app/_api/config";
 import NoticeCard from "./NoticeCard";
+import SmSearchBar from "../SmSearchBar";
+import ProfileImgContainer from "../ProfileImgContainer";
 
 export default function TopBar() {
   const pathname = usePathname();
@@ -119,7 +120,7 @@ export default function TopBar() {
           <div className="flex items-center gap-6">
             {/* 검색창 */}
             <div className="w-[240px]">
-              <SmSearchBar />
+              <SmSearchBar baseURL="/search" />
             </div>
             {/* 로그인 : 알림, 프로필 / 비로그인 : 로그인 버튼 */}
             {token ? (
@@ -134,16 +135,11 @@ export default function TopBar() {
                   )}
                   <NoticeIcon />
                 </button>
-                <button
-                  ref={profileRef}
-                  className="w-9 h-9 border border-border-2 rounded-full overflow-hidden"
-                  onClick={onProfileClicked}
-                >
-                  <Image
+                <button ref={profileRef} onClick={onProfileClicked}>
+                  <ProfileImgContainer
                     width={36}
                     height={36}
-                    src={"/profileImg1.png"}
-                    alt="profileImg"
+                    src="/profileImg1.png"
                   />
                 </button>
               </>
