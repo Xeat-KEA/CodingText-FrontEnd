@@ -4,11 +4,15 @@ import { useState } from "react";
 import { PostProps } from "../../_interfaces/interfaces"; // 게시물 내용 받기
 
 import { useBase64 } from "@/app/_hooks/useBase64";
+import { Code_Post_Dummy_Data } from "@/app/(admin)/_constants/constants";
 
 const PostContent: React.FC<PostProps> = ({ currentPost }) => {
   const isCodingPost = currentPost !== undefined && currentPost.categoryId === 1;
-  const codeContentDe = useBase64("decode", currentPost.codeContent);
-  const writtenCodeDe = useBase64("decode", currentPost.writtenCode);
+  // 더미데이터 삭제 필요
+  const currentCodingPost = Code_Post_Dummy_Data.find(post => post.postId === Number(currentPost?.postId));
+  // 코딩 게시글일 경우 추가 게시글 정보 받아와서 디코딩
+  const codeContentDe = currentCodingPost && useBase64("decode", currentCodingPost.codeContent);
+  const writtenCodeDe = currentCodingPost && useBase64("decode", currentCodingPost.writtenCode);
   const contentDe = useBase64("decode", currentPost.content);
 
   const [visibleSections, setVisibleSections] = useState({

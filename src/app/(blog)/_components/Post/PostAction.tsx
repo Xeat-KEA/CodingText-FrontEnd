@@ -66,6 +66,7 @@ const PostAction: React.FC<PostProps> = ({ currentPost }) => {
     setSelectedOption(null);
   };
 
+  // 로직 추가 예정
   const onClickDeletePost = (id: number) => {
     setPostToDelete(id);
     setIsDeleteDialogOpen(true);

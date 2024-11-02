@@ -70,7 +70,7 @@ export const useBlogStore = create<BlogStore>((set) => ({
     rank: 'sophomore',
     profileMessage: 'No introduction provided.',
     FollowerCount: 3,
-    profileImage: "/profileImg2.png",
+    profileImg: "/profileImg2.png",
     blogProfile: "",
   },
   setProfile: (profile) => set({ profile }),

@@ -3,11 +3,10 @@ import SubCategoryItem from "./SubCategoryItem";
 import AddCategory from "./AddCategory";
 import { CategoryItemProps } from "../../_interfaces/interfaces";
 import { useBlogStore } from "@/app/stores";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 const CategoryItem: React.FC<CategoryItemProps> = ({
   category,
-  currentPath,
   handleAddCategory,
   handleDeleteCategory,
 }) => {
@@ -22,6 +21,8 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
     setIsAddingSubCategory,
   } = useBlogStore();
   const router = useRouter();
+  const pathname = usePathname();
+  
   const [editCategoryId, setEditCategoryId] = useState<number | null>(null);
   const [editCategoryTitle, setEditCategoryTitle] = useState<string>("");
   const [hoveredCategoryId, setHoveredCategoryId] = useState<boolean>(false);
@@ -109,7 +110,7 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
           <>
             <p
               className={`${
-                currentPath === `/blog/${blogId}/${category.id}`
+                pathname === `/blog/${blogId}/${category.id}`
                   ? "font-bold"
                   : ""
               } cursor-pointer`}
@@ -153,7 +154,7 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
               key={subCategory.id}
               subCategory={subCategory}
               category={category}
-              currentPath={currentPath}
+              currentPath={pathname}
               handleDeleteCategory={handleDeleteCategory}
             />
           ))}

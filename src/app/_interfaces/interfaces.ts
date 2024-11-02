@@ -134,13 +134,14 @@ export interface PostCardProps {
   codeId: number | null;
 }
 
-export interface ProfileData {
-  userId: number;
-  nickName: string;
-  profileImg: string;
-  profileMessage: string;
-  codeLanguage: string;
-}
+// 프로토타입을 위한 임시
+// export interface ProfileData {
+//   userId: number;
+//   nickName: string;
+//   profileImg: string;
+//   profileMessage: string;
+//   codeLanguage: string;
+// }
 
 export interface NoticeCardProps {
   category: string;
@@ -238,7 +239,7 @@ export interface Category {
 
 export interface BlogProfile {
   userId: number;
-  profileImage?: string;
+  profileImg: string;
   nickName: string;
   rank: string;
   profileMessage: string;
