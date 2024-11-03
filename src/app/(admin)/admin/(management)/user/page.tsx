@@ -4,8 +4,8 @@ import UserDetailInfo from "@/app/(admin)/_components/UserDetailInfo";
 import UserListCard from "@/app/(admin)/_components/UserListCard";
 import UserListTopBar from "@/app/(admin)/_components/UserListTopBar";
 import UserSearch from "@/app/(admin)/_components/UserSearch";
-import EditOrCancelBtn from "@/app/_components/EditOrCancelBtn";
 import Pagination from "@/app/_components/Pagination";
+import SaveOrCancelBtn from "@/app/_components/SaveOrCancelBtn";
 import { useSetParams } from "@/app/_hooks/useSetParams";
 import { useEffect, useState } from "react";
 
@@ -47,9 +47,8 @@ export default function UserManagementPage() {
         {selectedId !== -1 && (
           <div className="flex flex-col gap-8 py-8 border-t border-border-2">
             <UserDetailInfo userId={1} />
-            <EditOrCancelBtn
-              editBtn="변경 사항 저장"
-              onEdit={() => {}}
+            <SaveOrCancelBtn
+              saveBtn="변경 사항 저장"
               onCancel={onCancel}
             />
           </div>
