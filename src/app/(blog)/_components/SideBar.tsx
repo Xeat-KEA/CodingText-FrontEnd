@@ -37,22 +37,22 @@ export default function SideBar() {
 
   useEffect(() => {
     // 프로토타입 더미데이터 GET
-    api.get(`/blog/${blogId}`).then((res) => {
-      const profileData = res.data.data
+    // api.get(`/blog/${blogId}`).then((res) => {
+    //   const profileData = res.data.data
 
-      // 추후에 정보 전달 내용 수정 필요
-      const completeProfile = {
-        userId: profileData.userId,
-        nickName: profileData.nickName,
-        rank: 'sophomore',
-        profileMessage: profileData.profileMessage,
-        FollowerCount: 3,
-        profileImage: '/profileImg2.png',
-        blogProfile: profileData.blogProfile,
-      };
+    //   // 추후에 정보 전달 내용 수정 필요
+    //   const completeProfile = {
+    //     userId: profileData.userId,
+    //     nickName: profileData.nickName,
+    //     rank: 'sophomore',
+    //     profileMessage: profileData.profileMessage,
+    //     FollowerCount: 3,
+    //     profileImg: '/profileImg2.png',
+    //     blogProfile: profileData.blogProfile,
+    //   };
 
-      setProfile(completeProfile);
-    })
+    //   setProfile(completeProfile);
+    // })
 
     const userSpecificCategories = User_Specific_Categories.filter(
       (category) => category.blogId === blogId

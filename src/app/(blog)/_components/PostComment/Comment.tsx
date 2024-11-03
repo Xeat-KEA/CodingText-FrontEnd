@@ -6,6 +6,8 @@ import { BpReportIcon, ReplyIcon, SmDeleteIcon } from "../Icons";
 import api from "@/app/_api/config";
 import { useEffect, useState } from "react";
 import { BlogProfile } from "@/app/_interfaces/interfaces";
+import { Comment_Dummy_Data, Profile_Dummy_Data } from "@/app/(admin)/_constants/constants";
+import { usePathname } from "next/navigation";
 
 const Comment: React.FC<CommentProps> = ({
   replyId,
@@ -18,14 +20,20 @@ const Comment: React.FC<CommentProps> = ({
   onDelete,
   onReport,
 }) => {
-  const [profileData, setProfileData] = useState<BlogProfile[]>([]);
+  const pathname = usePathname();
+  const isAdminPage = pathname.includes("/admin/report/");
 
+  const [profileData, setProfileData] = useState<BlogProfile[]>([]);
+  
   useEffect(() => {
-    api.get(`/user-list`).then((res) => {
-      const userData = res.data.data;
-      setProfileData(userData);
-    });
-  }, []);
+    // api.get(`/user-list`).then((res) => {
+    //   const userData = res.data.data
+    //   setProfileData(userData);
+    // })
+
+    setProfileData(Profile_Dummy_Data)
+
+  }, [])
 
   // 댓글 작성자의 프로필
   const userProfile = profileData.find((profile) => profile.userId === userId);
@@ -41,11 +49,11 @@ const Comment: React.FC<CommentProps> = ({
         <div className="flex w-full justify-between items-center">
           <div className="flex gap-2 items-center">
             {/* 프로필 이미지 */}
-            {/* 수정 필요 - userProfile.profileImg && */}
-            {userProfile && (
+            {/* 수정 필요 - 댓글 작성자와 언급된 자 프로필*/}
+            {userProfile?.profileImg && (
               <div className="profile-image w-120 h-120 relative">
                 <Image
-                  src="/profileImg2.png"
+                  src={userProfile.profileImg}
                   alt={`${userProfile?.nickName}의 프로필 이미지`}
                   width={24}
                   height={24}
@@ -71,32 +79,48 @@ const Comment: React.FC<CommentProps> = ({
           )}
           {content}
         </div>
-        <div className="flex w-full h-5 justify-between items-center">
-          <button
-            className="flex items-center gap-1"
-            onClick={() => onReplyClick(replyId, userId)}
-          >
-            <ReplyIcon />
-            <p className="text-black text-xs font-semibold ">답글</p>
-          </button>
-          {isOwnComment ? (
-            <button
-              className="flex items-center gap-1"
-              onClick={() => onDelete(replyId)}
-            >
-              <SmDeleteIcon />
-              <p className="text-red text-xs font-semibold ">삭제</p>
-            </button>
-          ) : (
-            <button
-              className="flex items-center gap-1"
-              onClick={() => onReport(replyId)}
-            >
-              <BpReportIcon />
-              <p className="text-red text-xs font-semibold ">신고</p>
-            </button>
-          )}
-        </div>
+
+        {isAdminPage
+          ? (
+            <div className="flex w-full h-5 justify-end items-center">
+              <button
+                className="flex items-center gap-1"
+                onClick={() => onDelete(replyId)}
+              >
+                <SmDeleteIcon />
+                <p className="text-red text-xs font-semibold ">삭제</p>
+              </button>
+            </div>
+          )
+          : (
+            <div className="flex w-full h-5 justify-between items-center">
+              <button
+                className="flex items-center gap-1"
+                onClick={() => onReplyClick(replyId, userId)}
+              >
+                <ReplyIcon />
+                <p className="text-black text-xs font-semibold ">답글</p>
+              </button>
+              {isOwnComment ? (
+                <button
+                  className="flex items-center gap-1"
+                  onClick={() => onDelete(replyId)}
+                >
+                  <SmDeleteIcon />
+                  <p className="text-red text-xs font-semibold ">삭제</p>
+                </button>
+              ) : (
+                <button
+                  className="flex items-center gap-1"
+                  onClick={() => onReport(replyId)}
+                >
+                  <BpReportIcon />
+                  <p className="text-red text-xs font-semibold ">신고</p>
+                </button>
+              )}
+            </div>
+          )
+        }
       </div>
     </div>
   );

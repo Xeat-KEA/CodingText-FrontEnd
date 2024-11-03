@@ -8,7 +8,6 @@ export interface AddCategoryProps {
 
 export interface CategoryItemProps {
   category: Category;
-  currentPath: string;
   handleAddCategory: (title: string, parentId?: number) => void;
   handleDeleteCategory: (
     categoryId: number,
@@ -71,7 +70,7 @@ export interface CommentProps {
 }
 
 export interface PostProps {
-  currentPost: CompleteArticle;
+  currentPost: BlogPost;
   currentCategory?: Category;
   currentSubCategory?: SubCategory;
 }

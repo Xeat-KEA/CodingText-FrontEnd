@@ -1,23 +1,27 @@
-import { useState } from "react";
-import { 
-    CommentForm, 
-    CompleteArticle 
+import { useEffect, useState } from "react";
+import {
+    BlogPost,
+    CommentForm,
+    CompleteArticle
 } from "@/app/(blog)/_interfaces/interfaces";
-import { 
-    loggedInUserId, 
-    REPORT_REASONS, 
+import {
+    loggedInUserId,
+    REPORT_REASONS,
 } from "@/app/(blog)/_constants/constants";
 import CommentInput from "@/app/(blog)/_components/PostComment/CommentInput";
 import Comment from "@/app/(blog)/_components/PostComment/Comment";
 import Dialog from "@/app/_components/Dialog";
 import { DialogCheckIcon, DialogReportIcon } from "@/app/_components/Icons";
 import DropDown from "@/app/_components/DropDown";
+import { useParams, usePathname } from "next/navigation";
+import { Comment_Dummy_Data, Post_Dummy_Data, Report_Dummy_Data } from "@/app/(admin)/_constants/constants";
 
 // 추후에 게시글 정보 전달 (또는 추가)
 
 export default function CommentContainer() {
+    const params = useParams();
 
-    const [currentPost, setCurrentPost] = useState<CompleteArticle | null>(null);
+    const [currentPost, setCurrentPost] = useState<BlogPost | null>(null);
 
     const [comments, setComments] = useState<CommentForm[]>([]);
     const [replyParentId, setReplyParentId] = useState<number | null>(null);
@@ -31,6 +35,16 @@ export default function CommentContainer() {
     const [customInput, setCustomInput] = useState("");
     const [isReportDialogOpen, setIsReportDialogOpen] = useState(false);
     const [isReportConfirmDialogOpen, setIsReportConfirmDialogOpen] = useState(false);
+
+    const pathname = usePathname();
+    const isAdminPage = pathname.includes("/admin/report/");
+
+    useEffect(() => {
+        const reportPost = Report_Dummy_Data.find((report) => report.reportId === Number(params.id))
+        const currentPostId = Post_Dummy_Data.find((post) => post.blogId === reportPost?.reportedBlogId && post.postId === reportPost.reportedPostId)?.postId
+        const commentsList = Comment_Dummy_Data.filter(comment => comment.postId === currentPostId);
+        setComments(commentsList);
+    }, [params.id]);
 
     // 답글 버튼 클릭
     const onClickReply = (commentId: number | null, userId: number | null) => {
@@ -70,9 +84,13 @@ export default function CommentContainer() {
 
     const confirmDeleteComment = () => {
         if (commentToDelete === null) return;
-        setComments((prevComments) =>
-            prevComments.filter((comment) => comment.replyId !== commentToDelete)
+        setComments((prevComments) => 
+            prevComments.filter((comment) => 
+                comment.replyId !== commentToDelete && 
+                comment.parentReplyId !== commentToDelete // 댓글과 연결된 답글도 함께 필터링
+            )
         );
+    
         setIsDeleteDialogOpen(false);
         setCommentToDelete(null);
     };
@@ -103,12 +121,14 @@ export default function CommentContainer() {
             <p className="text-black text-lg">댓글 {comments.length}개</p>
 
             {/* 댓글 입력 */}
-            <CommentInput
-                target={replyParentId ? "reply" : "comment"}
-                onSubmit={submitComment}
-                mentionId={mentionId}
-                onCancel={onClickCancel}
-            />
+            {!isAdminPage &&
+                <CommentInput
+                    target={replyParentId ? "reply" : "comment"}
+                    onSubmit={submitComment}
+                    mentionId={mentionId}
+                    onCancel={onClickCancel}
+                />
+            }
 
             {comments
                 .filter((comment) => !comment.parentReplyId)
