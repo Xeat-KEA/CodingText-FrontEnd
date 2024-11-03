@@ -1,5 +1,5 @@
-import Image from "next/image";
 import { EditProfileImgProps } from "../_interfaces/interfaces";
+import ProfileImgContainer from "@/app/_components/ProfileImgContainer";
 
 export default function EditProfileImg({
   img,
@@ -9,16 +9,7 @@ export default function EditProfileImg({
   return (
     <div className="flex flex-col gap-3">
       <span className="edit-title">프로필 사진</span>
-      <div className="relative w-[120px] h-[120px] border border-border-2 rounded-full flex justify-center items-center overflow-hidden">
-        <Image
-          fill
-          sizes="100%"
-          src={img}
-          alt="myProfileImg"
-          priority
-          className="object-cover"
-        />
-      </div>
+      <ProfileImgContainer width={120} height={120} src={img} />
       <div className="flex flex-col gap-1">
         {/* 기본 프로필에서 선택 */}
         <button

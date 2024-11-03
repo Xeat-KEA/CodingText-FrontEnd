@@ -57,6 +57,7 @@ export interface MultiSelectionDropDownProps {
 export interface DialogProps {
   icon?: JSX.Element;
   title?: string;
+  isTitleSm?: boolean;
   content?: string;
   isWarning?: boolean;
   backBtn: string;
@@ -96,6 +97,17 @@ export interface CategoryDropDownProps {
 
 export interface CheckBoxIconProps {
   isActive?: boolean;
+}
+
+export interface ProfileImgContainerProps {
+  width: number;
+  height: number;
+  src?: string;
+}
+
+export interface SaveOrCancelBtnProps {
+  saveBtn: string;
+  onCancel: () => void;
 }
 
 export interface Post {
@@ -163,6 +175,25 @@ export interface SmBackBtnProps {
   onClick: () => void;
 }
 
+export interface IconBtnProps {
+  type: "edit" | "delete" | "report";
+  content: string;
+  onClick: () => void;
+}
+
+export interface SmCheckBoxBtnProps {
+  isActive: boolean;
+  onClick: () => void;
+}
+
+export interface CodeDetail {
+  title: string;
+  difficulty: string;
+  algorithm: string;
+  content: string;
+  testcase: any;
+}
+
 // 전역 변수 관련 Interface
 export interface TabStore {
   tab: string;
@@ -172,6 +203,8 @@ export interface TabStore {
 // 코딩테스트 관련 Interface
 export interface CodingTestStore {
   // 코딩 관련 state
+  title: string;
+  setTitle: (newTitle: string) => void;
   language: Selection | undefined;
   setLanguage: (newLanguage: Selection) => void;
   hasSolved: boolean;

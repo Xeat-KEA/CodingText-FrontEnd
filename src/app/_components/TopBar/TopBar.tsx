@@ -13,6 +13,7 @@ import { ProfileData } from "@/app/_interfaces/interfaces";
 import api from "@/app/_api/config";
 import NoticeCard from "./NoticeCard";
 import SmSearchBar from "../SmSearchBar";
+import ProfileImgContainer from "../ProfileImgContainer";
 
 export default function TopBar() {
   const pathname = usePathname();
@@ -134,16 +135,11 @@ export default function TopBar() {
                   )}
                   <NoticeIcon />
                 </button>
-                <button
-                  ref={profileRef}
-                  className="w-9 h-9 border border-border-2 rounded-full overflow-hidden"
-                  onClick={onProfileClicked}
-                >
-                  <Image
+                <button ref={profileRef} onClick={onProfileClicked}>
+                  <ProfileImgContainer
                     width={36}
                     height={36}
-                    src={"/profileImg1.png"}
-                    alt="profileImg"
+                    src="/profileImg1.png"
                   />
                 </button>
               </>

@@ -40,7 +40,7 @@ export default function Pagination() {
                 onClick={() => {
                   setPage(el);
                 }}
-                className={`w-[18px] h-[18px] flex justify-center items-center text-xs ${
+                className={`w-[18px] h-[18px] flex-center text-xs ${
                   el === page ? "font-bold text-black" : "text-disabled"
                 }`}
               >

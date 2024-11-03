@@ -4,9 +4,9 @@ import { useState } from "react"; // useState 훅 임포트
 import Dialog from "@/app/_components/Dialog";
 import { DialogCheckIcon, DialogReportIcon } from "@/app/_components/Icons";
 import Link from "next/link";
-import DropDown from "@/app/_components/DropDown";
 import { useBlogStore } from "@/app/stores";
 import { REPORT_REASONS } from "../_constants/constants";
+import DropDown from "@/app/_components/DropDown";
 
 export default function BlogProfile() {
   // 전역 변수
@@ -16,7 +16,8 @@ export default function BlogProfile() {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [customInput, setCustomInput] = useState("");
   const [isReportDialogOpen, setIsReportDialogOpen] = useState(false);
-  const [isReportConfirmDialogOpen, setIsReportConfirmDialogOpen] = useState(false);
+  const [isReportConfirmDialogOpen, setIsReportConfirmDialogOpen] =
+    useState(false);
 
   const onClickFollow = () => {
     if (!profile) return;

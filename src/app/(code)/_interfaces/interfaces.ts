@@ -18,9 +18,9 @@ export interface ProfileInfoProps {
 export interface Code {
   codeId: number;
   title: string;
-  difficulty: number;
-  participants: number;
-  rate: number;
+  difficulty?: number;
+  participants?: number;
+  rate?: number;
   createdAt?: string;
 }
 

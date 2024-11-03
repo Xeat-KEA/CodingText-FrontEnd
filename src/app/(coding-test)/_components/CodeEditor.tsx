@@ -41,6 +41,8 @@ export default function CodeEditor({
         setLang(langs.javascript());
       } else if (language?.selection === "c") {
         setLang(langs.cpp());
+      } else if (language?.selection === "json") {
+        setLang(langs.json());
       }
 
       setTheme(xcodeDark);
@@ -65,11 +67,7 @@ export default function CodeEditor({
   }, [language]);
 
   if (!lang || !theme || editorExtensions.length === 0) {
-    return (
-      <div className="w-full h-full flex justify-center items-center">
-        로딩 중이에요!
-      </div>
-    ); // 확장이 로드될 때까지 로딩 상태를 표시
+    return <div className="w-full h-full flex-center">로딩 중이에요!</div>; // 확장이 로드될 때까지 로딩 상태를 표시
   }
 
   return (

@@ -4,6 +4,7 @@ import { DialogProps } from "../_interfaces/interfaces";
 export default function Dialog({
   icon,
   title,
+  isTitleSm,
   content,
   isWarning,
   backBtn,
@@ -19,7 +20,7 @@ export default function Dialog({
   const ref = !blockOutsideClick ? useOutsideClick(onBackBtnClick) : null;
   return (
     <div className="overlay">
-      <div className="absolute w-full h-full px-12 flex justify-center items-center">
+      <div className="absolute w-full h-full px-12 flex-center">
         <div
           ref={ref}
           className="w-full max-w-[400px] flex flex-col gap-6 bg-white p-6 rounded-2xl shadow-1"
@@ -27,7 +28,11 @@ export default function Dialog({
           <div className="flex flex-col items-center gap-4 py-6">
             {icon && icon}
             <div className="flex flex-col gap-2 text-center">
-              <span className="whitespace-pre-wrap text-black text-xl font-semibold">
+              <span
+                className={`whitespace-pre-wrap text-black font-semibold ${
+                  isTitleSm ? "text-lg" : "text-xl"
+                }`}
+              >
                 {title}
               </span>
               <span

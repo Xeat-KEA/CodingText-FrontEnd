@@ -8,10 +8,7 @@ import { useRouter } from "next/navigation";
 
 export default function SignUpFormContainer() {
   const router = useRouter();
-  const { register, handleSubmit, setValue } = useForm<SignUpForm>();
-  const [selectedLang, setSelectedLang] = useState("");
-  const [selectedProfileImg, setSelectedProfileImg] =
-    useState("/profileImg1.png");
+  const { register, handleSubmit, setValue, watch } = useForm<SignUpForm>();
 
   const onValid = (data: SignUpForm) => {
     // 데이터 post 및 validation 필요
@@ -37,12 +34,11 @@ export default function SignUpFormContainer() {
       <div className="flex flex-col gap-2">
         <span className="text-sm text-black">기본 프로그래밍 언어</span>
         <DropDown
-          selection={selectedLang}
+          selection={watch("lang")}
           placeholder="언어를 선택해주세요"
           list={PROGRAMMING_LANGUAGES}
           onSelectionClick={(selected) => {
-            setSelectedLang(selected.content);
-            setValue("lang", selected.selection);
+            setValue("lang", selected.content);
           }}
         />
       </div>
@@ -50,9 +46,8 @@ export default function SignUpFormContainer() {
       <div className="flex flex-col gap-2">
         <span className="text-sm text-black">프로필 사진 선택</span>
         <ProfileImgSelection
-          seletedImg={selectedProfileImg}
+          seletedImg={watch("profileImg")}
           onSelectionClick={(selected) => {
-            setSelectedProfileImg(selected);
             setValue("profileImg", selected);
           }}
         />
