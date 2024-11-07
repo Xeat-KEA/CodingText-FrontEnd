@@ -13,6 +13,7 @@ export interface MainBoardProps {
 }
 
 export interface MainPost {
+  postId: number;
   profileImg: string;
   username: string;
   userId: number;
@@ -31,4 +32,20 @@ export interface MainPostsProps {
   subTitle?: string;
   url?: string;
   sliderList: MainPost[];
+}
+
+export interface MainCode {
+  codeNum: number;
+  difficulty: 1 | 2 | 3 | 4 | 5;
+  title: string;
+  algorithm: string;
+  rate: number;
+  participants: number;
+}
+
+export interface MainCodesProps {
+  title: string;
+  subTitle?: string;
+  url?: string;
+  sliderList: MainCode[];
 }

@@ -3,8 +3,11 @@ import ProfileImgContainer from "@/app/_components/ProfileImgContainer";
 import Medal from "./Medal";
 import { useGetYMD } from "@/app/_hooks/useGetYMD";
 import { MainPost } from "../_interfaces/interfaces";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function MainPostCard({
+  postId,
   profileImg,
   username,
   codeNum,
@@ -16,8 +19,10 @@ export default function MainPostCard({
   createdAt,
   ranking,
 }: MainPost) {
+  const router = useRouter();
   return (
-    <div className="main-slider-card">
+    <Link href={`/blog/${postId}`} className="main-post-card" scroll={false}>
+      {/* 상단 컨테이너 */}
       <div className="post-card-top-container">
         <div className="post-card-profile-container">
           <ProfileImgContainer width={24} height={24} src={profileImg} />
@@ -28,21 +33,36 @@ export default function MainPostCard({
           <span className="post-card-created-at">{useGetYMD(createdAt)}</span>
         )}
       </div>
+      {/* 중단 컨테이너 */}
       <div className="post-card-middle-container">
         <div className="post-card-content-container">
+          {/* (코드번호) 제목 */}
           <span className="post-card-title">
             {codeNum && (
               <>
-                <button className="post-card-code-number">#123</button>
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    router.push(`/search?keyword=${codeNum}&category=CODE`, {
+                      scroll: false,
+                    });
+                  }}
+                  className="post-card-code-number"
+                >
+                  #123
+                </button>
                 &nbsp;
               </>
             )}
             {title}
           </span>
+          {/* 게시글 내용 */}
           <span className="post-card-content">{content}</span>
         </div>
       </div>
+      {/* 하단 컨테이너 */}
       <div className="post-card-bottom-container">
+        {/* 좋아요 / 댓글 개수 */}
         <div className="post-card-counts-container">
           <div className="post-card-counts">
             <LikeCountIcon />
@@ -57,8 +77,14 @@ export default function MainPostCard({
             </span>
           </div>
         </div>
-        <span className="post-card-views">조회수 {views.toLocaleString()}</span>
+        {/* 조회수 */}
+        <span className="post-card-views">
+          조회수&nbsp;
+          <span className="post-card-views-number">
+            {views.toLocaleString()}
+          </span>
+        </span>
       </div>
-    </div>
+    </Link>
   );
 }

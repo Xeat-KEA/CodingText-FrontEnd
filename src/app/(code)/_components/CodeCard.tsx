@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { Code } from "../_interfaces/interfaces";
-import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useCheckToken } from "@/app/_hooks/useCheckToken";
+import { useSetDifficultyColor } from "@/app/_hooks/useSetDifficultyColor";
 
 export default function CodeCard({
   codeId,
@@ -15,59 +15,40 @@ export default function CodeCard({
 
   const router = useRouter();
 
-  const [isMounted, setisMounted] = useState(false);
+  const difficultyColor = useSetDifficultyColor(difficulty);
 
-  // 난이도 별 text 색상 변경
-  const [difficultyColor, setDifficultyColor] = useState("");
-  useEffect(() => {
-    if (Number(difficulty) === 1) {
-      setDifficultyColor("text-blue");
-    } else if (Number(difficulty) === 2) {
-      setDifficultyColor("text-green");
-    } else if (Number(difficulty) === 3) {
-      setDifficultyColor("text-yellow");
-    } else if (Number(difficulty) === 4) {
-      setDifficultyColor("text-orange");
-    } else if (Number(difficulty) === 5) {
-      setDifficultyColor("text-red");
-    }
-    setisMounted(true);
-  }, []);
   return (
-    isMounted &&
-    difficultyColor && (
-      <Link
-        href={token ? `/coding-test/${codeId}` : "/sign-in"}
-        className="w-full px-2 py-4 flex justify-between items-center gap-4"
-      >
-        <div className="w-full flex gap-2 items-center">
-          <span
-            onClick={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              router.push(
-                `/search?keyword=${codeId}&tab=POST&category=CODE&order=ACCURACY`,
-                { scroll: false }
-              );
-            }}
-            className="w-[60px] text-xs font-semibold text-primary-1 list-text hover:underline"
-          >
-            #{codeId}
-          </span>
-          <div className="w-full grow text-sm text-black">{title}</div>
+    <Link
+      href={token ? `/coding-test/${codeId}` : "/sign-in"}
+      className="w-full px-2 py-4 flex justify-between items-center gap-4"
+    >
+      <div className="w-full flex gap-2 items-center">
+        <span
+          onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            router.push(
+              `/search?keyword=${codeId}&tab=POST&category=CODE&order=ACCURACY`,
+              { scroll: false }
+            );
+          }}
+          className="w-[60px] code-card-code-number list-text"
+        >
+          #{codeId}
+        </span>
+        <div className="w-full grow text-sm text-black">{title}</div>
+      </div>
+      <div className="flex gap-8">
+        <div
+          className={`w-10 code-card-difficulty list-text ${difficultyColor}`}
+        >
+          {difficulty}단계
         </div>
-        <div className="flex gap-8">
-          <div
-            className={`w-10 text-xs font-bold list-text ${difficultyColor}`}
-          >
-            {difficulty}단계
-          </div>
-          <div className="w-16 text-xs text-black list-text">
-            {participants}명
-          </div>
-          <div className="w-10 text-xs text-black list-text">{rate}%</div>
+        <div className="w-16 text-xs text-black list-text">
+          {participants}명
         </div>
-      </Link>
-    )
+        <div className="w-10 text-xs text-black list-text">{rate}%</div>
+      </div>
+    </Link>
   );
 }

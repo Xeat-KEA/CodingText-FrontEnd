@@ -1,10 +1,11 @@
-import { SliderProps } from "../_interfaces/interfaces";
+import { MainCodesProps, MainPostsProps } from "../_interfaces/interfaces";
 
-export const dummytrending: SliderProps = {
+export const dummytrending: MainPostsProps = {
   title: "이번 주 인기 게시글",
   subTitle: "이번 주 인기 게시글을 확인해보세요",
   sliderList: [
     {
+      postId: 1,
       profileImg: "/profileImg1.png",
       username: "사용자명1",
       userId: 1,
@@ -17,6 +18,7 @@ export const dummytrending: SliderProps = {
       ranking: 1,
     },
     {
+      postId: 2,
       profileImg: "/profileImg2.png",
       username: "사용자명2",
       userId: 2,
@@ -29,6 +31,7 @@ export const dummytrending: SliderProps = {
       ranking: 2,
     },
     {
+      postId: 3,
       profileImg: "/profileImg3.png",
       username: "사용자명3",
       userId: 3,
@@ -43,12 +46,13 @@ export const dummytrending: SliderProps = {
   ],
 };
 
-export const dummycommunity: SliderProps = {
+export const dummycommunity: MainPostsProps = {
   title: "커뮤니티",
   subTitle: "요즘 개발자의 관심사를 알아보세요",
   url: "/",
   sliderList: [
     {
+      postId: 1,
       profileImg: "/profileImg1.png",
       username: "사용자명1",
       userId: 1,
@@ -60,6 +64,7 @@ export const dummycommunity: SliderProps = {
       createdAt: "2024-11-07",
     },
     {
+      postId: 2,
       profileImg: "/profileImg2.png",
       username: "사용자명2",
       userId: 2,
@@ -71,6 +76,7 @@ export const dummycommunity: SliderProps = {
       createdAt: "2024-11-07",
     },
     {
+      postId: 3,
       profileImg: "/profileImg3.png",
       username: "사용자명3",
       userId: 3,
@@ -84,11 +90,12 @@ export const dummycommunity: SliderProps = {
   ],
 };
 
-export const dummycodingpost: SliderProps = {
+export const dummycodingpost: MainPostsProps = {
   title: "코딩 테스트 게시글",
   subTitle: "다른 사람들의 문제 풀이를 살펴보세요",
   sliderList: [
     {
+      postId: 1,
       profileImg: "/profileImg1.png",
       username: "사용자명1",
       userId: 1,
@@ -101,6 +108,7 @@ export const dummycodingpost: SliderProps = {
       createdAt: "2024-11-07",
     },
     {
+      postId: 2,
       profileImg: "/profileImg2.png",
       username: "사용자명2",
       userId: 2,
@@ -113,6 +121,7 @@ export const dummycodingpost: SliderProps = {
       createdAt: "2024-11-07",
     },
     {
+      postId: 3,
       profileImg: "/profileImg3.png",
       username: "사용자명3",
       userId: 3,
@@ -127,44 +136,41 @@ export const dummycodingpost: SliderProps = {
   ],
 };
 
-export const dummycodes: SliderProps = {
+export const dummycodes: MainCodesProps = {
   title: "새롭게 추가된 문제를 확인해보세요",
+  url: "/code/list",
   sliderList: [
     {
-      profileImg: "/profileImg1.png",
-      username: "사용자명1",
-      userId: 1,
-      title: "게시글1",
-      content: "게시글 내용1",
-      likeCounts: 121,
-      commentCounts: 15,
-      views: 1962,
-      createdAt: "2024-11-07",
-      ranking: 1,
+      codeNum: 1,
+      title: "문제 1",
+      algorithm: "입출력",
+      difficulty: 1,
+      rate: 92,
+      participants: 1522,
     },
     {
-      profileImg: "/profileImg2.png",
-      username: "사용자명2",
-      userId: 2,
-      title: "게시글2",
-      content: "게시글 내용2",
-      likeCounts: 121,
-      commentCounts: 15,
-      views: 1962,
-      createdAt: "2024-11-07",
-      ranking: 2,
+      codeNum: 2,
+      title: "문제 2",
+      algorithm: "함수",
+      difficulty: 3,
+      rate: 88,
+      participants: 1522,
     },
     {
-      profileImg: "/profileImg3.png",
-      username: "사용자명3",
-      userId: 3,
-      title: "게시글3",
-      content: "게시글 내용3",
-      likeCounts: 121,
-      commentCounts: 15,
-      views: 1962,
-      createdAt: "2024-11-07",
-      ranking: 3,
+      codeNum: 3,
+      title: "문제 3",
+      algorithm: "다익스트라",
+      difficulty: 5,
+      rate: 81,
+      participants: 1522,
+    },
+    {
+      codeNum: 4,
+      title: "문제 4",
+      algorithm: "입출력",
+      difficulty: 2,
+      rate: 90,
+      participants: 1522,
     },
   ],
 };

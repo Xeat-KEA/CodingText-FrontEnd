@@ -10,18 +10,21 @@ export default function MainPosts({
 }: MainPostsProps) {
   return (
     <div className="main-container">
+      {/* 게시글 목록 제목 / 설명 */}
       <div className="main-text-container">
-        <div className="flex items-center gap-2">
+        <div className="main-title-container">
           <span className="main-title">{title}</span>
           {url && <MoreContentArrowIcon />}
         </div>
         {subTitle && <span className="main-sub-title">{subTitle}</span>}
       </div>
-      <div className="main-slider-container">
+      {/* 게시글 목록 */}
+      <div className="main-posts-container">
         {sliderList &&
-          sliderList.map((el, index) => (
+          sliderList.map((el) => (
             <MainPostCard
-              key={index}
+              key={el.postId}
+              postId={el.postId}
               profileImg={el.profileImg}
               username={el.username}
               userId={el.userId}

@@ -5,11 +5,13 @@ import TopBar from "../_components/TopBar/TopBar";
 import { useCheckToken } from "../_hooks/useCheckToken";
 import MainBanner from "./_components/MainBanner";
 import {
+  dummycodes,
   dummycodingpost,
   dummycommunity,
   dummytrending,
 } from "./_constants/constants";
 import MainPosts from "./_components/MainPosts";
+import MainCodes from "./_components/MainCodes";
 
 export default function Home() {
   // 로그인 여부 파악
@@ -40,6 +42,12 @@ export default function Home() {
             subTitle={dummycodingpost.subTitle}
             url={dummycommunity.url}
             sliderList={dummycodingpost.sliderList}
+          />
+          {/* 최신 코드 목록 */}
+          <MainCodes
+            title={dummycodes.title}
+            url={dummycodes.url}
+            sliderList={dummycodes.sliderList}
           />
         </div>
       </div>

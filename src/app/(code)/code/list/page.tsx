@@ -31,7 +31,16 @@ export default function CodeListPage() {
   // 코드 필터 변화 감지 후 문제 리스트 다시 GET 하는 과정 필요
 
   // 프로토타입 API 문제목록 GET
-  const [data, setData] = useState<Code[]>([]);
+  const [data, setData] = useState<Code[]>([
+    {
+      codeId: 1,
+      title: "string;",
+      difficulty: 1,
+      participants: 123,
+      rate: 124,
+      createdAt: "2024-11-04",
+    },
+  ]);
   useEffect(() => {
     api.get("/code-list").then((res) => {
       const result: Code[] = res.data.data.map((el: Code) => ({
