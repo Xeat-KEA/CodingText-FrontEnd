@@ -121,17 +121,13 @@ textarea {
   .main-sub-title {
     @apply text-body;
   }
-  /* 메인 페이지 슬라이더 상위 컨테이너 */
-  .main-slider-container {
+  /* 메인 페이지 게시글 상위 컨테이너 */
+  .main-posts-container {
     @apply relative md:grid md:grid-cols-3 gap-6 flex flex-col;
   }
   /* 메인 페이지 슬라이더 카드 */
-  .main-slider-card {
+  .main-post-card {
     @apply relative w-full h-[200px] p-6 bg-primary-2 rounded-xl;
-  }
-  /* 메인 페이지 슬라이더 버튼 */
-  .main-slider-btn {
-    @apply absolute top-1/2 -translate-y-1/2;
   }
 
   /* 로그인 / 회원가입 페이지 관련 */
