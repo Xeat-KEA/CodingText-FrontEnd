@@ -50,7 +50,7 @@ export default function CodeCard({
                 { scroll: false }
               );
             }}
-            className="w-[60px] text-xs font-semibold text-primary list-text hover:underline"
+            className="w-[60px] text-xs font-semibold text-primary-1 list-text hover:underline"
           >
             #{codeId}
           </span>

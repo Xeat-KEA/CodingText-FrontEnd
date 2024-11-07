@@ -20,7 +20,7 @@ export default function SelectionBar({ menuList }: SelectionBarProps) {
             <span
               className={`flex items-center text-sm text-black  h-full ${
                 searchParams.get("tab") === el.selection &&
-                "font-bold border-b-[3px] border-primary pt-[3px]"
+                "font-bold border-b-[3px] border-primary-1 pt-[3px]"
               }`}
             >
               {el.content}

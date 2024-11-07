@@ -59,7 +59,7 @@ export default function MultiSelectionDropDown({
                     ?.split(",")
                     .some((item) => item === el.selection)
                     ? "text-disabled"
-                    : "text-primary"
+                    : "text-primary-1"
                 }
               >
                 <MultiSelectionCheckIcon />

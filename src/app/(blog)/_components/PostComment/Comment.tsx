@@ -6,7 +6,10 @@ import { BpReportIcon, ReplyIcon, SmDeleteIcon } from "../Icons";
 import api from "@/app/_api/config";
 import { useEffect, useState } from "react";
 import { BlogProfile } from "@/app/_interfaces/interfaces";
-import { Comment_Dummy_Data, Profile_Dummy_Data } from "@/app/(admin)/_constants/constants";
+import {
+  Comment_Dummy_Data,
+  Profile_Dummy_Data,
+} from "@/app/(admin)/_constants/constants";
 import { usePathname } from "next/navigation";
 
 const Comment: React.FC<CommentProps> = ({
@@ -24,16 +27,15 @@ const Comment: React.FC<CommentProps> = ({
   const isAdminPage = pathname.includes("/admin/report/");
 
   const [profileData, setProfileData] = useState<BlogProfile[]>([]);
-  
+
   useEffect(() => {
     // api.get(`/user-list`).then((res) => {
     //   const userData = res.data.data
     //   setProfileData(userData);
     // })
 
-    setProfileData(Profile_Dummy_Data)
-
-  }, [])
+    setProfileData(Profile_Dummy_Data);
+  }, []);
 
   // 댓글 작성자의 프로필
   const userProfile = profileData.find((profile) => profile.userId === userId);
@@ -73,16 +75,33 @@ const Comment: React.FC<CommentProps> = ({
 
         <div className="text-sm text-body font-regular">
           {mentionProfile && (
-            <p className="text-sm text-primary font-semibold">
+            <p className="text-sm text-primary-1 font-semibold">
               @{mentionProfile.nickName}
             </p>
           )}
           {content}
         </div>
 
-        {isAdminPage
-          ? (
-            <div className="flex w-full h-5 justify-end items-center">
+        {isAdminPage ? (
+          <div className="flex w-full h-5 justify-end items-center">
+            <button
+              className="flex items-center gap-1"
+              onClick={() => onDelete(replyId)}
+            >
+              <SmDeleteIcon />
+              <p className="text-red text-xs font-semibold ">삭제</p>
+            </button>
+          </div>
+        ) : (
+          <div className="flex w-full h-5 justify-between items-center">
+            <button
+              className="flex items-center gap-1"
+              onClick={() => onReplyClick(replyId, userId)}
+            >
+              <ReplyIcon />
+              <p className="text-black text-xs font-semibold ">답글</p>
+            </button>
+            {isOwnComment ? (
               <button
                 className="flex items-center gap-1"
                 onClick={() => onDelete(replyId)}
@@ -90,37 +109,17 @@ const Comment: React.FC<CommentProps> = ({
                 <SmDeleteIcon />
                 <p className="text-red text-xs font-semibold ">삭제</p>
               </button>
-            </div>
-          )
-          : (
-            <div className="flex w-full h-5 justify-between items-center">
+            ) : (
               <button
                 className="flex items-center gap-1"
-                onClick={() => onReplyClick(replyId, userId)}
+                onClick={() => onReport(replyId)}
               >
-                <ReplyIcon />
-                <p className="text-black text-xs font-semibold ">답글</p>
+                <BpReportIcon />
+                <p className="text-red text-xs font-semibold ">신고</p>
               </button>
-              {isOwnComment ? (
-                <button
-                  className="flex items-center gap-1"
-                  onClick={() => onDelete(replyId)}
-                >
-                  <SmDeleteIcon />
-                  <p className="text-red text-xs font-semibold ">삭제</p>
-                </button>
-              ) : (
-                <button
-                  className="flex items-center gap-1"
-                  onClick={() => onReport(replyId)}
-                >
-                  <BpReportIcon />
-                  <p className="text-red text-xs font-semibold ">신고</p>
-                </button>
-              )}
-            </div>
-          )
-        }
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

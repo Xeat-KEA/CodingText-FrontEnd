@@ -11,7 +11,7 @@ export default function IconBtn({ type, content, onClick }: IconBtnProps) {
       {type === "report" && <ReportIcon />}
       <span
         className={`text-xs font-semibold whitespace-nowrap ${
-          type === "edit" ? "text-primary" : "text-red"
+          type === "edit" ? "text-primary-1" : "text-red"
         }`}
       >
         {content}

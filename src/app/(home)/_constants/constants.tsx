@@ -1,22 +1,170 @@
-import {
-  BannerBubble1,
-  BannerBubble2,
-  BannerBubble3,
-} from "../_components/Icons";
+import { SliderProps } from "../_interfaces/interfaces";
 
-export const BANNER_CARD_LIST = [
-  {
-    content: "문제를 풀며 궁금한 점을\nChatGPT에게 물어보세요!",
-    bubble: <BannerBubble1 />,
-  },
-  {
-    content: "ChatGPT가 질문에\n친절하게 답해줄거에요!",
-    bubble: <BannerBubble2 />,
-  },
-  {
-    content: "새로 배운 내용을 정리해\n블로그를 작성해보세요!",
-    bubble: <BannerBubble3 />,
-  },
-];
+export const dummytrending: SliderProps = {
+  title: "이번 주 인기 게시글",
+  subTitle: "이번 주 인기 게시글을 확인해보세요",
+  sliderList: [
+    {
+      profileImg: "/profileImg1.png",
+      username: "사용자명1",
+      userId: 1,
+      title: "게시글1",
+      content: "게시글 내용1",
+      likeCounts: 121,
+      commentCounts: 15,
+      views: 1962,
+      createdAt: "2024-11-07",
+      ranking: 1,
+    },
+    {
+      profileImg: "/profileImg2.png",
+      username: "사용자명2",
+      userId: 2,
+      title: "게시글2",
+      content: "게시글 내용2",
+      likeCounts: 121,
+      commentCounts: 15,
+      views: 1962,
+      createdAt: "2024-11-07",
+      ranking: 2,
+    },
+    {
+      profileImg: "/profileImg3.png",
+      username: "사용자명3",
+      userId: 3,
+      title: "게시글3",
+      content: "게시글 내용3",
+      likeCounts: 121,
+      commentCounts: 15,
+      views: 1962,
+      createdAt: "2024-11-07",
+      ranking: 3,
+    },
+  ],
+};
 
-export const BOARD_TAB_LIST = ["전체", "코딩테스트", "일반"];
+export const dummycommunity: SliderProps = {
+  title: "커뮤니티",
+  subTitle: "요즘 개발자의 관심사를 알아보세요",
+  url: "/",
+  sliderList: [
+    {
+      profileImg: "/profileImg1.png",
+      username: "사용자명1",
+      userId: 1,
+      title: "게시글1",
+      content: "게시글 내용1",
+      likeCounts: 121,
+      commentCounts: 15,
+      views: 1962,
+      createdAt: "2024-11-07",
+    },
+    {
+      profileImg: "/profileImg2.png",
+      username: "사용자명2",
+      userId: 2,
+      title: "게시글2",
+      content: "게시글 내용2",
+      likeCounts: 121,
+      commentCounts: 15,
+      views: 1962,
+      createdAt: "2024-11-07",
+    },
+    {
+      profileImg: "/profileImg3.png",
+      username: "사용자명3",
+      userId: 3,
+      title: "게시글3",
+      content: "게시글 내용3",
+      likeCounts: 121,
+      commentCounts: 15,
+      views: 1962,
+      createdAt: "2024-11-07",
+    },
+  ],
+};
+
+export const dummycodingpost: SliderProps = {
+  title: "코딩 테스트 게시글",
+  subTitle: "다른 사람들의 문제 풀이를 살펴보세요",
+  sliderList: [
+    {
+      profileImg: "/profileImg1.png",
+      username: "사용자명1",
+      userId: 1,
+      codeNum: 1,
+      title: "게시글1",
+      content: "게시글 내용1",
+      likeCounts: 121,
+      commentCounts: 15,
+      views: 1962,
+      createdAt: "2024-11-07",
+    },
+    {
+      profileImg: "/profileImg2.png",
+      username: "사용자명2",
+      userId: 2,
+      codeNum: 2,
+      title: "게시글2",
+      content: "게시글 내용2",
+      likeCounts: 121,
+      commentCounts: 15,
+      views: 1962,
+      createdAt: "2024-11-07",
+    },
+    {
+      profileImg: "/profileImg3.png",
+      username: "사용자명3",
+      userId: 3,
+      codeNum: 3,
+      title: "게시글3",
+      content: "게시글 내용3",
+      likeCounts: 121,
+      commentCounts: 15,
+      views: 1962,
+      createdAt: "2024-11-07",
+    },
+  ],
+};
+
+export const dummycodes: SliderProps = {
+  title: "새롭게 추가된 문제를 확인해보세요",
+  sliderList: [
+    {
+      profileImg: "/profileImg1.png",
+      username: "사용자명1",
+      userId: 1,
+      title: "게시글1",
+      content: "게시글 내용1",
+      likeCounts: 121,
+      commentCounts: 15,
+      views: 1962,
+      createdAt: "2024-11-07",
+      ranking: 1,
+    },
+    {
+      profileImg: "/profileImg2.png",
+      username: "사용자명2",
+      userId: 2,
+      title: "게시글2",
+      content: "게시글 내용2",
+      likeCounts: 121,
+      commentCounts: 15,
+      views: 1962,
+      createdAt: "2024-11-07",
+      ranking: 2,
+    },
+    {
+      profileImg: "/profileImg3.png",
+      username: "사용자명3",
+      userId: 3,
+      title: "게시글3",
+      content: "게시글 내용3",
+      likeCounts: 121,
+      commentCounts: 15,
+      views: 1962,
+      createdAt: "2024-11-07",
+      ranking: 3,
+    },
+  ],
+};

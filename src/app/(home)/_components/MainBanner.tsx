@@ -1,45 +1,54 @@
-import { LinkArrowIcon } from "@/app/_components/Icons";
-import Image from "next/image";
-import Link from "next/link";
+import { useState } from "react";
+import { SliderNextIcon, SliderPrevIcon } from "./Icons";
 
 export default function MainBanner() {
+  const [page, setPage] = useState(1);
+  const dummyBannerList = [
+    { img: "", url: "/" },
+    { img: "", url: "/" },
+    { img: "", url: "/" },
+  ];
+
   return (
-    <div className="top-container relative">
-      {/* 배너 배경 사진 */}
-      <Image
-        src="/mainBanner.png"
-        fill
-        sizes="100%"
-        alt="mainBanner"
-        className="-z-10 object-cover"
-        priority
-      />
-      <div className="max-w-1200 py-[120px]">
-        <div className="flex flex-col gap-16">
-          <div className="flex flex-col gap-4">
-            <span
-              style={{
-                textShadow: "0px 1px 20px rgba(255, 255, 255, 0.45)",
-              }}
-              className="text-3xl font-semibold text-black whitespace-pre-wrap"
-            >
-              {"codingtext가 제공하는\n문제를 풀어보세요!"}
-            </span>
-            <span
-              style={{
-                textShadow: "0px 1px 20px rgba(255, 255, 255, 0.45)",
-              }}
-              className="text-xl font-semibold text-body"
-            >
-              ChatGPT로 원하는 코딩 문제를 만들어 풀 수 있어요!
-            </span>
-          </div>
-          <Link href="/code/list" className="lg-btn text-primary">
-            <span className="text-xl font-semibold">문제 풀러 가기</span>
-            <LinkArrowIcon />
-          </Link>
+    <div className="top-container h-[320px] relative">
+      {/* 기본 레이아웃 (버튼, 페이지네이션) */}
+      <div className="max-w-1200 h-full absolute top-0 left-1/2 -translate-x-1/2">
+        {/* 이전 / 다음 버튼 */}
+        <button
+          onClick={() =>
+            setPage((prev) =>
+              prev - 1 >= 1 ? prev - 1 : dummyBannerList.length
+            )
+          }
+          className="main-slider-btn left-4"
+        >
+          <SliderPrevIcon />
+        </button>
+        <button
+          onClick={() =>
+            setPage((prev) =>
+              prev + 1 <= dummyBannerList.length ? prev + 1 : 1
+            )
+          }
+          className="main-slider-btn right-4"
+        >
+          <SliderNextIcon />
+        </button>
+        {/* 현재 페이지 표시 */}
+        <div className="absolute flex gap-3 left-1/2 -translate-x-1/2 bottom-4">
+          {dummyBannerList.map((el, index) => (
+            <button
+              key={index}
+              onClick={() => setPage(index + 1)}
+              className={`w-2 h-2 rounded-full ${
+                index + 1 === page ? "bg-primary-1" : "bg-white"
+              }`}
+            ></button>
+          ))}
         </div>
       </div>
+      {/* 배너 이미지 공간 */}
+      <div className="w-full bg-bg-1"></div>
     </div>
   );
 }
