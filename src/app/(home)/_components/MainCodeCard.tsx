@@ -46,15 +46,15 @@ export default function MainCodeCard({
       {/* 하단 컨테이너 */}
       <div className="post-card-bottom-container">
         {/* 정답률 */}
-        <span className="post-card-views">
-          정답률&nbsp;
+        <span className="code-card-value">
+          정답률
           <span className="post-card-views-number">
             {rate.toLocaleString()}%
           </span>
         </span>
         {/* 참여자수 */}
-        <span className="post-card-views">
-          참여자수&nbsp;
+        <span className="code-card-value">
+          참여자수
           <span className="post-card-views-number">
             {participants.toLocaleString()}명
           </span>

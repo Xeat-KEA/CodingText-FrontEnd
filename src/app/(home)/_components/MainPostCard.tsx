@@ -79,7 +79,7 @@ export default function MainPostCard({
         </div>
         {/* 조회수 */}
         <span className="post-card-views">
-          조회수&nbsp;
+          조회수
           <span className="post-card-views-number">
             {views.toLocaleString()}
           </span>

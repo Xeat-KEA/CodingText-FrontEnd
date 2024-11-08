@@ -107,7 +107,7 @@ textarea {
   /* 메인 페이지 관련 */
   /* 메인 페이지 슬라이더 버튼 */
   .main-slider-btn {
-    @apply absolute top-1/2 -translate-y-1/2;
+    @apply absolute h-full flex justify-center items-center z-20;
   }
   /* 각 항목 상위 컨테이너 */
   .main-container {
@@ -325,7 +325,7 @@ textarea {
   }
   /* 조회수 */
   .post-card-views {
-    @apply text-xs text-body;
+    @apply text-xs text-body flex gap-1;
   }
   /* 조회수 숫자 */
   .post-card-views-number {
@@ -339,5 +339,8 @@ textarea {
   }
   .code-card-difficulty {
     @apply text-xs font-bold;
+  }
+  .code-card-value {
+    @apply text-xs text-body flex gap-1 max-sm:flex-col items-center;
   }
 }
