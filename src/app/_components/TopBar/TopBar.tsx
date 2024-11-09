@@ -12,6 +12,7 @@ import SmSearchBar from "../SmSearchBar";
 import ProfileImgContainer from "../ProfileImgContainer";
 import { motion } from "framer-motion";
 import TopBarMenu from "./TopBarMenu";
+import { useHandleResize } from "@/app/_hooks/useHandleResize";
 
 export default function TopBar() {
   const pathname = usePathname();
@@ -64,6 +65,8 @@ export default function TopBar() {
   useEffect(() => {
     api.get("/my-page/1").then((res) => setProfileInfo(res.data.data));
   }, []); */
+
+  const windowSize = useHandleResize();
 
   const dummyprofile = {
     rank: "Junior",
@@ -160,7 +163,10 @@ export default function TopBar() {
       {isOpen.notice && (
         <div
           ref={noticePopupRef}
-          className="absolute bg-white right-0 top-[calc(100%+8px)] w-[396px] h-[300px] flex flex-col rounded-lg shadow-1 divide-y divide-border-1 overflow-y-auto"
+          style={{
+            right: `calc(8px + ${Math.max((windowSize - 1200) / 2, 0)}px)`,
+          }}
+          className="absolute bg-white top-[calc(100%+8px)] w-[396px] h-[300px] flex flex-col rounded-lg shadow-1 divide-y divide-border-1 overflow-y-auto"
         >
           {[1, 2, 3, 4, 5].map((el) => (
             <NoticeCard key={el} category="시스템" blogId={el} userId={el} />
@@ -171,7 +177,10 @@ export default function TopBar() {
       {isOpen.profile && (
         <div
           ref={profilePopupRef}
-          className="absolute bg-white right-0 top-[calc(100%+8px)] w-[160px] flex flex-col rounded-lg shadow-1 divide-y divide-border-1"
+          style={{
+            right: `calc(8px + ${Math.max((windowSize - 1200) / 2, 0)}px)`,
+          }}
+          className="absolute bg-white top-[calc(100%+8px)] w-[160px] flex flex-col rounded-lg shadow-1 divide-y divide-border-1"
         >
           {/* 사용자 정보 */}
           <div className="flex flex-col gap-[2px] px-6 py-4">

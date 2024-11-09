@@ -3,6 +3,7 @@ import { SliderNextIcon, SliderPrevIcon } from "./Icons";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
+import { useHandleResize } from "@/app/_hooks/useHandleResize";
 
 export default function MainBanner() {
   const router = useRouter();
@@ -64,16 +65,7 @@ export default function MainBanner() {
   };
 
   // 화면 크기 변경 시 state 변경
-  const [windowSize, setWindowSize] = useState<number>(0);
-  useEffect(() => {
-    const handleResize = () => {
-      setWindowSize(window.innerWidth);
-    };
-    // 초기 화면값 설정
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  const windowSize = useHandleResize();
 
   // 배너 자동 전환 (다른 탭으로 이동 등 웹 페이지에서 벗어날 경우 애니메이션 비활성화)
   useEffect(() => {
