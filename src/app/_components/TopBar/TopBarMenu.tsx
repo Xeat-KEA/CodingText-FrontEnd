@@ -25,7 +25,7 @@ export default function TopBarMenu({ token }: { token: string }) {
                 key={index}
                 href={el.url === "/blog" ? `${el.url}/${token}` : el.url}
                 scroll={false}
-                className="flex items-center w-full h-full"
+                className="flex items-center w-full h-full px-2 max-lg:px-12"
               >
                 {el.content}
               </Link>
@@ -46,7 +46,7 @@ export default function TopBarMenu({ token }: { token: string }) {
                   key={index}
                   href={el.url}
                   scroll={false}
-                  className="flex items-center w-full h-full"
+                  className="flex items-center w-full h-full  px-2 max-lg:px-12"
                 >
                   {el.content}
                 </Link>

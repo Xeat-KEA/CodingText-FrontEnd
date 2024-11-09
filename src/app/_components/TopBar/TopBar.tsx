@@ -39,7 +39,6 @@ export default function TopBar() {
     type: "notice" | "profile" | "menu",
     state?: boolean
   ) => {
-    console.log(isOpen[type]);
     setIsOpen((prev) => ({ ...prev, [type]: state || !prev[type] }));
   };
 
@@ -47,7 +46,7 @@ export default function TopBar() {
   const noticeRef = useRef(null);
   const profileRef = useRef(null);
 
-  // 팝업창 바깥 영역 클릭 감지용 hook 선언
+  // 바깥 영역 클릭 감지용 hook 선언
   const noticePopupRef = useOutsideClick(
     () => onIconClick("notice", false),
     noticeRef
@@ -56,6 +55,9 @@ export default function TopBar() {
     () => onIconClick("profile", false),
     profileRef
   );
+  const topBarRef = useOutsideClick(() => {
+    if (isOpen.menu) onIconClick("menu", false);
+  });
 
   // 프로토타입 API 사용자 정보 GET
   /* const [profileInfo, setProfileInfo] = useState<ProfileData>();
@@ -73,6 +75,7 @@ export default function TopBar() {
   return (
     <div className="fixed w-full h-16 z-50">
       <motion.nav
+        ref={topBarRef}
         initial={{ height: 64 }}
         animate={{ height: isOpen.menu ? "auto" : 64 }}
         transition={{ duration: 0.3, type: "tween" }}

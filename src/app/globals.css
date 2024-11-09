@@ -97,7 +97,7 @@ textarea {
   }
   /* 탑바 메뉴 버튼 */
   .top-bar-menu-btn {
-    @apply flex items-center px-2 max-lg:px-12 h-full max-lg:h-[56px] cursor-pointer max-lg:text-sm lg:font-semibold text-black whitespace-nowrap;
+    @apply flex items-center h-full max-lg:h-[56px] cursor-pointer max-lg:text-sm lg:font-semibold text-black whitespace-nowrap;
   }
   /* 프로필 메뉴 버튼 */
   .profile-popup-menu {
