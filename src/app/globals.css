@@ -57,6 +57,10 @@ textarea {
   .flex-center {
     @apply flex justify-center items-center;
   }
+  /* 텍스트 넘칠 시 ... 처리 (상위 엘리먼트에 overflow-hidden 필요) */
+  .text-overflow-ellipsis {
+    @apply overflow-hidden whitespace-nowrap text-ellipsis;
+  }
 
   /* 버튼 관련 클래스 */
   /* 작은 버튼 추상화 */
@@ -111,7 +115,7 @@ textarea {
   }
   /* 각 항목 상위 컨테이너 */
   .main-container {
-    @apply w-full flex flex-col gap-8;
+    @apply w-full flex flex-col gap-6 overflow-hidden;
   }
   /* 항목 설명 텍스트 컨테이너 */
   .main-text-container {
@@ -135,7 +139,7 @@ textarea {
   }
   /* 메인 페이지 게시글 카드 */
   .main-post-card {
-    @apply relative w-full p-6 bg-primary-2 rounded-xl flex flex-col gap-2;
+    @apply relative w-full p-6 flex flex-col gap-2;
   }
   /* 메인 페이지 문제 상위 컨테이너 */
   .main-codes-container {
@@ -147,11 +151,11 @@ textarea {
   }
   /* 메인 페이지 문제 카드 제목 */
   .main-code-card-title {
-    @apply text-lg text-black font-semibold;
+    @apply text-lg text-black font-semibold text-overflow-ellipsis;
   }
   /* 메인 페이지 문제 카드 알고리즘 */
   .main-code-card-algorithm {
-    @apply text-sm text-body;
+    @apply text-sm text-body text-overflow-ellipsis;
   }
 
   /* 로그인 / 회원가입 페이지 관련 */
@@ -293,11 +297,11 @@ textarea {
   }
   /* 게시글 내용 상위 컨테이너 */
   .post-card-content-container {
-    @apply flex flex-col gap-2;
+    @apply flex flex-col gap-2 overflow-hidden;
   }
   /* 게시글 제목 */
   .post-card-title {
-    @apply text-lg font-semibold text-black;
+    @apply text-lg font-semibold text-black text-overflow-ellipsis;
   }
   /* 코드 번호 */
   .post-card-code-number {
@@ -305,7 +309,7 @@ textarea {
   }
   /* 게시글 내용 */
   .post-card-content {
-    @apply text-sm text-body h-[60px] overflow-hidden;
+    @apply text-sm text-body h-[60px] overflow-hidden text-ellipsis line-clamp-3;
   }
   /* 하단 상위 컨테이너 */
   .post-card-bottom-container {

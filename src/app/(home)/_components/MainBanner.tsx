@@ -75,29 +75,36 @@ export default function MainBanner() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // 배너 자동 전환 (마우스 Hover시 애니메이션 정지)
-  const [isHovered, setIsHovered] = useState(false);
+  // 배너 자동 전환 (다른 탭으로 이동 등 웹 페이지에서 벗어날 경우 애니메이션 비활성화)
   useEffect(() => {
     let interval: NodeJS.Timeout;
-    if (!isHovered && document.visibilityState === "visible") {
-      interval = setInterval(() => {
-        setIsBack(false);
-        setPage((prev) =>
-          prev + 1 <= dummyBannerList.length - 1 ? prev + 1 : 0
-        );
-      }, 4000);
-    }
-    return () => clearInterval(interval);
-  }, [isHovered, document.visibilityState]);
+    // 현재 해당 탭에 위치하고 있을 때에만 타이머 활성화
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        interval = setInterval(() => {
+          setIsBack(false);
+          setPage((prev) =>
+            prev + 1 <= dummyBannerList.length - 1 ? prev + 1 : 0
+          );
+        }, 3500);
+      } else {
+        clearInterval(interval);
+      }
+    };
 
-  console.log(Math.max(windowSize - 1200, 0));
+    handleVisibilityChange();
+
+    // visibilitychange 감지 시 handleVisibilityChange 함수 재실행
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      clearInterval(interval);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, [page]);
 
   return (
-    <div
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      className="top-container h-[320px] relative"
-    >
+    <div className="top-container h-[320px] relative">
       {/* 이전 / 다음 버튼 */}
       <motion.button
         initial={{ color: "rgb(200, 200, 200)" }}

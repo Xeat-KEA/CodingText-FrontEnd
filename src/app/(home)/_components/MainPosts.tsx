@@ -1,5 +1,6 @@
+import { useRouter } from "next/navigation";
 import { MainPostsProps } from "../_interfaces/interfaces";
-import MoreContentArrowIcon, { SliderNextIcon, SliderPrevIcon } from "./Icons";
+import { MoreContentArrowIcon, SliderNextIcon, SliderPrevIcon } from "./Icons";
 import MainPostCard from "./MainPostCard";
 
 export default function MainPosts({
@@ -8,11 +9,15 @@ export default function MainPosts({
   url,
   sliderList,
 }: MainPostsProps) {
+  const router = useRouter();
   return (
     <div className="main-container">
       {/* 게시글 목록 제목 / 설명 */}
-      <div className="main-text-container">
-        <div className="main-title-container">
+      <div className={`main-text-container ${url && "cursor-pointer"}`}>
+        <div
+          onClick={() => url && router.push(url)}
+          className="main-title-container"
+        >
           <span className="main-title">{title}</span>
           {url && <MoreContentArrowIcon />}
         </div>

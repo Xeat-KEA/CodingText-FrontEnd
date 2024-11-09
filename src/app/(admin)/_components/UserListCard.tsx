@@ -18,7 +18,7 @@ export default function UserListCard({
         <div className="w-[100px] flex-center text-xs font-semibold text-primary-1 shrink-0">
           {nickname}
         </div>
-        <div className="w-full grow text-sm text-black overflow-hidden whitespace-nowrap text-ellipsis">
+        <div className="w-full grow text-sm text-black text-overflow-ellipsis">
           {email}
         </div>
       </div>

@@ -46,6 +46,37 @@ export interface MainCode {
 export interface MainCodesProps {
   title: string;
   subTitle?: string;
-  url?: string;
+  url: string;
   sliderList: MainCode[];
+}
+
+export interface MainMenuBtnProps {
+  icon: JSX.Element;
+  title: string;
+  url: string;
+}
+
+export interface MainNotice {
+  noticeId: number;
+  title: string;
+  createdAt: string;
+}
+
+export interface MainNoticesProps {
+  title: string;
+  url: string;
+  sliderList: MainNotice[];
+}
+
+export interface MainHistory {
+  codeNum: number | "ai";
+  title: string;
+  hasSolved: boolean;
+  createdAt: string;
+}
+
+export interface MainHistoriesProps {
+  title: string;
+  url: string;
+  sliderList: MainHistory[];
 }

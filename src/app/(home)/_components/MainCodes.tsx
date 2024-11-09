@@ -1,5 +1,6 @@
+import { useRouter } from "next/navigation";
 import { MainCodesProps } from "../_interfaces/interfaces";
-import MoreContentArrowIcon from "./Icons";
+import { MoreContentArrowIcon } from "./Icons";
 import MainCodeCard from "./MainCodeCard";
 
 export default function MainCodes({
@@ -8,13 +9,15 @@ export default function MainCodes({
   url,
   sliderList,
 }: MainCodesProps) {
+  const router = useRouter();
+
   return (
     <div className="main-container">
       {/* 코드 목록 제목 / 설명 */}
-      <div className="main-text-container">
-        <div className="main-title-container">
+      <div className="main-text-container cursor-pointer">
+        <div onClick={() => router.push(url)} className="main-title-container">
           <span className="main-title">{title}</span>
-          {url && <MoreContentArrowIcon />}
+          <MoreContentArrowIcon />
         </div>
         {subTitle && <span className="main-sub-title">{subTitle}</span>}
       </div>
