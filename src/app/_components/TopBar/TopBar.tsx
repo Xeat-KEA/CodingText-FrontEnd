@@ -4,16 +4,14 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useOutsideClick } from "@/app/_hooks/useOutsideClick";
-import { TOP_BAR_MENU } from "@/app/_constants/constants";
-import { LogoIcon, NoticeIcon } from "../Icons";
+import { HamburgerIcon, LogoIcon, NoticeIcon } from "../Icons";
 import ProfilePopup from "../ProfilePopup";
 import { useCheckToken } from "@/app/_hooks/useCheckToken";
-import Image from "next/image";
-import { ProfileData } from "@/app/_interfaces/interfaces";
-import api from "@/app/_api/config";
 import NoticeCard from "./NoticeCard";
 import SmSearchBar from "../SmSearchBar";
 import ProfileImgContainer from "../ProfileImgContainer";
+import { motion } from "framer-motion";
+import TopBarMenu from "./TopBarMenu";
 
 export default function TopBar() {
   const pathname = usePathname();
@@ -22,9 +20,10 @@ export default function TopBar() {
   const { token, isLoaded } = useCheckToken();
 
   // 팝업 상태 관리 state
-  const [isPopUpOpen, setIsPopUpOpen] = useState({
+  const [isOpen, setIsOpen] = useState({
     notice: false,
     profile: false,
+    menu: false,
   });
 
   // 알림 읽음 여부 확인
@@ -36,15 +35,12 @@ export default function TopBar() {
     }
   }, []);
 
-  // 알람 아이콘 클릭 시
-  const onNoticeClicked = () => {
-    setIsPopUpOpen((prev) => ({ ...prev, notice: !prev.notice }));
-    setHasNoticeRead(true);
-  };
-
-  // 내 프로필 클릭 시
-  const onProfileClicked = () => {
-    setIsPopUpOpen((prev) => ({ ...prev, profile: !prev.profile }));
+  const onIconClick = (
+    type: "notice" | "profile" | "menu",
+    state?: boolean
+  ) => {
+    console.log(isOpen[type]);
+    setIsOpen((prev) => ({ ...prev, [type]: state || !prev[type] }));
   };
 
   // useOutsideClick 예외 ref
@@ -53,132 +49,140 @@ export default function TopBar() {
 
   // 팝업창 바깥 영역 클릭 감지용 hook 선언
   const noticePopupRef = useOutsideClick(
-    () => setIsPopUpOpen((prev) => ({ ...prev, notice: false })),
+    () => onIconClick("notice", false),
     noticeRef
   );
   const profilePopupRef = useOutsideClick(
-    () => setIsPopUpOpen((prev) => ({ ...prev, profile: false })),
+    () => onIconClick("profile", false),
     profileRef
   );
 
   // 프로토타입 API 사용자 정보 GET
-  const [profileInfo, setProfileInfo] = useState<ProfileData>();
+  /* const [profileInfo, setProfileInfo] = useState<ProfileData>();
   useEffect(() => {
     api.get("/my-page/1").then((res) => setProfileInfo(res.data.data));
-  }, []);
+  }, []); */
+
+  const dummyprofile = {
+    rank: "Junior",
+    nickname: "사용자명",
+    userId: 1,
+    profileImg: "/profileImg6.png",
+  };
 
   return (
-    <nav className="fixed w-full h-16 bg-white border-b border-border-1 flex justify-center z-50">
-      <div
-        className={`relative w-full flex justify-between ${
-          !pathname.startsWith("/coding-test") ? "max-w-[1200px] px-12" : "px-6"
-        }`}
+    <div className="fixed w-full h-16 z-50">
+      <motion.nav
+        initial={{ height: 64 }}
+        animate={{ height: isOpen.menu ? "auto" : 64 }}
+        transition={{ duration: 0.3, type: "tween" }}
+        className="w-full h-full bg-white border-b border-border-1 flex max-lg:flex-col lg:justify-center overflow-hidden"
       >
-        {/* 탑바 좌측 요소 */}
-        <div className="flex items-center gap-14">
-          <Link href="/" scroll={false}>
-            <LogoIcon />
-          </Link>
-          {/* 메뉴 */}
-          {isLoaded && (
-            <ul className="flex h-full items-center gap-2">
-              {TOP_BAR_MENU.map((el, index) => {
-                if (token) {
-                  // 로그인 했을 시 모든 메뉴 표시
-                  return (
-                    <Link
-                      key={index}
-                      href={el.url === "/blog" ? `${el.url}/${token}` : el.url}
-                      className="top-bar-menu-btn"
-                      scroll={false}
-                    >
-                      {el.content}
-                    </Link>
-                  );
-                } else {
-                  // 로그인 하지 않을 시 첫 번째 메뉴만 표시
-                  if (index === 0) {
-                    return (
-                      <Link
-                        key={index}
-                        href={el.url}
-                        className="top-bar-menu-btn"
-                        scroll={false}
-                      >
-                        {el.content}
-                      </Link>
-                    );
-                  }
-                }
-              })}
-            </ul>
-          )}
-        </div>
-
-        {/* 탑바 우측 요소 */}
-        {isLoaded && (
-          <div className="flex items-center gap-6">
-            {/* 검색창 */}
-            <div className="w-[240px]">
-              <SmSearchBar baseURL="/search" />
-            </div>
-            {/* 로그인 : 알림, 프로필 / 비로그인 : 로그인 버튼 */}
-            {token ? (
-              <>
-                <button
-                  ref={noticeRef}
-                  className="relative"
-                  onClick={onNoticeClicked}
-                >
-                  {!hasNoticeRead && (
-                    <div className="absolute w-1 h-1 rounded-full bg-red right-[2px] top-[2px]"></div>
-                  )}
-                  <NoticeIcon />
-                </button>
-                <button ref={profileRef} onClick={onProfileClicked}>
-                  <ProfileImgContainer
-                    width={36}
-                    height={36}
-                    src="/profileImg1.png"
-                  />
-                </button>
-              </>
-            ) : (
-              <Link href="/sign-in" className="sm-btn-primary rounded-full">
-                로그인
-              </Link>
+        {/* 상단바 */}
+        <div
+          className={`relative w-full h-16 shrink-0 flex justify-between ${
+            !pathname.startsWith("/coding-test")
+              ? "max-w-[1200px] px-12"
+              : "px-6"
+          }`}
+        >
+          {/* 탑바 좌측 요소 */}
+          <div className="flex items-center gap-14">
+            <Link href="/" scroll={false}>
+              <LogoIcon />
+            </Link>
+            {/* 메뉴 (화면 크기 lg 이상) */}
+            {isLoaded && (
+              <ul className="flex h-full items-center gap-2 max-lg:hidden">
+                <TopBarMenu token={token} />
+              </ul>
             )}
           </div>
-        )}
-        {/* 알림 팝업 */}
-        {isPopUpOpen.notice && (
-          <div
-            ref={noticePopupRef}
-            className="absolute bg-white right-0 top-[calc(100%+8px)] w-[396px] h-[300px] flex flex-col rounded-lg shadow-1 divide-y divide-border-1 overflow-y-auto"
-          >
-            {[1, 2, 3, 4, 5].map((el) => (
-              <NoticeCard key={el} category="시스템" blogId={el} userId={el} />
-            ))}
-          </div>
-        )}
-        {/* 프로필 팝업 */}
-        {isPopUpOpen.profile && (
-          <div
-            ref={profilePopupRef}
-            className="absolute bg-white right-0 top-[calc(100%+8px)] w-[160px] flex flex-col rounded-lg shadow-1 divide-y divide-border-1"
-          >
-            {/* 사용자 정보 */}
-            <div className="flex flex-col gap-[2px] px-6 py-4">
-              <span className="text-body text-xs font-bold">Junior</span>
-              <span className="text-base font-bold text-black">
-                {profileInfo?.nickName}
-              </span>
+
+          {/* 탑바 우측 요소 */}
+          {isLoaded && (
+            <div className="flex items-center gap-6">
+              {/* 검색창 (화면 크기 lg 이상) */}
+              <div className="w-[240px] max-lg:hidden">
+                <SmSearchBar baseURL="/search" />
+              </div>
+              {/* 로그인 : 알림, 프로필 / 비로그인 : 로그인 버튼 */}
+              {token ? (
+                <>
+                  <button
+                    ref={noticeRef}
+                    className="relative"
+                    onClick={() => onIconClick("notice")}
+                  >
+                    {!hasNoticeRead && (
+                      <div className="absolute w-1 h-1 rounded-full bg-red right-[2px] top-[2px]"></div>
+                    )}
+                    <NoticeIcon />
+                  </button>
+                  <button
+                    ref={profileRef}
+                    onClick={() => onIconClick("profile")}
+                  >
+                    <ProfileImgContainer
+                      width={36}
+                      height={36}
+                      src={dummyprofile.profileImg}
+                    />
+                  </button>
+                </>
+              ) : (
+                <Link href="/sign-in" className="sm-btn-primary rounded-full">
+                  로그인
+                </Link>
+              )}
+              {/* 메뉴 더보기 버튼 (화면 크기 lg 이하) */}
+              <button onClick={() => onIconClick("menu")} className="lg:hidden">
+                <HamburgerIcon />
+              </button>
             </div>
-            {/* 프로필 메뉴 */}
-            <ProfilePopup />
+          )}
+        </div>
+        {/* 메뉴 (화면 크기 lg 이하) */}
+        <div className="w-full flex flex-col bg-white lg:hidden">
+          <div className="px-12 pt-4 pb-6 border-b border-border-1">
+            <SmSearchBar
+              baseURL="/search"
+              placeholder="검색어를 입력해주세요"
+            />
           </div>
-        )}
-      </div>
-    </nav>
+          <TopBarMenu token={token} />
+        </div>
+      </motion.nav>
+      {/* 알림 팝업 */}
+      {isOpen.notice && (
+        <div
+          ref={noticePopupRef}
+          className="absolute bg-white right-0 top-[calc(100%+8px)] w-[396px] h-[300px] flex flex-col rounded-lg shadow-1 divide-y divide-border-1 overflow-y-auto"
+        >
+          {[1, 2, 3, 4, 5].map((el) => (
+            <NoticeCard key={el} category="시스템" blogId={el} userId={el} />
+          ))}
+        </div>
+      )}
+      {/* 프로필 팝업 */}
+      {isOpen.profile && (
+        <div
+          ref={profilePopupRef}
+          className="absolute bg-white right-0 top-[calc(100%+8px)] w-[160px] flex flex-col rounded-lg shadow-1 divide-y divide-border-1"
+        >
+          {/* 사용자 정보 */}
+          <div className="flex flex-col gap-[2px] px-6 py-4">
+            <span className="text-body text-xs font-bold">
+              {dummyprofile.rank}
+            </span>
+            <span className="text-base font-bold text-black">
+              {dummyprofile.nickname}
+            </span>
+          </div>
+          {/* 프로필 메뉴 */}
+          <ProfilePopup />
+        </div>
+      )}
+    </div>
   );
 }

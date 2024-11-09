@@ -97,7 +97,7 @@ textarea {
   }
   /* 탑바 메뉴 버튼 */
   .top-bar-menu-btn {
-    @apply flex items-center px-2 h-full cursor-pointer text-base font-semibold text-black whitespace-nowrap;
+    @apply flex items-center px-2 max-lg:px-12 h-full max-lg:h-[56px] cursor-pointer max-lg:text-sm lg:font-semibold text-black whitespace-nowrap;
   }
   /* 프로필 메뉴 버튼 */
   .profile-popup-menu {
@@ -115,7 +115,7 @@ textarea {
   }
   /* 각 항목 상위 컨테이너 */
   .main-container {
-    @apply w-full flex flex-col gap-6 overflow-hidden;
+    @apply w-full flex flex-col gap-6 lg:overflow-hidden;
   }
   /* 항목 설명 텍스트 컨테이너 */
   .main-text-container {
