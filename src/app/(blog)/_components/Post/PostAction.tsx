@@ -20,7 +20,9 @@ const PostAction: React.FC<PostProps> = ({ currentPost }) => {
 
   const router = useRouter();
   const [isLiking, setIsLiking] = useState<boolean>(false);
-  const [newLikeCount, setNewLikeCount] = useState<number>(Number(currentPost.likeCount))
+  const [newLikeCount, setNewLikeCount] = useState<number>(
+    Number(currentPost.likeCount)
+  );
   const [isShareDialogOpen, setIsShareDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [postToDelete, setPostToDelete] = useState<number | null>(null);
@@ -28,7 +30,8 @@ const PostAction: React.FC<PostProps> = ({ currentPost }) => {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [customInput, setCustomInput] = useState("");
   const [isReportDialogOpen, setIsReportDialogOpen] = useState(false);
-  const [isReportConfirmDialogOpen, setIsReportConfirmDialogOpen] = useState(false);
+  const [isReportConfirmDialogOpen, setIsReportConfirmDialogOpen] =
+    useState(false);
 
   const onClickLike = () => {
     if (!currentPost) return;
@@ -86,12 +89,12 @@ const PostAction: React.FC<PostProps> = ({ currentPost }) => {
       {isOwnBlog ? (
         <button className="flex items-center gap-1">
           <BpFollowerIcon isFilled={true} />
-          <p className="text-primary text-xs font-semibold">{`좋아요 ${currentPost?.likeCount}`}</p>
+          <p className="text-primary-1 text-xs font-semibold">{`좋아요 ${currentPost?.likeCount}`}</p>
         </button>
       ) : (
         <button className="flex items-center gap-1" onClick={onClickLike}>
           <BpFollowerIcon isFilled={isLiking} />
-          <p className="text-primary text-xs font-semibold">{`좋아요 ${newLikeCount}`}</p>
+          <p className="text-primary-1 text-xs font-semibold">{`좋아요 ${newLikeCount}`}</p>
         </button>
       )}
       <div className="flex gap-4">
@@ -102,9 +105,12 @@ const PostAction: React.FC<PostProps> = ({ currentPost }) => {
         {isOwnBlog ? (
           <>
             {/* 전달 사항 수정 필요 */}
-            <Link href={`/blog/${blogId}/edit-post/${currentPost.postId}`} className="flex items-center gap-1">
+            <Link
+              href={`/blog/${blogId}/edit-post/${currentPost.postId}`}
+              className="flex items-center gap-1"
+            >
               <BpEditIcon />
-              <p className="text-primary text-xs font-semibold">{`수정`}</p>
+              <p className="text-primary-1 text-xs font-semibold">{`수정`}</p>
             </Link>
 
             <button

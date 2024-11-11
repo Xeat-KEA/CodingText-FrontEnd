@@ -57,10 +57,10 @@ export default function BlogProfile() {
         {profile && (
           <div className="profile-card flex items-center space-x-6">
             {/* 프로필 이미지 */}
-            {profile.profileImage && (
+            {profile.profileImg && (
               <div className="profile-image w-120 h-120 relative">
                 <Image
-                  src={profile.profileImage}
+                  src={profile.profileImg}
                   alt={`${profile.nickName}의 프로필 이미지`}
                   width={120}
                   height={120}
@@ -87,7 +87,7 @@ export default function BlogProfile() {
                       onClick={onClickFollow}
                     >
                       <BpFollowerIcon isFilled={isFollowing} />
-                      <p className="text-primary text-xs font-semibold">{`팔로워 ${profile.FollowerCount}`}</p>
+                      <p className="text-primary-1 text-xs font-semibold">{`팔로워 ${profile.FollowerCount}`}</p>
                     </button>
                     <button
                       className="flex items-center gap-1"
@@ -101,7 +101,7 @@ export default function BlogProfile() {
                   <>
                     <button className="flex items-center gap-1">
                       <BpFollowerIcon isFilled={true} />
-                      <p className="text-primary text-xs font-semibold">{`팔로워 ${profile.FollowerCount}`}</p>
+                      <p className="text-primary-1 text-xs font-semibold">{`팔로워 ${profile.FollowerCount}`}</p>
                     </button>
                   </>
                 )}
@@ -114,12 +114,14 @@ export default function BlogProfile() {
       {/* 사용자 정보 수정 버튼 */}
       {isOwnBlog && (
         <Link
-        // 경로 수정 필요
+          // 경로 수정 필요
           href="/edit/profile"
           className="inline-flex items-center w-auto h-5 gap-1 ml-2"
         >
           <BpEditIcon />
-          <p className="text-primary text-xs font-semibold">사용자 정보 수정</p>
+          <p className="text-primary-1 text-xs font-semibold">
+            사용자 정보 수정
+          </p>
         </Link>
       )}
 

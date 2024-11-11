@@ -17,7 +17,7 @@ export default function ProfileInfo({ category, content }: ProfileInfoProps) {
   return (
     <div className="flex w-full justify-between items-center">
       <span className="text-xs text-black">{returnInfo()}</span>
-      <span className="text-sm font-bold text-black">{`${content.toLocaleString()}${returnInfo(
+      <span className="text-sm font-bold text-primary-1">{`${content.toLocaleString()}${returnInfo(
         true
       )}`}</span>
     </div>

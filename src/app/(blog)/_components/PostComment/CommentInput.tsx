@@ -8,11 +8,7 @@ export default function CommentInput({
   onSubmit,
   onCancel,
 }: CommentInputProps) {
-  const {
-    register,
-    handleSubmit,
-    reset,
-  } = useForm();
+  const { register, handleSubmit, reset } = useForm();
   const { profile } = useBlogStore();
 
   const mentionProfile = profile;
@@ -51,7 +47,7 @@ export default function CommentInput({
         <div className="flex absolute right-0 items-center">
           <button
             type="submit"
-            className="w-[74px] h-[33px] bg-primary text-white text-xs text-bold rounded-md"
+            className="w-[74px] h-[33px] bg-primary-1 text-white text-xs text-bold rounded-md"
           >
             작성하기
           </button>

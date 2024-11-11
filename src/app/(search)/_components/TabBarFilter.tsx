@@ -23,7 +23,7 @@ export default function TabBarFilter() {
           onClick={() => setFilter("category", el.selection)}
           className={`text-xs ${
             searchParams.get("category") === el.selection
-              ? "text-primary font-semibold"
+              ? "text-primary-1 font-semibold"
               : "text-disabled"
           }`}
         >
@@ -37,7 +37,7 @@ export default function TabBarFilter() {
           onClick={() => setFilter("order", el.selection)}
           className={`text-xs ${
             searchParams.get("order") === el.selection
-              ? "text-primary font-semibold"
+              ? "text-primary-1 font-semibold"
               : "text-disabled"
           }`}
         >

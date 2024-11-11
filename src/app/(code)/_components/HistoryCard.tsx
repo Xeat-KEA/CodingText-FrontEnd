@@ -42,7 +42,7 @@ export default function HistoryCard({
                   { scroll: false }
                 );
               }}
-              className="w-[60px] text-xs font-semibold text-primary list-text cursor-pointer hover:underline"
+              className="w-[60px] text-xs font-semibold text-primary-1 list-text cursor-pointer hover:underline"
             >
               {!isAI ? `#${codeId}` : "AI 생성"}
             </span>

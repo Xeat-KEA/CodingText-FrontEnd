@@ -9,7 +9,7 @@ export default function BlogInfo() {
   const { isOwnBlog, profile } = useBlogStore();
 
   // 소개글 디코딩
-  const blogIntro =  useBase64("decode", profile.blogProfile);
+  const blogIntro = useBase64("decode", profile.blogProfile);
 
   return (
     <>
@@ -27,12 +27,12 @@ export default function BlogInfo() {
           {/* 블로그 정보 수정 버튼 */}
           {isOwnBlog && (
             <Link
-            // 경로 수정 필요
+              // 경로 수정 필요
               href="/edit/blog"
               className="inline-flex items-center w-auto h-5 gap-1 ml-2"
             >
               <BpEditIcon />
-              <p className="text-primary text-xs font-semibold">
+              <p className="text-primary-1 text-xs font-semibold">
                 블로그 정보 수정
               </p>
             </Link>

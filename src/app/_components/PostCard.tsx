@@ -1,6 +1,5 @@
 import { PostCardProps } from "../_interfaces/interfaces";
 import { CommentCountIcon, LikeCountIcon, ReportIcon } from "./Icons";
-import { useState } from "react";
 import { useCalculateDate } from "../_hooks/useCalculateDate";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -25,7 +24,6 @@ export default function PostCard({
 }: PostCardProps) {
   const router = useRouter();
 
-  const [isHovered, setIsHovered] = useState(false);
   const date = useCalculateDate(createAt);
 
   const decodedContent = useBase64("decode", content);
@@ -35,11 +33,9 @@ export default function PostCard({
   return (
     <Link
       href={`/blog/${blogId}/post/${articleId}`} // 블로그 Id 수정 필요
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
       className="w-full flex flex-col gap-2 py-6 cursor-pointer"
     >
-      <div className="w-full flex justify-between items-center">
+      <div className="post-card-top-container">
         {nickName && profileImg && (
           <>
             {/* 사용자 정보 */}
@@ -49,12 +45,10 @@ export default function PostCard({
                 e.stopPropagation();
                 // 사용자 클릭 시 해당 사용자 블로그로 이동
               }}
-              className="flex gap-2 items-center"
+              className="post-card-profile-container"
             >
               <ProfileImgContainer width={24} height={24} src={profileImg} />
-              <span className="text-xs font-semibold text-body">
-                {nickName}
-              </span>
+              <span className="post-card-nickname">{nickName}</span>
             </div>
           </>
         )}
@@ -65,13 +59,13 @@ export default function PostCard({
           </>
         )}
         {/* 날짜 정보 (수정 필요) */}
-        <span className="text-xs text-body">{date}</span>
+        <span className="post-card-created-at">{date}</span>
       </div>
       {/* 게시글 정보 */}
-      <div className="w-full h-[120px] flex justify-between items-center gap-6">
+      <div className="post-card-middle-container">
         {/* 게시글 내용 */}
-        <div className="flex flex-col gap-2">
-          <span className="text-lg font-semibold text-black">
+        <div className="post-card-content-container">
+          <span className="post-card-title">
             {codeId && (
               <button
                 onClick={(e) => {
@@ -82,7 +76,7 @@ export default function PostCard({
                     { scroll: false }
                   );
                 }}
-                className="text-lg font-bold text-primary hover:underline"
+                className="post-card-code-number"
               >
                 #{codeId}&nbsp;
               </button>
@@ -90,7 +84,7 @@ export default function PostCard({
             {title}
           </span>
           <div
-            className="text-sm text-body h-[60px] overflow-hidden"
+            className="post-card-content"
             dangerouslySetInnerHTML={{
               __html: DOMPurify.sanitize(decodedContent),
             }}
@@ -101,36 +95,20 @@ export default function PostCard({
           <div className="w-[160px] h-[120px] rounded-lg bg-disabled shrink-0"></div>
         )}
       </div>
-      <div className="w-full flex items-center justify-between">
+      <div className="">
         {/* 좋아요 / 댓글 개수 */}
-        <div className="flex gap-4">
-          <div className="flex gap-2 items-center">
+        <div className="post-card-counts-container">
+          <div className="post-card-counts">
             <LikeCountIcon />
-            <span className="text-xs text-body">{likes}</span>
+            <span className="post-card-counts-number">{likes}</span>
           </div>
-          <div className="flex gap-2 items-center">
+          <div className="post-card-counts">
             <CommentCountIcon />
-            <span className="text-xs text-body">{comments}</span>
+            <span className="post-card-counts-number">{comments}</span>
           </div>
         </div>
         {/* 조회수 */}
-        {!isHovered ? (
-          <span className="text-xs text-body">조회수 {views}</span>
-        ) : (
-          // 사용자 인증 추가 후 내 게시글에는 수정 버튼 필요
-          <button
-            onClick={(e) => {
-              // 부모 요소 onClick 실행 방지
-              e.stopPropagation();
-              // 신고 로직 추가 필요
-              console.log("reported");
-            }}
-            className="flex gap-1 items-center"
-          >
-            <ReportIcon />
-            <span className="text-xs font-semibold text-red">신고</span>
-          </button>
-        )}
+        <span className="post-card-views">조회수 {views}</span>
       </div>
     </Link>
   );
