@@ -279,8 +279,8 @@ export function SmBubbleIcon() {
     <path d="M242.831 121.391C252.436 121.391 260.223 113.605 260.223 104C260.223 94.395 252.436 86.6086 242.831 86.6086C233.226 86.6086 225.44 94.395 225.44 104C225.44 113.605 233.226 121.391 242.831 121.391Z" fill="#222222"/>
     </g>
     <defs>
-    <filter id="filter0_d_738_15222" x="0" y="0" width="336.744" height="240" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-    <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+    <filter id="filter0_d_738_15222" x="0" y="0" width="336.744" height="240" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
+    <feFlood floodOpacity="0" result="BackgroundImageFix"/>
     <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
     <feOffset dy="16"/>
     <feGaussianBlur stdDeviation="10"/>

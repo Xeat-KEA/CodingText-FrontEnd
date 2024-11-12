@@ -1,16 +1,17 @@
 import Image from "next/image";
-import { BpEditIcon, BpFollowerIcon, BpReportIcon } from "./Icons";
-import { useState } from "react"; // useState 훅 임포트
+import { BpEditIcon, BpFollowerIcon } from "./Icons";
+import { useEffect, useState } from "react"; // useState 훅 임포트
 import Dialog from "@/app/_components/Dialog";
 import { DialogCheckIcon, DialogReportIcon } from "@/app/_components/Icons";
 import Link from "next/link";
 import { useBlogStore } from "@/app/stores";
 import { REPORT_REASONS } from "../_constants/constants";
 import DropDown from "@/app/_components/DropDown";
+import IconBtn from "@/app/_components/IconBtn";
 
 export default function BlogProfile() {
   // 전역 변수
-  const { isOwnBlog, profile, setProfile } = useBlogStore();
+  const { blogId, isOwnBlog, profile, setProfile } = useBlogStore();
   const [isFollowing, setIsFollowing] = useState(false); // 초기값 설정
   const [blogToReport, setBlogToReport] = useState<number | null>(null);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
@@ -51,16 +52,19 @@ export default function BlogProfile() {
     setSelectedOption(null);
   };
 
+  // 프로필 api 연결
+  useEffect(()=> {
+  }, [blogId])
   return (
     <>
       <div className="w-226 h-30 mt-12 mb-6 p-2">
         {profile && (
           <div className="profile-card flex items-center space-x-6">
             {/* 프로필 이미지 */}
-            {profile.profileImage && (
+            {profile.profileImg && (
               <div className="profile-image w-120 h-120 relative">
                 <Image
-                  src={profile.profileImage}
+                  src={profile.profileImg}
                   alt={`${profile.nickName}의 프로필 이미지`}
                   width={120}
                   height={120}
@@ -89,13 +93,12 @@ export default function BlogProfile() {
                       <BpFollowerIcon isFilled={isFollowing} />
                       <p className="text-primary text-xs font-semibold">{`팔로워 ${profile.FollowerCount}`}</p>
                     </button>
-                    <button
-                      className="flex items-center gap-1"
+
+                    <IconBtn
+                      type="report"
+                      content="신고"
                       onClick={() => onClickReportBlog(profile.userId)}
-                    >
-                      <BpReportIcon />
-                      <p className="text-red text-xs font-semibold">{`신고`}</p>
-                    </button>
+                    />
                   </>
                 ) : (
                   <>
@@ -114,13 +117,14 @@ export default function BlogProfile() {
       {/* 사용자 정보 수정 버튼 */}
       {isOwnBlog && (
         <Link
-        // 경로 수정 필요
+          // 경로 수정 필요
           href="/edit/profile"
           className="inline-flex items-center w-auto h-5 gap-1 ml-2"
         >
           <BpEditIcon />
           <p className="text-primary text-xs font-semibold">사용자 정보 수정</p>
         </Link>
+        
       )}
 
       {/* 신고 다이얼로그 컴포넌트 */}

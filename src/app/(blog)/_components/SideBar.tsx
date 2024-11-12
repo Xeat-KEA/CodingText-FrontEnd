@@ -19,6 +19,7 @@ import { useBlogStore } from "@/app/stores";
 import { useParams } from "next/navigation";
 import Board from "./Sidebar-Board/Board";
 import api from "@/app/_api/config";
+import { Profile_Dummy_Data } from "@/app/(admin)/_constants/constants";
 
 export default function SideBar() {
   // 전역 변수
@@ -35,6 +36,7 @@ export default function SideBar() {
   const [isCollapsed, setIsCollapsed] = useState(false); // 최소화
   const toggleSidebar = () => setIsCollapsed(!isCollapsed);
 
+  // 게시판 목록 api 연결
   useEffect(() => {
     // 프로토타입 더미데이터 GET
     // api.get(`/blog/${blogId}`).then((res) => {
@@ -69,6 +71,15 @@ export default function SideBar() {
     setBlogId(blogId);
     setIsOwnBlog(blogId === loggedInUserId);
   }, [blogId, setProfile]);
+
+  // 프로필 api 연결
+  useEffect(() => {
+    const foundProfile = Profile_Dummy_Data.find(profile => profile.userId === blogId);
+    if (foundProfile) {
+      setProfile(foundProfile);
+    } else {
+    }
+  }, [blogId]);
 
   // 사이드바 페이지 이동 컴포넌트
   const SidebarLink = ({

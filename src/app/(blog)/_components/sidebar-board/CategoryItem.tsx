@@ -109,9 +109,8 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
         ) : (
           <>
             <p
-              className={`${
-                pathname === `/blog/${blogId}/${category.id}`
-                  ? "font-bold"
+              className={`${pathname.startsWith(`/blog/${blogId}/${category.id}`)
+                ? "font-bold"
                   : ""
               } cursor-pointer`}
               onClick={() => handleCategoryClick(category.id)}

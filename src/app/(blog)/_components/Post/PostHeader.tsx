@@ -13,7 +13,7 @@ const PostHeader: React.FC<PostProps> = ({
 }) => {
     const pathname = usePathname();
     const isAdminPage = pathname.includes("/admin/report/");
-
+    
     const isCodingPost = Number(currentCategory?.id) === 1;
     // 일반 게시글과 코딩 게시글 정보가 분리되어 있기 때문에 아래와 같이 사용 (프로토타입을 위해 임시 변경)
     // const currentCodingPost = IsCoding_Data.find(post => post.postId === Number(currentPost?.postId));
