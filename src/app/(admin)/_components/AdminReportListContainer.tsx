@@ -1,4 +1,3 @@
-"use client";
 
 import TabBar from "@/app/_components/TapBar/TabBar";
 import { Report_Dummy_Data, REPORT_TAP_LIST } from "../_constants/constants";

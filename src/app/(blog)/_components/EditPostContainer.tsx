@@ -5,14 +5,14 @@ import { Post } from "@/app/_interfaces/interfaces";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import api from "@/app/_api/config";
+import { useBlogStore } from "@/app/stores";
+import { PostProps } from "../_interfaces/interfaces";
 
-export default function EditPostContainer(){
+const EditPostContainer: React.FC<PostProps> = ({ currentPost }) => {
     const router = useRouter();
     const searchParams = useSearchParams();
     const { id, postId } = useParams();
-
     const [post, setPost] = useState<Post>(); // 현재 게시글 상태
-
     const [isCancelDialogOpen, setIsCancelDialogOpen] = useState(false);
     const [isPostedDialogOpen, setIsPostedDialogOpen] = useState(false);
 
@@ -20,13 +20,13 @@ export default function EditPostContainer(){
         setPost(data);
     };
 
-    useEffect(()=>{
-        api.get(`/article/${postId}`).then((res) => {
-            const data = res.data.data
-            setPost(data);
-        })
+    useEffect(() => {
+        // api.get(`/article/${postId}`).then((res) => {
+        //     const data = res.data.data
+        //     setPost(data);
+        // })
     })
-    
+
     return (
         <>
             <div className="top-container">
@@ -71,3 +71,5 @@ export default function EditPostContainer(){
         </>
     );
 }
+
+export default EditPostContainer;

@@ -2,18 +2,18 @@ import Dialog from "@/app/_components/Dialog";
 import { DialogXIcon } from "@/app/_components/Icons";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { NoticeFormContainerProps } from "../_interfaces/interfaces";
+import { PushFormContainerProps } from "../_interfaces/interfaces";
 
-export default function NoticeFormContainer({
+export default function PushFormContainer({
   onSubmit,
   isDone,
-}: NoticeFormContainerProps) {
-  const { register, handleSubmit, setValue } = useForm<{ notice: string }>();
-  const onValid = ({ notice }: { notice: string }) => {
-    if (notice.length === 0) {
+}: PushFormContainerProps) {
+  const { register, handleSubmit, setValue } = useForm<{ push: string }>();
+  const onValid = ({ push }: { push: string }) => {
+    if (push.length === 0) {
       setIsError((prev) => !prev);
     } else {
-      onSubmit(notice);
+      onSubmit(push);
     }
   };
 
@@ -22,7 +22,7 @@ export default function NoticeFormContainer({
   // 알림 전달 완료 시 textarea 초기화
   useEffect(() => {
     if (isDone) {
-      setValue("notice", "");
+      setValue("push", "");
     }
   }, [isDone]);
   return (
@@ -31,7 +31,7 @@ export default function NoticeFormContainer({
         <div className="edit-container">
           <span className="edit-title">알림</span>
           <textarea
-            {...register("notice")}
+            {...register("push")}
             className="sign-in-input resize-none h-[120px]"
           />
         </div>

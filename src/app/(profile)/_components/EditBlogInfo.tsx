@@ -14,7 +14,7 @@ export default function EditBlogInfo() {
   };
   const { data } = useQuery({ queryKey: ["BlogData"], queryFn: fetchBlogData });
 
-  // 변경 사항 취소를 위한 초기값 저장
+  // 변경 사항 취소를 위한 초기값 
   const [blogData, setBlogData] = useState("");
   const [isIntroEditing, setIsIntroEditing] = useState(false);
   const { content, setContent } = useTiptapStore();

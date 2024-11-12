@@ -19,7 +19,7 @@ export default function AdminReportContentContainer() {
     
     return (
         <div className="top-container">
-            <div className="max-w-800 min-h-screen flex flex-col gap-6">
+            <div className="w-full max-w-[800px] min-h-screen flex flex-col gap-6">
                 {/* 신고 내역으로 버튼*/}
                 <div className="w-full">
                     <BackBtn

@@ -22,7 +22,7 @@ export default function Board() {
     const [isInsufficientSubCategories, setIsInsufficientSubCategories] = useState(false); 
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [categoryToDelete, setCategoryToDelete] = useState<{ categoryId: number; subCategoryId: number; isSub: boolean } | null>(null);
-    const [deletCategoryTitle, setDeleteCategoryTitle] = useState("");
+    const [deleteCategoryTitle, setDeleteCategoryTitle] = useState("");
 
     // 상/하위 게시판 추가 함수
     const handleAddCategory = useCallback((title: string, parentId?: number) => {
@@ -150,7 +150,7 @@ export default function Board() {
                     icon={isAddCategoryDisabled ? <FailIcon /> : undefined}
                     title={isAddCategoryDisabled
                         ? "더 이상 게시판을 \n 추가할 수 없어요"
-                        : `'${deletCategoryTitle}' \n 게시판을 삭제할까요?`}
+                        : `'${deleteCategoryTitle}' \n 게시판을 삭제할까요?`}
                     content={isAddCategoryDisabled
                         ? "상위 게시판은 최대 5개까지 \n 생성할 수 있어요"
                         : categoryToDelete?.isSub

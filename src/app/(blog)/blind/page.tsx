@@ -1,11 +1,24 @@
-import { BannerBubble2 } from "@/app/(home)/_components/Icons";
-import { LogoIcon } from "@/app/_components/Icons";
-import { SmBubbleIcon } from "./Icons";
-import { useRouter } from "next/navigation";
+"use client"
 
-export default function BlindPostContainer() {
+import { LogoIcon } from "@/app/_components/Icons";
+import { SmBubbleIcon } from "../_components/Icons";
+import { useRouter } from "next/navigation";
+import { usePathValue } from "@/app/_hooks/usePathValue";
+import { useBlogStore } from "@/app/stores";
+
+export default function BlindPostPage() {
+    const { blogId } = useBlogStore();
     const router = useRouter();
-      
+    const previousURL = usePathValue();
+    
+    const onClickBack = () => {
+        if (previousURL && previousURL !== "/blind") {
+          router.push(previousURL);
+        } else {
+          router.push(`/blog/${blogId}`);
+        }
+      };
+    
     return (
         <div className="w-full flex justify-center bg-bg-1">
             <div className="max-w-800 min-h-screen flex flex-col items-center">
@@ -17,7 +30,7 @@ export default function BlindPostContainer() {
                     {"블라인드 처리된 \n 게시물이에요"}
                 </span>
                 <button
-                onClick={() => router.back()}
+                onClick={onClickBack}
                 className="w-full py-3 border border-border-2 rounded-2xl bg-white text-base text-black font-semibold"
                 >
                     이전 페이지로

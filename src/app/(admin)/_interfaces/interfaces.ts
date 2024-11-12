@@ -75,7 +75,7 @@ export interface SearchUserBarProps {
   isDisabled?: boolean;
 }
 
-export interface NoticeFormContainerProps {
-  onSubmit: (notice: string) => void;
+export interface PushFormContainerProps {
+  onSubmit: (push: string) => void;
   isDone: boolean;
 }
