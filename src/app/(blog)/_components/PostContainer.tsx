@@ -1,3 +1,4 @@
+import BlogLayout from "../blog/[id]/layout";
 import PostAction from "@/app/(blog)/_components/Post/PostAction";
 import PostContent from "@/app/(blog)/_components/Post/PostContent";
 import PostHeader from "@/app/(blog)/_components/Post/PostHeader";
@@ -10,6 +11,7 @@ import { BlogPost, CompleteArticle } from "@/app/(blog)/_interfaces/interfaces";
 import api from "@/app/_api/config";
 import BlindPostContainer from "./BlindPostContainer";
 import { Post_Dummy_Data } from "@/app/(admin)/_constants/constants";
+import { usePathValue } from "@/app/_hooks/usePathValue";
 
 export default function PostContainer() {
     //  전역변수
@@ -39,20 +41,6 @@ export default function PostContainer() {
     // 비밀번호 입력 dialog 추가
 
     useEffect(() => {
-        if (articleId === 3) {
-            setCategoryId(1);
-            setSubCategoryId(1);
-            setBlogUserId(2);
-        } else if (articleId === 1) {
-            setCategoryId(2);
-            setSubCategoryId(2);
-            setBlogUserId(1);
-        } else {
-            setCategoryId(0);
-            setSubCategoryId(0);
-            setBlogUserId(3);
-        }
-
         // 프로토타입 더미 데이터 GET
         // api.get(`/article/${articleId}`).then((res) => {
         //     const data = res.data.data
@@ -69,14 +57,20 @@ export default function PostContainer() {
         const findedPost = Post_Dummy_Data.find(post => post.blogId === Number(params?.id) && post.postId === Number(params?.postId))
         setCurrentPost(findedPost || null)
         setIsBlind(findedPost?.isBlind ?? false)
-        console.log()
-    }, [currentPost, params]);
+        setCategoryId(Number(findedPost?.categoryId))
+        setSubCategoryId(Number(findedPost?.subCategoryId))
+    }, [params]);
+
+    useEffect(() => {
+        if (isBlind) {
+            router.push("/blind");
+        }
+    }, [isBlind, router]);
+
 
     return (
         <>
-            {isBlind ? (
-                <BlindPostContainer />
-            ) : (
+            {!isBlind && (
                 <div className="top-container">
                     <div className="max-w-800 min-h-screen flex flex-col gap-6 py-12">
                         {/* 목록으로 버튼*/}

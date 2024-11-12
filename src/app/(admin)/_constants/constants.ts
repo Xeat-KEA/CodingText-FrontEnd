@@ -63,7 +63,7 @@ export const Post_Dummy_Data = [
   {
     postId: 1,
     blogId: 101,
-    categoryId: 2,
+    categoryId: 1,
     subCategoryId: 2,
     title: "일반 게시글",
     content: "7J6E7IucIOqyjOyLnOusvOyeheuLiOuLpC4K6rCc67Cc7J6Q7J6F64uI64ukLgrrsJjqsJHsirXri4jri6Qu",
@@ -80,7 +80,7 @@ export const Post_Dummy_Data = [
   {
     postId: 2,
     blogId: 101,
-    categoryId: 2,
+    categoryId: 1,
     subCategoryId: 2,
     title: "코딩 게시글",
     content: "7J6E7IucIOqyjOyLnOusvOyeheuLiOuLpC4K6rCc67Cc7J6Q7J6F64uI64ukLgrrsJjqsJHsirXri4jri6Qu",

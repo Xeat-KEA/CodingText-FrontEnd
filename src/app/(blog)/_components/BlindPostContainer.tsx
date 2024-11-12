@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 
 export default function BlindPostContainer() {
     const router = useRouter();
+      
     return (
         <div className="w-full flex justify-center bg-bg-1">
             <div className="max-w-800 min-h-screen flex flex-col items-center">
@@ -17,7 +18,7 @@ export default function BlindPostContainer() {
                 </span>
                 <button
                 onClick={() => router.back()}
-                className="w-4/5 py-6 border border-border-2 rounded-2xl bg-white text-xl text-black font-semibold"
+                className="w-full py-3 border border-border-2 rounded-2xl bg-white text-base text-black font-semibold"
                 >
                     이전 페이지로
                 </button>
