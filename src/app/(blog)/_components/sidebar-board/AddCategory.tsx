@@ -5,9 +5,9 @@ import { AddCategoryProps } from "../../_interfaces/interfaces";
 import { useBlogStore } from "@/app/stores";
 
 const AddCategory: React.FC<AddCategoryProps> = ({
-    handleAddCategory,
-    parentId,
-    isSubCategory,
+  handleAddCategory,
+  parentId,
+  isSubCategory,
 }) => {
     // 전역 변수
     const {

@@ -9,11 +9,7 @@ export default function CommentInput({
   onSubmit,
   onCancel,
 }: CommentInputProps) {
-  const {
-    register,
-    handleSubmit,
-    reset,
-  } = useForm();
+  const { register, handleSubmit, reset } = useForm();
   const { profile } = useBlogStore();
 
   // 수정 필요
@@ -53,7 +49,7 @@ export default function CommentInput({
         <div className="flex absolute right-0 items-center">
           <button
             type="submit"
-            className="px-4 py-2 bg-primary text-white text-xs text-bold rounded-md"
+            className="px-4 py-2 bg-primary-1 text-white text-xs text-bold rounded-md"
           >
             작성하기
           </button>

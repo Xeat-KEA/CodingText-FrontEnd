@@ -15,7 +15,7 @@ export default function BlogSubContainer() {
     const pathname = usePathname();
     const searchParams = useSearchParams();
     const [filter, setFilter] = useState("ACCURACY");
-    
+
     useEffect(() => {
         // filter 변경 시 다시 GET 하는 로직 필요
     }, [filter]);
@@ -62,7 +62,7 @@ export default function BlogSubContainer() {
                                 key={el.selection}
                                 onClick={() => setFilter(el.selection)}
                                 className={`text-xs ${filter === el.selection
-                                        ? "text-primary font-semibold"
+                                        ? "text-primary-1 font-semibold"
                                         : "text-disabled"
                                     }`}
                             >
@@ -99,5 +99,5 @@ export default function BlogSubContainer() {
                 <Pagination />
             </div>
         </div>
-    )
+    );
 }

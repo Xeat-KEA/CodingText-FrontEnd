@@ -12,7 +12,7 @@ export default function IconBtn({ type, content, onClick }: IconBtnProps) {
       {type === "blind" && <BlindIcon/>}
       <span
         className={`text-xs font-semibold whitespace-nowrap ${
-          type === "edit" ? "text-primary" : type === "blind" ? "text-body" : "text-red"
+          type === "edit" ? "text-primary-1" : type === "blind" ? "text-body" : "text-red"
         }`}
       >
         {content}

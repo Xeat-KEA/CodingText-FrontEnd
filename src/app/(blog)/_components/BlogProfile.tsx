@@ -91,7 +91,7 @@ export default function BlogProfile() {
                       onClick={onClickFollow}
                     >
                       <BpFollowerIcon isFilled={isFollowing} />
-                      <p className="text-primary text-xs font-semibold">{`팔로워 ${profile.FollowerCount}`}</p>
+                      <p className="text-primary-1 text-xs font-semibold">{`팔로워 ${profile.FollowerCount}`}</p>
                     </button>
 
                     <IconBtn
@@ -104,7 +104,7 @@ export default function BlogProfile() {
                   <>
                     <button className="flex items-center gap-1">
                       <BpFollowerIcon isFilled={true} />
-                      <p className="text-primary text-xs font-semibold">{`팔로워 ${profile.FollowerCount}`}</p>
+                      <p className="text-primary-1 text-xs font-semibold">{`팔로워 ${profile.FollowerCount}`}</p>
                     </button>
                   </>
                 )}
@@ -122,7 +122,9 @@ export default function BlogProfile() {
           className="inline-flex items-center w-auto h-5 gap-1 ml-2"
         >
           <BpEditIcon />
-          <p className="text-primary text-xs font-semibold">사용자 정보 수정</p>
+          <p className="text-primary-1 text-xs font-semibold">
+            사용자 정보 수정
+          </p>
         </Link>
         
       )}

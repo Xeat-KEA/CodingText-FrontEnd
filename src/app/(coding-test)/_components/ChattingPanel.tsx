@@ -61,7 +61,7 @@ export default function ChattingPanel() {
             className={`bubble ${
               chat.role === "gpt"
                 ? "bg-white"
-                : "bg-primary font-bold self-end !text-white whitespace-pre-wrap"
+                : "bg-primary-1 font-bold self-end !text-white whitespace-pre-wrap"
             }`}
             dangerouslySetInnerHTML={{
               __html: DOMPurify.sanitize(chat.content),

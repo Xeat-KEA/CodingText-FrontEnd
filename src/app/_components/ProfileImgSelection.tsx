@@ -16,7 +16,7 @@ export default function ProfileImgSelection({
           key={el}
           className={`flex-center w-16 h-16 rounded-full overflow-hidden cursor-pointer ${
             el === profileImg
-              ? "border-2 border-primary"
+              ? "border-2 border-primary-1"
               : "border border-border-2 "
           }`}
           onClick={() => {

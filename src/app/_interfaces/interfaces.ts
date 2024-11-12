@@ -95,7 +95,7 @@ export interface CategoryDropDownProps {
   placeholder?: string;
 }
 
-export interface CheckBoxIconProps {
+export interface IconProps {
   isActive?: boolean;
 }
 

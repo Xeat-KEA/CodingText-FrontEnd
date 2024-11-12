@@ -65,7 +65,7 @@ export default function ChatInput({ onSubmit }: ChatInputProps) {
         />
         <button
           type="submit"
-          className="self-end flex-center w-8 h-8 rounded-full bg-primary"
+          className="self-end flex-center w-8 h-8 rounded-full bg-primary-1"
         >
           <SendMessageIcon />
         </button>

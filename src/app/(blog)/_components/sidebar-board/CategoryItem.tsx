@@ -1,9 +1,9 @@
 import React, { useCallback, useState } from "react";
-import SubCategoryItem from "./SubCategoryItem";
-import AddCategory from "./AddCategory";
 import { CategoryItemProps } from "../../_interfaces/interfaces";
 import { useBlogStore } from "@/app/stores";
 import { usePathname, useRouter } from "next/navigation";
+import SubCategoryItem from "./SubCategoryItem";
+import AddCategory from "./AddCategory";
 
 const CategoryItem: React.FC<CategoryItemProps> = ({
   category,
@@ -22,7 +22,7 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
   } = useBlogStore();
   const router = useRouter();
   const pathname = usePathname();
-  
+
   const [editCategoryId, setEditCategoryId] = useState<number | null>(null);
   const [editCategoryTitle, setEditCategoryTitle] = useState<string>("");
   const [hoveredCategoryId, setHoveredCategoryId] = useState<boolean>(false);
@@ -89,7 +89,7 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
               />
               <div className="absolute right-3 flex text-2xs space-x-2">
                 <button
-                  className="text-primary"
+                  className="text-primary-1"
                   onClick={() => saveEditCategory(category.id)}
                 >
                   저장
@@ -109,10 +109,7 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
         ) : (
           <>
             <p
-              className={`${pathname.startsWith(`/blog/${blogId}/${category.id}`)
-                ? "font-bold"
-                  : ""
-              } cursor-pointer`}
+              className={`${pathname.startsWith(`/blog/${blogId}/${category.id}`) ? "font-bold" : ""} cursor-pointer`}
               onClick={() => handleCategoryClick(category.id)}
             >
               {category.title}

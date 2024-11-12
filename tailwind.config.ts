@@ -18,7 +18,10 @@ const config: Config = {
       },
       colors: {
         // Theme 색상
-        primary: "#6B6CED",
+        primary: {
+          1: "#6B6CED",
+          2: "#F6F8FD",
+        },
 
         // Text 색상
         black: "#222222",
