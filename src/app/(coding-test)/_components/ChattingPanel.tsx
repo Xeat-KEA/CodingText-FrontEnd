@@ -50,7 +50,7 @@ export default function ChattingPanel() {
   }, [data]);
 
   return (
-    <>
+    <div className="flex flex-col bg-bg-1 h-full max-md:h-[70vh]">
       <div
         ref={chatContainerRef}
         className="grow flex flex-col px-6 py-8 gap-6 overflow-y-auto"
@@ -73,6 +73,6 @@ export default function ChattingPanel() {
       </div>
       {/* 채팅 입력칸 */}
       <ChatInput onSubmit={onSubmit} />
-    </>
+    </div>
   );
 }

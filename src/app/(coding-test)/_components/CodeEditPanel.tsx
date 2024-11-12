@@ -42,16 +42,18 @@ export default function CodeEditPanel() {
 
   return (
     <>
-      <div className="w-full flex flex-col px-6 py-8 gap-4">
-        {/* 코드 에디터 */}
-        <div className="flex h-full rounded-2xl overflow-hidden">
-          <CodeEditor />
+      <div className="w-full flex flex-col px-6 py-8 gap-4 max-md:h-screen">
+        <div className="h-full flex flex-col gap-4">
+          {/* 코드 에디터 */}
+          <div className="flex h-full rounded-2xl overflow-hidden">
+            <CodeEditor />
+          </div>
+          {/* 탭바 */}
+          <TabBar
+            menuList={CODING_TAB_BAR_MENU}
+            dropDownList={PROGRAMMING_LANGUAGES}
+          />
         </div>
-        {/* 탭바 */}
-        <TabBar
-          menuList={CODING_TAB_BAR_MENU}
-          dropDownList={PROGRAMMING_LANGUAGES}
-        />
         {/* 컴파일러 / 메모장 */}
         <div
           className={`w-full h-[200px] flex shrink-0 rounded-2xl overflow-hidden ${

@@ -7,6 +7,7 @@ import NewPostPanel from "../../_components/NewPostPanel";
 import { useEffect } from "react";
 import { useCheckToken } from "@/app/_hooks/useCheckToken";
 import ChattingPanel from "../../_components/ChattingPanel";
+import { useHandleResize } from "@/app/_hooks/useHandleResize";
 
 export default function CodingTestPage() {
   // 로그인 여부 확인
@@ -22,17 +23,28 @@ export default function CodingTestPage() {
     setContent("");
   }, []);
 
+  const windowSize = useHandleResize();
+
   return (
-    <Splitter className="w-full h-screen pt-16 flex">
-      {/* 채팅창 공간 */}
-      <SplitterPanel className="bg-bg-1 flex flex-col">
-        {/* 메세지 표시 공간 */}
-        <ChattingPanel />
-      </SplitterPanel>
-      {/* 작성 관련 공간 */}
-      <SplitterPanel className="flex">
-        {!isPosting ? <CodeEditPanel /> : <NewPostPanel />}
-      </SplitterPanel>
-    </Splitter>
+    <>
+      {windowSize >= 768 ? (
+        <Splitter className="w-full h-screen pt-16 flex">
+          {/* 채팅창 공간 */}
+          <SplitterPanel className="flex flex-col">
+            {/* 메세지 표시 공간 */}
+            <ChattingPanel />
+          </SplitterPanel>
+          {/* 작성 관련 공간 */}
+          <SplitterPanel className="flex">
+            {!isPosting ? <CodeEditPanel /> : <NewPostPanel />}
+          </SplitterPanel>
+        </Splitter>
+      ) : (
+        <div className="w-full pt-16 flex flex-col">
+          <ChattingPanel />
+          {!isPosting ? <CodeEditPanel /> : <NewPostPanel />}
+        </div>
+      )}
+    </>
   );
 }

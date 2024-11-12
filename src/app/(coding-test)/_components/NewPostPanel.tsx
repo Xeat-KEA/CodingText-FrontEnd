@@ -25,7 +25,7 @@ export default function NewPostPanel() {
 
   return (
     <>
-      <div className="w-full flex flex-col px-6 pt-4 pb-8 gap-4">
+      <div className="w-full flex flex-col px-6 pt-4 pb-8 gap-4 max-md:h-screen">
         {/* 탭바 */}
         <TabBar menuList={POSTING_TAB_BAR_MENU} />
         {/* 컴파일러 / 메모장 */}
@@ -54,10 +54,11 @@ export default function NewPostPanel() {
             isCodingTest
             onCancelClick={() => setIsPosting(false)}
             onBtnClick={(data) => {
+              /* 
               // data post 부분 작성 필요
               const newContent = useBase64("encode", data.content);
-              const newData = { ...data, content: newContent };
-              console.log(newData);
+              const newData = { ...data, content: newContent }; */
+              console.log(data);
 
               setIsDialogOpen((prev) => !prev);
             }}
