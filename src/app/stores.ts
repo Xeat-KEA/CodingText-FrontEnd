@@ -16,7 +16,7 @@ export const useCodingTestStore = create<CodingTestStore>((set) => ({
   title: "",
   setTitle: (newTitle) => set({ title: newTitle }),
   // 언어 설정
-  language: undefined,
+  language: { content: "", selection: "" },
   setLanguage: (newLanguage) => set({ language: newLanguage }),
   // 정답 제출 여부
   hasSolved: false,

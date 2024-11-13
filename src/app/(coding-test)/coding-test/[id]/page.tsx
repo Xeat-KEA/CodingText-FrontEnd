@@ -27,23 +27,27 @@ export default function CodingTestPage() {
 
   return (
     <>
-      {windowSize >= 768 ? (
-        <Splitter className="w-full h-screen pt-16 flex">
-          {/* 채팅창 공간 */}
-          <SplitterPanel className="flex flex-col">
-            {/* 메세지 표시 공간 */}
+      {windowSize ? (
+        windowSize >= 768 ? (
+          <Splitter className="w-full h-screen pt-16 flex">
+            {/* 채팅창 공간 */}
+            <SplitterPanel className="flex flex-col">
+              {/* 메세지 표시 공간 */}
+              <ChattingPanel />
+            </SplitterPanel>
+            {/* 작성 관련 공간 */}
+            <SplitterPanel className="flex">
+              {!isPosting ? <CodeEditPanel /> : <NewPostPanel />}
+            </SplitterPanel>
+          </Splitter>
+        ) : (
+          <div className="w-full pt-16 flex flex-col">
             <ChattingPanel />
-          </SplitterPanel>
-          {/* 작성 관련 공간 */}
-          <SplitterPanel className="flex">
             {!isPosting ? <CodeEditPanel /> : <NewPostPanel />}
-          </SplitterPanel>
-        </Splitter>
+          </div>
+        )
       ) : (
-        <div className="w-full pt-16 flex flex-col">
-          <ChattingPanel />
-          {!isPosting ? <CodeEditPanel /> : <NewPostPanel />}
-        </div>
+        <div>Loading</div>
       )}
     </>
   );

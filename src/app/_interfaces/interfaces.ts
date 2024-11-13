@@ -205,7 +205,7 @@ export interface CodingTestStore {
   // 코딩 관련 state
   title: string;
   setTitle: (newTitle: string) => void;
-  language: Selection | undefined;
+  language: Selection;
   setLanguage: (newLanguage: Selection) => void;
   hasSolved: boolean;
   setHasSolved: (isCorrect: boolean) => void;

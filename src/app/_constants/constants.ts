@@ -17,7 +17,7 @@ export const PROFILE_MENU = [
 export const PROGRAMMING_LANGUAGES: Selection[] = [
   { content: "Java", selection: "java" },
   { content: "Python", selection: "python" },
-  { content: "JavaScript", selection: "javascript" },
+  { content: "JavaScript", selection: "js" },
   { content: "C++", selection: "c++" },
 ];
 

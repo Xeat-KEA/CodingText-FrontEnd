@@ -12,8 +12,9 @@ export default function ChattingPanel() {
 
   // 문제 정보 GET (자체 제공 문제)
   const fetchChats = async () => {
+    /* 
     const response = await api.get("/coding-test");
-    return response.data;
+    return response.data; */
   };
   const { data, isLoading } = useQuery({
     queryKey: ["chats"],

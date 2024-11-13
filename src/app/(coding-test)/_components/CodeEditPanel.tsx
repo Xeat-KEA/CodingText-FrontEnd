@@ -9,6 +9,7 @@ import { useParams, useRouter } from "next/navigation";
 import { usePageHandler } from "@/app/_hooks/usePageHandler";
 import TabBar from "@/app/_components/TapBar/TabBar";
 import { useBase64 } from "@/app/_hooks/useBase64";
+import api from "@/app/_api/config";
 
 export default function CodeEditPanel() {
   const router = useRouter();
@@ -18,21 +19,47 @@ export default function CodeEditPanel() {
   const { tab } = useTabStore();
 
   // 코딩 테스트 관련 전역 변수
-  const { value, hasSolved, setHasSolved, setIsPosting, memo, setMemo } =
-    useCodingTestStore();
+  const {
+    value,
+    hasSolved,
+    setHasSolved,
+    setIsPosting,
+    memo,
+    setMemo,
+    language,
+  } = useCodingTestStore();
 
   const [isCorrect, setIsCorrect] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isPageChanging, setIsPageChanging] = useState(false);
   const [compiledResult, setCompiledResult] = useState("");
 
-  const onCodeSubmit = () => {
+  const onCodeSubmit = async () => {
     // 코드를 base64로 인코딩하여 백에 전달
     const encodedCode = useBase64("encode", value);
+    const data = {
+      codeId: Number(id),
+      language: language.selection,
+      code: encodedCode,
+    };
 
-    // 백으로부터 전달 받은 컴파일 결과 내용을 디코딩 후 저장
-    const result = useBase64("decode", "");
-    setCompiledResult(result);
+    try {
+      const response = await api.post(
+        "/code-compile-service/code/compile",
+        data,
+        {
+          headers: { Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}` },
+        }
+      );
+      if (response.status === 200) {
+        const result = response.data.data.result[0];
+        setCompiledResult(result);
+        console.log(result);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+
     // 정답 여부 저장
     setIsCorrect(true);
   };
