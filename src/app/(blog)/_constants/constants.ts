@@ -53,5 +53,5 @@ export const User_Specific_Categories: Category[] = [
       { id: 2, title: "동아리" },
       { id: 3, title: "스터디 그룹" },
     ],
-  }
+  },
 ];

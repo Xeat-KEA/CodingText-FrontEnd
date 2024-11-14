@@ -1,12 +1,11 @@
-"use client"
+"use client";
 
-import AdminNoticeContainer from "@/app/(admin)/_components/AdminNoticeContainer"
+import AdminNoticeContainer from "@/app/(admin)/_components/AdminNoticeContainer";
 
 export default function AdminNoticePage() {
-
-    return (
-        <>
-            <AdminNoticeContainer />
-        </>
-    )
+  return (
+    <>
+      <AdminNoticeContainer />
+    </>
+  );
 }

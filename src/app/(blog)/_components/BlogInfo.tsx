@@ -29,8 +29,7 @@ export default function BlogInfo() {
             <Link
               // 경로 수정 필요
               href="/edit/blog"
-              className="inline-flex items-center w-auto h-5 gap-1 ml-2"
-            >
+              className="inline-flex items-center w-auto h-5 gap-1 ml-2">
               <BpEditIcon />
               <p className="text-primary-1 text-xs font-semibold">
                 블로그 정보 수정

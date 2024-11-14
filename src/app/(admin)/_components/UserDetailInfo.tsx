@@ -37,8 +37,7 @@ export default function UserDetailInfo({ userId }: { userId: number }) {
         <span className="text-xl-content">{dummyData.nickname}</span>
         <button
           onClick={() => onReset("nickname")}
-          className="edit-btn-primary"
-        >
+          className="edit-btn-primary">
           초기화
         </button>
       </div>
@@ -52,8 +51,7 @@ export default function UserDetailInfo({ userId }: { userId: number }) {
         />
         <button
           onClick={() => onReset("profileImg")}
-          className="edit-btn-primary"
-        >
+          className="edit-btn-primary">
           초기화
         </button>
       </div>

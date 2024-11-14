@@ -15,7 +15,7 @@ export const usePathValue = (): string | null => {
       storage.setItem("CURRENT_URL", currentURL);
       console.log("a", currentURL);
       console.log(prevURL);
-      
+
       setPreviousURL(prevURL);
     } else {
       // /blind 경로일 때는 이전 URL을 유지
