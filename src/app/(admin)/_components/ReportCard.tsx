@@ -73,7 +73,7 @@ export default function ReportCard({
       <Link
         href={
           tab === "블로그"
-            ? `/admin/user?keyword=`
+            ? `/admin/user/${reportId}` // 추후 수정
             : `/admin/report/${reportId}`
         }
         className="flex items-center gap-2 text-xs text-primary-1 font-semibold">

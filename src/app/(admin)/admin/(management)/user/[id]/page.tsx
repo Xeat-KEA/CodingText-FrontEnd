@@ -18,7 +18,7 @@ export default function UserManagementDetailPage() {
 
   const onCancel = () => {
     setSelectedId(-1);
-    router.back();
+    router.push(`/admin/user`);
   };
 
   return (
