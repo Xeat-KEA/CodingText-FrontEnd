@@ -26,16 +26,14 @@ export default function ManageReceiver({
         <div
           className={`w-full max-w-[240px] h-[160px] px-6 py-4 flex flex-col gap-2 border border-border-2 rounded-lg overflow-y-auto ${
             isAll ? "bg-bg-1" : "bg-white"
-          }`}
-        >
+          }`}>
           {receivers.map((el) => (
             <div key={el} className="flex w-full justify-between items-center">
               <span className="text-black">{el}</span>
               <button
                 className="edit-btn-red"
                 onClick={() => onDelete(el)}
-                disabled={isAll}
-              >
+                disabled={isAll}>
                 취소
               </button>
             </div>

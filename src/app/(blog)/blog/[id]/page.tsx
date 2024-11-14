@@ -6,7 +6,7 @@ import BlogInfo from "../../_components/BlogInfo";
 
 export default function BlogHomePage() {
   // 로그인 여부 확인
-  const { } = useCheckToken(true);
+  const {} = useCheckToken(true);
 
   return (
     <>

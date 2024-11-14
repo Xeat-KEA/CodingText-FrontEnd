@@ -53,8 +53,7 @@ export default function BlogProfile() {
   };
 
   // 프로필 api 연결
-  useEffect(()=> {
-  }, [blogId])
+  useEffect(() => {}, [blogId]);
   return (
     <>
       <div className="w-226 h-30 mt-12 mb-6 p-2">
@@ -88,8 +87,7 @@ export default function BlogProfile() {
                   <>
                     <button
                       className="flex items-center gap-1"
-                      onClick={onClickFollow}
-                    >
+                      onClick={onClickFollow}>
                       <BpFollowerIcon isFilled={isFollowing} />
                       <p className="text-primary-1 text-xs font-semibold">{`팔로워 ${profile.FollowerCount}`}</p>
                     </button>
@@ -119,14 +117,12 @@ export default function BlogProfile() {
         <Link
           // 경로 수정 필요
           href="/edit/profile"
-          className="inline-flex items-center w-auto h-5 gap-1 ml-2"
-        >
+          className="inline-flex items-center w-auto h-5 gap-1 ml-2">
           <BpEditIcon />
           <p className="text-primary-1 text-xs font-semibold">
             사용자 정보 수정
           </p>
         </Link>
-        
       )}
 
       {/* 신고 다이얼로그 컴포넌트 */}
@@ -137,8 +133,7 @@ export default function BlogProfile() {
           backBtn="취소"
           onBackBtnClick={cancelReportBlog}
           redBtn="신고"
-          onBtnClick={confirmReportBlog}
-        >
+          onBtnClick={confirmReportBlog}>
           <DropDown
             isSmall={false}
             selection={selectedOption || ""}
@@ -166,8 +161,7 @@ export default function BlogProfile() {
           title="감사합니다"
           content="신고가 정상적으로 접수되었어요"
           backBtn="확인"
-          onBackBtnClick={() => setIsReportConfirmDialogOpen(false)}
-        ></Dialog>
+          onBackBtnClick={() => setIsReportConfirmDialogOpen(false)}></Dialog>
       )}
     </>
   );

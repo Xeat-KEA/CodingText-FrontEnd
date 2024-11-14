@@ -35,8 +35,7 @@ export default function AdminSignUpFormContainer() {
         <SignInTitle title="관리자 회원가입" />
         <form
           onSubmit={handleSubmit(onValid)}
-          className="flex flex-col w-full gap-8"
-        >
+          className="flex flex-col w-full gap-8">
           {/* 아이디 비밀번호 입력 */}
           <div className="flex flex-col gap-6">
             <input
@@ -70,8 +69,7 @@ export default function AdminSignUpFormContainer() {
             <button
               type="button"
               onClick={() => router.push("/admin/sign-in")}
-              className="edit-btn text-body font-semibold"
-            >
+              className="edit-btn text-body font-semibold">
               뒤로
             </button>
           </div>

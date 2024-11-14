@@ -75,8 +75,7 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
       <div
         className="flex items-center relative text-black text-sm font-regular h-10 pl-6 py-2 cursor-pointer"
         onMouseEnter={() => setHoveredCategoryId(true)}
-        onMouseLeave={() => setHoveredCategoryId(false)}
-      >
+        onMouseLeave={() => setHoveredCategoryId(false)}>
         {editCategoryId === category.id ? (
           isOwnBlog && (
             <>
@@ -90,8 +89,7 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
               <div className="absolute right-3 flex text-2xs space-x-2">
                 <button
                   className="text-primary-1"
-                  onClick={() => saveEditCategory(category.id)}
-                >
+                  onClick={() => saveEditCategory(category.id)}>
                   저장
                 </button>
                 <button
@@ -99,8 +97,7 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
                   onClick={() => {
                     setEditCategoryId(null);
                     setEditCategoryTitle("");
-                  }}
-                >
+                  }}>
                   취소
                 </button>
               </div>
@@ -110,8 +107,7 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
           <>
             <p
               className={`${pathname.startsWith(`/blog/${blogId}/${category.id}`) ? "font-bold" : ""} cursor-pointer`}
-              onClick={() => handleCategoryClick(category.id)}
-            >
+              onClick={() => handleCategoryClick(category.id)}>
               {category.title}
             </p>
             {isOwnBlog &&
@@ -124,16 +120,14 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
                     onClick={() => {
                       setEditCategoryId(category.id);
                       setEditCategoryTitle(category.title);
-                    }}
-                  >
+                    }}>
                     수정
                   </button>
                   <button
                     className="text-red"
                     onClick={() =>
                       handleDeleteCategory(category.id, category.title, false)
-                    }
-                  >
+                    }>
                     삭제
                   </button>
                 </div>
@@ -167,8 +161,7 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
               ) : (
                 <button
                   onClick={() => setIsAddingSubCategory(category.id, true)}
-                  className="text-2xs text-disabled h-8 py-2"
-                >
+                  className="text-2xs text-disabled h-8 py-2">
                   새 하위 게시판 추가
                 </button>
               )}

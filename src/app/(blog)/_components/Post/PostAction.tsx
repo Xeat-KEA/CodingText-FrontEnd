@@ -1,9 +1,6 @@
 import { useBlogStore } from "@/app/stores";
 import { PostProps } from "../../_interfaces/interfaces";
-import {
-  BpFollowerIcon,
-  ShareIcon,
-} from "../Icons";
+import { BpFollowerIcon, ShareIcon } from "../Icons";
 import { useState } from "react";
 import Dialog from "@/app/_components/Dialog";
 import { DialogCheckIcon, DialogReportIcon } from "@/app/_components/Icons";
@@ -105,7 +102,9 @@ const PostAction: React.FC<PostProps> = ({ currentPost }) => {
             <IconBtn
               type="edit"
               content="수정"
-              onClick={() => router.push(`/blog/${blogId}/edit-post/${currentPost.postId}`)}
+              onClick={() =>
+                router.push(`/blog/${blogId}/edit-post/${currentPost.postId}`)
+              }
             />
             <IconBtn
               type="delete"
@@ -156,8 +155,7 @@ const PostAction: React.FC<PostProps> = ({ currentPost }) => {
           backBtn="취소"
           onBackBtnClick={cancelReportPost}
           redBtn="신고"
-          onBtnClick={confirmReportPost}
-        >
+          onBtnClick={confirmReportPost}>
           <DropDown
             isSmall={false}
             selection={selectedOption || ""}
@@ -185,8 +183,7 @@ const PostAction: React.FC<PostProps> = ({ currentPost }) => {
           title="감사합니다"
           content="신고가 정상적으로 접수되었어요"
           backBtn="확인"
-          onBackBtnClick={() => setIsReportConfirmDialogOpen(false)}
-        ></Dialog>
+          onBackBtnClick={() => setIsReportConfirmDialogOpen(false)}></Dialog>
       )}
     </div>
   );

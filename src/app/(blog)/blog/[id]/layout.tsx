@@ -1,16 +1,14 @@
 import SideBar from "../../_components/SideBar";
 
 export default function BlogLayout({
-    children,
+  children,
 }: Readonly<{
-    children: React.ReactNode;
+  children: React.ReactNode;
 }>) {
-    return (
-        <div>
-            <SideBar/>
-            <div>
-                {children}
-            </div>
-        </div>
-    );
+  return (
+    <div>
+      <SideBar />
+      <div>{children}</div>
+    </div>
+  );
 }
