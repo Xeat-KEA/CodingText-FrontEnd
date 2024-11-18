@@ -1,40 +1,31 @@
-import CodeEditor from "./CodeEditor";
-import { CODING_BUTTONS, CODING_TAB_BAR_MENU } from "../_constants/constants";
-import { PROGRAMMING_LANGUAGES } from "@/app/_constants/constants";
-import { useCodingTestStore, useTabStore } from "@/app/stores";
-import { useState } from "react";
+import { useCodingTestStore } from "@/app/stores";
+import { useEffect, useState } from "react";
 import Dialog from "@/app/_components/Dialog";
 import { DialogCheckIcon, DialogXIcon } from "@/app/_components/Icons";
 import { useParams, useRouter } from "next/navigation";
 import { usePageHandler } from "@/app/_hooks/usePageHandler";
-import TabBar from "@/app/_components/TapBar/TabBar";
 import { useBase64 } from "@/app/_hooks/useBase64";
 import api from "@/app/_api/config";
+import { useHandleResize } from "@/app/_hooks/useHandleResize";
+import CodePart from "./CodePart";
+import SplittedCodePart from "./SplittedCodePart";
+import CodePartBtns from "./CodePartBtns";
 
 export default function CodeEditPanel() {
   const router = useRouter();
   const { id } = useParams();
 
-  // 현재 탭 전역 변수
-  const { tab } = useTabStore();
-
   // 코딩 테스트 관련 전역 변수
-  const {
-    value,
-    hasSolved,
-    setHasSolved,
-    setIsPosting,
-    memo,
-    setMemo,
-    language,
-  } = useCodingTestStore();
+  const { value, setIsPosting, language, setHasSolved } = useCodingTestStore();
 
   const [isCorrect, setIsCorrect] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isPageChanging, setIsPageChanging] = useState(false);
   const [compiledResult, setCompiledResult] = useState("");
+  const [isRunning, setIsRunning] = useState(false);
 
-  const onCodeSubmit = async () => {
+  // 코드 컴파일 시
+  const onCompile = async () => {
     // 코드를 base64로 인코딩하여 백에 전달
     const encodedCode = useBase64("encode", value);
     const data = {
@@ -42,117 +33,55 @@ export default function CodeEditPanel() {
       language: language.selection,
       code: encodedCode,
     };
-
-    try {
-      const response = await api.post(
-        "/code-compile-service/code/compile",
-        data,
-        {
-          headers: { Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}` },
+    if (!isRunning) {
+      try {
+        setIsRunning(true);
+        const response = await api.post(
+          "/code-compile-service/code/compile",
+          data,
+          {
+            headers: {
+              Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}`,
+            },
+          }
+        );
+        if (response.status === 200) {
+          const result = response.data.data;
+          setCompiledResult(result.result[0]);
+          setIsRunning(false);
         }
-      );
-      if (response.status === 200) {
-        const result = response.data.data.result[0];
-        setCompiledResult(result);
-        console.log(result);
+      } catch (err) {
+        console.log(err);
       }
-    } catch (err) {
-      console.log(err);
     }
+  };
 
-    // 정답 여부 저장
+  // 코드 제출 시
+  const onSubmit = () => {
     setIsCorrect(true);
+    setHasSolved(true);
+    setIsDialogOpen((prev) => !prev);
   };
 
   // 새로고침, 페이지 닫기, 뒤로가기 방지
   usePageHandler();
 
+  const windowSize = useHandleResize();
+  console.log(compiledResult);
   return (
     <>
-      <div className="w-full flex flex-col px-6 py-8 gap-4 max-md:h-screen">
-        <div className="h-full flex flex-col gap-4">
-          {/* 코드 에디터 */}
-          <div className="flex h-full rounded-2xl overflow-hidden">
-            <CodeEditor />
-          </div>
-          {/* 탭바 */}
-          <TabBar
-            menuList={CODING_TAB_BAR_MENU}
-            dropDownList={PROGRAMMING_LANGUAGES}
+      <div className="w-full flex flex-col max-md:h-screen">
+        {/* 화면 크기 클 경우 Splitter 있는 코드 작성 부분 렌더링 */}
+        {windowSize > 768 ? (
+          <SplittedCodePart
+            isRunning={isRunning}
+            compiledResult={compiledResult}
           />
-        </div>
-        {/* 컴파일러 / 메모장 */}
-        <div
-          className={`w-full h-[200px] flex shrink-0 rounded-2xl overflow-hidden ${
-            tab === "메모장" && "border border-border-2"
-          }`}
-        >
-          {/* 컴파일러 */}
-          {tab === "컴파일러" && (
-            <div className="prose w-full max-w-none">
-              <pre className="w-full h-full !m-0">
-                <code>
-                  {/* 컴파일 결과 */}
-                  {compiledResult}
-                </code>
-              </pre>
-            </div>
-          )}
-          {/* 메모장 */}
-          {tab === "메모장" && (
-            <textarea
-              value={memo}
-              onChange={(e) => setMemo(e.target.value)}
-              className={`${
-                tab === "메모장" ? "block" : "hidden"
-              } w-full h-full px-4 py-3 text-black resize-none`}
-            />
-          )}
-        </div>
-        {/* 구분선 */}
-        <div className="division" />
+        ) : (
+          <CodePart isRunning={isRunning} compiledResult={compiledResult} />
+        )}
         {/* 하단 버튼 */}
-        <div className="flex gap-4 self-end">
-          {/* 글 쓰기 버튼 (정답 시에만 활성화) */}
-          <button
-            onClick={() => setIsPosting(true)}
-            className={`${!hasSolved ? "btn-disabled" : "btn-default"}`}
-            disabled={!hasSolved}
-          >
-            {CODING_BUTTONS[0].content}
-          </button>
-          {/* 다른 사람 풀이 보기 버튼 */}
-          <button
-            onClick={() =>
-              router.push(`${CODING_BUTTONS[1].url}&keyword=${id}`, {
-                scroll: false,
-              })
-            }
-            className="btn-default"
-          >
-            {CODING_BUTTONS[1].content}
-          </button>
-          {/* 코드 컴파일 후 실행 */}
-          <button onClick={onCodeSubmit} className="btn-default">
-            {CODING_BUTTONS[2].content}
-          </button>
-          {/* 코드 제출 */}
-          <button
-            onClick={() => {
-              onCodeSubmit();
-
-              if (isCorrect) {
-                setHasSolved(true);
-                setIsDialogOpen((prev) => !prev);
-              } else {
-                setIsDialogOpen((prev) => !prev);
-              }
-            }}
-            className="btn-primary"
-          >
-            {CODING_BUTTONS[3].content}
-          </button>
-        </div>
+        <CodePartBtns onCompile={onCompile} onSubmit={onSubmit} />
       </div>
       {isCorrect && isDialogOpen && (
         <Dialog

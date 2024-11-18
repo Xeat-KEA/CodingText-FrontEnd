@@ -30,6 +30,9 @@ export const useCodingTestStore = create<CodingTestStore>((set) => ({
   // 메모장
   memo: "",
   setMemo: (string) => set({ memo: string }),
+  // 코드 작성 부분 크기
+  isSmall: false,
+  setIsSmall: (state) => set({ isSmall: state }),
 }));
 
 // 탭바 메뉴 관련 전역변수

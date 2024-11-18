@@ -77,7 +77,7 @@ textarea {
   }
   /* 버튼 추상화 */
   .btn {
-    @apply flex justify-center px-4 py-3 text-xs whitespace-nowrap;
+    @apply flex justify-center items-center px-4 py-3 text-xs whitespace-nowrap;
   }
   /* 기본 버튼 */
   .btn-default {
@@ -185,7 +185,6 @@ textarea {
   .post-input {
     @apply px-4 py-2 text-sm text-black border-b border-border-2;
   }
-
   /* 텍스트 에디터 관련 클래스 */
   .toolbar-btn {
     @apply px-1 py-[2px] rounded-lg text-black hover:bg-bg-1;

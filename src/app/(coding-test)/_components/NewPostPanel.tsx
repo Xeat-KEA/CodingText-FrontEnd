@@ -1,4 +1,3 @@
-import { POSTING_TAB_BAR_MENU } from "../_constants/constants";
 import { useCodingTestStore, useTabStore } from "@/app/stores";
 import CodeEditor from "./CodeEditor";
 import { useState } from "react";
@@ -7,8 +6,9 @@ import { DialogCheckIcon } from "@/app/_components/Icons";
 import { useRouter } from "next/navigation";
 import { usePageHandler } from "@/app/_hooks/usePageHandler";
 import TabBar from "@/app/_components/TapBar/TabBar";
-import { useBase64 } from "@/app/_hooks/useBase64";
 import PostEditor from "@/app/_components/PostEditor/PostEditor";
+import { useBase64 } from "@/app/_hooks/useBase64";
+import { POSTING_TAB_BAR_MENU } from "../_constants/constants";
 
 export default function NewPostPanel() {
   const router = useRouter();
@@ -54,13 +54,10 @@ export default function NewPostPanel() {
             isCodingTest
             onCancelClick={() => setIsPosting(false)}
             onBtnClick={(data) => {
-              /* 
               // data post 부분 작성 필요
               const newContent = useBase64("encode", data.content);
-              const newData = { ...data, content: newContent }; */
-              console.log(data);
-
-              setIsDialogOpen((prev) => !prev);
+              const newData = { ...data, content: newContent };
+              console.log(newData);
             }}
           />
         </div>

@@ -12,3 +12,13 @@ export interface ChatInputForm {
   sendWithCode: boolean;
   content: string;
 }
+
+export interface CodePartProps {
+  isRunning: boolean;
+  compiledResult: string;
+}
+
+export interface CodePartBtnsProps {
+  onCompile: () => void;
+  onSubmit: () => void;
+}

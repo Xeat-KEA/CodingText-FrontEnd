@@ -30,7 +30,9 @@ export default function SideBar() {
   const setBlogId = useBlogStore((state) => state.setBlogId);
   const setIsOwnBlog = useBlogStore((state) => state.setIsOwnBlog);
   const setBoardCategories = useBlogStore((state) => state.setBoardCategories);
-  const setActiveCategories = useBlogStore((state) => state.setActiveCategories);
+  const setActiveCategories = useBlogStore(
+    (state) => state.setActiveCategories
+  );
 
   const [isCollapsed, setIsCollapsed] = useState(false); // 최소화
   const toggleSidebar = () => setIsCollapsed(!isCollapsed);
@@ -82,10 +84,11 @@ export default function SideBar() {
   }) => (
     <Link
       href={href}
-      className={`flex items-center h-6 py-6 text-black ${isCollapsed
-        ? "justify-center w-6 ml-2"
-        : "justify-between w-60 pl-6 pr-2"
-        }`}
+      className={`flex items-center h-6 py-6 text-black ${
+        isCollapsed
+          ? "justify-center w-6 ml-2"
+          : "justify-between w-60 pl-6 pr-2"
+      }`}
     >
       {!isCollapsed && <p className="text-xs">{label}</p>}
       <Icon />
@@ -94,13 +97,15 @@ export default function SideBar() {
 
   return (
     <nav
-      className={`fixed top-0 left-0 h-screen bg-white border-r transition-all duration-150 z-20 ${isCollapsed ? "w-10" : "w-60"
-        }`}
+      className={`fixed top-0 left-0 h-screen bg-white border-r transition-all duration-150 z-20 ${
+        isCollapsed ? "w-10" : "w-60"
+      }`}
     >
       {/* 사이드바 상단 요소 */}
       <div
-        className={`flex items-center h-8 mt-5 mb-3 mr-2 ${isCollapsed ? "justify-center w-6 ml-2" : "justify-between w-52 ml-6"
-          }`}
+        className={`flex items-center h-8 mt-5 mb-3 mr-2 ${
+          isCollapsed ? "justify-center w-6 ml-2" : "justify-between w-52 ml-6"
+        }`}
       >
         {!isCollapsed && (
           <Link href="/">
@@ -117,7 +122,9 @@ export default function SideBar() {
 
       <SidebarLink
         href={`/blog/${profile?.userId}`}
-        label={isOwnBlog ? "나의 블로그 홈" : `${profile?.nickName}의 블로그 홈`}
+        label={
+          isOwnBlog ? "나의 블로그 홈" : `${profile?.nickName}의 블로그 홈`
+        }
         Icon={SbHomeIcon}
       />
       {/* 게시판 목록 */}
@@ -126,7 +133,7 @@ export default function SideBar() {
         style={{ maxHeight: "calc(100vh - 252px)" }}
       >
         {!isCollapsed && (
-          <div className="relative">
+          <div className="relative overflow-x-hidden">
             <Board />
           </div>
         )}

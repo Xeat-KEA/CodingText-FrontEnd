@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import { useCheckToken } from "@/app/_hooks/useCheckToken";
 import ChattingPanel from "../../_components/ChattingPanel";
 import { useHandleResize } from "@/app/_hooks/useHandleResize";
+import LoadingSpinner from "@/app/_components/LoadingSpinner";
 
 export default function CodingTestPage() {
   // 로그인 여부 확인
@@ -29,7 +30,7 @@ export default function CodingTestPage() {
     <>
       {windowSize ? (
         windowSize >= 768 ? (
-          <Splitter className="w-full h-screen pt-16 flex">
+          <Splitter gutterSize={10} className="w-full h-screen pt-16 flex">
             {/* 채팅창 공간 */}
             <SplitterPanel className="flex flex-col">
               {/* 메세지 표시 공간 */}
@@ -47,7 +48,9 @@ export default function CodingTestPage() {
           </div>
         )
       ) : (
-        <div>Loading</div>
+        <div className="flex justify-center items-center w-screen h-screen">
+          <LoadingSpinner />
+        </div>
       )}
     </>
   );

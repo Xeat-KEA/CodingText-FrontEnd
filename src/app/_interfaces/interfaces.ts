@@ -8,7 +8,6 @@ export interface SearchBarProps {
 
 export interface TabBarProps {
   menuList: string[];
-  dropDownList?: Selection[];
 }
 
 export interface Selection {
@@ -34,6 +33,7 @@ export interface DropDownProps {
   list?: Selection[];
   placeholder?: string;
   disabled?: boolean;
+  showListUpward?: boolean;
 }
 
 export interface ParamDropDownProps {
@@ -215,6 +215,8 @@ export interface CodingTestStore {
   setValue: (code: string) => void;
   memo: string;
   setMemo: (string: string) => void;
+  isSmall: boolean;
+  setIsSmall: (state: boolean) => void;
 }
 
 // 텍스트 에디터 내용 Interface
