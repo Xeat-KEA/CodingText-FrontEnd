@@ -6,7 +6,7 @@ import LoadingSpinner from "@/app/_components/LoadingSpinner";
 export default function CodeCompiler() {
   const { isRunning, compileError, compiledResult } = useCodingTestStore();
   return (
-    <div className="w-full h-full relative overflow-y-auto min-h-[100px]">
+    <div className="w-full h-full relative overflow-y-auto md:min-h-[200px]">
       {!isRunning ? (
         <div className="absolute top-0 left-0 w-full h-full flex flex-col divide-y divide-border-1">
           {compileError === "" ? (

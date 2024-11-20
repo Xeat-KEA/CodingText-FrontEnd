@@ -43,7 +43,11 @@ export default function SplittedCodePart() {
         {/* 탭바 */}
         <TabBar menuList={CODING_TAB_BAR_MENU} />
         {/* 컴파일러 */}
-        {tab === "컴파일러" && <CodeCompiler />}
+        {tab === "컴파일러" && (
+          <div className="w-full h-full pb-4">
+            <CodeCompiler />
+          </div>
+        )}
         {/* 메모장 */}
         {tab === "메모장" && (
           <div className="w-full h-full py-4">
