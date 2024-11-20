@@ -10,7 +10,7 @@ const AddCategory: React.FC<AddCategoryProps> = ({
   isSubCategory,
 }) => {
   // 전역 변수
-  const { setIsAddingCategory } = useBlogStore();
+  const { setIsAddingCategory, setIsAddingSubCategory } = useBlogStore();
   const [newCategoryTitle, setNewCategoryTitle] = useState("");
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     // utils에 추가 예정
@@ -38,18 +38,20 @@ const AddCategory: React.FC<AddCategoryProps> = ({
       />
       <div className="absolute right-3 flex text-2xs space-x-2">
         <button
-          className="text-primary-1"
+          className="text-primary"
           onClick={() => {
             handleAddCategory(newCategoryTitle, parentId);
             setNewCategoryTitle("");
-          }}
-        >
+          }}>
           추가
         </button>
         <button
           className="text-disabled"
-          onClick={() => setIsAddingCategory(false)}
-        >
+          onClick={() =>
+            isSubCategory
+              ? setIsAddingSubCategory(Number(parentId), false)
+              : setIsAddingCategory(false)
+          }>
           취소
         </button>
       </div>

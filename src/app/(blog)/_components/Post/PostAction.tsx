@@ -1,19 +1,13 @@
 import { useBlogStore } from "@/app/stores";
 import { PostProps } from "../../_interfaces/interfaces";
-import {
-  BpEditIcon,
-  BpFollowerIcon,
-  BpReportIcon,
-  ShareIcon,
-  SmDeleteIcon,
-} from "../Icons";
-import { useEffect, useState } from "react";
+import { BpFollowerIcon, ShareIcon } from "../Icons";
+import { useState } from "react";
 import Dialog from "@/app/_components/Dialog";
 import { DialogCheckIcon, DialogReportIcon } from "@/app/_components/Icons";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import DropDown from "@/app/_components/DropDown";
 import { REPORT_REASONS } from "../../_constants/constants";
+import IconBtn from "@/app/_components/IconBtn";
 
 const PostAction: React.FC<PostProps> = ({ currentPost }) => {
   const { blogId, isOwnBlog, params } = useBlogStore();
@@ -105,30 +99,25 @@ const PostAction: React.FC<PostProps> = ({ currentPost }) => {
         {isOwnBlog ? (
           <>
             {/* 전달 사항 수정 필요 */}
-            <Link
-              href={`/blog/${blogId}/edit-post/${currentPost.postId}`}
-              className="flex items-center gap-1"
-            >
-              <BpEditIcon />
-              <p className="text-primary-1 text-xs font-semibold">{`수정`}</p>
-            </Link>
-
-            <button
-              className="flex items-center gap-1"
+            <IconBtn
+              type="edit"
+              content="수정"
+              onClick={() =>
+                router.push(`/blog/${blogId}/edit-post/${currentPost.postId}`)
+              }
+            />
+            <IconBtn
+              type="delete"
+              content="삭제"
               onClick={() => onClickDeletePost(Number(currentPost?.postId))}
-            >
-              <SmDeleteIcon />
-              <p className="text-red text-xs font-semibold">{`삭제`}</p>
-            </button>
+            />
           </>
         ) : (
-          <button
-            className="flex items-center gap-1"
+          <IconBtn
+            type="report"
+            content="신고"
             onClick={() => onClickReportPost(Number(currentPost?.postId))}
-          >
-            <BpReportIcon />
-            <p className="text-red text-xs font-semibold">{`이 게시글 신고`}</p>
-          </button>
+          />
         )}
       </div>
 
@@ -166,8 +155,7 @@ const PostAction: React.FC<PostProps> = ({ currentPost }) => {
           backBtn="취소"
           onBackBtnClick={cancelReportPost}
           redBtn="신고"
-          onBtnClick={confirmReportPost}
-        >
+          onBtnClick={confirmReportPost}>
           <DropDown
             isSmall={false}
             selection={selectedOption || ""}
@@ -195,8 +183,7 @@ const PostAction: React.FC<PostProps> = ({ currentPost }) => {
           title="감사합니다"
           content="신고가 정상적으로 접수되었어요"
           backBtn="확인"
-          onBackBtnClick={() => setIsReportConfirmDialogOpen(false)}
-        ></Dialog>
+          onBackBtnClick={() => setIsReportConfirmDialogOpen(false)}></Dialog>
       )}
     </div>
   );

@@ -81,8 +81,7 @@ const SubCategoryItem: React.FC<SubCategoryItemProps> = ({
       className="flex items-center relative text-xs font-regular h-8 py-2"
       key={subCategory.id}
       onMouseEnter={() => setHoveredSubCategoryId(true)}
-      onMouseLeave={() => setHoveredSubCategoryId(false)}
-    >
+      onMouseLeave={() => setHoveredSubCategoryId(false)}>
       {editSubCategoryId[category.id] === subCategory.id ? (
         isOwnBlog && (
           <>
@@ -100,14 +99,14 @@ const SubCategoryItem: React.FC<SubCategoryItemProps> = ({
             <div className="absolute right-3 flex text-2xs space-x-2">
               <button
                 className="text-primary-1"
-                onClick={() => saveEditSubCategory(category.id, subCategory.id)}
-              >
+                onClick={() =>
+                  saveEditSubCategory(category.id, subCategory.id)
+                }>
                 저장
               </button>
               <button
                 className="text-disabled"
-                onClick={() => cancelEditSubCategory(category.id)}
-              >
+                onClick={() => cancelEditSubCategory(category.id)}>
                 취소
               </button>
             </div>
@@ -125,8 +124,7 @@ const SubCategoryItem: React.FC<SubCategoryItemProps> = ({
                   Number(subCategoryId) == subCategory.id)
                   ? "font-bold"
                   : ""
-              }
-            >
+              }>
               {subCategory.title}
             </p>
           </Link>
@@ -145,8 +143,7 @@ const SubCategoryItem: React.FC<SubCategoryItemProps> = ({
                       subCategory.id,
                       subCategory.title
                     )
-                  }
-                >
+                  }>
                   수정
                 </button>
                 <button
@@ -158,8 +155,7 @@ const SubCategoryItem: React.FC<SubCategoryItemProps> = ({
                       true,
                       subCategory.id
                     )
-                  }
-                >
+                  }>
                   삭제
                 </button>
               </div>

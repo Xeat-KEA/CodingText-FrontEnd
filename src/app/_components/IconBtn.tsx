@@ -1,6 +1,6 @@
 import { BpEditIcon, SmDeleteIcon } from "../(blog)/_components/Icons";
 import { IconBtnProps } from "../_interfaces/interfaces";
-import { ReportIcon } from "./Icons";
+import { BlindIcon, ReportIcon } from "./Icons";
 
 export default function IconBtn({ type, content, onClick }: IconBtnProps) {
   return (
@@ -9,9 +9,10 @@ export default function IconBtn({ type, content, onClick }: IconBtnProps) {
       {type === "edit" && <BpEditIcon />}
       {type === "delete" && <SmDeleteIcon />}
       {type === "report" && <ReportIcon />}
+      {type === "blind" && <BlindIcon/>}
       <span
         className={`text-xs font-semibold whitespace-nowrap ${
-          type === "edit" ? "text-primary-1" : "text-red"
+          type === "edit" ? "text-primary-1" : type === "blind" ? "text-body" : "text-red"
         }`}
       >
         {content}

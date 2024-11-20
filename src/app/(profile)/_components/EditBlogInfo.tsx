@@ -14,7 +14,7 @@ export default function EditBlogInfo() {
   };
   const { data } = useQuery({ queryKey: ["BlogData"], queryFn: fetchBlogData });
 
-  // 변경 사항 취소를 위한 초기값 저장
+  // 변경 사항 취소를 위한 초기값
   const [blogData, setBlogData] = useState("");
   const [isIntroEditing, setIsIntroEditing] = useState(false);
   const { content, setContent } = useTiptapStore();
@@ -25,8 +25,7 @@ export default function EditBlogInfo() {
       <div
         className={`w-full h-[400px] overflow-y-auto ${
           !isIntroEditing && "border border-border-2 rounded-2xl px-6 py-4"
-        }`}
-      >
+        }`}>
         {!isIntroEditing ? (
           <div
             className="prose"

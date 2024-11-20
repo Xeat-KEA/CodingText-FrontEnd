@@ -2,7 +2,7 @@ import Image from "next/image";
 import { useBlogStore } from "@/app/stores";
 import { CommentProps } from "../../_interfaces/interfaces";
 import { useCalculateDate } from "@/app/_hooks/useCalculateDate";
-import { BpReportIcon, ReplyIcon, SmDeleteIcon } from "../Icons";
+import { ReplyIcon } from "../Icons";
 import api from "@/app/_api/config";
 import { useEffect, useState } from "react";
 import { BlogProfile } from "@/app/_interfaces/interfaces";
@@ -11,6 +11,7 @@ import {
   Profile_Dummy_Data,
 } from "@/app/(admin)/_constants/constants";
 import { usePathname } from "next/navigation";
+import IconBtn from "@/app/_components/IconBtn";
 
 const Comment: React.FC<CommentProps> = ({
   replyId,
@@ -75,7 +76,7 @@ const Comment: React.FC<CommentProps> = ({
 
         <div className="text-sm text-body font-regular">
           {mentionProfile && (
-            <p className="text-sm text-primary-1 font-semibold">
+            <p className="text-sm text-primary font-semibold">
               @{mentionProfile.nickName}
             </p>
           )}
@@ -84,39 +85,32 @@ const Comment: React.FC<CommentProps> = ({
 
         {isAdminPage ? (
           <div className="flex w-full h-5 justify-end items-center">
-            <button
-              className="flex items-center gap-1"
+            <IconBtn
+              type="delete"
+              content="삭제"
               onClick={() => onDelete(replyId)}
-            >
-              <SmDeleteIcon />
-              <p className="text-red text-xs font-semibold ">삭제</p>
-            </button>
+            />
           </div>
         ) : (
           <div className="flex w-full h-5 justify-between items-center">
             <button
               className="flex items-center gap-1"
-              onClick={() => onReplyClick(replyId, userId)}
-            >
+              onClick={() => onReplyClick(replyId, userId)}>
               <ReplyIcon />
               <p className="text-black text-xs font-semibold ">답글</p>
             </button>
             {isOwnComment ? (
-              <button
-                className="flex items-center gap-1"
+              <IconBtn
+                type="delete"
+                content="삭제"
                 onClick={() => onDelete(replyId)}
-              >
-                <SmDeleteIcon />
-                <p className="text-red text-xs font-semibold ">삭제</p>
-              </button>
+              />
             ) : (
-              <button
-                className="flex items-center gap-1"
+              <IconBtn
+                type="report"
+                content="신고"
                 onClick={() => onReport(replyId)}
-              >
-                <BpReportIcon />
-                <p className="text-red text-xs font-semibold ">신고</p>
-              </button>
+              />
             )}
           </div>
         )}

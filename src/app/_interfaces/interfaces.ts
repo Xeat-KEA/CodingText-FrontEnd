@@ -177,7 +177,7 @@ export interface SmBackBtnProps {
 }
 
 export interface IconBtnProps {
-  type: "edit" | "delete" | "report";
+  type: "edit" | "delete" | "report" | "blind";
   content: string;
   onClick: () => void;
 }
@@ -333,4 +333,17 @@ export interface BlogStore {
   setIsAddingCategory: (state: boolean) => void;
   isAddingSubCategory: { [key: number]: boolean };
   setIsAddingSubCategory: (parentId: number, isAdding: boolean) => void;
+}
+
+export interface Notice {
+  noticeId: number;
+  noticeTitle: string;
+  noticeContent: string;
+  noticedAt: string;
+}
+
+export interface NoticeForm {
+  noticeTitle: string;
+  noticeContent: string;
+  noticedAt: string;
 }

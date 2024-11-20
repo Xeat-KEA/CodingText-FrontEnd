@@ -1,16 +1,17 @@
 import Image from "next/image";
-import { BpEditIcon, BpFollowerIcon, BpReportIcon } from "./Icons";
-import { useState } from "react"; // useState 훅 임포트
+import { BpEditIcon, BpFollowerIcon } from "./Icons";
+import { useEffect, useState } from "react"; // useState 훅 임포트
 import Dialog from "@/app/_components/Dialog";
 import { DialogCheckIcon, DialogReportIcon } from "@/app/_components/Icons";
 import Link from "next/link";
 import { useBlogStore } from "@/app/stores";
 import { REPORT_REASONS } from "../_constants/constants";
 import DropDown from "@/app/_components/DropDown";
+import IconBtn from "@/app/_components/IconBtn";
 
 export default function BlogProfile() {
   // 전역 변수
-  const { isOwnBlog, profile, setProfile } = useBlogStore();
+  const { blogId, isOwnBlog, profile, setProfile } = useBlogStore();
   const [isFollowing, setIsFollowing] = useState(false); // 초기값 설정
   const [blogToReport, setBlogToReport] = useState<number | null>(null);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
@@ -51,6 +52,8 @@ export default function BlogProfile() {
     setSelectedOption(null);
   };
 
+  // 프로필 api 연결
+  useEffect(() => {}, [blogId]);
   return (
     <>
       <div className="w-226 h-30 mt-12 mb-6 p-2">
@@ -84,18 +87,16 @@ export default function BlogProfile() {
                   <>
                     <button
                       className="flex items-center gap-1"
-                      onClick={onClickFollow}
-                    >
+                      onClick={onClickFollow}>
                       <BpFollowerIcon isFilled={isFollowing} />
                       <p className="text-primary-1 text-xs font-semibold">{`팔로워 ${profile.FollowerCount}`}</p>
                     </button>
-                    <button
-                      className="flex items-center gap-1"
+
+                    <IconBtn
+                      type="report"
+                      content="신고"
                       onClick={() => onClickReportBlog(profile.userId)}
-                    >
-                      <BpReportIcon />
-                      <p className="text-red text-xs font-semibold">{`신고`}</p>
-                    </button>
+                    />
                   </>
                 ) : (
                   <>
@@ -116,8 +117,7 @@ export default function BlogProfile() {
         <Link
           // 경로 수정 필요
           href="/edit/profile"
-          className="inline-flex items-center w-auto h-5 gap-1 ml-2"
-        >
+          className="inline-flex items-center w-auto h-5 gap-1 ml-2">
           <BpEditIcon />
           <p className="text-primary-1 text-xs font-semibold">
             사용자 정보 수정
@@ -133,8 +133,7 @@ export default function BlogProfile() {
           backBtn="취소"
           onBackBtnClick={cancelReportBlog}
           redBtn="신고"
-          onBtnClick={confirmReportBlog}
-        >
+          onBtnClick={confirmReportBlog}>
           <DropDown
             isSmall={false}
             selection={selectedOption || ""}
@@ -162,8 +161,7 @@ export default function BlogProfile() {
           title="감사합니다"
           content="신고가 정상적으로 접수되었어요"
           backBtn="확인"
-          onBackBtnClick={() => setIsReportConfirmDialogOpen(false)}
-        ></Dialog>
+          onBackBtnClick={() => setIsReportConfirmDialogOpen(false)}></Dialog>
       )}
     </>
   );

@@ -27,7 +27,7 @@ export default function Board() {
     subCategoryId: number;
     isSub: boolean;
   } | null>(null);
-  const [deletCategoryTitle, setDeleteCategoryTitle] = useState("");
+  const [deleteCategoryTitle, setDeleteCategoryTitle] = useState("");
 
   // 상/하위 게시판 추가 함수
   const handleAddCategory = useCallback(
@@ -174,7 +174,7 @@ export default function Board() {
           title={
             isAddCategoryDisabled
               ? "더 이상 게시판을 \n 추가할 수 없어요"
-              : `'${deletCategoryTitle}' \n 게시판을 삭제할까요?`
+              : `'${deleteCategoryTitle}' \n 게시판을 삭제할까요?`
           }
           content={
             isAddCategoryDisabled

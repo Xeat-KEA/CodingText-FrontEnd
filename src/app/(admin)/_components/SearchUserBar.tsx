@@ -27,8 +27,7 @@ export default function SearchUserBar({
         onSubmit={handleSubmit(onValid)}
         className={`flex gap-2 w-full max-w-[240px] border border-border-2 rounded-full px-4 py-2 ${
           isDisabled && "bg-bg-1"
-        }`}
-      >
+        }`}>
         <input
           {...register("nickName")}
           className="grow text-xs disabled:bg-bg-1"

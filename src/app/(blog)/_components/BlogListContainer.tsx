@@ -61,8 +61,7 @@ export default function BlogListContainer() {
                   filter === el.selection
                     ? "text-primary-1 font-semibold"
                     : "text-disabled"
-                }`}
-              >
+                }`}>
                 {el.content}
               </button>
             ))}
@@ -73,8 +72,7 @@ export default function BlogListContainer() {
             result.slice((page - 1) * 10, page * 10).map((el, index) => (
               <div
                 key={index}
-                className={`${index >= 2 && "border-t border-border2"}`}
-              >
+                className={`${index >= 2 && "border-t border-border2"}`}>
                 <PostCard
                   articleId={el.articleId}
                   profileImg={`/profileImg${(el.articleId % 6) + 1}.png`}

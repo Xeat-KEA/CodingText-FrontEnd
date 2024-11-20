@@ -4,14 +4,18 @@ import Pagination from "@/app/_components/Pagination";
 import PostCard from "@/app/_components/PostCard";
 import SearchBar from "@/app/_components/SearchBar";
 import { TAB_BAR_ORDER_FILTER } from "@/app/_constants/constants";
+import { usePathValue } from "@/app/_hooks/usePathValue";
 import { usePaginationStore } from "@/app/stores";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function BlogSubContainer() {
+  usePathValue();
+
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [filter, setFilter] = useState("ACCURACY");
+
   useEffect(() => {
     // filter 변경 시 다시 GET 하는 로직 필요
   }, [filter]);
@@ -61,8 +65,7 @@ export default function BlogSubContainer() {
                   filter === el.selection
                     ? "text-primary-1 font-semibold"
                     : "text-disabled"
-                }`}
-              >
+                }`}>
                 {el.content}
               </button>
             ))}
@@ -73,8 +76,7 @@ export default function BlogSubContainer() {
             result.slice((page - 1) * 10, page * 10).map((el, index) => (
               <div
                 key={index}
-                className={`${index >= 2 && "border-t border-border2"}`}
-              >
+                className={`${index >= 2 && "border-t border-border2"}`}>
                 <PostCard
                   articleId={el.articleId}
                   profileImg={`/profileImg${(el.articleId % 6) + 1}.png`}

@@ -7,6 +7,7 @@ import {
 import { PageMoveIcon } from "@/app/_components/Icons";
 import { Report } from "../_interfaces/interfaces";
 import { useBase64 } from "@/app/_hooks/useBase64";
+import { useTabStore } from "@/app/stores";
 
 export default function ReportCard({
   reportId,
@@ -18,8 +19,13 @@ export default function ReportCard({
   reportReason,
   directReason,
 }: Report) {
+  const { tab } = useTabStore();
+
   const reporterNickName = Profile_Dummy_Data.find(
     (profile) => profile.userId === reportUserId
+  )?.nickName;
+  const reportedBlogName = Profile_Dummy_Data.find(
+    (profile) => profile.userId === reportedBlogId
   )?.nickName;
 
   // 디코딩 처리
@@ -45,9 +51,12 @@ export default function ReportCard({
             {reporterNickName}
           </span>
           <span className="flex justify-center">
-            {reportedCommentId === undefined
-              ? reportedPostContent
-              : reportedCommentContent}
+            {reportedCommentId !== undefined
+            ? reportedCommentContent
+            : reportedPostId !== undefined
+            ? reportedPostContent
+            : reportedBlogName
+          }
           </span>
         </div>
 
@@ -62,10 +71,13 @@ export default function ReportCard({
         </div>
       </div>
       <Link
-        href={`/admin/report/${reportId}`} // 링크 수정
-        className="flex items-center gap-2 text-xs text-primary-1 font-semibold"
-      >
-        {"해당 게시글 표시"}
+        href={
+          tab === "블로그"
+            ? `/admin/user/${reportId}` // 추후 수정
+            : `/admin/report/${reportId}`
+        }
+        className="flex items-center gap-2 text-xs text-primary-1 font-semibold">
+        {tab === "블로그" ? "해당 블로그 표시" : "해당 게시글 표시"}
         <PageMoveIcon />
       </Link>
     </div>

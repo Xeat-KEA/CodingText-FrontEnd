@@ -9,11 +9,11 @@ export interface SignUpForm {
   verify: string;
 }
 
-export interface Report{
+export interface Report {
   reportId: number;
   reportUserId: number;
   reportedBlogId: number;
-  reportedPostId: number;
+  reportedPostId?: number;
   reportedAt: string;
   reportedCommentId?: number; // 댓글 신고
   reportedCommentUserID?: number; // 댓글 작성자 ID
@@ -75,7 +75,7 @@ export interface SearchUserBarProps {
   isDisabled?: boolean;
 }
 
-export interface NoticeFormContainerProps {
-  onSubmit: (notice: string) => void;
+export interface PushFormContainerProps {
+  onSubmit: (push: string) => void;
   isDone: boolean;
 }
