@@ -10,6 +10,7 @@ export default function DropDown({
   list,
   onSelectionClick,
   placeholder,
+  showListUpward,
 }: DropDownProps) {
   const [isListOpen, setIsListOpen] = useState(false);
   const ref = useOutsideClick(
@@ -42,7 +43,11 @@ export default function DropDown({
       </span>
       {/* 선택 항목 목록 */}
       {isListOpen && (
-        <ul className="absolute w-full left-0 top-[calc(100%+8px)] flex flex-col divide-y bg-white border border-border-2 rounded-lg shadow-1 cursor-pointer max-h-[200px] overflow-auto">
+        <ul
+          className={`absolute w-full left-0 ${
+            !showListUpward ? "top-[calc(100%+8px)]" : "bottom-[calc(100%+8px)]"
+          } flex flex-col divide-y bg-white border border-border-2 rounded-lg shadow-1 cursor-pointer max-h-[200px] overflow-auto`}
+        >
           {list &&
             list.map((el, index) => (
               <li

@@ -1,3 +1,4 @@
+import LoadingSpinner from "@/app/_components/LoadingSpinner";
 import { CodeEditorProps } from "@/app/_interfaces/interfaces";
 import { useCodingTestStore } from "@/app/stores";
 import { Extension } from "@uiw/react-codemirror";
@@ -37,9 +38,9 @@ export default function CodeEditor({
         setLang(langs.java());
       } else if (language?.selection === "python") {
         setLang(langs.python());
-      } else if (language?.selection === "javascript") {
+      } else if (language?.selection === "js") {
         setLang(langs.javascript());
-      } else if (language?.selection === "c") {
+      } else if (language?.selection === "c++") {
         setLang(langs.cpp());
       } else if (language?.selection === "json") {
         setLang(langs.json());
@@ -67,7 +68,7 @@ export default function CodeEditor({
   }, [language]);
 
   if (!lang || !theme || editorExtensions.length === 0) {
-    return <div className="w-full h-full flex-center">로딩 중이에요!</div>; // 확장이 로드될 때까지 로딩 상태를 표시
+    return <LoadingSpinner textColor="white" />; // 확장이 로드될 때까지 로딩 상태를 표시
   }
 
   return (

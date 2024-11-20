@@ -12,3 +12,16 @@ export interface ChatInputForm {
   sendWithCode: boolean;
   content: string;
 }
+
+export interface CodePartBtnsProps {
+  onCompile: () => void;
+  onSubmit: () => void;
+}
+
+export interface CompileResult {
+  index?: number;
+  runtime: number;
+  input: string;
+  output?: string;
+  result: string;
+}

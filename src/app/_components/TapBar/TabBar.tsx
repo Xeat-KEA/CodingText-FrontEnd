@@ -1,17 +1,13 @@
-import { useCodingTestStore, useTabStore } from "@/app/stores";
-import { useEffect } from "react";
-import DropDown from "../DropDown";
 import { TabBarProps } from "@/app/_interfaces/interfaces";
+import { useTabStore } from "@/app/stores";
+import { useEffect } from "react";
 
-export default function TabBar({ menuList, dropDownList }: TabBarProps) {
+export default function TabBar({ menuList }: TabBarProps) {
   // 전역 변수
   const { tab, setTab } = useTabStore();
-  const { language, setLanguage } = useCodingTestStore();
 
-  // 전역 변수 초기값 설정
   useEffect(() => {
     setTab(menuList[0]);
-    dropDownList && setLanguage(dropDownList[0]);
   }, []);
 
   return (
@@ -35,17 +31,6 @@ export default function TabBar({ menuList, dropDownList }: TabBarProps) {
           </div>
         ))}
       </nav>
-      {/* 드롭다운 */}
-      {dropDownList && language && (
-        <div className="w-[120px]">
-          <DropDown
-            selection={language.content}
-            onSelectionClick={(selected) => setLanguage(selected)}
-            list={dropDownList}
-            isSmall
-          />
-        </div>
-      )}
     </div>
   );
 }

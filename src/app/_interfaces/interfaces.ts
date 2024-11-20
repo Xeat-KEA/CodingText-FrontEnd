@@ -1,4 +1,5 @@
 import { Editor } from "@tiptap/react";
+import { CompileResult } from "../(coding-test)/_interface/interfaces";
 
 export interface SearchBarProps {
   baseURL: string;
@@ -8,7 +9,6 @@ export interface SearchBarProps {
 
 export interface TabBarProps {
   menuList: string[];
-  dropDownList?: Selection[];
 }
 
 export interface Selection {
@@ -34,6 +34,7 @@ export interface DropDownProps {
   list?: Selection[];
   placeholder?: string;
   disabled?: boolean;
+  showListUpward?: boolean;
 }
 
 export interface ParamDropDownProps {
@@ -205,7 +206,7 @@ export interface CodingTestStore {
   // 코딩 관련 state
   title: string;
   setTitle: (newTitle: string) => void;
-  language: Selection | undefined;
+  language: Selection;
   setLanguage: (newLanguage: Selection) => void;
   hasSolved: boolean;
   setHasSolved: (isCorrect: boolean) => void;
@@ -215,6 +216,12 @@ export interface CodingTestStore {
   setValue: (code: string) => void;
   memo: string;
   setMemo: (string: string) => void;
+  isRunning: boolean;
+  setIsRunning: (state: boolean) => void;
+  compiledResult: CompileResult[];
+  setCompiledResult: (result: CompileResult[]) => void;
+  compileError: string;
+  setCompileError: (error: string) => void;
 }
 
 // 텍스트 에디터 내용 Interface
@@ -242,6 +249,11 @@ export interface CodeFilterStore {
   setAlgorithm: (newList: string[]) => void;
   order: string;
   setOrder: (selected: string) => void;
+}
+
+export interface WindowSizeStore {
+  windowSize: number;
+  setWindowSize: (size: number) => void;
 }
 
 // Form 관련 인터페이스

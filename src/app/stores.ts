@@ -6,6 +6,7 @@ import {
   SearchFilterStore,
   TabStore,
   TiptapStore,
+  WindowSizeStore,
 } from "./_interfaces/interfaces";
 import { RegisterStore } from "./(admin)/_interfaces/interfaces";
 
@@ -16,7 +17,7 @@ export const useCodingTestStore = create<CodingTestStore>((set) => ({
   title: "",
   setTitle: (newTitle) => set({ title: newTitle }),
   // 언어 설정
-  language: undefined,
+  language: { content: "", selection: "" },
   setLanguage: (newLanguage) => set({ language: newLanguage }),
   // 정답 제출 여부
   hasSolved: false,
@@ -30,6 +31,15 @@ export const useCodingTestStore = create<CodingTestStore>((set) => ({
   // 메모장
   memo: "",
   setMemo: (string) => set({ memo: string }),
+  // 컴파일 실행 중 여부
+  isRunning: false,
+  setIsRunning: (state) => set({ isRunning: state }),
+  // 컴파일 결과
+  compiledResult: [],
+  setCompiledResult: (result) => set({ compiledResult: result }),
+  // 컴파일 에러 여부
+  compileError: "",
+  setCompileError: (error) => set({ compileError: error }),
 }));
 
 // 탭바 메뉴 관련 전역변수
@@ -115,4 +125,10 @@ export const useBlogStore = create<BlogStore>((set) => ({
 export const useRegisterStore = create<RegisterStore>((set) => ({
   isRegistering: false,
   setIsRegistering: (state) => set({ isRegistering: state }),
+}));
+
+// 화면 크기 저장 전역변수
+export const useWindowSizeStore = create<WindowSizeStore>((set) => ({
+  windowSize: 0,
+  setWindowSize: (number) => set({ windowSize: number }),
 }));
