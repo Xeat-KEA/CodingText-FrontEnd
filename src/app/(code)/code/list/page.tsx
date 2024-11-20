@@ -40,6 +40,278 @@ export default function CodeListPage() {
       rate: 124,
       createdAt: "2024-11-04",
     },
+    {
+      codeId: 1,
+      title: "string;",
+      difficulty: 1,
+      participants: 123,
+      rate: 124,
+      createdAt: "2024-11-04",
+    },
+    {
+      codeId: 1,
+      title: "string;",
+      difficulty: 1,
+      participants: 123,
+      rate: 124,
+      createdAt: "2024-11-04",
+    },
+    {
+      codeId: 1,
+      title: "string;",
+      difficulty: 1,
+      participants: 123,
+      rate: 124,
+      createdAt: "2024-11-04",
+    },
+    {
+      codeId: 1,
+      title: "string;",
+      difficulty: 1,
+      participants: 123,
+      rate: 124,
+      createdAt: "2024-11-04",
+    },
+    {
+      codeId: 1,
+      title: "string;",
+      difficulty: 1,
+      participants: 123,
+      rate: 124,
+      createdAt: "2024-11-04",
+    },
+    {
+      codeId: 1,
+      title: "string;",
+      difficulty: 1,
+      participants: 123,
+      rate: 124,
+      createdAt: "2024-11-04",
+    },
+    {
+      codeId: 1,
+      title: "string;",
+      difficulty: 1,
+      participants: 123,
+      rate: 124,
+      createdAt: "2024-11-04",
+    },
+    {
+      codeId: 1,
+      title: "string;",
+      difficulty: 1,
+      participants: 123,
+      rate: 124,
+      createdAt: "2024-11-04",
+    },
+    {
+      codeId: 1,
+      title: "string;",
+      difficulty: 1,
+      participants: 123,
+      rate: 124,
+      createdAt: "2024-11-04",
+    },
+    {
+      codeId: 1,
+      title: "string;",
+      difficulty: 1,
+      participants: 123,
+      rate: 124,
+      createdAt: "2024-11-04",
+    },
+    {
+      codeId: 1,
+      title: "string;",
+      difficulty: 1,
+      participants: 123,
+      rate: 124,
+      createdAt: "2024-11-04",
+    },
+    {
+      codeId: 1,
+      title: "string;",
+      difficulty: 1,
+      participants: 123,
+      rate: 124,
+      createdAt: "2024-11-04",
+    },
+    {
+      codeId: 1,
+      title: "string;",
+      difficulty: 1,
+      participants: 123,
+      rate: 124,
+      createdAt: "2024-11-04",
+    },
+    {
+      codeId: 1,
+      title: "string;",
+      difficulty: 1,
+      participants: 123,
+      rate: 124,
+      createdAt: "2024-11-04",
+    },
+    {
+      codeId: 1,
+      title: "string;",
+      difficulty: 1,
+      participants: 123,
+      rate: 124,
+      createdAt: "2024-11-04",
+    },
+    {
+      codeId: 1,
+      title: "string;",
+      difficulty: 1,
+      participants: 123,
+      rate: 124,
+      createdAt: "2024-11-04",
+    },
+    {
+      codeId: 1,
+      title: "string;",
+      difficulty: 1,
+      participants: 123,
+      rate: 124,
+      createdAt: "2024-11-04",
+    },
+    {
+      codeId: 1,
+      title: "string;",
+      difficulty: 1,
+      participants: 123,
+      rate: 124,
+      createdAt: "2024-11-04",
+    },
+    {
+      codeId: 1,
+      title: "string;",
+      difficulty: 1,
+      participants: 123,
+      rate: 124,
+      createdAt: "2024-11-04",
+    },
+    {
+      codeId: 1,
+      title: "string;",
+      difficulty: 1,
+      participants: 123,
+      rate: 124,
+      createdAt: "2024-11-04",
+    },
+    {
+      codeId: 1,
+      title: "string;",
+      difficulty: 1,
+      participants: 123,
+      rate: 124,
+      createdAt: "2024-11-04",
+    },
+    {
+      codeId: 1,
+      title: "string;",
+      difficulty: 1,
+      participants: 123,
+      rate: 124,
+      createdAt: "2024-11-04",
+    },
+    {
+      codeId: 1,
+      title: "string;",
+      difficulty: 1,
+      participants: 123,
+      rate: 124,
+      createdAt: "2024-11-04",
+    },
+    {
+      codeId: 1,
+      title: "string;",
+      difficulty: 1,
+      participants: 123,
+      rate: 124,
+      createdAt: "2024-11-04",
+    },
+    {
+      codeId: 1,
+      title: "string;",
+      difficulty: 1,
+      participants: 123,
+      rate: 124,
+      createdAt: "2024-11-04",
+    },
+    {
+      codeId: 1,
+      title: "string;",
+      difficulty: 1,
+      participants: 123,
+      rate: 124,
+      createdAt: "2024-11-04",
+    },
+    {
+      codeId: 1,
+      title: "string;",
+      difficulty: 1,
+      participants: 123,
+      rate: 124,
+      createdAt: "2024-11-04",
+    },
+    {
+      codeId: 1,
+      title: "string;",
+      difficulty: 1,
+      participants: 123,
+      rate: 124,
+      createdAt: "2024-11-04",
+    },
+    {
+      codeId: 1,
+      title: "string;",
+      difficulty: 1,
+      participants: 123,
+      rate: 124,
+      createdAt: "2024-11-04",
+    },
+    {
+      codeId: 1,
+      title: "string;",
+      difficulty: 1,
+      participants: 123,
+      rate: 124,
+      createdAt: "2024-11-04",
+    },
+    {
+      codeId: 1,
+      title: "string;",
+      difficulty: 1,
+      participants: 123,
+      rate: 124,
+      createdAt: "2024-11-04",
+    },
+    {
+      codeId: 1,
+      title: "string;",
+      difficulty: 1,
+      participants: 123,
+      rate: 124,
+      createdAt: "2024-11-04",
+    },
+    {
+      codeId: 1,
+      title: "string;",
+      difficulty: 1,
+      participants: 123,
+      rate: 124,
+      createdAt: "2024-11-04",
+    },
+    {
+      codeId: 1,
+      title: "string;",
+      difficulty: 1,
+      participants: 123,
+      rate: 124,
+      createdAt: "2024-11-04",
+    },
   ]);
   useEffect(() => {
     api.get("/code-list").then((res) => {
@@ -54,10 +326,11 @@ export default function CodeListPage() {
 
   // 페이지네이션
   const { page, setPage, setLastPage } = usePaginationStore();
+  const CODES_PER_PAGE = 15;
   // 첫 페이지 초기화
   useEffect(() => {
     setPage(1);
-    setLastPage(Math.ceil(data.length / 10));
+    setLastPage(Math.ceil(data.length / CODES_PER_PAGE));
   }, [data]);
   // Page 변화 감지 후 문제 리스트 다시 GET 하는 과정 필요
 
@@ -67,16 +340,18 @@ export default function CodeListPage() {
       <CodeListTopBar />
       {/* 문제 */}
       <div className="w-full flex flex-col divide-y divide-border-1">
-        {data.slice((page - 1) * 10, page * 10).map((el) => (
-          <CodeCard
-            key={el.codeId}
-            codeId={el.codeId}
-            title={el.title}
-            difficulty={el.difficulty}
-            participants={el.participants}
-            rate={el.rate}
-          />
-        ))}
+        {data
+          .slice((page - 1) * CODES_PER_PAGE, page * CODES_PER_PAGE)
+          .map((el, index) => (
+            <CodeCard
+              key={index}
+              codeId={el.codeId}
+              title={el.title}
+              difficulty={el.difficulty}
+              participants={el.participants}
+              rate={el.rate}
+            />
+          ))}
       </div>
     </div>
   );
