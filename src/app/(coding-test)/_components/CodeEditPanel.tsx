@@ -9,7 +9,6 @@ import api from "@/app/_api/config";
 import CodePart from "./CodePart";
 import SplittedCodePart from "./SplittedCodePart";
 import CodePartBtns from "./CodePartBtns";
-import { dummy, dummyerror } from "../_constants/constants";
 import { isAxiosError } from "axios";
 
 export default function CodeEditPanel() {
