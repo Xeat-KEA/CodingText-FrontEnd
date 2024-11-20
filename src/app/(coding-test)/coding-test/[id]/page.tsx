@@ -2,29 +2,37 @@
 
 import { Splitter, SplitterPanel } from "primereact/splitter";
 import CodeEditPanel from "../../_components/CodeEditPanel";
-import { useCodingTestStore, useTiptapStore } from "@/app/stores";
+import {
+  useCodingTestStore,
+  useTiptapStore,
+  useWindowSizeStore,
+} from "@/app/stores";
 import NewPostPanel from "../../_components/NewPostPanel";
 import { useEffect } from "react";
 import { useCheckToken } from "@/app/_hooks/useCheckToken";
 import ChattingPanel from "../../_components/ChattingPanel";
-import { useHandleResize } from "@/app/_hooks/useHandleResize";
 import LoadingSpinner from "@/app/_components/LoadingSpinner";
+import { PROGRAMMING_LANGUAGES } from "@/app/_constants/constants";
+import { handleWindowResize } from "@/app/utils";
 
 export default function CodingTestPage() {
   // 로그인 여부 확인
   const {} = useCheckToken(true);
 
   // 필요한 전역변수 선언
-  const { isPosting, setIsPosting, setValue } = useCodingTestStore();
+  const { isPosting, setIsPosting, setValue, setLanguage } =
+    useCodingTestStore();
   const { setContent } = useTiptapStore();
   // 페이지 진입 시 전역변수 초기화
   useEffect(() => {
     setIsPosting(false);
     setValue("");
     setContent("");
+    setLanguage(PROGRAMMING_LANGUAGES[0]);
   }, []);
 
-  const windowSize = useHandleResize();
+  const { windowSize } = useWindowSizeStore();
+  handleWindowResize();
 
   return (
     <>
@@ -48,7 +56,7 @@ export default function CodingTestPage() {
           </div>
         )
       ) : (
-        <div className="flex justify-center items-center w-screen h-screen">
+        <div className="w-screen h-screen">
           <LoadingSpinner />
         </div>
       )}

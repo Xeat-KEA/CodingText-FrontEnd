@@ -1,4 +1,5 @@
 import { Editor } from "@tiptap/react";
+import { CompileResult } from "../(coding-test)/_interface/interfaces";
 
 export interface SearchBarProps {
   baseURL: string;
@@ -215,8 +216,12 @@ export interface CodingTestStore {
   setValue: (code: string) => void;
   memo: string;
   setMemo: (string: string) => void;
-  isSmall: boolean;
-  setIsSmall: (state: boolean) => void;
+  isRunning: boolean;
+  setIsRunning: (state: boolean) => void;
+  compiledResult: CompileResult[];
+  setCompiledResult: (result: CompileResult[]) => void;
+  compileError: string;
+  setCompileError: (error: string) => void;
 }
 
 // 텍스트 에디터 내용 Interface
@@ -244,6 +249,11 @@ export interface CodeFilterStore {
   setAlgorithm: (newList: string[]) => void;
   order: string;
   setOrder: (selected: string) => void;
+}
+
+export interface WindowSizeStore {
+  windowSize: number;
+  setWindowSize: (size: number) => void;
 }
 
 // Form 관련 인터페이스

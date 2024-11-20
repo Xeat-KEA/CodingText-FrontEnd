@@ -12,7 +12,7 @@ import SmSearchBar from "../SmSearchBar";
 import ProfileImgContainer from "../ProfileImgContainer";
 import { motion } from "framer-motion";
 import TopBarMenu from "./TopBarMenu";
-import { useHandleResize } from "@/app/_hooks/useHandleResize";
+import { useWindowSizeStore } from "@/app/stores";
 
 export default function TopBar() {
   const pathname = usePathname();
@@ -66,7 +66,7 @@ export default function TopBar() {
     api.get("/my-page/1").then((res) => setProfileInfo(res.data.data));
   }, []); */
 
-  const windowSize = useHandleResize();
+  const { windowSize } = useWindowSizeStore();
 
   const dummyprofile = {
     rank: "Junior",

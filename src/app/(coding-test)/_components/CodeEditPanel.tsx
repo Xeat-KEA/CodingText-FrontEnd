@@ -1,28 +1,36 @@
-import { useCodingTestStore } from "@/app/stores";
-import { useEffect, useState } from "react";
+import { useCodingTestStore, useWindowSizeStore } from "@/app/stores";
+import { useState } from "react";
 import Dialog from "@/app/_components/Dialog";
 import { DialogCheckIcon, DialogXIcon } from "@/app/_components/Icons";
 import { useParams, useRouter } from "next/navigation";
 import { usePageHandler } from "@/app/_hooks/usePageHandler";
 import { useBase64 } from "@/app/_hooks/useBase64";
 import api from "@/app/_api/config";
-import { useHandleResize } from "@/app/_hooks/useHandleResize";
 import CodePart from "./CodePart";
 import SplittedCodePart from "./SplittedCodePart";
 import CodePartBtns from "./CodePartBtns";
+import { dummy, dummyerror } from "../_constants/constants";
+import { isAxiosError } from "axios";
 
 export default function CodeEditPanel() {
   const router = useRouter();
   const { id } = useParams();
 
   // 코딩 테스트 관련 전역 변수
-  const { value, setIsPosting, language, setHasSolved } = useCodingTestStore();
+  const {
+    value,
+    setIsPosting,
+    language,
+    setHasSolved,
+    isRunning,
+    setIsRunning,
+    setCompiledResult,
+    setCompileError,
+  } = useCodingTestStore();
 
   const [isCorrect, setIsCorrect] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isPageChanging, setIsPageChanging] = useState(false);
-  const [compiledResult, setCompiledResult] = useState("");
-  const [isRunning, setIsRunning] = useState(false);
 
   // 코드 컴파일 시
   const onCompile = async () => {
@@ -36,6 +44,7 @@ export default function CodeEditPanel() {
     if (!isRunning) {
       try {
         setIsRunning(true);
+        setCompileError("");
         const response = await api.post(
           "/code-compile-service/code/compile",
           data,
@@ -46,12 +55,17 @@ export default function CodeEditPanel() {
           }
         );
         if (response.status === 200) {
-          const result = response.data.data;
-          setCompiledResult(result.result[0]);
-          setIsRunning(false);
+          const result = response.data.data.result;
+          setCompiledResult(result);
+          console.log(result);
         }
-      } catch (err) {
-        console.log(err);
+        setIsRunning(false);
+      } catch (err: any) {
+        if (isAxiosError(err)) {
+          // 컴파일 에러 메세지 저장
+          setCompileError(err.response?.data.message);
+        }
+        setIsRunning(false);
       }
     }
   };
@@ -66,20 +80,13 @@ export default function CodeEditPanel() {
   // 새로고침, 페이지 닫기, 뒤로가기 방지
   usePageHandler();
 
-  const windowSize = useHandleResize();
-  console.log(compiledResult);
+  const { windowSize } = useWindowSizeStore();
+
   return (
     <>
       <div className="w-full flex flex-col max-md:h-screen">
         {/* 화면 크기 클 경우 Splitter 있는 코드 작성 부분 렌더링 */}
-        {windowSize > 768 ? (
-          <SplittedCodePart
-            isRunning={isRunning}
-            compiledResult={compiledResult}
-          />
-        ) : (
-          <CodePart isRunning={isRunning} compiledResult={compiledResult} />
-        )}
+        {windowSize > 768 ? <SplittedCodePart /> : <CodePart />}
         {/* 하단 버튼 */}
         <CodePartBtns onCompile={onCompile} onSubmit={onSubmit} />
       </div>

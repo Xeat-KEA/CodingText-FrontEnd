@@ -1,10 +1,9 @@
 import DropDown from "@/app/_components/DropDown";
 import { PROGRAMMING_LANGUAGES } from "@/app/_constants/constants";
-import { useCodingTestStore } from "@/app/stores";
+import { useCodingTestStore, useWindowSizeStore } from "@/app/stores";
 import { useParams, useRouter } from "next/navigation";
 import { CodePartBtnsProps } from "../_interface/interfaces";
-import { useEffect } from "react";
-import { useHandleResize } from "@/app/_hooks/useHandleResize";
+import { useEffect, useRef, useState } from "react";
 import { CODING_BUTTONS } from "../_constants/constants";
 
 export default function CodePartBtns({
@@ -14,31 +13,34 @@ export default function CodePartBtns({
   const router = useRouter();
   const { id } = useParams();
 
-  const {
-    language,
-    setLanguage,
-    setIsPosting,
-    hasSolved,
-    setHasSolved,
-    isSmall,
-    setIsSmall,
-  } = useCodingTestStore();
-  const windowSize = useHandleResize();
+  const { language, setLanguage, setIsPosting, hasSolved, setHasSolved } =
+    useCodingTestStore();
+  const { windowSize } = useWindowSizeStore();
 
-  // 전역 변수 초기값 설정
+  // 코드 작성 부분 크기 감지
+  const ref = useRef<HTMLDivElement>(null);
+  const [isSmall, setIsSmall] = useState(false);
   useEffect(() => {
-    setLanguage(PROGRAMMING_LANGUAGES[0]);
-  }, []);
+    const observer = new ResizeObserver(() => {
+      if (ref.current) {
+        setIsSmall(ref.current.clientWidth < 600);
+      }
+    });
 
-  // 화면 크기에 따른 isSmall 설정
-  useEffect(() => {
-    if (windowSize <= 768) {
-      setIsSmall(true);
+    if (ref.current) {
+      observer.observe(ref.current);
     }
-  }, [windowSize]);
+
+    return () => {
+      if (ref.current) {
+        observer.unobserve(ref.current);
+      }
+    };
+  }, []);
 
   return (
     <div
+      ref={ref}
       className={`w-full flex ${
         windowSize > 440 ? "justify-between items-center" : "flex-col items-end"
       } px-6 pt-6 pb-8 gap-4`}

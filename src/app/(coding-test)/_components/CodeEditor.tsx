@@ -68,11 +68,7 @@ export default function CodeEditor({
   }, [language]);
 
   if (!lang || !theme || editorExtensions.length === 0) {
-    return (
-      <div className="w-full h-full flex-center">
-        <LoadingSpinner />
-      </div>
-    ); // 확장이 로드될 때까지 로딩 상태를 표시
+    return <LoadingSpinner textColor="white" />; // 확장이 로드될 때까지 로딩 상태를 표시
   }
 
   return (

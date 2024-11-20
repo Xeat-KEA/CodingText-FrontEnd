@@ -199,7 +199,7 @@ textarea {
   .prose h3,
   .prose ul,
   .prose ol {
-    @apply m-0;
+    @apply m-0 break-words;
   }
   .prose hr {
     @apply my-8;

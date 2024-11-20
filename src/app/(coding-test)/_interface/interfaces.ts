@@ -13,12 +13,15 @@ export interface ChatInputForm {
   content: string;
 }
 
-export interface CodePartProps {
-  isRunning: boolean;
-  compiledResult: string;
-}
-
 export interface CodePartBtnsProps {
   onCompile: () => void;
   onSubmit: () => void;
+}
+
+export interface CompileResult {
+  index?: number;
+  runtime: number;
+  input: string;
+  output?: string;
+  result: string;
 }
