@@ -13,14 +13,13 @@ export default function SearchBar({
 }: SearchBarProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [filter, setFilter] = useState("");
 
-  const { register, handleSubmit, setValue, watch } = useForm<SearchForm>();
+  const { register, handleSubmit, setValue } = useForm<SearchForm>();
   const onValid = (data: SearchForm) => {
     const newParams = new URLSearchParams(searchParams.toString());
     newParams.set("keyword", data.keyword);
-    if (data.filter) {
-      newParams.set("filter", data.filter);
-    }
+    newParams.set("filter", data.filter || "title");
     router.push(`${baseURL}?${newParams}`, {
       scroll: false,
     });
@@ -37,7 +36,13 @@ export default function SearchBar({
   // 드롭다운 값 변경을 위한 state
   useEffect(() => {
     if (hasFilter) {
-      setValue("filter", CODE_SEARCH_FILTER_LIST[0].content);
+      const currentFilter = searchParams.get("filter");
+      if (currentFilter) {
+        const target = CODE_SEARCH_FILTER_LIST.find(
+          (el) => el.selection === currentFilter
+        );
+        setFilter(target!.content);
+      }
     }
   }, []);
 
@@ -49,9 +54,10 @@ export default function SearchBar({
             isSmall
             borderRight
             list={CODE_SEARCH_FILTER_LIST}
-            selection={watch("filter") || "제목"}
+            selection={filter || "제목"}
             onSelectionClick={(selected) => {
-              setValue("filter", selected.content);
+              setValue("filter", selected.selection);
+              setFilter(selected.content);
             }}
           />
         </div>

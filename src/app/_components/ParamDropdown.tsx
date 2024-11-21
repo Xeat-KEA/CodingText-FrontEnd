@@ -33,7 +33,8 @@ export default function ParamDropDown({
       </div>
       <span className="grow flex justify-center text-xs text-black whitespace-nowrap">
         {searchParams.get(paramType)
-          ? searchParams.get(paramType)
+          ? list.find((el) => el.selection === searchParams.get(paramType))
+              ?.content
           : placeholder}
       </span>
       {/* 선택 항목 목록 */}
@@ -45,9 +46,9 @@ export default function ParamDropDown({
               className={`w-full flex justify-center text-xs text-black ${
                 isSmall ? "px-2 py-[6px]" : "px-4 py-2"
               }`}
-              onClick={() => setParams("order", el)}
+              onClick={() => setParams("order", el.selection)}
             >
-              {el}
+              {el.content}
             </li>
           ))}
         </ul>

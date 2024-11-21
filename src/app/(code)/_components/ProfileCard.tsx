@@ -1,4 +1,3 @@
-import Image from "next/image";
 import ProfileInfo from "./ProfileInfo";
 import { useState } from "react";
 import ChatGPTDialog from "./ChatGPTDialog";
@@ -15,7 +14,7 @@ export default function ProfileCard({ userData }: ProfileCardProps) {
       <div className="w-full flex flex-col items-center gap-4 sticky top-24 border p-6 border-border-2 rounded-xl">
         {!userData ? (
           <>
-            <span className="text-black text-lg font-semibold text-center py-6 whitespace-pre-wrap">
+            <span className="lg:w-[360px] text-black text-lg font-semibold text-center py-6 whitespace-pre-wrap">
               {"로그인이 필요한\n서비스에요"}
             </span>
             <Link href="/sign-in" className="btn-primary w-full">
@@ -56,7 +55,7 @@ export default function ProfileCard({ userData }: ProfileCardProps) {
                   />
                 </div>
               </div>
-              <div className="flex gap-4">
+              <div className="flex gap-4 max-sm:flex-col">
                 <button
                   onClick={() => setIsDialogOpen((prev) => !prev)}
                   className="btn-primary w-full"

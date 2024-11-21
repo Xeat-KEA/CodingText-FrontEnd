@@ -36,7 +36,7 @@ export interface MainPostsProps {
 
 export interface MainCode {
   codeNum: number;
-  difficulty: 1 | 2 | 3 | 4 | 5;
+  difficulty: "LEVEL1" | "LEVEL2" | "LEVEL3" | "LEVEL4" | "LEVEL5";
   title: string;
   algorithm: string;
   rate: number;

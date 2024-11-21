@@ -6,8 +6,7 @@ import ProfileCard from "./ProfileCard";
 import CodeFilter from "./CodeFilter";
 import { usePathname } from "next/navigation";
 import { useCheckToken } from "@/app/_hooks/useCheckToken";
-import { useEffect, useState } from "react";
-import api from "@/app/_api/config";
+import { useState } from "react";
 import { ProfileCardProps } from "../_interfaces/interfaces";
 import { dummyuserdata } from "@/app/(home)/_constants/constants";
 
