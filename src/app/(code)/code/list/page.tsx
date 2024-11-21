@@ -46,7 +46,7 @@ export default function CodeListPage() {
         algorithm,
         difficulty,
         searchBy: searchBy,
-        searchText: keyword,
+        searchText: searchBy === "title" ? keyword : Number(keyword),
         sortBy: order,
         page: page,
         size: 15,
@@ -60,9 +60,19 @@ export default function CodeListPage() {
     return response.data;
   };
   const { data } = useQuery<{ content: Code[] }>({
-    queryKey: ["codeList", algorithm, difficulty, order, page, keyword],
+    queryKey: [
+      "codeList",
+      algorithm,
+      difficulty,
+      order,
+      page,
+      keyword,
+      searchBy,
+    ],
     queryFn: fetchCodeList,
   });
+
+  console.log(data);
 
   return (
     <div className="w-full flex flex-col">
