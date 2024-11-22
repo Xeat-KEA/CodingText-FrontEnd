@@ -16,7 +16,7 @@ export interface SignInTitleProps {
 }
 
 export interface SignInBtnProps {
-  icon: JSX.Element;
+  image: string;
   service: string;
   redirectionURL: string;
 }
