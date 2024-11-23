@@ -159,7 +159,8 @@ export default function Board() {
           ) : (
             <button
               onClick={() => setIsAddingCategory(true)}
-              className="text-xs text-disabled font-semibold">
+              className="text-xs text-disabled font-semibold"
+            >
               새 상위 게시판 추가
             </button>
           )}
@@ -179,8 +180,8 @@ export default function Board() {
             isAddCategoryDisabled
               ? "상위 게시판은 최대 5개까지 \n 생성할 수 있어요"
               : categoryToDelete?.isSub
-                ? "삭제 후 복구할 수 없어요!" // 하위
-                : "하위 게시판도 함께 사라지며 \n 삭제 후 복구할 수 없어요!" // 상위
+              ? "삭제 후 복구할 수 없어요!" // 하위
+              : "하위 게시판도 함께 사라지며 \n 삭제 후 복구할 수 없어요!" // 상위
           }
           isWarning={!isAddCategoryDisabled}
           backBtn={isAddCategoryDisabled ? "확인" : "취소"}

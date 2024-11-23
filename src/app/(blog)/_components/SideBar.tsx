@@ -101,7 +101,8 @@ export default function SideBar() {
         isCollapsed
           ? "justify-center w-6 ml-2"
           : "justify-between w-60 pl-6 pr-2"
-      }`}>
+      }`}
+    >
       {!isCollapsed && <p className="text-xs">{label}</p>}
       <Icon />
     </Link>
@@ -111,12 +112,14 @@ export default function SideBar() {
     <nav
       className={`fixed top-0 left-0 h-screen bg-white border-r transition-all duration-150 z-20 ${
         isCollapsed ? "w-10" : "w-60"
-      }`}>
+      }`}
+    >
       {/* 사이드바 상단 요소 */}
       <div
         className={`flex items-center h-8 mt-5 mb-3 mr-2 ${
           isCollapsed ? "justify-center w-6 ml-2" : "justify-between w-52 ml-6"
-        }`}>
+        }`}
+      >
         {!isCollapsed && (
           <Link href="/">
             <LogoIcon />
@@ -124,7 +127,8 @@ export default function SideBar() {
         )}
         <button
           onClick={toggleSidebar}
-          className={`focus:outline-none ${isCollapsed && "rotate-180"}`}>
+          className={`focus:outline-none ${isCollapsed && "rotate-180"}`}
+        >
           <SbHiddenIcon />
         </button>
       </div>
@@ -139,9 +143,10 @@ export default function SideBar() {
       {/* 게시판 목록 */}
       <div
         className={`flex-1 overflow-y-auto`}
-        style={{ maxHeight: "calc(100vh - 252px)" }}>
+        style={{ maxHeight: "calc(100vh - 252px)" }}
+      >
         {!isCollapsed && (
-          <div className="relative">
+          <div className="relative overflow-x-hidden">
             <Board />
           </div>
         )}
