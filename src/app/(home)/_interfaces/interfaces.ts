@@ -1,29 +1,7 @@
-import { PostResult } from "@/app/(search)/_interfaces/interfaces";
+import { Post } from "@/app/_interfaces/interfaces";
 
-export interface BannerCardProps {
-  content: string;
-  bubble: JSX.Element;
-  index: number;
-}
-
-export interface MainBoardProps {
-  title: string;
-  hasTab?: boolean;
-  postList: PostResult[];
-}
-
-export interface MainPost {
-  postId: number;
-  profileImg: string;
-  username: string;
-  userId: number;
-  codeNum?: number;
-  title: string;
-  content: string;
-  likeCounts: number;
-  commentCounts: number;
-  views: number;
-  createdAt?: string;
+export interface MainPostCardProps {
+  post: Post;
   ranking?: 1 | 2 | 3;
 }
 
@@ -31,7 +9,8 @@ export interface MainPostsProps {
   title: string;
   subTitle?: string;
   url?: string;
-  sliderList: MainPost[];
+  sliderList: Post[];
+  hasRanking?: boolean;
 }
 
 export interface MainCode {

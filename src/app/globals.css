@@ -115,7 +115,7 @@ textarea {
   }
   /* 각 항목 상위 컨테이너 */
   .main-container {
-    @apply w-full flex flex-col gap-6 lg:overflow-hidden;
+    @apply w-full flex flex-col gap-6;
   }
   /* 항목 설명 텍스트 컨테이너 */
   .main-text-container {

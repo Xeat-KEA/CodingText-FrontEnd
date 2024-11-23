@@ -112,12 +112,18 @@ export interface SaveOrCancelBtnProps {
 }
 
 export interface Post {
+  articleId: number;
+  profileUrl: string;
+  blogId: number;
   title: string;
-  isSecret?: boolean;
-  password?: string;
-  parentCategory?: number;
-  childCategory?: number;
   content: string;
+  isSecret: boolean;
+  likeCount: number;
+  replyCount: number;
+  viewCount: number;
+  createdDate: string;
+  codeId?: string;
+  thumbnailImageUrl?: string | null;
 }
 
 export interface ProfileImgSelectionProps {

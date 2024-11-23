@@ -95,7 +95,7 @@ export default function PostCard({
           <div className="w-[160px] h-[120px] rounded-lg bg-disabled shrink-0"></div>
         )}
       </div>
-      <div className="">
+      <div className="post-card-bottom-container">
         {/* 좋아요 / 댓글 개수 */}
         <div className="post-card-counts-container">
           <div className="post-card-counts">

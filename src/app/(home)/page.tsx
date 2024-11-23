@@ -19,14 +19,52 @@ import MainMenu from "./_components/MainMenu";
 import MainNotices from "./_components/MainNotices";
 import MainHistories from "./_components/MainHistories";
 import MainProfileCard from "./_components/MainProfileCard";
+import api from "../_api/config";
+import { useQuery } from "@tanstack/react-query";
 
 export default function Home() {
   // 로그인 여부 파악
   const { token, isLoaded } = useCheckToken();
 
+  // 인기 게시글 API 호출
+  const fetchTrendingPosts = async () => {
+    const response = await api.get("/blog-service/blog/board/all/like", {
+      headers: { Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}` },
+    });
+    return response.data;
+  };
+  const { data: trendings } = useQuery({
+    queryKey: ["trendingPosts"],
+    queryFn: fetchTrendingPosts,
+  });
+
+  // 일반 게시글 API 호출
+  const fetchGeneralPosts = async () => {
+    const response = await api.get("/blog-service/blog/board/article/recent", {
+      headers: { Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}` },
+    });
+    return response.data;
+  };
+  const { data: recents } = useQuery({
+    queryKey: ["generalPosts"],
+    queryFn: fetchGeneralPosts,
+  });
+
+  // 코딩 테스트 게시글 API 호출
+  const fetchCodePosts = async () => {
+    const response = await api.get("/blog-service/blog/board/code/recent", {
+      headers: { Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}` },
+    });
+    return response.data;
+  };
+  const { data: codes } = useQuery({
+    queryKey: ["codePosts"],
+    queryFn: fetchCodePosts,
+  });
+  console.log(trendings, recents, codes);
+
   return (
     <>
-      <TopBar />
       <div className="relative flex flex-col w-full items-center pt-16">
         {/* 배너 */}
         <MainBanner />
@@ -55,21 +93,22 @@ export default function Home() {
           <MainPosts
             title={dummytrending.title}
             subTitle={dummytrending.subTitle}
-            sliderList={dummytrending.sliderList}
+            sliderList={trendings?.data.slice(0, 3)}
+            hasRanking
           />
-          {/* 커뮤니티 */}
+          {/* 최신 게시글 */}
           <MainPosts
             title={dummycommunity.title}
             subTitle={dummycommunity.subTitle}
             url={dummycommunity.url}
-            sliderList={dummycommunity.sliderList}
+            sliderList={recents?.data.responseDtoList}
           />
           {/* 코딩 테스트 게시글 */}
           <MainPosts
             title={dummycodingpost.title}
             subTitle={dummycodingpost.subTitle}
-            url={dummycommunity.url}
-            sliderList={dummycodingpost.sliderList}
+            url={dummycodingpost.url}
+            sliderList={codes?.data.codeArticleList}
           />
           {/* 최신 코드 목록 */}
           <MainCodes

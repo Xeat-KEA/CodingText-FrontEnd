@@ -8,7 +8,19 @@ const bundleAnalyzer = withBundleAnalyzer({
 const nextConfig = {
   // 임시로 모든 도메인에서 오는 이미지 허용 (이미지 저장 로직 구현 후 수정 필요)
   images: {
-    remotePatterns: [{ protocol: "https", hostname: "**" }],
+    remotePatterns: [
+      {
+        protocol: "http",
+        hostname: "172.16.211.113",
+        port: "9000",
+        pathname: "/**", // 모든 하위 경로 허용
+      },
+      {
+        protocol: "https",
+        hostname: "picsum.photos",
+        pathname: "/id/**", // 특정 경로 패턴 허용
+      },
+    ],
   },
 };
 

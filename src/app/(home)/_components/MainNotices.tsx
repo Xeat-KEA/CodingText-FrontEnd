@@ -8,7 +8,7 @@ export default function MainNotices({
   sliderList,
 }: MainNoticesProps) {
   return (
-    <div className="main-container">
+    <div className="main-container overflow-hidden">
       {/* 공지 목록 제목 */}
       <div className="main-text-container">
         <div className="main-title-container cursor-pointer">

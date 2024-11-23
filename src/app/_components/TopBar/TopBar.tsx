@@ -87,9 +87,12 @@ export default function TopBar() {
         {/* 상단바 */}
         <div
           className={`relative w-full h-16 shrink-0 flex justify-between ${
-            !pathname.startsWith("/coding-test")
-              ? "max-w-[1200px] px-12"
-              : "px-6"
+            pathname.startsWith("/coding-test")
+              ? "px-6"
+              : pathname.startsWith("/recent-post") ||
+                pathname.startsWith("/code-post")
+              ? "max-w-1000"
+              : "max-w-1200"
           }`}
         >
           {/* 탑바 좌측 요소 */}
