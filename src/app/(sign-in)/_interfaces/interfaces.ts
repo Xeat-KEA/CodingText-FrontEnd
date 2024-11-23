@@ -1,7 +1,8 @@
 export interface SignUpForm {
-  nickname: string;
-  lang: string;
-  profileImg: string;
+  nickName: string;
+  codeLanguage: string;
+  useSocialProfile: boolean;
+  // profileImg: string;
 }
 
 export interface PolicyContainerProps {

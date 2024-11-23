@@ -3,29 +3,34 @@ import ProfileImgSelection from "@/app/_components/ProfileImgSelection";
 import { PROGRAMMING_LANGUAGES } from "@/app/_constants/constants";
 import { SignUpForm } from "../_interfaces/interfaces";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
 import { useRouter } from "next/navigation";
+import api from "@/app/_api/config";
 
 export default function SignUpFormContainer() {
   const router = useRouter();
-  const { register, handleSubmit, setValue, watch } = useForm<SignUpForm>();
+  const { register, handleSubmit, setValue, watch } = useForm<SignUpForm>({
+    defaultValues: { useSocialProfile: false },
+  });
+  const token = localStorage.getItem("token");
 
   const onValid = (data: SignUpForm) => {
     // 데이터 post 및 validation 필요
     console.log(data);
 
-    if (!data.lang) {
-      console.log("error");
-    } else {
-      router.push("/sign-up/done");
-    }
+    api
+      .post("/user-service/auth/signup", data, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((res) => {
+        router.push("/sign-up/done");
+      });
   };
 
   return (
     <form onSubmit={handleSubmit(onValid)} className="flex flex-col gap-8">
       {/* 닉네임 입력 */}
       <input
-        {...register("nickname", { required: true })}
+        {...register("nickName", { required: true })}
         className="sign-in-input"
         placeholder="닉네임"
         autoComplete="off"
@@ -34,23 +39,23 @@ export default function SignUpFormContainer() {
       <div className="flex flex-col gap-2">
         <span className="text-sm text-black">기본 프로그래밍 언어</span>
         <DropDown
-          selection={watch("lang")}
+          selection={watch("codeLanguage")}
           placeholder="언어를 선택해주세요"
           list={PROGRAMMING_LANGUAGES}
           onSelectionClick={(selected) => {
-            setValue("lang", selected.content);
+            setValue("codeLanguage", selected.content);
           }}
         />
       </div>
       {/* 프로필 사진 선택 */}
       <div className="flex flex-col gap-2">
         <span className="text-sm text-black">프로필 사진 선택</span>
-        <ProfileImgSelection
+        {/* <ProfileImgSelection
           seletedImg={watch("profileImg")}
           onSelectionClick={(selected) => {
             setValue("profileImg", selected);
           }}
-        />
+        /> */}
       </div>
       <button type="submit" className="btn-primary">
         완료
