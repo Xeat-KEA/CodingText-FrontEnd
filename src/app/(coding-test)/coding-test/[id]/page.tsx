@@ -9,16 +9,12 @@ import {
 } from "@/app/stores";
 import NewPostPanel from "../../_components/NewPostPanel";
 import { useEffect } from "react";
-import { useCheckToken } from "@/app/_hooks/useCheckToken";
 import ChattingPanel from "../../_components/ChattingPanel";
 import LoadingSpinner from "@/app/_components/LoadingSpinner";
 import { PROGRAMMING_LANGUAGES } from "@/app/_constants/constants";
 import { handleWindowResize } from "@/app/utils";
 
 export default function CodingTestPage() {
-  // 로그인 여부 확인
-  const {} = useCheckToken(true);
-
   // 필요한 전역변수 선언
   const { isPosting, setIsPosting, setValue, setLanguage } =
     useCodingTestStore();

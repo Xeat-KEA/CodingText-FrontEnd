@@ -14,15 +14,13 @@ export default function CodeCard({
   createdAt,
   registerStatus,
 }: Code) {
-  const { token } = useCheckToken();
-
   const router = useRouter();
 
   const [level, color] = useSetDifficulty(difficulty);
 
   return (
     <Link
-      href={token ? `/coding-test/${codeId}` : "/sign-in"}
+      href={`/coding-test/${codeId}`}
       className="w-full px-2 py-4 flex justify-between items-center gap-4"
     >
       <div className="w-full flex gap-2 items-center">
