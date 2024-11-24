@@ -133,6 +133,7 @@ export default function MainBanner() {
             onClick={(e) => {
               e.stopPropagation();
               if (!isMoving) {
+                setIsMoving(true);
                 if (index > page) {
                   setIsBack(false);
                 } else {
