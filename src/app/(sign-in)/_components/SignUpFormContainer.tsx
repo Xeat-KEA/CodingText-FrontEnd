@@ -5,6 +5,7 @@ import { SignUpForm } from "../_interfaces/interfaces";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import api from "@/app/_api/config";
+import { useState } from "react";
 
 export default function SignUpFormContainer() {
   const router = useRouter();
@@ -12,6 +13,10 @@ export default function SignUpFormContainer() {
     defaultValues: { useSocialProfile: false },
   });
   const token = localStorage.getItem("token");
+
+  const [language, setLanguage] = useState("");
+
+  const [temp, setTemp] = useState();
 
   const onValid = (data: SignUpForm) => {
     // 데이터 post 및 validation 필요
@@ -22,7 +27,13 @@ export default function SignUpFormContainer() {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
-        router.push("/sign-up/done");
+        console.log(res.data);
+        if (res.data) {
+          setTemp(res.data);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
       });
   };
 
@@ -39,23 +50,24 @@ export default function SignUpFormContainer() {
       <div className="flex flex-col gap-2">
         <span className="text-sm text-black">기본 프로그래밍 언어</span>
         <DropDown
-          selection={watch("codeLanguage")}
+          selection={language}
           placeholder="언어를 선택해주세요"
           list={PROGRAMMING_LANGUAGES}
           onSelectionClick={(selected) => {
-            setValue("codeLanguage", selected.content);
+            setValue("codeLanguage", selected.selection);
+            setLanguage(selected.content);
           }}
         />
       </div>
       {/* 프로필 사진 선택 */}
       <div className="flex flex-col gap-2">
         <span className="text-sm text-black">프로필 사진 선택</span>
-        {/* <ProfileImgSelection
-          seletedImg={watch("profileImg")}
+        <ProfileImgSelection
+          seletedImg={watch("basicProfileUrl")}
           onSelectionClick={(selected) => {
-            setValue("profileImg", selected);
+            setValue("basicProfileUrl", selected);
           }}
-        /> */}
+        />
       </div>
       <button type="submit" className="btn-primary">
         완료

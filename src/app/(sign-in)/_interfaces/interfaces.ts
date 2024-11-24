@@ -2,7 +2,7 @@ export interface SignUpForm {
   nickName: string;
   codeLanguage: string;
   useSocialProfile: boolean;
-  // profileImg: string;
+  basicProfileUrl: string;
 }
 
 export interface PolicyContainerProps {
@@ -20,4 +20,13 @@ export interface SignInBtnProps {
   image: string;
   service: string;
   redirectionURL: string;
+}
+
+export interface SignUpResult {
+  userId: string;
+  role: string;
+  jwtToken: {
+    accessToken: string;
+    refreshToken: string;
+  };
 }
