@@ -31,7 +31,7 @@ export default function MainPostCard({ post, ranking }: MainPostCardProps) {
         <div className="post-card-top-container">
           <div className="post-card-profile-container">
             <ProfileImgContainer width={24} height={24} src={post.profileUrl} />
-            <span className="post-card-nickname">{"hi"}</span>
+            <span className="post-card-nickname">{post.nickName}</span>
           </div>
           {ranking && <Medal ranking={ranking} />}
           {!ranking && post.createdDate && (
@@ -59,7 +59,7 @@ export default function MainPostCard({ post, ranking }: MainPostCardProps) {
                     }}
                     className="post-card-code-number"
                   >
-                    {post.codeId}
+                    #{post.codeId}
                   </button>
                   &nbsp;
                 </>

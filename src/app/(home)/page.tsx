@@ -1,17 +1,14 @@
 "use client";
 
 import Footer from "./_components/Footer";
-import TopBar from "../_components/TopBar/TopBar";
 import { useCheckToken } from "../_hooks/useCheckToken";
 import MainBanner from "./_components/MainBanner";
 import {
   dummycodes,
-  dummycodingpost,
-  dummycommunity,
   dummyhistories,
   dummynotice,
-  dummytrending,
   dummyuserdata,
+  POSTS_LIST,
 } from "./_constants/constants";
 import MainPosts from "./_components/MainPosts";
 import MainCodes from "./_components/MainCodes";
@@ -91,23 +88,23 @@ export default function Home() {
           )}
           {/* 이번 주 인기 게시글 슬라이더 */}
           <MainPosts
-            title={dummytrending.title}
-            subTitle={dummytrending.subTitle}
+            title={POSTS_LIST[0].title}
+            subTitle={POSTS_LIST[0].content}
             sliderList={trendings?.data.slice(0, 3)}
             hasRanking
           />
           {/* 최신 게시글 */}
           <MainPosts
-            title={dummycommunity.title}
-            subTitle={dummycommunity.subTitle}
-            url={dummycommunity.url}
+            title={POSTS_LIST[1].title}
+            subTitle={POSTS_LIST[1].content}
+            url={POSTS_LIST[1].url}
             sliderList={recents?.data.responseDtoList}
           />
           {/* 코딩 테스트 게시글 */}
           <MainPosts
-            title={dummycodingpost.title}
-            subTitle={dummycodingpost.subTitle}
-            url={dummycodingpost.url}
+            title={POSTS_LIST[1].title}
+            subTitle={POSTS_LIST[1].content}
+            url={POSTS_LIST[1].url}
             sliderList={codes?.data.codeArticleList}
           />
           {/* 최신 코드 목록 */}

@@ -1,9 +1,39 @@
 "use client";
 
 import api from "@/app/_api/config";
+import PostCard from "@/app/_components/PostCard";
 import { useInfiniteQuery } from "@tanstack/react-query";
+import { PostsResponse } from "../_interfaces/interfaces";
 
 export default function RecentPostPage() {
+  const fetchRecents = async ({
+    pageParam,
+  }: {
+    pageParam?: number;
+  }): Promise<PostsResponse> => {
+    const response = await api.get("/blog-service/blog/board/article/recent", {
+      params: { page: pageParam, size: 5 },
+      headers: { Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}` },
+    });
+
+    return response.data.data;
+  };
+
+  const { data, fetchNextPage } = useInfiniteQuery({
+    queryKey: ["recents"],
+    queryFn: fetchRecents,
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, allPages) => {
+      console.log(lastPage);
+      if (lastPage.pageInfo.totalPageNum === lastPage.pageInfo.currentPageNum) {
+        return undefined;
+      } else {
+        return lastPage.pageInfo.currentPageNum;
+      }
+    },
+    select: (data) => data.pages.flatMap((page) => page.responseDtoList),
+  });
+
   return (
     <div className="top-container">
       <div className="max-w-1000 pt-16">
@@ -18,20 +48,11 @@ export default function RecentPostPage() {
             </span>
           </div>
           <div className="flex flex-col divide-y divide-border-2">
-            {/* {data.map((el, index) => (
-              <PostCard
-                articleId={el.articleId}
-                comments={el.comments}
-                content={el.content}
-                createAt={el.createAt}
-                likes={el.likes}
-                title={el.title}
-                views={el.views}
-                codeId={null}
-              />
-            ))} */}
+            {data?.map((el) => (
+              <PostCard key={el.articleId} post={el} />
+            ))}
           </div>
-          <button onClick={() => {}}>다음 페이지 로딩</button>
+          <button onClick={() => fetchNextPage()}>다음 페이지 로딩</button>
         </div>
       </div>
     </div>

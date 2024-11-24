@@ -10,153 +10,31 @@ import {
   MainHistoriesProps,
   MainMenuBtnProps,
   MainNoticesProps,
-  MainPostsProps,
 } from "../_interfaces/interfaces";
 
 export const MAIN_MENU_LIST: MainMenuBtnProps[] = [
   { icon: <MainCodeIcon />, title: "코딩 테스트", url: "/code/list" },
   { icon: <MainAIIcon />, title: "AI 문제 생성", url: "/ai" },
-  { icon: <MainCommunityIcon />, title: "최신 게시글", url: "/community" },
+  { icon: <MainCommunityIcon />, title: "최신 게시글", url: "/recent-post" },
   { icon: <MainNoticeIcon />, title: "공지사항", url: "/notice" },
 ];
 
-export const dummytrending: MainPostsProps = {
-  title: "이번 주 인기 게시글",
-  subTitle: "이번 주 인기 게시글을 확인해보세요",
-  sliderList: [
-    {
-      articleId: 1,
-      profileImg: "/profileImg1.png",
-      username: "사용자명1",
-      blogId: 1,
-      title: "게시글1 게시글1 게시글1 게시글1 게시글1 게시글1 게시글1 게시글1",
-      content:
-        "게시글 내용1 게시글 내용1 게시글 내용1 게시글 내용1 게시글 내용1 게시글 내용1 게시글 내용1 게시글 내용1 게시글 내용1 게시글 내용1 게시글 내용1 게시글 내용1 게시글 내용1 게시글 내용1 게시글 내용1 게시글 내용1 게시글 내용1 게시글 내용1 게시글 내용1 게시글 내용1 게시글 내용1 게시글 내용1",
-      likeCount: 121,
-      replyCount: 15,
-      viewCount: 1962,
-      createdAt: "2024-11-07",
-      ranking: 1,
-    },
-    {
-      articleId: 2,
-      profileImg: "/profileImg2.png",
-      username: "사용자명2",
-      blogId: 2,
-      title: "게시글2",
-      content: "게시글 내용2",
-      likeCount: 121,
-      replyCount: 15,
-      viewCount: 1962,
-      createdAt: "2024-11-07",
-      ranking: 2,
-    },
-    {
-      articleId: 3,
-      profileImg: "/profileImg3.png",
-      username: "사용자명3",
-      blogId: 3,
-      title: "게시글3",
-      content: "게시글 내용3",
-      likeCount: 121,
-      replyCount: 15,
-      viewCount: 1962,
-      createdAt: "2024-11-07",
-      ranking: 3,
-    },
-  ],
-};
-
-export const dummycommunity: MainPostsProps = {
-  title: "최신 게시글",
-  subTitle: "요즘 개발자의 관심사를 알아보세요",
-  url: "/recent-post",
-  sliderList: [
-    {
-      articleId: 1,
-      profileImg: "/profileImg1.png",
-      username: "사용자명1",
-      blogId: 1,
-      title: "게시글1",
-      content: "게시글 내용1",
-      likeCount: 121,
-      replyCount: 15,
-      viewCount: 1962,
-      createdAt: "2024-11-07",
-    },
-    {
-      articleId: 2,
-      profileImg: "/profileImg2.png",
-      username: "사용자명2",
-      blogId: 2,
-      title: "게시글2",
-      content: "게시글 내용2",
-      likeCount: 121,
-      replyCount: 15,
-      viewCount: 1962,
-      createdAt: "2024-11-07",
-    },
-    {
-      articleId: 3,
-      profileImg: "/profileImg3.png",
-      username: "사용자명3",
-      blogId: 3,
-      title: "게시글3",
-      content: "게시글 내용3",
-      likeCount: 121,
-      replyCount: 15,
-      viewCount: 1962,
-      createdAt: "2024-11-07",
-    },
-  ],
-};
-
-export const dummycodingpost: MainPostsProps = {
-  title: "코딩 테스트 게시글",
-  subTitle: "다른 사람들의 문제 풀이를 살펴보세요",
-  url: "/code-post",
-  sliderList: [
-    {
-      articleId: 1,
-      profileImg: "/profileImg1.png",
-      username: "사용자명1",
-      blogId: 1,
-      codeNum: 1,
-      title: "게시글1",
-      content: "게시글 내용1",
-      likeCount: 121,
-      replyCount: 15,
-      viewCount: 1962,
-      createdAt: "2024-11-07",
-    },
-    {
-      articleId: 2,
-      profileImg: "/profileImg2.png",
-      username: "사용자명2",
-      blogId: 2,
-      codeNum: 2,
-      title: "게시글2",
-      content: "게시글 내용2",
-      likeCount: 121,
-      replyCount: 15,
-      viewCount: 1962,
-      createdAt: "2024-11-07",
-    },
-    {
-      articleId: 3,
-      profileImg: "/profileImg3.png",
-      username: "사용자명3",
-      blogId: 3,
-      codeNum: 3,
-      title: "게시글3",
-      content: "게시글 내용3",
-      likeCount: 121,
-      replyCount: 15,
-      viewCount: 1962,
-      createdAt: "2024-11-07",
-    },
-  ],
-};
+export const POSTS_LIST = [
+  {
+    title: "이번 주 인기 게시글",
+    content: "이번 주 인기 게시글을 확인해보세요",
+  },
+  {
+    title: "최신 게시글",
+    content: "요즘 개발자의 관심사를 알아보세요",
+    url: "/recent-post",
+  },
+  {
+    title: "코딩 테스트 게시글",
+    content: "다른 사람들의 문제 풀이를 살펴보세요",
+    url: "/code-post",
+  },
+];
 
 export const dummycodes: MainCodesProps = {
   title: "새롭게 추가된 문제를 확인해보세요",

@@ -59,3 +59,13 @@ export interface MainHistoriesProps {
   url: string;
   sliderList: MainHistory[];
 }
+
+interface PageInfo {
+  totalPageNum: number;
+  currentPageNum: number;
+}
+
+export interface PostsResponse {
+  pageInfo: PageInfo;
+  responseDtoList: Post[];
+}

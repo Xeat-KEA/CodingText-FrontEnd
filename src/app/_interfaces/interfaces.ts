@@ -114,6 +114,7 @@ export interface SaveOrCancelBtnProps {
 export interface Post {
   articleId: number;
   profileUrl: string;
+  nickName: string;
   blogId: number;
   title: string;
   content: string;
@@ -122,8 +123,9 @@ export interface Post {
   replyCount: number;
   viewCount: number;
   createdDate: string;
-  codeId?: string;
+  codeId?: number;
   thumbnailImageUrl?: string | null;
+  category?: string;
 }
 
 export interface ProfileImgSelectionProps {
@@ -136,21 +138,6 @@ export interface EditBtnProps {
   onEditClick: () => void;
   onCancelClick: () => void;
   onSubmit: () => void;
-}
-
-export interface PostCardProps {
-  articleId: number;
-  profileImg?: string;
-  nickName?: string;
-  category?: string;
-  createAt: string;
-  title: string;
-  content: string;
-  thumbnail?: string;
-  likes: number;
-  comments: number;
-  views: number;
-  codeId: number | null;
 }
 
 // 프로토타입을 위한 임시
