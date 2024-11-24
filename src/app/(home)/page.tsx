@@ -102,9 +102,9 @@ export default function Home() {
           />
           {/* 코딩 테스트 게시글 */}
           <MainPosts
-            title={POSTS_LIST[1].title}
-            subTitle={POSTS_LIST[1].content}
-            url={POSTS_LIST[1].url}
+            title={POSTS_LIST[2].title}
+            subTitle={POSTS_LIST[2].content}
+            url={POSTS_LIST[2].url}
             sliderList={codes?.data.codeArticleList}
           />
           {/* 최신 코드 목록 */}

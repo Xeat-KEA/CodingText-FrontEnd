@@ -4,6 +4,10 @@ import api from "@/app/_api/config";
 import PostCard from "@/app/_components/PostCard";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { PostsResponse } from "../_interfaces/interfaces";
+import LoadingAnimation from "@/app/_components/LoadingAnimation";
+import { useInView } from "react-intersection-observer";
+import { useEffect } from "react";
+import { POSTS_LIST } from "../_constants/constants";
 
 export default function RecentPostPage() {
   const fetchRecents = async ({
@@ -19,20 +23,32 @@ export default function RecentPostPage() {
     return response.data.data;
   };
 
-  const { data, fetchNextPage } = useInfiniteQuery({
-    queryKey: ["recents"],
-    queryFn: fetchRecents,
-    initialPageParam: 0,
-    getNextPageParam: (lastPage, allPages) => {
-      console.log(lastPage);
-      if (lastPage.pageInfo.totalPageNum === lastPage.pageInfo.currentPageNum) {
-        return undefined;
-      } else {
-        return lastPage.pageInfo.currentPageNum;
-      }
-    },
-    select: (data) => data.pages.flatMap((page) => page.responseDtoList),
-  });
+  // 무한스크롤 데이터 가져오기
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
+    useInfiniteQuery({
+      queryKey: ["recents"],
+      queryFn: fetchRecents,
+      initialPageParam: 0,
+      getNextPageParam: (lastPage, allPages) => {
+        if (
+          lastPage.pageInfo.totalPageNum === lastPage.pageInfo.currentPageNum
+        ) {
+          return undefined;
+        } else {
+          return lastPage.pageInfo.currentPageNum;
+        }
+      },
+      // 데이터 평탄화
+      select: (data) => data.pages.flatMap((page) => page.responseDtoList!),
+    });
+
+  // 무한스크롤 트리거
+  const { ref, inView } = useInView();
+  useEffect(() => {
+    if (inView) {
+      fetchNextPage();
+    }
+  }, [inView]);
 
   return (
     <div className="top-container">
@@ -41,18 +57,27 @@ export default function RecentPostPage() {
           {/* 게시글 목록 제목 / 설명 */}
           <div className="main-text-container">
             <div className="main-title-container">
-              <span className="main-title">최신 게시글</span>
+              <span className="main-title">{POSTS_LIST[1].title}</span>
             </div>
-            <span className="main-sub-title">
-              요즘 개발자의 관심사를 알아보세요
-            </span>
+            <span className="main-sub-title">{POSTS_LIST[1].content}</span>
           </div>
           <div className="flex flex-col divide-y divide-border-2">
-            {data?.map((el) => (
-              <PostCard key={el.articleId} post={el} />
-            ))}
+            {!isLoading ? (
+              <>
+                {data?.map((el) => (
+                  <PostCard key={el.articleId} post={el} />
+                ))}
+              </>
+            ) : (
+              <>{/* 스켈레톤 UI 적용 예정 */}</>
+            )}
           </div>
-          <button onClick={() => fetchNextPage()}>다음 페이지 로딩</button>
+          {!isLoading && hasNextPage && (
+            // 노출 시 다음 데이터 fetch
+            <div ref={ref} className="w-full h-10 flex-center">
+              <LoadingAnimation />
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -67,5 +67,6 @@ interface PageInfo {
 
 export interface PostsResponse {
   pageInfo: PageInfo;
-  responseDtoList: Post[];
+  responseDtoList?: Post[];
+  codeArticleList?: Post[];
 }
