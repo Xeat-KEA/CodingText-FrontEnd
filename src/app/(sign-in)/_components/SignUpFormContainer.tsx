@@ -5,14 +5,22 @@ import { SignUpForm } from "../_interfaces/interfaces";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import api from "@/app/_api/config";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function SignUpFormContainer() {
   const router = useRouter();
   const { register, handleSubmit, setValue, watch } = useForm<SignUpForm>({
     defaultValues: { useSocialProfile: false },
   });
-  const token = localStorage.getItem("token");
+
+  // 회원가입 중에 토큰 임시 저장 및 localStorage에서의 토큰 삭제
+  const [tempToken, setTempToken] = useState("");
+  useEffect(() => {
+    const token = localStorage.getItem("tempToken");
+    setTempToken(token || "");
+    // 회원가입 중 이탈 시의 토큰 잔류 방지
+    localStorage.removeItem("tempToken");
+  }, []);
 
   const [language, setLanguage] = useState("");
 
@@ -24,18 +32,22 @@ export default function SignUpFormContainer() {
 
     api
       .post("/user-service/auth/signup", data, {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${tempToken}` },
       })
       .then((res) => {
-        console.log(res.data);
         if (res.data) {
-          setTemp(res.data);
+          localStorage.setItem("accessToken", res.data.jwtToken.accessToken);
+          if (localStorage.getItem("accessToken")) {
+            router.push("/sign-up/done");
+          }
         }
       })
       .catch((err) => {
         console.log(err);
       });
   };
+
+  console.log(temp);
 
   return (
     <form onSubmit={handleSubmit(onValid)} className="flex flex-col gap-8">

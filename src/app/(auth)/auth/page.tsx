@@ -13,10 +13,10 @@ export default function AuthSignUpPage() {
   const signedIn = searchParams.get("signedIn") === "true" ? true : false;
   useEffect(() => {
     if (signedIn && token) {
-      localStorage.setItem("token", token);
+      localStorage.setItem("accessToken", token);
       router.push("/");
     } else if (!signedIn && token) {
-      localStorage.setItem("token", token);
+      localStorage.setItem("tempToken", token);
       router.push("/sign-up");
     }
   }, []);

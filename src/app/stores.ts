@@ -6,9 +6,18 @@ import {
   SearchFilterStore,
   TabStore,
   TiptapStore,
+  TokenStore,
   WindowSizeStore,
 } from "./_interfaces/interfaces";
 import { RegisterStore } from "./(admin)/_interfaces/interfaces";
+
+// 토큰 저장 전역변수
+export const useTokenStore = create<TokenStore>((set) => ({
+  accessToken: "",
+  setAccessToken: (token) => set({ accessToken: token }),
+  isTokenSet: false,
+  setIsTokenSet: (state) => set({ isTokenSet: state }),
+}));
 
 // 코딩테스트 관련 전역변수
 export const useCodingTestStore = create<CodingTestStore>((set) => ({
