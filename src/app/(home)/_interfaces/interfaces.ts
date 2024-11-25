@@ -14,15 +14,6 @@ export interface MainPostListProps {
   hasRanking?: boolean;
 }
 
-export interface MainCode {
-  codeNum: number;
-  difficulty: "LEVEL1" | "LEVEL2" | "LEVEL3" | "LEVEL4" | "LEVEL5";
-  title: string;
-  algorithm: string;
-  rate: number;
-  participants: number;
-}
-
 export interface MainCodeListProps {
   title: string;
   subTitle?: string;
@@ -68,6 +59,5 @@ interface PageInfo {
 
 export interface PostsResponse {
   pageInfo: PageInfo;
-  responseDtoList?: Post[];
-  codeArticleList?: Post[];
+  articleList: Post[];
 }
