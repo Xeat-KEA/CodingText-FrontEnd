@@ -18,13 +18,14 @@ export default function SignUpFormContainer() {
   useEffect(() => {
     const token = localStorage.getItem("tempToken");
     setTempToken(token || "");
-    // 회원가입 중 이탈 시의 토큰 잔류 방지
-    localStorage.removeItem("tempToken");
   }, []);
+  useEffect(() => {
+    if (tempToken) {
+      localStorage.removeItem("tempToken");
+    }
+  }, [tempToken]);
 
   const [language, setLanguage] = useState("");
-
-  const [temp, setTemp] = useState();
 
   const onValid = (data: SignUpForm) => {
     // 데이터 post 및 validation 필요
@@ -46,8 +47,6 @@ export default function SignUpFormContainer() {
         console.log(err);
       });
   };
-
-  console.log(temp);
 
   return (
     <form onSubmit={handleSubmit(onValid)} className="flex flex-col gap-8">

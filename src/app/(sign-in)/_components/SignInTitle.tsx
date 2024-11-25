@@ -14,7 +14,10 @@ export default function SignInTitle({
       {content && <span className="sign-in-content">{content}</span>}
       {hasBackBtn && (
         <div className="absolute left-0 top-0 -translate-y-full">
-          <SmBackBtn content="이전으로" onClick={() => router.back()} />
+          <SmBackBtn
+            content="이전으로"
+            onClick={() => router.push("/sign-in")}
+          />
         </div>
       )}
     </div>
