@@ -65,7 +65,7 @@ export const useTiptapStore = create<TiptapStore>((set) => ({
 
 // 페이지 정보 저장 전역변수
 export const usePaginationStore = create<PaginationStore>((set) => ({
-  page: 1,
+  page: 0,
   setPage: (newPage) => set({ page: newPage }),
   lastPage: 0,
   setLastPage: (page) => set({ lastPage: page }),
