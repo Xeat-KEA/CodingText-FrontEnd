@@ -15,7 +15,5 @@ export const useCheckToken = () => {
     }
   }, []);
 
-  console.log("hi");
-
   return { accessToken, isTokenSet };
 };

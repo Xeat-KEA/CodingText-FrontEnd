@@ -3,17 +3,8 @@
 import Footer from "./_components/Footer";
 import { useCheckToken } from "../_hooks/useCheckToken";
 import MainBanner from "./_components/MainBanner";
-import {
-  dummycodes,
-  dummyhistories,
-  dummynotice,
-  dummyuserdata,
-  POSTS_LIST,
-} from "./_constants/constants";
+import { dummycodes, POSTS_LIST } from "./_constants/constants";
 import MainMenu from "./_components/MainMenu";
-import MainNotices from "./_components/MainNotices";
-import MainHistories from "./_components/MainHistories";
-import MainProfileCard from "./_components/MainProfileCard";
 import api from "../_api/config";
 import { useQuery } from "@tanstack/react-query";
 import MainPostList from "./_components/MainPosts";
@@ -21,44 +12,73 @@ import MainCodeList from "./_components/MainCodes";
 
 export default function Home() {
   // 로그인 여부 파악
-  const { accessToken } = useCheckToken();
+  const { accessToken, isTokenSet } = useCheckToken();
 
   // 인기 게시글 API 호출
   const fetchTrendingPosts = async () => {
-    const response = await api.get("/blog-service/blog/board/all/like", {
-      headers: { Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}` },
-    });
-    return response.data;
+    if (accessToken) {
+      const response = await api.get("/blog-service/blog/board/all/best", {
+        headers: { Authorization: accessToken },
+      });
+      return response.data;
+    }
+    return null;
   };
   const { data: trendings } = useQuery({
-    queryKey: ["trendingPosts"],
+    queryKey: ["trendingPosts", isTokenSet],
     queryFn: fetchTrendingPosts,
   });
 
   // 일반 게시글 API 호출
   const fetchGeneralPosts = async () => {
-    const response = await api.get("/blog-service/blog/board/article/recent", {
-      headers: { Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}` },
-    });
-    return response.data;
+    if (accessToken) {
+      const response = await api.get(
+        "/blog-service/blog/board/article/recent",
+        {
+          headers: { Authorization: accessToken },
+        }
+      );
+      return response.data;
+    }
+    return null;
   };
   const { data: recentPost } = useQuery({
-    queryKey: ["generalPosts"],
+    queryKey: ["generalPosts", isTokenSet],
     queryFn: fetchGeneralPosts,
   });
 
   // 코딩 테스트 게시글 API 호출
   const fetchCodePosts = async () => {
-    const response = await api.get("/blog-service/blog/board/code/recent", {
-      headers: { Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}` },
-    });
-    return response.data;
+    if (accessToken) {
+      const response = await api.get("/blog-service/blog/board/code/recent", {
+        headers: { Authorization: accessToken },
+      });
+      return response.data;
+    }
+    return null;
   };
   const { data: codePost } = useQuery({
-    queryKey: ["codePosts"],
+    queryKey: ["codePosts", isTokenSet],
     queryFn: fetchCodePosts,
   });
-  console.log(trendings, recentPost, codePost);
+
+  // 코드 목록 API 호출
+  const fetchCodes = async () => {
+    if (accessToken) {
+      const response = await api.get("/code-bank-service/code/lists", {
+        headers: { Authorization: accessToken },
+        params: { sortBy: "createdAt" },
+      });
+
+      return response.data;
+    }
+    return null;
+  };
+  const { data: codes } = useQuery({
+    queryKey: ["codes", isTokenSet],
+    queryFn: fetchCodes,
+    select: (data) => data.content.slice(0, 4),
+  });
 
   return (
     <>
@@ -67,30 +87,12 @@ export default function Home() {
         <MainBanner />
         <div className="max-w-1200 p-16 flex flex-col items-center gap-16">
           {/* 비회원 : 메인 메뉴 / 회원 : 사용자 정보, 공지사항, 문제 풀이 기록 */}
-          {!accessToken ? (
-            <MainMenu />
-          ) : (
-            <div className="w-full flex flex-col gap-12">
-              <div className="w-full flex max-lg:flex-col lg:flex-row-reverse gap-12 overflow-hidden">
-                <MainProfileCard userData={dummyuserdata.userData} />
-                <MainNotices
-                  title={dummynotice.title}
-                  url={dummynotice.url}
-                  sliderList={dummynotice.sliderList}
-                />
-              </div>
-              <MainHistories
-                title={dummyhistories.title}
-                url={dummyhistories.url}
-                sliderList={dummyhistories.sliderList}
-              />
-            </div>
-          )}
+          <MainMenu />
           {/* 이번 주 인기 게시글 슬라이더 */}
           <MainPostList
             title={POSTS_LIST[0].title}
             subTitle={POSTS_LIST[0].content}
-            sliderList={trendings?.data.slice(0, 3)}
+            sliderList={trendings?.data.articleList}
             hasRanking
           />
           {/* 최신 게시글 */}
@@ -98,19 +100,19 @@ export default function Home() {
             title={POSTS_LIST[1].title}
             subTitle={POSTS_LIST[1].content}
             url={POSTS_LIST[1].url}
-            sliderList={recentPost?.data.responseDtoList}
+            sliderList={recentPost?.data.articleList}
           />
           {/* 코딩 테스트 게시글 */}
           <MainPostList
             title={POSTS_LIST[2].title}
             subTitle={POSTS_LIST[2].content}
             url={POSTS_LIST[2].url}
-            sliderList={codePost?.data.codeArticleList}
+            sliderList={codePost?.data.articleList}
           />
           {/* 최신 코드 목록 */}
           <MainCodeList
-            title={dummycodes.title}
-            url={dummycodes.url}
+            title={POSTS_LIST[4].title}
+            url={POSTS_LIST[4].url!}
             sliderList={dummycodes.sliderList}
           />
         </div>

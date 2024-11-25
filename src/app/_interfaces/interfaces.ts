@@ -149,10 +149,13 @@ export interface EditBtnProps {
 //   codeLanguage: string;
 // }
 
-export interface NoticeCardProps {
-  category: string;
+export interface Push {
+  noticeId: number;
   blogId: number;
-  userId: number;
+  sentUserNickName: string;
+  noticeCategory: string;
+  content: string;
+  createdDate: string;
 }
 
 export interface ProfileTab {
@@ -186,6 +189,23 @@ export interface CodeDetail {
   algorithm: string;
   content: string;
   testcase: any;
+}
+
+export interface Statistics {
+  nickName: string;
+  rank: number;
+  registerCount: number;
+  solvedCount: number;
+  tier: string;
+  totalScore: number;
+}
+
+export interface UserInfo {
+  nickName: string;
+  tier: string;
+  profileMessage: string;
+  profileUrl: string;
+  codeLanguage: string;
 }
 
 // 전역 변수 관련 Interface

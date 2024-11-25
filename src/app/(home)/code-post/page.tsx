@@ -40,7 +40,7 @@ export default function CodePostPage() {
         }
       },
       // 데이터 평탄화
-      select: (data) => data.pages.flatMap((page) => page.codeArticleList!),
+      select: (data) => data.pages.flatMap((page) => page.articleList),
     });
 
   // 무한스크롤 트리거

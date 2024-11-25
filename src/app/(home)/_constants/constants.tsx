@@ -34,6 +34,11 @@ export const POSTS_LIST = [
     content: "다른 사람들의 문제 풀이를 살펴보세요",
     url: "/code-post",
   },
+  { title: "공지사항", url: "/notice" },
+  {
+    title: "내 문제 풀이 기록",
+    url: "/code/history",
+  },
 ];
 
 export const dummycodes: MainCodeListProps = {

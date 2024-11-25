@@ -12,6 +12,9 @@ import ProfileImgContainer from "../ProfileImgContainer";
 import { motion } from "framer-motion";
 import TopBarMenu from "./TopBarMenu";
 import { useTokenStore, useWindowSizeStore } from "@/app/stores";
+import api from "@/app/_api/config";
+import { useQuery } from "@tanstack/react-query";
+import { Push, UserInfo } from "@/app/_interfaces/interfaces";
 
 export default function TopBar() {
   const pathname = usePathname();
@@ -59,20 +62,43 @@ export default function TopBar() {
     if (isOpen.menu) onIconClick("menu", false);
   });
 
-  // 프로토타입 API 사용자 정보 GET
-  /* const [profileInfo, setProfileInfo] = useState<ProfileData>();
-  useEffect(() => {
-    api.get("/my-page/1").then((res) => setProfileInfo(res.data.data));
-  }, []); */
-
   const { windowSize } = useWindowSizeStore();
 
-  const dummyprofile = {
-    rank: "Junior",
-    nickname: "사용자명",
-    userId: 1,
-    profileImg: "/profileImg6.png",
+  // 사용자 정보 API 호출
+  const fetchUserInfo = async () => {
+    if (accessToken) {
+      const response = await api.get("/user-service/users/userInfo", {
+        headers: { Authorization: accessToken },
+      });
+
+      return response.data;
+    } else {
+      return null;
+    }
   };
+  const { data: userInfo } = useQuery<UserInfo>({
+    queryKey: ["userInfo", isTokenSet],
+    queryFn: fetchUserInfo,
+  });
+
+  // 알림 목록 API 호출
+  const fetchPushs = async () => {
+    if (accessToken) {
+      const response = await api.get("blog-service/blog/notice/list", {
+        // 사용자에게 알림 더미 데이터가 없어 임시 토큰 사용 중
+        headers: { Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}` },
+      });
+
+      return response.data;
+    } else {
+      return null;
+    }
+  };
+  const { data: pushs } = useQuery({
+    queryKey: ["pushs", isTokenSet],
+    queryFn: fetchPushs,
+    select: (data) => data.data,
+  });
 
   return (
     <div className="fixed w-full h-16 z-50">
@@ -134,7 +160,7 @@ export default function TopBar() {
                     <ProfileImgContainer
                       width={36}
                       height={36}
-                      src={dummyprofile.profileImg}
+                      src={userInfo?.profileUrl}
                     />
                   </button>
                 </>
@@ -170,8 +196,8 @@ export default function TopBar() {
           }}
           className="absolute bg-white top-[calc(100%+8px)] w-[396px] h-[300px] flex flex-col rounded-lg shadow-1 divide-y divide-border-1 overflow-y-auto"
         >
-          {[1, 2, 3, 4, 5].map((el) => (
-            <NoticeCard key={el} category="시스템" blogId={el} userId={el} />
+          {pushs.map((el: Push) => (
+            <NoticeCard key={el.noticeId} push={el} />
           ))}
         </div>
       )}
@@ -187,10 +213,10 @@ export default function TopBar() {
           {/* 사용자 정보 */}
           <div className="flex flex-col gap-[2px] px-6 py-4">
             <span className="text-body text-xs font-bold">
-              {dummyprofile.rank}
+              {userInfo?.tier}
             </span>
             <span className="text-base font-bold text-black">
-              {dummyprofile.nickname}
+              {userInfo?.nickName}
             </span>
           </div>
           {/* 프로필 메뉴 */}

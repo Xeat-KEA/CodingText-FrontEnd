@@ -39,7 +39,7 @@ export default function RecentPostPage() {
         }
       },
       // 데이터 평탄화
-      select: (data) => data.pages.flatMap((page) => page.responseDtoList!),
+      select: (data) => data.pages.flatMap((page) => page.articleList),
     });
 
   // 무한스크롤 트리거
