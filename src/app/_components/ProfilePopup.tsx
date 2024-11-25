@@ -6,7 +6,7 @@ export default function ProfilePopup() {
   const router = useRouter();
   const pathname = usePathname();
   const logout = () => {
-    localStorage.removeItem("token");
+    localStorage.removeItem("accessToken");
     if (pathname === "/") {
       window.location.reload();
     } else {

@@ -6,19 +6,18 @@ import { usePathname } from "next/navigation";
 import { useOutsideClick } from "@/app/_hooks/useOutsideClick";
 import { HamburgerIcon, LogoIcon, NoticeIcon } from "../Icons";
 import ProfilePopup from "../ProfilePopup";
-import { useCheckToken } from "@/app/_hooks/useCheckToken";
 import NoticeCard from "./NoticeCard";
 import SmSearchBar from "../SmSearchBar";
 import ProfileImgContainer from "../ProfileImgContainer";
 import { motion } from "framer-motion";
 import TopBarMenu from "./TopBarMenu";
-import { useWindowSizeStore } from "@/app/stores";
+import { useTokenStore, useWindowSizeStore } from "@/app/stores";
 
 export default function TopBar() {
   const pathname = usePathname();
 
   // 로그인 여부 확인
-  const { token, isLoaded } = useCheckToken();
+  const { accessToken, isTokenSet } = useTokenStore();
 
   // 팝업 상태 관리 state
   const [isOpen, setIsOpen] = useState({
@@ -101,22 +100,22 @@ export default function TopBar() {
               <LogoIcon />
             </Link>
             {/* 메뉴 (화면 크기 lg 이상) */}
-            {isLoaded && (
+            {isTokenSet && (
               <ul className="flex h-full items-center gap-2 max-lg:hidden">
-                <TopBarMenu token={token} />
+                <TopBarMenu token={accessToken} />
               </ul>
             )}
           </div>
 
           {/* 탑바 우측 요소 */}
-          {isLoaded && (
+          {isTokenSet && (
             <div className="flex items-center gap-6">
               {/* 검색창 (화면 크기 lg 이상) */}
               <div className="w-[240px] max-lg:hidden">
                 <SmSearchBar baseURL="/search" />
               </div>
               {/* 로그인 : 알림, 프로필 / 비로그인 : 로그인 버튼 */}
-              {token ? (
+              {accessToken ? (
                 <>
                   <button
                     ref={noticeRef}
@@ -159,7 +158,7 @@ export default function TopBar() {
               placeholder="검색어를 입력해주세요"
             />
           </div>
-          <TopBarMenu token={token} />
+          <TopBarMenu token={accessToken} />
         </div>
       </motion.nav>
       {/* 알림 팝업 */}

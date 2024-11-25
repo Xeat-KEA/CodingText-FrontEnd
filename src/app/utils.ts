@@ -1,5 +1,5 @@
 import { KeyboardEvent, useEffect } from "react";
-import { useWindowSizeStore } from "./stores";
+import { useTokenStore, useWindowSizeStore } from "./stores";
 
 // input 내에서 Enter가 눌렸을 경우 Submit이 일어나는 것 방지
 export const handleEnter = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -21,5 +21,15 @@ export const handleWindowResize = () => {
 
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
+  }, []);
+};
+
+// 토큰 확인 후 전역변수로 저장
+export const checkToken = () => {
+  const { setAccessToken } = useTokenStore();
+  useEffect(() => {
+    if (typeof window !== undefined) {
+      setAccessToken(localStorage.getItem("accessToken") || "");
+    }
   }, []);
 };

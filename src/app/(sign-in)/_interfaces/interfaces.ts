@@ -1,7 +1,8 @@
 export interface SignUpForm {
-  nickname: string;
-  lang: string;
-  profileImg: string;
+  nickName: string;
+  codeLanguage: string;
+  useSocialProfile: boolean;
+  basicProfileUrl: string;
 }
 
 export interface PolicyContainerProps {
@@ -16,7 +17,16 @@ export interface SignInTitleProps {
 }
 
 export interface SignInBtnProps {
-  icon: JSX.Element;
+  image: string;
   service: string;
   redirectionURL: string;
+}
+
+export interface SignUpResult {
+  userId: string;
+  role: string;
+  jwtToken: {
+    accessToken: string;
+    refreshToken: string;
+  };
 }

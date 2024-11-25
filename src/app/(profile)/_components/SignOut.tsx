@@ -13,7 +13,7 @@ export default function SignOutOrDeleteAccount() {
       <div className="flex flex-col gap-8">
         <button
           onClick={() => {
-            localStorage.removeItem("token");
+            localStorage.removeItem("accessToken");
             router.push("/", { scroll: false });
           }}
           className="edit-btn-red"
@@ -38,9 +38,7 @@ export default function SignOutOrDeleteAccount() {
           onBackBtnClick={() => setIsDeletingAccount((prev) => !prev)}
           redBtn="회원 탈퇴"
           onBtnClick={() => {
-            // 회원 탈퇴 POST 필요
-
-            localStorage.removeItem("token");
+            localStorage.removeItem("accessToken");
             router.push("/", { scroll: false });
           }}
         />

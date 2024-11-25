@@ -21,7 +21,7 @@ import MainCodeList from "./_components/MainCodes";
 
 export default function Home() {
   // 로그인 여부 파악
-  const { token, isLoaded } = useCheckToken();
+  const { accessToken } = useCheckToken();
 
   // 인기 게시글 API 호출
   const fetchTrendingPosts = async () => {
@@ -67,7 +67,7 @@ export default function Home() {
         <MainBanner />
         <div className="max-w-1200 p-16 flex flex-col items-center gap-16">
           {/* 비회원 : 메인 메뉴 / 회원 : 사용자 정보, 공지사항, 문제 풀이 기록 */}
-          {!token ? (
+          {!accessToken ? (
             <MainMenu />
           ) : (
             <div className="w-full flex flex-col gap-12">

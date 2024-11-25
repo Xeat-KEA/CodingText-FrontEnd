@@ -1,26 +1,21 @@
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useTokenStore } from "../stores";
 
-export const useCheckToken = (guard?: boolean) => {
-  const [token, setToken] = useState("");
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  const router = useRouter();
+export const useCheckToken = () => {
+  const { accessToken, setAccessToken, isTokenSet, setIsTokenSet } =
+    useTokenStore();
 
   useEffect(() => {
     if (typeof window !== undefined) {
-      const storedToken = localStorage.getItem("token");
+      const storedToken = localStorage.getItem("accessToken");
       if (storedToken) {
-        setToken(storedToken);
+        setAccessToken(storedToken);
       }
-      if (guard) {
-        if (!storedToken) {
-          router.push("/sign-in");
-        }
-      }
-      setIsLoaded(true);
+      setIsTokenSet(true);
     }
   }, []);
 
-  return { token, isLoaded };
+  console.log("hi");
+
+  return { accessToken, isTokenSet };
 };
