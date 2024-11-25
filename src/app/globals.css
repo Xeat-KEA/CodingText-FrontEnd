@@ -134,7 +134,7 @@ textarea {
     @apply text-body;
   }
   /* 메인 페이지 게시글 상위 컨테이너 */
-  .main-posts-container {
+  .main-post-list-container {
     @apply relative lg:grid lg:grid-cols-3 gap-6 flex flex-col;
   }
   /* 메인 페이지 게시글 카드 */
@@ -142,7 +142,7 @@ textarea {
     @apply relative w-full p-6 flex flex-col gap-2;
   }
   /* 메인 페이지 문제 상위 컨테이너 */
-  .main-codes-container {
+  .main-code-list-container {
     @apply relative grid grid-cols-2 lg:grid-cols-4 gap-6;
   }
   /* 메인 페이지 문제 카드 */

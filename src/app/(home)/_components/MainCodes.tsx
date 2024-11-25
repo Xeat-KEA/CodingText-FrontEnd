@@ -1,14 +1,14 @@
 import { useRouter } from "next/navigation";
-import { MainCodesProps } from "../_interfaces/interfaces";
+import { MainCodeListProps } from "../_interfaces/interfaces";
 import { MoreContentArrowIcon } from "./Icons";
 import MainCodeCard from "./MainCodeCard";
 
-export default function MainCodes({
+export default function MainCodeList({
   title,
   subTitle,
   url,
   sliderList,
-}: MainCodesProps) {
+}: MainCodeListProps) {
   const router = useRouter();
 
   return (
@@ -22,7 +22,7 @@ export default function MainCodes({
         {subTitle && <span className="main-sub-title">{subTitle}</span>}
       </div>
       {/* 코드 목록 */}
-      <div className="main-codes-container">
+      <div className="main-code-list-container">
         {sliderList &&
           sliderList.map((el) => (
             <MainCodeCard

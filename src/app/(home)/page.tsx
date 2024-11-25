@@ -10,14 +10,14 @@ import {
   dummyuserdata,
   POSTS_LIST,
 } from "./_constants/constants";
-import MainPosts from "./_components/MainPosts";
-import MainCodes from "./_components/MainCodes";
 import MainMenu from "./_components/MainMenu";
 import MainNotices from "./_components/MainNotices";
 import MainHistories from "./_components/MainHistories";
 import MainProfileCard from "./_components/MainProfileCard";
 import api from "../_api/config";
 import { useQuery } from "@tanstack/react-query";
+import MainPostList from "./_components/MainPosts";
+import MainCodeList from "./_components/MainCodes";
 
 export default function Home() {
   // 로그인 여부 파악
@@ -42,7 +42,7 @@ export default function Home() {
     });
     return response.data;
   };
-  const { data: recents } = useQuery({
+  const { data: recentPost } = useQuery({
     queryKey: ["generalPosts"],
     queryFn: fetchGeneralPosts,
   });
@@ -54,11 +54,11 @@ export default function Home() {
     });
     return response.data;
   };
-  const { data: codes } = useQuery({
+  const { data: codePost } = useQuery({
     queryKey: ["codePosts"],
     queryFn: fetchCodePosts,
   });
-  console.log(trendings, recents, codes);
+  console.log(trendings, recentPost, codePost);
 
   return (
     <>
@@ -87,28 +87,28 @@ export default function Home() {
             </div>
           )}
           {/* 이번 주 인기 게시글 슬라이더 */}
-          <MainPosts
+          <MainPostList
             title={POSTS_LIST[0].title}
             subTitle={POSTS_LIST[0].content}
             sliderList={trendings?.data.slice(0, 3)}
             hasRanking
           />
           {/* 최신 게시글 */}
-          <MainPosts
+          <MainPostList
             title={POSTS_LIST[1].title}
             subTitle={POSTS_LIST[1].content}
             url={POSTS_LIST[1].url}
-            sliderList={recents?.data.responseDtoList}
+            sliderList={recentPost?.data.responseDtoList}
           />
           {/* 코딩 테스트 게시글 */}
-          <MainPosts
+          <MainPostList
             title={POSTS_LIST[2].title}
             subTitle={POSTS_LIST[2].content}
             url={POSTS_LIST[2].url}
-            sliderList={codes?.data.codeArticleList}
+            sliderList={codePost?.data.codeArticleList}
           />
           {/* 최신 코드 목록 */}
-          <MainCodes
+          <MainCodeList
             title={dummycodes.title}
             url={dummycodes.url}
             sliderList={dummycodes.sliderList}

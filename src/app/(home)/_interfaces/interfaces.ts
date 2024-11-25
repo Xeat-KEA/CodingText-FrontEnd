@@ -5,7 +5,7 @@ export interface MainPostCardProps {
   ranking?: 1 | 2 | 3;
 }
 
-export interface MainPostsProps {
+export interface MainPostListProps {
   title: string;
   subTitle?: string;
   url?: string;
@@ -22,7 +22,7 @@ export interface MainCode {
   participants: number;
 }
 
-export interface MainCodesProps {
+export interface MainCodeListProps {
   title: string;
   subTitle?: string;
   url: string;

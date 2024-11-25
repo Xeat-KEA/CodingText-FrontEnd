@@ -6,7 +6,7 @@ import {
   MainNoticeIcon,
 } from "../_components/Icons";
 import {
-  MainCodesProps,
+  MainCodeListProps,
   MainHistoriesProps,
   MainMenuBtnProps,
   MainNoticesProps,
@@ -36,7 +36,7 @@ export const POSTS_LIST = [
   },
 ];
 
-export const dummycodes: MainCodesProps = {
+export const dummycodes: MainCodeListProps = {
   title: "새롭게 추가된 문제를 확인해보세요",
   url: "/code/list",
   sliderList: [
