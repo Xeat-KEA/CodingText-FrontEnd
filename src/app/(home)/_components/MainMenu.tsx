@@ -34,18 +34,11 @@ export default function MainMenu() {
 
   // 공지사항 목록 API 호출
   const fetchNoticeList = async () => {
-    if (accessToken) {
-      const response = await api.get("/user-service/users/announce", {
-        headers: { Authorization: accessToken },
-      });
-
-      return response.data;
-    } else {
-      return null;
-    }
+    const response = await api.get("/user-service/users/announce");
+    return response.data;
   };
   const { data: noticeList } = useQuery({
-    queryKey: ["noticeList", isTokenSet],
+    queryKey: ["noticeList"],
     queryFn: fetchNoticeList,
   });
 

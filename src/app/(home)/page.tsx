@@ -11,71 +11,48 @@ import MainPostList from "./_components/MainPosts";
 import MainCodeList from "./_components/MainCodes";
 
 export default function Home() {
-  // 로그인 여부 파악
-  const { accessToken, isTokenSet } = useCheckToken();
+  // 로그인 여부 파악 후 전역변수 설정
+  const {} = useCheckToken();
 
   // 인기 게시글 API 호출
   const fetchTrendingPosts = async () => {
-    if (accessToken) {
-      const response = await api.get("/blog-service/blog/board/all/best", {
-        headers: { Authorization: accessToken },
-      });
-      return response.data;
-    }
-    return null;
+    const response = await api.get("/blog-service/blog/board/all/best");
+    return response.data;
   };
   const { data: trendings } = useQuery({
-    queryKey: ["trendingPosts", isTokenSet],
+    queryKey: ["trendingPosts"],
     queryFn: fetchTrendingPosts,
   });
 
   // 일반 게시글 API 호출
   const fetchGeneralPosts = async () => {
-    if (accessToken) {
-      const response = await api.get(
-        "/blog-service/blog/board/article/recent",
-        {
-          headers: { Authorization: accessToken },
-        }
-      );
-      return response.data;
-    }
-    return null;
+    const response = await api.get("/blog-service/blog/board/article/recent");
+    return response.data;
   };
   const { data: recentPost } = useQuery({
-    queryKey: ["generalPosts", isTokenSet],
+    queryKey: ["generalPosts"],
     queryFn: fetchGeneralPosts,
   });
 
   // 코딩 테스트 게시글 API 호출
   const fetchCodePosts = async () => {
-    if (accessToken) {
-      const response = await api.get("/blog-service/blog/board/code/recent", {
-        headers: { Authorization: accessToken },
-      });
-      return response.data;
-    }
-    return null;
+    const response = await api.get("/blog-service/blog/board/code/recent", {});
+    return response.data;
   };
   const { data: codePost } = useQuery({
-    queryKey: ["codePosts", isTokenSet],
+    queryKey: ["codePosts"],
     queryFn: fetchCodePosts,
   });
 
   // 코드 목록 API 호출
   const fetchCodes = async () => {
-    if (accessToken) {
-      const response = await api.get("/code-bank-service/code/lists", {
-        headers: { Authorization: accessToken },
-        params: { sortBy: "createdAt" },
-      });
-
-      return response.data;
-    }
-    return null;
+    const response = await api.get("/code-bank-service/code/lists", {
+      params: { sortBy: "createdAt" },
+    });
+    return response.data;
   };
   const { data: codes } = useQuery({
-    queryKey: ["codes", isTokenSet],
+    queryKey: ["codes"],
     queryFn: fetchCodes,
     select: (data) => data.content.slice(0, 4),
   });
