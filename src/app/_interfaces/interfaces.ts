@@ -196,6 +196,13 @@ export interface CodeDetail {
 }
 
 // 전역 변수 관련 Interface
+export interface TokenStore {
+  accessToken: string;
+  setAccessToken: (token: string) => void;
+  isTokenSet: boolean;
+  setIsTokenSet: (state: boolean) => void;
+}
+
 export interface TabStore {
   tab: string;
   setTab: (newTab: string) => void;

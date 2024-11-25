@@ -2,7 +2,8 @@
 
 import SignInTitle from "../_components/SignInTitle";
 import { SOCIAL_LOGIN_BUTTON_LIST } from "../_constants/constants";
-import SignInBtn from "../_components/SignInBtn";
+import Link from "next/link";
+import Image from "next/image";
 
 export default function SignInPage() {
   return (
@@ -11,12 +12,16 @@ export default function SignInPage() {
       {/* 소셜 로그인 버튼 */}
       <div className="flex flex-col gap-4">
         {SOCIAL_LOGIN_BUTTON_LIST.map((el, index) => (
-          <SignInBtn
-            key={index}
-            icon={el.icon}
-            service={el.service}
-            redirectionURL={el.redirectionURL}
-          />
+          <Link key={el.service} href={el.redirectionURL}>
+            <Image
+              src={el.image}
+              width={300}
+              height={45}
+              alt={el.service}
+              style={{ width: 300, height: 45 }}
+              priority
+            />
+          </Link>
         ))}
       </div>
     </div>
