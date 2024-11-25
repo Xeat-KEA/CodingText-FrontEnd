@@ -1,5 +1,7 @@
 "use client";
 
+import { LogoIcon } from "@/app/_components/Icons";
+import LoadingSpinner from "@/app/_components/LoadingSpinner";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
@@ -18,5 +20,12 @@ export default function AuthSignUpPage() {
       router.push("/sign-up");
     }
   }, []);
-  return <div></div>;
+  return (
+    <div className="top-container">
+      <div className="max-w-400 min-h-screen flex flex-col items-center justify-between py-20">
+        <LogoIcon />
+        <LoadingSpinner />
+      </div>
+    </div>
+  );
 }
