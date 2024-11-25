@@ -1,18 +1,11 @@
-import { MainCode } from "../_interfaces/interfaces";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { useSetDifficulty } from "@/app/_hooks/useSetDifficulty";
+import { Code } from "@/app/(code)/_interfaces/interfaces";
 
-export default function MainCodeCard({
-  codeNum,
-  title,
-  difficulty,
-  algorithm,
-  participants,
-  rate,
-}: MainCode) {
-  const [level, color] = useSetDifficulty(difficulty);
+export default function MainCodeCard({ code }: { code: Code }) {
+  const [level, color] = useSetDifficulty(code.difficulty);
   const router = useRouter();
   return (
     <motion.div
@@ -24,7 +17,7 @@ export default function MainCodeCard({
       }}
     >
       <Link
-        href={`/coding-test/${codeNum}`}
+        href={`/coding-test/${code.codeId}`}
         className="main-post-card"
         scroll={false}
       >
@@ -33,22 +26,22 @@ export default function MainCodeCard({
           <button
             onClick={(e) => {
               e.preventDefault();
-              router.push(`/search?keyword=${codeNum}&category=CODE`, {
+              router.push(`/search?keyword=${code.codeId}&category=CODE`, {
                 scroll: false,
               });
             }}
             className="code-card-code-number"
           >
-            #{codeNum}
+            #{code.codeId}
           </button>
           <span className={`code-card-difficulty ${color}`}>{level}단계</span>
         </div>
         {/* 중단 컨테이너 */}
         <div className="post-card-content-container">
           {/* 문제 제목 */}
-          <span className="main-code-card-title">{title}</span>
+          <span className="main-code-card-title">{code.title}</span>
           {/* 알고리즘 */}
-          <span className="main-code-card-algorithm">{algorithm}</span>
+          <span className="main-code-card-algorithm">{code.algorithm}</span>
         </div>
         {/* 하단 컨테이너 */}
         <div className="post-card-bottom-container">
@@ -56,15 +49,13 @@ export default function MainCodeCard({
           <span className="code-card-value">
             정답률
             <span className="post-card-views-number">
-              {rate.toLocaleString()}%
+              {code.correctRate.toLocaleString()}%
             </span>
           </span>
           {/* 참여자수 */}
           <span className="code-card-value">
             참여자수
-            <span className="post-card-views-number">
-              {participants.toLocaleString()}명
-            </span>
+            <span className="post-card-views-number">{1}명</span>
           </span>
         </div>
       </Link>

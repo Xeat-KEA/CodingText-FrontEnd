@@ -24,17 +24,7 @@ export default function MainCodes({
       {/* 코드 목록 */}
       <div className="main-codes-container">
         {sliderList &&
-          sliderList.map((el) => (
-            <MainCodeCard
-              key={el.codeNum}
-              codeNum={el.codeNum}
-              title={el.title}
-              algorithm={el.algorithm}
-              difficulty={el.difficulty}
-              participants={el.participants}
-              rate={el.rate}
-            />
-          ))}
+          sliderList.map((el) => <MainCodeCard key={el.codeId} code={el} />)}
       </div>
     </div>
   );

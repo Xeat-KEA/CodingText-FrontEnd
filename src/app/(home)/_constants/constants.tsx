@@ -34,51 +34,13 @@ export const POSTS_LIST = [
     content: "다른 사람들의 문제 풀이를 살펴보세요",
     url: "/code-post",
   },
+  { title: "새롭게 추가된 문제를 확인해보세요", url: "/code/list" },
   { title: "공지사항", url: "/notice" },
   {
     title: "내 문제 풀이 기록",
     url: "/code/history",
   },
 ];
-
-export const dummycodes: MainCodeListProps = {
-  title: "새롭게 추가된 문제를 확인해보세요",
-  url: "/code/list",
-  sliderList: [
-    {
-      codeNum: 1,
-      title: "문제 1",
-      algorithm: "입출력",
-      difficulty: "LEVEL1",
-      rate: 92,
-      participants: 1522,
-    },
-    {
-      codeNum: 2,
-      title: "문제 2",
-      algorithm: "함수",
-      difficulty: "LEVEL3",
-      rate: 88,
-      participants: 1522,
-    },
-    {
-      codeNum: 3,
-      title: "문제 3 문제 3 문제 3 문제 3 문제 3",
-      algorithm: "다익스트라 다익스트라 다익스트라 다익스트라",
-      difficulty: "LEVEL5",
-      rate: 81,
-      participants: 1522,
-    },
-    {
-      codeNum: 4,
-      title: "문제 4",
-      algorithm: "입출력",
-      difficulty: "LEVEL2",
-      rate: 90,
-      participants: 1522,
-    },
-  ],
-};
 
 export const dummynotice: MainNoticesProps = {
   title: "공지사항",

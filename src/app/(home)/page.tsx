@@ -3,7 +3,7 @@
 import Footer from "./_components/Footer";
 import { useCheckToken } from "../_hooks/useCheckToken";
 import MainBanner from "./_components/MainBanner";
-import { dummycodes, POSTS_LIST } from "./_constants/constants";
+import { POSTS_LIST } from "./_constants/constants";
 import MainMenu from "./_components/MainMenu";
 import api from "../_api/config";
 import { useQuery } from "@tanstack/react-query";
@@ -111,9 +111,9 @@ export default function Home() {
           />
           {/* 최신 코드 목록 */}
           <MainCodeList
-            title={POSTS_LIST[4].title}
-            url={POSTS_LIST[4].url!}
-            sliderList={dummycodes.sliderList}
+            title={POSTS_LIST[3].title}
+            url={POSTS_LIST[3].url!}
+            sliderList={codes}
           />
         </div>
       </div>

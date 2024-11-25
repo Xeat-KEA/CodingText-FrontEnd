@@ -1,3 +1,4 @@
+import { Code } from "@/app/(code)/_interfaces/interfaces";
 import { Post } from "@/app/_interfaces/interfaces";
 
 export interface MainPostCardProps {
@@ -26,7 +27,7 @@ export interface MainCodeListProps {
   title: string;
   subTitle?: string;
   url: string;
-  sliderList: MainCode[];
+  sliderList: Code[];
 }
 
 export interface MainMenuBtnProps {

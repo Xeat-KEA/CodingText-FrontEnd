@@ -17,27 +17,35 @@ export default function MainMenu() {
 
   // 사용자 문제 풀이 정보 API 호출
   const fetchStatistics = async () => {
-    const response = await api.get("/user-service/users/statistics", {
-      headers: { Authorization: accessToken },
-    });
+    if (accessToken) {
+      const response = await api.get("/user-service/users/statistics", {
+        headers: { Authorization: accessToken },
+      });
 
-    return response.data;
+      return response.data;
+    } else {
+      return null;
+    }
   };
   const { data: statistics } = useQuery<Statistics>({
-    queryKey: ["statistics"],
+    queryKey: ["statistics", isTokenSet],
     queryFn: fetchStatistics,
   });
 
   // 공지사항 목록 API 호출
   const fetchNoticeList = async () => {
-    const response = await api.get("/user-service/users/announce", {
-      headers: { Authorization: accessToken },
-    });
+    if (accessToken) {
+      const response = await api.get("/user-service/users/announce", {
+        headers: { Authorization: accessToken },
+      });
 
-    return response.data;
+      return response.data;
+    } else {
+      return null;
+    }
   };
   const { data: noticeList } = useQuery({
-    queryKey: ["noticeList"],
+    queryKey: ["noticeList", isTokenSet],
     queryFn: fetchNoticeList,
   });
 
@@ -66,14 +74,14 @@ export default function MainMenu() {
                   <></>
                 )}
                 <MainNotices
-                  title={POSTS_LIST[3].title}
-                  url={POSTS_LIST[3].url!}
+                  title={POSTS_LIST[4].title}
+                  url={POSTS_LIST[4].url!}
                   sliderList={noticeList?.content.slice(0, 5)}
                 />
               </div>
               <MainHistories
-                title={POSTS_LIST[4].title}
-                url={POSTS_LIST[4].url!}
+                title={POSTS_LIST[5].title}
+                url={POSTS_LIST[5].url!}
                 sliderList={dummyhistories.sliderList}
               />
             </div>
