@@ -16,12 +16,14 @@ export interface ProfileInfoProps {
 }
 
 export interface Code {
+  algorithm: string;
   codeId: number;
+  content: string;
+  correctRate: number;
+  createdAt: string;
+  difficulty: "LEVEL1" | "LEVEL2" | "LEVEL3" | "LEVEL4" | "LEVEL5";
+  registerStatus: string;
   title: string;
-  difficulty: 1 | 2 | 3 | 4 | 5;
-  participants?: number;
-  rate?: number;
-  createdAt?: string;
 }
 
 export interface History {

@@ -39,7 +39,7 @@ export interface DropDownProps {
 
 export interface ParamDropDownProps {
   isSmall?: boolean;
-  list: string[];
+  list: Selection[];
   paramType: string;
   placeholder?: string;
 }

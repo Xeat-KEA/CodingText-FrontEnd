@@ -1,8 +1,8 @@
-import { useSetDifficultyColor } from "@/app/_hooks/useSetDifficultyColor";
 import { MainCode } from "../_interfaces/interfaces";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
+import { useSetDifficulty } from "@/app/_hooks/useSetDifficulty";
 
 export default function MainCodeCard({
   codeNum,
@@ -12,7 +12,7 @@ export default function MainCodeCard({
   participants,
   rate,
 }: MainCode) {
-  const difficultyColor = useSetDifficultyColor(difficulty);
+  const [level, color] = useSetDifficulty(difficulty);
   const router = useRouter();
   return (
     <motion.div
@@ -41,9 +41,7 @@ export default function MainCodeCard({
           >
             #{codeNum}
           </button>
-          <span className={`code-card-difficulty ${difficultyColor}`}>
-            {difficulty}단계
-          </span>
+          <span className={`code-card-difficulty ${color}`}>{level}단계</span>
         </div>
         {/* 중단 컨테이너 */}
         <div className="post-card-content-container">

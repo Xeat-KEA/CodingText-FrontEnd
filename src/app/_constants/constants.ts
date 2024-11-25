@@ -47,46 +47,41 @@ export const TAB_BAR_ORDER_FILTER: Selection[] = [
 
 // 난이도 목록
 export const DIFFICULTY_LIST: Selection[] = [
-  { content: "1단계", selection: "1" },
-  { content: "2단계", selection: "2" },
-  { content: "3단계", selection: "3" },
-  { content: "4단계", selection: "4" },
-  { content: "5단계", selection: "5" },
+  { content: "1단계", selection: "LEVEL1" },
+  { content: "2단계", selection: "LEVEL2" },
+  { content: "3단계", selection: "LEVEL3" },
+  { content: "4단계", selection: "LEVEL4" },
+  { content: "5단계", selection: "LEVEL5" },
 ];
 
 // 알고리즘 목록
 export const ALGORITHM_LIST: Selection[] = [
-  { content: "입출력", selection: "입출력" },
-  { content: "함수", selection: "함수" },
-  { content: "재귀함수", selection: "재귀함수" },
-  { content: "1차원 리스트", selection: "1차원 리스트" },
-  { content: "스트링", selection: "스트링" },
-  { content: "2차원 리스트", selection: "2차원 리스트" },
-  { content: "스택/큐/DFS/BFS", selection: "스택/큐/DFS/BFS" },
-  { content: "비트연산과 부분집합", selection: "비트연산과 부분집합" },
-  { content: "정렬", selection: "정렬" },
-  { content: "순열/조합/백트래킹", selection: "순열/조합/백트래킹" },
-  { content: "트리/힙", selection: "트리/힙" },
-  { content: "MST/다익스트라", selection: "MST/다익스트라" },
+  { content: "다이나믹 프로그래밍", selection: "DP" },
+  { content: "그래프", selection: "GRAPH" },
+  { content: "탐욕법", selection: "GREEDY" },
+  { content: "힙", selection: "HEAP" },
+  { content: "해쉬", selection: "HASH" },
+  { content: "스택", selection: "STACK" },
 ];
 
 export const Notice_Dummy_Data: Notice[] = [
-    {
-        noticeId: 1,
-        noticeTitle: "공지사항 1",
-        noticeContent: "7LKr67KI7Ke4IOqzteyngOyCrO2VreyeheuLiOuLpC4=",
-        noticedAt: "2024.10.30",
-    },
-    {
-        noticeId: 2,
-        noticeTitle: "공지사항 2 제목 공지사항 2 공지사항 2 공지사항 2",
-        noticeContent: "65GQ67KI7Ke4IOqzteyngOyCrO2VreyeheuLiOuLpC4=",
-        noticedAt: "2024.09.03",
-    },
-    {
-        noticeId: 3,
-        noticeTitle: "공지사항 3",
-        noticeContent: "PGgxPuyEuOuyiOynuCDqs7Xsp4Dsgqztla3snoXri4jri6QuPC9oMT48cD7qs7Xsp4Dsgqztla0g64K07Jqp7J20IOyXrOq4sOyXkCDstpTqsIDrkKAg7JiI7KCV7J6F64uI64ukLjwvcD48cD7tlYTsmpTtlZwg6rK97JqwIOuNlCDrp47snYAg7KCV67O066W8IO2ZleyduO2VmOyEuOyalC48L3A+",
-        noticedAt: "2024.07.11",
-    }
-]
+  {
+    noticeId: 1,
+    noticeTitle: "공지사항 1",
+    noticeContent: "7LKr67KI7Ke4IOqzteyngOyCrO2VreyeheuLiOuLpC4=",
+    noticedAt: "2024.10.30",
+  },
+  {
+    noticeId: 2,
+    noticeTitle: "공지사항 2 제목 공지사항 2 공지사항 2 공지사항 2",
+    noticeContent: "65GQ67KI7Ke4IOqzteyngOyCrO2VreyeheuLiOuLpC4=",
+    noticedAt: "2024.09.03",
+  },
+  {
+    noticeId: 3,
+    noticeTitle: "공지사항 3",
+    noticeContent:
+      "PGgxPuyEuOuyiOynuCDqs7Xsp4Dsgqztla3snoXri4jri6QuPC9oMT48cD7qs7Xsp4Dsgqztla0g64K07Jqp7J20IOyXrOq4sOyXkCDstpTqsIDrkKAg7JiI7KCV7J6F64uI64ukLjwvcD48cD7tlYTsmpTtlZwg6rK97JqwIOuNlCDrp47snYAg7KCV67O066W8IO2ZleyduO2VmOyEuOyalC48L3A+",
+    noticedAt: "2024.07.11",
+  },
+];

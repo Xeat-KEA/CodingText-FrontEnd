@@ -17,7 +17,7 @@ export const useSetParams = () => {
       router.push(`${pathname}?${newParams}`, { scroll: false });
     }
     if (typeof param === "object") {
-      let newParamList = [...param.list];
+      let newParamList = [...param.list].filter(Boolean);
 
       // 기존 파라미터에 선택된 파라미터가 존재하는지 확인 후 처리
       if (newParamList.includes(param.selected)) {
