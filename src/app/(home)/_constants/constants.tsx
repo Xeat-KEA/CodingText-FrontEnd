@@ -1,16 +1,10 @@
-import { ProfileCardProps } from "@/app/(code)/_interfaces/interfaces";
 import {
   MainAIIcon,
   MainCodeIcon,
   MainCommunityIcon,
   MainNoticeIcon,
 } from "../_components/Icons";
-import {
-  MainCodeListProps,
-  MainHistoriesProps,
-  MainMenuBtnProps,
-  MainNoticesProps,
-} from "../_interfaces/interfaces";
+import { MainMenuBtnProps } from "../_interfaces/interfaces";
 
 export const MAIN_MENU_LIST: MainMenuBtnProps[] = [
   { icon: <MainCodeIcon />, title: "코딩 테스트", url: "/code/list" },
@@ -41,49 +35,3 @@ export const POSTS_LIST = [
     url: "/code/history",
   },
 ];
-
-export const dummynotice: MainNoticesProps = {
-  title: "공지사항",
-  url: "/notice",
-  sliderList: [
-    { noticeId: 1, title: "공지사항 1", createdAt: "2024-11-08" },
-    {
-      noticeId: 2,
-      title:
-        "공지사항 2 공지사항 2 공지사항 2 공지사항 2 공지사항 2 공지사항 2 공지사항 2 공지사항 2 공지사항 2 공지사항 2 공지사항 2 공지사항 2",
-      createdAt: "2024-11-07",
-    },
-    { noticeId: 3, title: "공지사항 3", createdAt: "2024-11-06" },
-    { noticeId: 4, title: "공지사항 4", createdAt: "2024-11-05" },
-    { noticeId: 5, title: "공지사항 5", createdAt: "2024-11-04" },
-  ],
-};
-
-export const dummyhistories: MainHistoriesProps = {
-  title: "내 문제 풀이 기록",
-  url: "/code/history",
-  sliderList: [
-    { codeNum: 1, title: "문제 1", hasSolved: true, createdAt: "2024-11-08" },
-    { codeNum: 2, title: "문제 2", hasSolved: false, createdAt: "2024-11-08" },
-    {
-      codeNum: "ai",
-      title: "문제 3 (AI) 문제 3 (AI) 문제 3 (AI) 문제 3 (AI)",
-      hasSolved: true,
-      createdAt: "2024-11-08",
-    },
-    { codeNum: 4, title: "문제 4", hasSolved: true, createdAt: "2024-11-08" },
-    { codeNum: 5, title: "문제 5", hasSolved: true, createdAt: "2024-11-08" },
-  ],
-};
-
-export const dummyuserdata: ProfileCardProps = {
-  userData: {
-    profileImg: "/profileImg4.png",
-    rank: "Junior",
-    nickname: "사용자명",
-    ranking: 112,
-    registered: 15,
-    score: 5166,
-    solved: 85,
-  },
-};

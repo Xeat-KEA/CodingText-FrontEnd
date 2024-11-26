@@ -1,9 +1,5 @@
 import { useTokenStore } from "@/app/stores";
-import {
-  dummyhistories,
-  MAIN_MENU_LIST,
-  POSTS_LIST,
-} from "../_constants/constants";
+import { MAIN_MENU_LIST, POSTS_LIST } from "../_constants/constants";
 import MainMenuBtn from "./MainMenuBtn";
 import MainProfileCard from "./MainProfileCard";
 import MainNotices from "./MainNotices";
@@ -59,8 +55,6 @@ export default function MainMenu() {
     queryFn: fetchHistoryList,
     select: (data) => data.content.slice(0, 5),
   });
-
-  console.log(historyList);
 
   return (
     <>

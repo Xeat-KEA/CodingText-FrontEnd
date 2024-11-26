@@ -6,6 +6,9 @@ export default function ProfileImgContainer({
   height,
   src,
 }: ProfileImgContainerProps) {
+  // 정규식을 사용하여 이미지 링크의 공백으로 인해 생기는 오류 방지
+  const filteredSrc = src?.trim().replace(/\s+/g, "") || "";
+
   return (
     <div
       style={{ width: `${width}px`, height: `${height}px` }}
@@ -15,8 +18,8 @@ export default function ProfileImgContainer({
         <Image
           fill
           sizes="100%"
-          src={src}
-          alt={src}
+          src={filteredSrc}
+          alt={filteredSrc}
           priority
           className="object-cover"
         />

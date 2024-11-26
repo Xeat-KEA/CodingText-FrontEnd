@@ -1,15 +1,3 @@
-export interface ProfileCardProps {
-  userData?: {
-    profileImg: string;
-    rank: string;
-    nickname: string;
-    solved: number;
-    registered: number;
-    score: number;
-    ranking: number;
-  };
-}
-
 export interface ProfileInfoProps {
   category: string;
   content: number;
@@ -34,7 +22,7 @@ export interface History {
   isCorrect: boolean;
   isCreatedByAI: boolean;
   writtenCode: string;
-  title: string;
+  codeTitle: string;
 }
 
 export interface CreateCodeForm {

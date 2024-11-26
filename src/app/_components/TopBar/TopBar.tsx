@@ -95,7 +95,6 @@ export default function TopBar() {
         headers: { Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}` },
         params: { page: pageParam, size: 5 },
       });
-
       return response.data.data;
     } else {
       return null;

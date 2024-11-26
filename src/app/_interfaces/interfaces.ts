@@ -192,6 +192,7 @@ export interface CodeDetail {
 }
 
 export interface Statistics {
+  profileUrl: string;
   nickName: string;
   rank: number;
   registerCount: number;

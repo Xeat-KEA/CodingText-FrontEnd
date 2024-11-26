@@ -20,7 +20,7 @@ export default function MainHistoryCard({ history }: { history: History }) {
           </div>
           {/* 문제 제목 */}
           <span className="w-full text-black overflow-hidden whitespace-nowrap text-ellipsis">
-            {history.title}
+            {history.codeTitle}
           </span>
         </div>
         <div className="flex">

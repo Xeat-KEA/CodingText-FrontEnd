@@ -10,7 +10,11 @@ export default function MainProfileCard({
   return (
     <div className="lg:w-[360px] w-full flex flex-col gap-6 shrink-0 p-6 border border-border-2 rounded-xl">
       <div className="flex gap-4 items-center">
-        <ProfileImgContainer width={48} height={48} src={"/profileImg3.png"} />
+        <ProfileImgContainer
+          width={48}
+          height={48}
+          src={statistics.profileUrl}
+        />
         <div className="flex flex-col">
           <span className="text-xs text-body font-bold">{statistics.tier}</span>
           <span className="text-lg text-black">{statistics.nickName}</span>
