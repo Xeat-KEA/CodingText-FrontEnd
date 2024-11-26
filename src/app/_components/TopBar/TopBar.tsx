@@ -13,8 +13,10 @@ import { motion } from "framer-motion";
 import TopBarMenu from "./TopBarMenu";
 import { useTokenStore, useWindowSizeStore } from "@/app/stores";
 import api from "@/app/_api/config";
-import { useQuery } from "@tanstack/react-query";
-import { Push, UserInfo } from "@/app/_interfaces/interfaces";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { Push, PushesResponse, UserInfo } from "@/app/_interfaces/interfaces";
+import { useInView } from "react-intersection-observer";
+import LoadingAnimation from "../LoadingAnimation";
 
 export default function TopBar() {
   const pathname = usePathname();
@@ -82,23 +84,54 @@ export default function TopBar() {
   });
 
   // 알림 목록 API 호출
-  const fetchPushs = async () => {
+  const fetchPushes = async ({
+    pageParam,
+  }: {
+    pageParam?: number;
+  }): Promise<PushesResponse | null> => {
     if (accessToken) {
-      const response = await api.get("blog-service/blog/notice/list", {
+      const response = await api.get("/blog-service/blog/notice/list", {
         // 사용자에게 알림 더미 데이터가 없어 임시 토큰 사용 중
         headers: { Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}` },
+        params: { page: pageParam, size: 5 },
       });
 
-      return response.data;
+      return response.data.data;
     } else {
       return null;
     }
   };
-  const { data: pushs } = useQuery({
-    queryKey: ["pushs", isTokenSet],
-    queryFn: fetchPushs,
-    select: (data) => data.data,
+  // 무한스크롤 데이터 가져오기
+  const {
+    data: pushes,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
+  } = useInfiniteQuery({
+    queryKey: ["pushes", isTokenSet],
+    queryFn: fetchPushes,
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, allPages) => {
+      if (
+        lastPage?.pageInfo.totalPageNum === lastPage?.pageInfo.currentPageNum
+      ) {
+        return undefined;
+      } else {
+        return lastPage?.pageInfo.currentPageNum;
+      }
+    },
+    // 데이터 평탄화
+    select: (data) => data.pages.flatMap((page) => page?.noticeList),
   });
+
+  // 무한스크롤 트리거
+  const { ref, inView } = useInView();
+  useEffect(() => {
+    if (inView) {
+      fetchNextPage();
+    }
+  }, [inView]);
 
   return (
     <div className="fixed w-full h-16 z-50">
@@ -196,9 +229,14 @@ export default function TopBar() {
           }}
           className="absolute bg-white top-[calc(100%+8px)] w-[396px] h-[300px] flex flex-col rounded-lg shadow-1 divide-y divide-border-1 overflow-y-auto"
         >
-          {pushs.map((el: Push) => (
-            <NoticeCard key={el.noticeId} push={el} />
-          ))}
+          {pushes !== undefined &&
+            pushes?.map((el) => <NoticeCard key={el?.noticeId} push={el!} />)}
+          {!isLoading && hasNextPage && (
+            // 노출 시 다음 데이터 fetch
+            <div ref={ref} className="w-full h-10 flex-center shrink-0">
+              <LoadingAnimation />
+            </div>
+          )}
         </div>
       )}
       {/* 프로필 팝업 */}

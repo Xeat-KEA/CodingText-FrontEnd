@@ -1,5 +1,5 @@
 import { Code } from "@/app/(code)/_interfaces/interfaces";
-import { Post } from "@/app/_interfaces/interfaces";
+import { PageInfo, Post } from "@/app/_interfaces/interfaces";
 
 export interface MainPostCardProps {
   post: Post;
@@ -50,11 +50,6 @@ export interface MainHistoriesProps {
   title: string;
   url: string;
   sliderList: MainHistory[];
-}
-
-interface PageInfo {
-  totalPageNum: number;
-  currentPageNum: number;
 }
 
 export interface PostsResponse {

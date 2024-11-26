@@ -208,6 +208,16 @@ export interface UserInfo {
   codeLanguage: string;
 }
 
+export interface PageInfo {
+  totalPageNum: number;
+  currentPageNum: number;
+}
+
+export interface PushesResponse {
+  pageInfo: PageInfo;
+  noticeList: Push[];
+}
+
 // 전역 변수 관련 Interface
 export interface TokenStore {
   accessToken: string;
