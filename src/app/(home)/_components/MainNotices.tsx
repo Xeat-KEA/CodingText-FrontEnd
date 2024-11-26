@@ -22,10 +22,10 @@ export default function MainNotices({
         {sliderList &&
           sliderList.map((el) => (
             <MainNoticeCard
-              key={el.noticeId}
-              noticeId={el.noticeId}
+              key={el.announceId}
+              announceId={el.announceId}
+              createdDate={el.createdDate}
               title={el.title}
-              createdAt={el.createdAt}
             />
           ))}
       </div>

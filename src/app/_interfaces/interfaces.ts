@@ -218,6 +218,12 @@ export interface PushesResponse {
   noticeList: Push[];
 }
 
+export interface NoticeCardProps {
+  announceId: number;
+  createdDate: string;
+  title: string;
+}
+
 // 전역 변수 관련 Interface
 export interface TokenStore {
   accessToken: string;

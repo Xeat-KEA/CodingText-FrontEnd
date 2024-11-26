@@ -22,13 +22,7 @@ export default function MainHistories({
       <div className="flex flex-col">
         {sliderList &&
           sliderList.map((el) => (
-            <MainHistoryCard
-              key={el.codeNum}
-              codeNum={el.codeNum}
-              title={el.title}
-              hasSolved={el.hasSolved}
-              createdAt={el.createdAt}
-            />
+            <MainHistoryCard key={el.codeHistoryId} history={el} />
           ))}
       </div>
     </div>

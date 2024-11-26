@@ -1,13 +1,13 @@
 import { CommentCountIcon, LikeCountIcon } from "@/app/_components/Icons";
 import ProfileImgContainer from "@/app/_components/ProfileImgContainer";
 import Medal from "./Medal";
-import { useGetYMD } from "@/app/_hooks/useGetYMD";
 import { MainPostCardProps } from "../_interfaces/interfaces";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import DOMPurify from "isomorphic-dompurify";
 import { useBase64 } from "@/app/_hooks/useBase64";
+import { useCalculateDate } from "@/app/_hooks/useCalculateDate";
 
 export default function MainPostCard({ post, ranking }: MainPostCardProps) {
   const router = useRouter();
@@ -36,7 +36,7 @@ export default function MainPostCard({ post, ranking }: MainPostCardProps) {
           {ranking && <Medal ranking={ranking} />}
           {!ranking && post.createdDate && (
             <span className="post-card-created-at">
-              {useGetYMD(post.createdDate)}
+              {useCalculateDate(post.createdDate)}
             </span>
           )}
         </div>

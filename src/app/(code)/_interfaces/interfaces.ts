@@ -27,14 +27,14 @@ export interface Code {
 }
 
 export interface History {
-  historyId: number;
-  createdAt: string;
-  title: string;
-  isCorrect: boolean;
-  registerStatus: boolean;
-  isAI: boolean;
+  codeHistoryId: number;
   codeId: number;
-  userId: number;
+  compiledAt: string;
+  createdAt: string;
+  isCorrect: boolean;
+  isCreatedByAI: boolean;
+  writtenCode: string;
+  title: string;
 }
 
 export interface CreateCodeForm {

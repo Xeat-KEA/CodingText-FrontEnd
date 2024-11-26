@@ -1,5 +1,10 @@
-import { Code } from "@/app/(code)/_interfaces/interfaces";
-import { PageInfo, Post } from "@/app/_interfaces/interfaces";
+import { Code, History } from "@/app/(code)/_interfaces/interfaces";
+import {
+  Notice,
+  NoticeCardProps,
+  PageInfo,
+  Post,
+} from "@/app/_interfaces/interfaces";
 
 export interface MainPostCardProps {
   post: Post;
@@ -36,20 +41,13 @@ export interface MainNotice {
 export interface MainNoticesProps {
   title: string;
   url: string;
-  sliderList: MainNotice[];
-}
-
-export interface MainHistory {
-  codeNum: number | "ai";
-  title: string;
-  hasSolved: boolean;
-  createdAt: string;
+  sliderList: NoticeCardProps[];
 }
 
 export interface MainHistoriesProps {
   title: string;
   url: string;
-  sliderList: MainHistory[];
+  sliderList: History[];
 }
 
 export interface PostsResponse {

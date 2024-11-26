@@ -15,13 +15,12 @@ import { Statistics } from "@/app/_interfaces/interfaces";
 export default function MainMenu() {
   const { accessToken, isTokenSet } = useTokenStore();
 
-  // 사용자 문제 풀이 정보 API 호출
+  // 사용자 분석 정보 API 호출
   const fetchStatistics = async () => {
     if (accessToken) {
       const response = await api.get("/user-service/users/statistics", {
         headers: { Authorization: accessToken },
       });
-
       return response.data;
     } else {
       return null;
@@ -40,7 +39,28 @@ export default function MainMenu() {
   const { data: noticeList } = useQuery({
     queryKey: ["noticeList"],
     queryFn: fetchNoticeList,
+    select: (data) => data.content.slice(0, 5),
   });
+
+  // 문제 풀이 기록 API 호출
+  const fetchHistoryList = async () => {
+    if (accessToken) {
+      const response = await api.get("/code-bank-service/code/history/user", {
+        headers: { Authorization: accessToken },
+        params: { sortBy: "compiledAt" },
+      });
+      return response.data;
+    } else {
+      return null;
+    }
+  };
+  const { data: historyList } = useQuery({
+    queryKey: ["historyList", isTokenSet],
+    queryFn: fetchHistoryList,
+    select: (data) => data.content.slice(0, 5),
+  });
+
+  console.log(historyList);
 
   return (
     <>
@@ -69,13 +89,13 @@ export default function MainMenu() {
                 <MainNotices
                   title={POSTS_LIST[4].title}
                   url={POSTS_LIST[4].url!}
-                  sliderList={noticeList?.content.slice(0, 5)}
+                  sliderList={noticeList}
                 />
               </div>
               <MainHistories
                 title={POSTS_LIST[5].title}
                 url={POSTS_LIST[5].url!}
-                sliderList={dummyhistories.sliderList}
+                sliderList={historyList}
               />
             </div>
           )}

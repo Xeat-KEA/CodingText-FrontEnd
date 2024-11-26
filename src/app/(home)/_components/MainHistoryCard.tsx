@@ -1,15 +1,10 @@
 import Link from "next/link";
-import { MainHistory } from "../_interfaces/interfaces";
 import { useState } from "react";
 import Dialog from "@/app/_components/Dialog";
 import { DialogCheckIcon } from "@/app/_components/Icons";
+import { History } from "@/app/(code)/_interfaces/interfaces";
 
-export default function MainHistoryCard({
-  codeNum,
-  title,
-  hasSolved,
-  createdAt,
-}: MainHistory) {
+export default function MainHistoryCard({ history }: { history: History }) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isRegistered, setIsRegistered] = useState(false);
 
@@ -20,18 +15,18 @@ export default function MainHistoryCard({
           {/* 문제 번호 / AI 생성 여부 */}
           <div className="w-[60px] flex items-center shrink-0">
             <button className="code-card-code-number">
-              {codeNum === "ai" ? "AI 생성" : `#${codeNum}`}
+              {history.isCreatedByAI ? "AI 생성" : `#${history.codeId}`}
             </button>
           </div>
           {/* 문제 제목 */}
           <span className="w-full text-black overflow-hidden whitespace-nowrap text-ellipsis">
-            {title}
+            {history.title}
           </span>
         </div>
         <div className="flex">
           <div className="flex gap-2">
             {/* AI 생성 문제일 시 정식 등록 건의 버튼 활성화 */}
-            {codeNum === "ai" && (
+            {history.isCreatedByAI && (
               <button
                 onClick={() => setIsDialogOpen((prev) => !prev)}
                 className="text-xs font-semibold text-disabled whitespace-nowrap"
@@ -41,7 +36,7 @@ export default function MainHistoryCard({
             )}
             {/* 문제 다시 풀어보기 */}
             <Link
-              href={`/coding-test/${codeNum}`}
+              href={`/coding-test/${history.codeId}`}
               className="text-xs font-semibold text-black whitespace-nowrap"
             >
               다시 풀어보기
@@ -50,10 +45,10 @@ export default function MainHistoryCard({
           {/* 정답 여부 */}
           <span
             className={`w-12 text-xs font-bold text-center ${
-              hasSolved ? "text-green" : "text-red"
+              history.isCorrect ? "text-green" : "text-red"
             }`}
           >
-            {hasSolved ? "정답" : "오답"}
+            {history.isCorrect ? "정답" : "오답"}
           </span>
         </div>
       </div>
