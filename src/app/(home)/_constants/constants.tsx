@@ -35,3 +35,16 @@ export const POSTS_LIST = [
     url: "/code/history",
   },
 ];
+
+export const BANNER_IMG_LIST = [
+  {
+    lgImg: "/banner/lgBanner1.png",
+    smImg: "/banner/smBanner1.png",
+    url: "",
+  },
+  {
+    lgImg: "/banner/lgBanner2.png",
+    smImg: "/banner/smBanner2.png",
+    url: "",
+  },
+];
