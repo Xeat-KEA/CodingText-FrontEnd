@@ -10,8 +10,11 @@ import { useInView } from "react-intersection-observer";
 import { useEffect } from "react";
 import { POSTS_LIST } from "../_constants/constants";
 import { useCheckToken } from "@/app/_hooks/useCheckToken";
+import SmBackBtn from "@/app/_components/SmBackBtn";
+import { useRouter } from "next/navigation";
 
 export default function CodePostPage() {
+  const router = useRouter();
   const {} = useCheckToken();
 
   const fetchCodes = async ({
@@ -58,6 +61,7 @@ export default function CodePostPage() {
     <div className="top-container">
       <div className="max-w-1000 pt-16">
         <div className="flex flex-col py-8 gap-4">
+          <SmBackBtn content="메인 페이지로" onClick={() => router.push("/")} />
           {/* 게시글 목록 제목 / 설명 */}
           <div className="main-text-container">
             <div className="main-title-container">
