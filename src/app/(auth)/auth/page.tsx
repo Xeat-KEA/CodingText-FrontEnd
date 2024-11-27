@@ -9,14 +9,18 @@ export default function AuthSignUpPage() {
   const router = useRouter();
 
   const searchParams = useSearchParams();
-  const token = searchParams.get("token");
+  const access = searchParams.get("access");
+  const refresh = searchParams.get("refresh");
+  const userId = searchParams.get("userId");
   const signedIn = searchParams.get("signedIn") === "true" ? true : false;
   useEffect(() => {
-    if (signedIn && token) {
-      localStorage.setItem("accessToken", token);
+    if (signedIn && access && refresh && userId) {
+      localStorage.setItem("accessToken", access);
+      localStorage.setItem("refreshToken", refresh);
+      localStorage.setItem("userId", userId);
       router.push("/");
-    } else if (!signedIn && token) {
-      localStorage.setItem("tempToken", token);
+    } else if (!signedIn && access) {
+      localStorage.setItem("tempToken", access);
       router.push("/sign-up");
     }
   }, []);

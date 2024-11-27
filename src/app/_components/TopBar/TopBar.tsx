@@ -14,7 +14,7 @@ import TopBarMenu from "./TopBarMenu";
 import { useTokenStore, useWindowSizeStore } from "@/app/stores";
 import api from "@/app/_api/config";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import { Push, PushesResponse, UserInfo } from "@/app/_interfaces/interfaces";
+import { PushesResponse, UserInfo } from "@/app/_interfaces/interfaces";
 import { useInView } from "react-intersection-observer";
 import LoadingAnimation from "../LoadingAnimation";
 
@@ -92,9 +92,10 @@ export default function TopBar() {
     if (accessToken) {
       const response = await api.get("/blog-service/blog/notice/list", {
         // 사용자에게 알림 더미 데이터가 없어 임시 토큰 사용 중
-        headers: { Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}` },
+        headers: { Authorization: accessToken },
         params: { page: pageParam, size: 5 },
       });
+      console.log(response);
       return response.data.data;
     } else {
       return null;
@@ -108,10 +109,13 @@ export default function TopBar() {
     isFetchingNextPage,
     isLoading,
   } = useInfiniteQuery({
-    queryKey: ["pushes", isTokenSet],
+    queryKey: ["pushes", isTokenSet, isOpen.notice],
     queryFn: fetchPushes,
     initialPageParam: 0,
     getNextPageParam: (lastPage, allPages) => {
+      if (lastPage?.pageInfo.totalPageNum === 0) {
+        return undefined;
+      }
       if (
         lastPage?.pageInfo.totalPageNum === lastPage?.pageInfo.currentPageNum
       ) {
@@ -127,7 +131,7 @@ export default function TopBar() {
   // 무한스크롤 트리거
   const { ref, inView } = useInView();
   useEffect(() => {
-    if (inView) {
+    if (inView && !isLoading) {
       fetchNextPage();
     }
   }, [inView]);
@@ -226,10 +230,13 @@ export default function TopBar() {
           style={{
             right: `calc(8px + ${Math.max((windowSize - 1200) / 2, 0)}px)`,
           }}
-          className="absolute bg-white top-[calc(100%+8px)] w-[396px] h-[300px] flex flex-col rounded-lg shadow-1 divide-y divide-border-1 overflow-y-auto"
+          className="absolute bg-white top-[calc(100%+8px)] w-[396px] h-[300px] flex flex-col justify-center items-center rounded-lg shadow-1 divide-y divide-border-1 overflow-y-auto"
         >
-          {pushes !== undefined &&
-            pushes?.map((el) => <NoticeCard key={el?.noticeId} push={el!} />)}
+          {pushes !== undefined && pushes.length !== 0 ? (
+            pushes?.map((el) => <NoticeCard key={el?.noticeId} push={el!} />)
+          ) : (
+            <span className="text-sm text-body">전달 받은 알림이 없어요!</span>
+          )}
           {!isLoading && hasNextPage && (
             // 노출 시 다음 데이터 fetch
             <div ref={ref} className="w-full h-10 flex-center shrink-0">

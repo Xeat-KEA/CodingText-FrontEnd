@@ -8,8 +8,11 @@ import LoadingAnimation from "@/app/_components/LoadingAnimation";
 import { useInView } from "react-intersection-observer";
 import { useEffect } from "react";
 import { POSTS_LIST } from "../_constants/constants";
+import { useCheckToken } from "@/app/_hooks/useCheckToken";
 
 export default function RecentPostPage() {
+  const {} = useCheckToken();
+
   const fetchRecents = async ({
     pageParam,
   }: {
