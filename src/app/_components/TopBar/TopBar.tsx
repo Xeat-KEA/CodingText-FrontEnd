@@ -244,16 +244,23 @@ export default function TopBar() {
           style={{
             right: `calc(8px + ${Math.max((windowSize - 1200) / 2, 0)}px)`,
           }}
-          className="absolute bg-white top-[calc(100%+8px)] w-[396px] h-[300px] flex flex-col justify-center items-center rounded-lg shadow-1 divide-y divide-border-1 overflow-y-auto"
+          className="absolute bg-white top-[calc(100%+8px)] w-[396px] h-[300px] flex flex-col items-center rounded-lg shadow-1 divide-y divide-border-1 overflow-y-auto"
         >
           {pushes !== undefined && pushes.length !== 0 ? (
             pushes?.map((el) => <NoticeCard key={el?.noticeId} push={el!} />)
           ) : (
-            <span className="text-sm text-body">전달 받은 알림이 없어요!</span>
+            <span className="text-sm text-body h-full flex items-center">
+              전달 받은 알림이 없어요!
+            </span>
           )}
           {!isLoading && hasNextPage && (
             // 노출 시 다음 데이터 fetch
-            <div ref={ref} className="w-full h-10 flex-center shrink-0">
+            <div
+              ref={ref}
+              className={`w-full flex-center shrink-0 ${
+                isLoading ? "h-full" : "h-10"
+              }`}
+            >
               <LoadingAnimation />
             </div>
           )}

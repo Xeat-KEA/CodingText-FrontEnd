@@ -58,6 +58,7 @@ export default function NewPostPanel() {
               const newContent = useBase64("encode", data.content);
               const newData = { ...data, content: newContent };
               console.log(newData);
+              setIsDialogOpen((prev) => !prev);
             }}
           />
         </div>
