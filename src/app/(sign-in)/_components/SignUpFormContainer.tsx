@@ -27,25 +27,22 @@ export default function SignUpFormContainer() {
 
   const [language, setLanguage] = useState("");
 
-  const onValid = (data: SignUpForm) => {
+  const onValid = async (data: SignUpForm) => {
     // 데이터 post 및 validation 필요
     console.log(data);
 
-    api
-      .post("/user-service/auth/signup", data, {
+    try {
+      const {
+        data: { userId, jwtToken },
+      } = await api.post("/user-service/auth/signup", data, {
         headers: { Authorization: `Bearer ${tempToken}` },
-      })
-      .then((res) => {
-        if (res.data) {
-          localStorage.setItem("accessToken", res.data.jwtToken.accessToken);
-          if (localStorage.getItem("accessToken")) {
-            router.push("/sign-up/done");
-          }
-        }
-      })
-      .catch((err) => {
-        console.log(err);
       });
+      localStorage.setItem("accessToken", jwtToken.accessToken);
+      localStorage.setItem("refreshToken", jwtToken.refreshToken);
+      localStorage.setItem("userId", userId);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (

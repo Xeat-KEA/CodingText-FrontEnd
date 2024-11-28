@@ -127,7 +127,9 @@ export default function MainBanner() {
               }
             }}
             className={`w-2 h-2 rounded-full ${
-              index === page ? "bg-primary-1" : "bg-white"
+              index === page
+                ? "bg-primary-1"
+                : "bg-white border border-border-2"
             }`}
           ></button>
         ))}

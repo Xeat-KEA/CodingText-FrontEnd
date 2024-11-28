@@ -95,7 +95,6 @@ export default function TopBar() {
         headers: { Authorization: accessToken },
         params: { page: pageParam, size: 5 },
       });
-      console.log(response);
       return response.data.data;
     } else {
       return null;
