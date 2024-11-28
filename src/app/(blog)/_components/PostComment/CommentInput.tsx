@@ -10,11 +10,12 @@ export default function CommentInput({
   onCancel,
 }: CommentInputProps) {
   const { register, handleSubmit, reset } = useForm();
-  const { profile } = useBlogStore();
+  const { userBlogId, profile } = useBlogStore();
 
   // 수정 필요
-  const mentionProfile = Profile_Dummy_Data.find((profile) => profile.userId === mentionId);
+  const mentionProfile = Profile_Dummy_Data.find((profile) => profile.blogId === mentionId);
 
+  // 댓글
   const onClickSubmit = (data: any) => {
     onSubmit(data);
     reset();

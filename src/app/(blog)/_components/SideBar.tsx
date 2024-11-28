@@ -1,8 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { LogoIcon } from "@/app/_components/Icons";
 import Link from "next/link";
+import { useParams, usePathname } from "next/navigation";
+import api from "@/app/_api/config";
+import { useQuery } from "@tanstack/react-query";
+
 import {
   SbGotestIcon,
   SbHiddenIcon,
@@ -10,76 +13,111 @@ import {
   SbMyblogIcon,
   SbNewpostIcon,
 } from "./Icons";
-import {
-  Board_Categories,
-  loggedInUserId,
-  User_Specific_Categories,
-} from "../_constants/constants";
-import { useBlogStore } from "@/app/stores";
-import { useParams } from "next/navigation";
+import { LogoIcon } from "@/app/_components/Icons";
+import { useBlogStore, useCategoryStore } from "@/app/stores";
 import Board from "./Sidebar-Board/Board";
-import api from "@/app/_api/config";
-import { Profile_Dummy_Data } from "@/app/(admin)/_constants/constants";
+import { useHandleResize } from "@/app/_hooks/useHandleResize";
 
 export default function SideBar() {
   // 전역 변수
-  const { profile, isOwnBlog, setParams } = useBlogStore();
-
+  const { userBlogId, currentBlogId, isOwnBlog } = useBlogStore();
+  // const { boardCategories } = useCategoryStore();
   const params = useParams();
-  const blogId = Number(params.id);
-  const setProfile = useBlogStore((profile) => profile.setProfile);
-  const setBlogId = useBlogStore((state) => state.setBlogId);
+  const pathname = usePathname();
+  const setUserBlogId = useBlogStore((state) => state.setUserBlogId);
+  // const setCurrentBlogId = useBlogStore((state) => state.setCurrentBlogId);
   const setIsOwnBlog = useBlogStore((state) => state.setIsOwnBlog);
-  const setBoardCategories = useBlogStore((state) => state.setBoardCategories);
-  const setActiveCategories = useBlogStore((state) => state.setActiveCategories);
-
+  const [sideUserName, setSideUserName] = useState("");
+  const setBoardCategories = useCategoryStore(
+    (state) => state.setBoardCategories
+  );
+  const setActiveCategories = useCategoryStore(
+    (state) => state.setActiveCategories
+  );
   const [isCollapsed, setIsCollapsed] = useState(false); // 최소화
   const toggleSidebar = () => setIsCollapsed(!isCollapsed);
 
-  // 게시판 목록 api 연결
+  // 화면 사이즈 감지 후 사이드 바 닫기
+  const windowSize = useHandleResize();
   useEffect(() => {
-    // 프로토타입 더미데이터 GET
-    // api.get(`/blog/${blogId}`).then((res) => {
-    //   const profileData = res.data.data
-
-    //   // 추후에 정보 전달 내용 수정 필요
-    //   const completeProfile = {
-    //     userId: profileData.userId,
-    //     nickName: profileData.nickName,
-    //     rank: 'sophomore',
-    //     profileMessage: profileData.profileMessage,
-    //     FollowerCount: 3,
-    //     profileImg: '/profileImg2.png',
-    //     blogProfile: profileData.blogProfile,
-    //   };
-
-    //   setProfile(completeProfile);
-    // })
-
-    const userSpecificCategories = User_Specific_Categories.filter(
-      (category) => category.blogId === blogId
-    ); // 개별
-
-    setParams({
-      id: params.id,
-      categoryId: params.categoryId,
-      subCategoryId: params.subCategoryId,
-      postId: params.postId,
-    });
-    setBoardCategories([...Board_Categories, ...userSpecificCategories]);
-    setActiveCategories([]);
-    setBlogId(blogId);
-    setIsOwnBlog(blogId === loggedInUserId);
-  }, [blogId, setProfile]);
-
-  // 프로필 api 연결
-  useEffect(() => {
-    const foundProfile = Profile_Dummy_Data.find(profile => profile.userId === blogId);
-    if (foundProfile) {
-      setProfile(foundProfile);
-    } else {
+    if (windowSize < 768) {
+      setIsCollapsed(true);
     }
-  }, [blogId]);
+  }, [windowSize]);
+
+  // 새 글 작성 또는 편집 페이지에서 사이드바 닫기
+  useEffect(() => {
+    if (pathname?.includes("new-post") || pathname?.includes("edit-post")) {
+      setIsCollapsed(true);
+    } else {
+      setIsCollapsed(false);
+    }
+  }, [pathname]);
+
+  // 토큰 값으로 조회한 사용자 블로그 아이디
+  useEffect(() => {
+    api
+      .get(`/blog-service/blog`, {
+        headers: {
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}`,
+        },
+      })
+      .then((res) => {
+        const { blogId } = res.data.data;
+        if (blogId && blogId !== -1) {
+          setUserBlogId(blogId);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching blogId:", error);
+      });
+  }, [userBlogId, params]);
+
+  // 블로그 소유 여부
+  useEffect(() => {
+    if (userBlogId !== -1 && currentBlogId !== -1) {
+      setIsOwnBlog(userBlogId === currentBlogId);
+    }
+  }, [userBlogId, currentBlogId]);
+
+  // 게시판 목록 api 연결
+  const fetchBoardCategories = async () => {
+    const response = await api.get(
+      `/blog-service/blog/board/list/${currentBlogId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}`,
+        },
+      }
+    );
+
+    const boardData = response.data.data.categoryList;
+    setSideUserName(response.data.data.userName);
+
+    setBoardCategories([]);
+    setActiveCategories([]);
+
+    // 데이터 형식 변환
+    const transformedCategories = boardData.map((category: any) => ({
+      id: category.parentCategoryId,
+      title: category.parentName,
+      createDate: category.createdDate,
+      childCategories: category.childCategories.map((child: any) => ({
+        id: child.childCategoryId,
+        title: child.childName,
+        createDate: child.createdDate,
+        parentCategoryId: category.parentCategoryId,
+      })),
+    }));
+    setBoardCategories(transformedCategories);
+    return boardData;
+  };
+
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["boardCategories"],
+    queryFn: fetchBoardCategories,
+    enabled: currentBlogId !== -1,
+  });
 
   // 사이드바 페이지 이동 컴포넌트
   const SidebarLink = ({
@@ -93,11 +131,11 @@ export default function SideBar() {
   }) => (
     <Link
       href={href}
-      className={`flex items-center h-6 py-6 text-black ${isCollapsed
-        ? "justify-center w-6 ml-2"
-        : "justify-between w-60 pl-6 pr-2"
-        }`}
-    >
+      className={`flex items-center h-6 py-6 text-black ${
+        isCollapsed
+          ? "justify-center w-6 ml-2"
+          : "justify-between w-60 pl-6 pr-2"
+      }`}>
       {!isCollapsed && <p className="text-xs">{label}</p>}
       <Icon />
     </Link>
@@ -105,14 +143,13 @@ export default function SideBar() {
 
   return (
     <nav
-      className={`fixed top-0 left-0 h-screen bg-white border-r transition-all duration-150 z-20 ${isCollapsed ? "w-10" : "w-60"
-        }`}
-    >
+      className={`fixed top-0 left-0 h-screen bg-white border-r transition-all duration-150 z-20 
+        ${isCollapsed ? "w-10" : "w-60"}`}>
       {/* 사이드바 상단 요소 */}
       <div
-        className={`flex items-center h-8 mt-5 mb-3 mr-2 ${isCollapsed ? "justify-center w-6 ml-2" : "justify-between w-52 ml-6"
-          }`}
-      >
+        className={`flex items-center h-8 mt-5 mb-3 mr-2 ${
+          isCollapsed ? "justify-center w-6 ml-2" : "justify-between w-52 ml-6"
+        }`}>
         {!isCollapsed && (
           <Link href="/">
             <LogoIcon />
@@ -120,24 +157,22 @@ export default function SideBar() {
         )}
         <button
           onClick={toggleSidebar}
-          className={`focus:outline-none ${isCollapsed && "rotate-180"}`}
-        >
+          className={`focus:outline-none ${isCollapsed && "rotate-180"}`}>
           <SbHiddenIcon />
         </button>
       </div>
 
       <SidebarLink
-        href={`/blog/${profile?.userId}`}
-        label={isOwnBlog ? "나의 블로그 홈" : `${profile?.nickName}의 블로그 홈`}
+        href={`/blog/${currentBlogId}`}
+        label={isOwnBlog ? "나의 블로그 홈" : `${sideUserName}의 블로그 홈`}
         Icon={SbHomeIcon}
       />
       {/* 게시판 목록 */}
       <div
         className={`flex-1 overflow-y-auto`}
-        style={{ maxHeight: "calc(100vh - 252px)" }}
-      >
+        style={{ maxHeight: "calc(100vh - 252px)" }}>
         {!isCollapsed && (
-          <div className="relative">
+          <div className="relative overflow-x-hidden">
             <Board />
           </div>
         )}
@@ -148,13 +183,13 @@ export default function SideBar() {
         <SidebarLink href="/" label="문제 풀러 가기" Icon={SbGotestIcon} />
         {isOwnBlog ? (
           <SidebarLink
-            href={`/blog/${loggedInUserId}/new-post`}
+            href={`/new-post`}
             label="새 게시글"
             Icon={SbNewpostIcon}
           />
         ) : (
           <SidebarLink
-            href={`/blog/${loggedInUserId}`}
+            href={`/blog/${userBlogId}`}
             label="내 블로그로"
             Icon={SbMyblogIcon}
           />

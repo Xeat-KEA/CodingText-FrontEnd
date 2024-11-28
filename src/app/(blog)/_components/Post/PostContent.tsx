@@ -1,20 +1,28 @@
 import DOMPurify from "isomorphic-dompurify";
 import { SmShowMoreIcon } from "../Icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PostProps } from "../../_interfaces/interfaces"; // 게시물 내용 받기
-
 import { useBase64 } from "@/app/_hooks/useBase64";
 import { Code_Post_Dummy_Data } from "@/app/(admin)/_constants/constants";
+import CodeEditor from "@/app/(coding-test)/_components/CodeEditor";
+import { useCodingTestStore, usePostStore } from "@/app/stores";
 
-const PostContent: React.FC<PostProps> = ({ currentPost }) => {
-  const isCodingPost = currentPost !== undefined && currentPost.categoryId === 1;
-  // 더미데이터 삭제 필요
-  const currentCodingPost = Code_Post_Dummy_Data.find(post => post.postId === Number(currentPost?.postId));
-  // 코딩 게시글일 경우 추가 게시글 정보 받아와서 디코딩
-  const codeContentDe = currentCodingPost && useBase64("decode", currentCodingPost.codeContent);
-  const writtenCodeDe = currentCodingPost && useBase64("decode", currentCodingPost.writtenCode);
+  export default function PostContent(){
+  const {isCodingPost, currentPost} = usePostStore();
+  const { setLanguage, setValue } = useCodingTestStore();
+
+  useEffect(() => {
+    setLanguage({ content: "json", selection: "json" });
+    setValue(currentPost.writtenCode || "");
+  }, []);
+
+  // 코딩 게시글 디코딩
+  // const codeContentDe =
+  //   currentPost.codeContent && useBase64("decode", currentPost.codeContent);
+  // const writtenCodeDe =
+  //   currentPost.writtenCode && useBase64("decode", currentPost.writtenCode);
+
   const contentDe = useBase64("decode", currentPost.content);
-
   const [visibleSections, setVisibleSections] = useState({
     codeContent: false,
     writtenCode: false,
@@ -37,8 +45,7 @@ const PostContent: React.FC<PostProps> = ({ currentPost }) => {
     <>
       <div
         className="flex items-center gap-2 mb-4 text-lg text-black cursor-pointer"
-        onClick={() => toggleVisibility(toggleKey)}
-      >
+        onClick={() => toggleVisibility(toggleKey)}>
         <SmShowMoreIcon isHidden={!isVisible} /> {label}
       </div>
       {isVisible && children}
@@ -58,9 +65,7 @@ const PostContent: React.FC<PostProps> = ({ currentPost }) => {
               <div
                 className="prose"
                 dangerouslySetInnerHTML={{
-                  __html: DOMPurify.sanitize(
-                    String(codeContentDe)
-                  ),
+                  __html: DOMPurify.sanitize(String(currentPost.codeContent)),
                 }}
               />
             </div>
@@ -70,9 +75,9 @@ const PostContent: React.FC<PostProps> = ({ currentPost }) => {
             visibleSections.writtenCode,
             "writtenCode",
             <div className="w-full mb-6">
-                <pre className="rounded-xl overflow-hidden w-full">
-                  <code className="text-black">{writtenCodeDe}</code>
-                </pre>
+              <div className="rounded-lg overflow-hidden">
+                <CodeEditor defaultValue={currentPost.writtenCode} isViewer />
+              </div>
             </div>
           )}
           {renderToggleSection(
@@ -105,4 +110,3 @@ const PostContent: React.FC<PostProps> = ({ currentPost }) => {
     </div>
   );
 };
-export default PostContent;

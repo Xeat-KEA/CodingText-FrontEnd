@@ -1,4 +1,5 @@
 import { Editor } from "@tiptap/react";
+import { BlogPost } from "../(blog)/_interfaces/interfaces";
 
 export interface SearchBarProps {
   baseURL: string;
@@ -111,12 +112,12 @@ export interface SaveOrCancelBtnProps {
 }
 
 export interface Post {
-  title: string;
-  isSecret?: boolean;
-  password?: string;
   parentCategory?: number;
   childCategory?: number;
+  title: string;
   content: string;
+  isSecret?: boolean;
+  password?: string;
 }
 
 export interface ProfileImgSelectionProps {
@@ -146,14 +147,13 @@ export interface PostCardProps {
   codeId: number | null;
 }
 
-// 프로토타입을 위한 임시
-// export interface ProfileData {
-//   userId: number;
-//   nickName: string;
-//   profileImg: string;
-//   profileMessage: string;
-//   codeLanguage: string;
-// }
+export interface ProfileData {
+  userId: number;
+  nickName: string;
+  profileImg: string;
+  profileMessage: string;
+  codeLanguage: string;
+}
 
 export interface NoticeCardProps {
   category: string;
@@ -258,26 +258,41 @@ export interface SearchForm {
   filter?: string;
 }
 
-export interface SubCategory {
+export interface ChildCategory {
   id: number;
   title: string;
+  createDate?: string;
+  parentCategoryId?: number;
 }
 
 export interface Category {
   id: number;
   title: string;
+  createDate?: string;
   blogId?: number;
-  subCategories?: SubCategory[];
+  childCategories?: ChildCategory[];
+}
+
+export enum Rank {
+  Freshman = "Freshman",
+  Sophomore = "Sophomore",
+  Junior = "Junior",
+  Senior = "Senior",
 }
 
 export interface BlogProfile {
-  userId: number;
-  profileImg: string;
-  nickName: string;
-  rank: string;
+  blogId: number;
+  tier: string;
+  userName: string;
   profileMessage: string;
-  FollowerCount: number;
-  blogProfile: string;
+  followCount: number;
+  followCheck: boolean;
+  profileUrl: string;
+}
+
+export interface BlogMainContent {
+  blogId: number;
+  mainContent: string;
 }
 
 export interface IBackBtn {
@@ -285,28 +300,26 @@ export interface IBackBtn {
   onClick?: () => void;
 }
 
-export interface Params {
-  id: string | string[];
-  categoryId: string | string[];
-  subCategoryId: string | string[];
-  postId: string | string[];
-}
-
 // 블로그 정보 저장
 export interface BlogStore {
-  blogId: number;
-  setBlogId: (id: number) => void;
-  categoryId: number;
-  setCategoryId: (id: number) => void;
-  subCategoryId: number;
-  setSubCategoryId: (id: number) => void;
+  userBlogId: number; // 로그인된 사용자 블로그 아이디
+  setUserBlogId: (id: number) => void;
+  currentBlogId: number; // 현재 페이지의 블로그 아이디
+  setCurrentBlogId: (id: number) => void;
   isOwnBlog: boolean;
   setIsOwnBlog: (isOwnBlog: boolean) => void;
   profile: BlogProfile;
   setProfile: (profile: BlogProfile) => void;
+  blogContent: BlogMainContent;
+  setBlogContent: (blogContent: BlogMainContent) => void;
+}
 
-  params: Params | null; // Params 객체를 저장할 변수
-  setParams: (params: Params) => void; // params를 설정하는 함수
+// 게시판 관련
+export interface CategoryStore {
+  categoryId: number;
+  setCategoryId: (id: number) => void;
+  childCategoryId: number;
+  setChildCategoryId: (id: number) => void;
 
   // sidebar-board 관련 Interface
   boardCategories: Category[];
@@ -319,8 +332,16 @@ export interface BlogStore {
   ) => void;
   isAddingCategory: boolean;
   setIsAddingCategory: (state: boolean) => void;
-  isAddingSubCategory: { [key: number]: boolean };
-  setIsAddingSubCategory: (parentId: number, isAdding: boolean) => void;
+  isAddingChildCategory: { [key: number]: boolean };
+  setIsAddingChildCategory: (parentId: number, isAdding: boolean) => void;
+}
+
+// 게시글 관련
+export interface PostStore{
+  currentPost: BlogPost;
+  setCurrentPost: (post: BlogPost) => void;
+  isCodingPost: boolean;
+  setIsCodinPost: (isCodingPost: boolean) => void;
 }
 
 export interface Notice {

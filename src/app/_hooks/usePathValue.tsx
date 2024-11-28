@@ -13,8 +13,6 @@ export const usePathValue = (): string | null => {
       const prevURL = storage.getItem("CURRENT_URL");
       storage.setItem("PREVIOUS_URL", prevURL ?? "");
       storage.setItem("CURRENT_URL", currentURL);
-      console.log("a", currentURL);
-      console.log(prevURL);
       
       setPreviousURL(prevURL);
     } else {

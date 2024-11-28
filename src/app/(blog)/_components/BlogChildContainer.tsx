@@ -5,41 +5,16 @@ import PostCard from "@/app/_components/PostCard";
 import SearchBar from "@/app/_components/SearchBar";
 import { TAB_BAR_ORDER_FILTER } from "@/app/_constants/constants";
 import { usePathValue } from "@/app/_hooks/usePathValue";
-import { useBlogStore, useCategoryStore, usePaginationStore } from "@/app/stores";
-import { useQuery } from "@tanstack/react-query";
-import { useParams, usePathname, useSearchParams } from "next/navigation";
+import { usePaginationStore } from "@/app/stores";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
-export default function BlogListContainer() {
+export default function BlogChildContainer() {
   usePathValue();
 
-  const { currentBlogId, userBlogId } = useBlogStore();
-  const {boardCategories} = useCategoryStore();
-  const setUserBlogId = useBlogStore((state) => state.setUserBlogId);
-  const setCurrentBlogId = useBlogStore((state) => state.setCurrentBlogId);
-  const params = useParams();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [filter, setFilter] = useState("ACCURACY");
-
-  // 토큰 값으로 조회한 사용자 블로그 아이디
-  useEffect(() => {
-    api
-      .get(`/blog-service/blog`, {
-        headers: {
-          Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}`,
-        },
-      })
-      .then((res) => {
-        const { blogId } = res.data.data;
-        if (blogId && blogId !== -1) {
-          setUserBlogId(blogId);
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching blogId:", error);
-      });
-  }, [userBlogId]);
 
   useEffect(() => {
     // filter 변경 시 다시 GET 하는 로직 필요
@@ -56,33 +31,15 @@ export default function BlogListContainer() {
   const [result, setResult] = useState<PostResult[]>([]);
 
   // 프로토타입 더미 데이터 GET
-  // useEffect(() => {
-  //   api.get("/article-list").then((res) => {
-  //     // 날짜 내림차순
-  //     const sortedData = res.data.data.sort((a: PostResult, b: PostResult) =>
-  //       a.createAt > b.createAt ? -1 : 1
-  //     );
-  //     setResult(sortedData);
-  //   });
-  // }, []);
-
-  // 블로그 전체 게시글 목록 조회
-  const fetchAllListData = async () => {
-    const response = await api.get(
-      `/blog-service/blog/board/article/${userBlogId}`,
-      {
-        params: { page: 0, size: 5 },
-      }
-    );
-    console.log(response.data.data);
-    setCurrentBlogId(response.data.data.blogId);
-    return response.data.data;
-  };
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["allPosts", userBlogId],
-    queryFn: fetchAllListData,
-    enabled: Number(params.categoryId) === 0,
-  });
+  useEffect(() => {
+    api.get("/article-list").then((res) => {
+      // 날짜 내림차순
+      const sortedData = res.data.data.sort((a: PostResult, b: PostResult) =>
+        a.createAt > b.createAt ? -1 : 1
+      );
+      setResult(sortedData);
+    });
+  }, []);
 
   // 페이지네이션
   const { page, setPage, setLastPage } = usePaginationStore();

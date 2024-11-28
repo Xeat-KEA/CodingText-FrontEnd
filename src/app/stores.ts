@@ -1,8 +1,11 @@
 import { create } from "zustand";
 import {
   BlogStore,
+  CategoryStore,
   CodingTestStore,
   PaginationStore,
+  PostStore,
+  Rank,
   SearchFilterStore,
   TabStore,
   TiptapStore,
@@ -60,27 +63,35 @@ export const useSearchFilterStore = create<SearchFilterStore>((set) => ({
 
 // 블로그 정보 저장 전역변수
 export const useBlogStore = create<BlogStore>((set) => ({
-  blogId: 1,
-  setBlogId: (id) => set({ blogId: id }),
-  categoryId: 0,
-  setCategoryId: (id) => set({ categoryId: id }),
-  subCategoryId: 0,
-  setSubCategoryId: (id) => set({ subCategoryId: id }),
+  userBlogId: -1,
+  setUserBlogId: (id) => set({ userBlogId: id }),
+  currentBlogId: -1,
+  setCurrentBlogId: (id) => set({ currentBlogId: id }),
   isOwnBlog: false,
   setIsOwnBlog: (state) => set({ isOwnBlog: state }),
   profile: {
-    userId: 0,
-    nickName: "Anonymous",
-    rank: "sophomore",
-    profileMessage: "No introduction provided.",
-    FollowerCount: 3,
-    profileImg: "/profileImg2.png",
-    blogProfile: "",
+    blogId: -1,
+    followCheck: false,
+    followCount: -1,
+    profileMessage: "default",
+    profileUrl: "",
+    tier: "Sophomore",
+    userName: "default",
   },
   setProfile: (profile) => set({ profile }),
+  blogContent: {
+    blogId: -1,
+    mainContent: "",
+  },
+  setBlogContent: (blogContent) => set({ blogContent }),
+}));
 
-  params: null, // 초기값 설정
-  setParams: (params) => set({ params }), // params 설정 함수
+// 게시판 관련 정보 저장 전역 변수
+export const useCategoryStore = create<CategoryStore>((set) => ({
+  categoryId: -1,
+  setCategoryId: (id) => set({ categoryId: id }),
+  childCategoryId: -1,
+  setChildCategoryId: (id) => set({ childCategoryId: id }),
 
   // sidebar-board 관련
   boardCategories: [],
@@ -101,14 +112,42 @@ export const useBlogStore = create<BlogStore>((set) => ({
     })),
   isAddingCategory: false,
   setIsAddingCategory: (state) => set({ isAddingCategory: state }),
-  isAddingSubCategory: {},
-  setIsAddingSubCategory: (parentId, isAdding) =>
+  isAddingChildCategory: {},
+  setIsAddingChildCategory: (parentId, isAdding) =>
     set((state) => ({
-      isAddingSubCategory: {
-        ...state.isAddingSubCategory,
+      isAddingChildCategory: {
+        ...state.isAddingChildCategory,
         [parentId]: isAdding,
       },
     })),
+}));
+
+// 게시글 관련 정보 저장 전역 변수
+export const usePostStore = create<PostStore>((set) => ({
+  currentPost: {
+    postId: -1,
+    articleReplies: -1,
+    blogId: -1,
+    checkRecommend: false, // ?
+    childCategoryId: -1,
+    childName: "",
+    codeContent: "",
+    codeId: -1,
+    content: "",
+    createdDate: "",
+    isBlind: false,
+    isSecret: false,
+    likeCount: -1,
+    profileUrl: "",
+    replyCount: -1,
+    title: "",
+    userName: "",
+    viewCount: -1,
+    writtenCode: "",
+  },
+  setCurrentPost: (currentPost) => set({ currentPost }),
+  isCodingPost: false,
+  setIsCodinPost: (state) => set({ isCodingPost: state }),
 }));
 
 // 문제 등록 여부 저장 전역변수

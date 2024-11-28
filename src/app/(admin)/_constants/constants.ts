@@ -49,13 +49,13 @@ export const Report_Dummy_Data: Report[] = [
 
 export const Profile_Dummy_Data: BlogProfile[] = [
   {
-    userId: 101,
-    profileImg: "/profileImg1.png",
-    nickName: "개발자",
-    rank: "sophomore",
+    blogId: 101,
+    profileUrl: "/profileImg1.png",
+    userName: "개발자",
+    tier: "sophomore",
     profileMessage: "안녕하세요, 개발자입니다",
-    FollowerCount: 3,
-    blogProfile: "",
+    followCount: 3,
+    followCheck: false,
   }
 ]
 

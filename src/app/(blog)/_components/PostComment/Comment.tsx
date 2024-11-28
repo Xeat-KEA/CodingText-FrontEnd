@@ -26,6 +26,10 @@ const Comment: React.FC<CommentProps> = ({
 
   const [profileData, setProfileData] = useState<BlogProfile[]>([]);
 
+  const fetchCommentData = async() => {
+
+  }
+  
   useEffect(() => {
     // api.get(`/user-list`).then((res) => {
     //   const userData = res.data.data
@@ -37,11 +41,11 @@ const Comment: React.FC<CommentProps> = ({
   }, [])
 
   // 댓글 작성자의 프로필
-  const userProfile = profileData.find((profile) => profile.userId === userId);
+  const userProfile = profileData.find((profile) => profile.blogId === userId);
 
   // // 언급된 사용자의 프로필
   const mentionProfile = profileData.find(
-    (profile) => profile.userId === mentionId
+    (profile) => profile.blogId === mentionId
   );
 
   return (
@@ -74,7 +78,7 @@ const Comment: React.FC<CommentProps> = ({
 
         <div className="text-sm text-body font-regular">
           {mentionProfile && (
-            <p className="text-sm text-primary font-semibold">
+            <p className="text-sm text-primary-1 font-semibold">
               @{mentionProfile.nickName}
             </p>
           )}

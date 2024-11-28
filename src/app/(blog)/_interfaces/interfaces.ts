@@ -1,9 +1,9 @@
-import { SubCategory, Category } from "@/app/_interfaces/interfaces";
+import { ChildCategory, Category } from "@/app/_interfaces/interfaces";
 
 export interface AddCategoryProps {
   handleAddCategory: (title: string, parentId?: number) => void;
   parentId?: number;
-  isSubCategory?: boolean;
+  isChildCategory?: boolean;
 }
 
 export interface CategoryItemProps {
@@ -12,46 +12,50 @@ export interface CategoryItemProps {
   handleDeleteCategory: (
     categoryId: number,
     title: string,
-    isSub?: boolean,
-    subCategoryId?: number
+    isChild?: boolean,
+    childCategoryId?: number
   ) => void;
 }
 
-export interface SubCategoryItemProps {
-  subCategory: SubCategory;
+export interface ChildCategoryItemProps {
+  childCategory: ChildCategory;
   category: Category;
   currentPath: string;
   handleDeleteCategory: (
     categoryId: number,
     title: string,
-    isSub?: boolean,
-    subCategoryId?: number
+    isChild?: boolean,
+    childCategoryId?: number
   ) => void;
 }
 export interface BlogPost {
   postId: number;
+  articleReplies: number;
   blogId: number;
-  categoryId: number;
-  subCategoryId: number;
-  title: string;
+  checkRecommend: boolean; // ?
+  childCategoryId: number;
+  childName: string;
+  codeContent?: string;
+  codeId?: number;
   content: string;
-  viewCount: number;
-  isSecret: boolean;
+  createdDate: string;
   isBlind: boolean;
-  password: string;
+  isSecret: boolean;
   likeCount: number;
-  reportCount: number;
-  commentCount: number;
-  createdAt: string;
-  modifiedAt: string;
+  profileUrl: string;
+  replyCount: number;
+  title: string;
+  userName: string;
+  viewCount: number;
+  writtenCode?: string;
 }
 
 export interface CommentForm {
   replyId: number;
   postId: number;
   userId: number;
-  mentionId: number | null;
-  parentReplyId: number | null;
+  mentionId?: number;
+  parentReplyId?: number;
   content: string;
   createdAt: string;
   modifiedAt: string;
@@ -71,8 +75,8 @@ export interface CommentProps {
 
 export interface PostProps {
   currentPost: BlogPost;
-  currentCategory?: Category;
-  currentSubCategory?: SubCategory;
+  // currentCategory?: Category;
+  // currentChildCategory?: ChildCategory;
 }
 
 export interface BpFollowerIconProps {
@@ -94,7 +98,7 @@ export interface CompleteArticle {
   postId: number;
   blogId: number;
   categoryId: number;
-  subCategoryId: number;
+  childCategoryId: number;
   language: string;
   title: string;
   content: string;

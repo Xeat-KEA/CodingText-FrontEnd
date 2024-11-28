@@ -1,9 +1,6 @@
-import { useBlogStore } from "@/app/stores";
+import { useBlogStore, useCategoryStore, usePostStore } from "@/app/stores";
 import { PostProps } from "../../_interfaces/interfaces";
-import {
-  BpFollowerIcon,
-  ShareIcon,
-} from "../Icons";
+import { BpFollowerIcon, ShareIcon } from "../Icons";
 import { useState } from "react";
 import Dialog from "@/app/_components/Dialog";
 import { DialogCheckIcon, DialogReportIcon } from "@/app/_components/Icons";
@@ -11,15 +8,18 @@ import { useRouter } from "next/navigation";
 import DropDown from "@/app/_components/DropDown";
 import { REPORT_REASONS } from "../../_constants/constants";
 import IconBtn from "@/app/_components/IconBtn";
+import api from "@/app/_api/config";
+import { useQueryClient } from "@tanstack/react-query";
 
-const PostAction: React.FC<PostProps> = ({ currentPost }) => {
-  const { blogId, isOwnBlog, params } = useBlogStore();
+export default function PostAction() {
+  const queryClient = useQueryClient();
+
+  const { currentPost, isCodingPost } = usePostStore();
+  const { currentBlogId, isOwnBlog } = useBlogStore();
+  const { categoryId, childCategoryId } = useCategoryStore();
 
   const router = useRouter();
   const [isLiking, setIsLiking] = useState<boolean>(false);
-  const [newLikeCount, setNewLikeCount] = useState<number>(
-    Number(currentPost.likeCount)
-  );
   const [isShareDialogOpen, setIsShareDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [postToDelete, setPostToDelete] = useState<number | null>(null);
@@ -30,15 +30,27 @@ const PostAction: React.FC<PostProps> = ({ currentPost }) => {
   const [isReportConfirmDialogOpen, setIsReportConfirmDialogOpen] =
     useState(false);
 
-  const onClickLike = () => {
+  // 좋아요 API 연결
+  const onClickLike = async () => {
     if (!currentPost) return;
-    setIsLiking((prev) => {
-      const updatedLikeCount = prev ? newLikeCount - 1 : newLikeCount + 1;
-      setNewLikeCount(updatedLikeCount);
-      return !prev;
-    });
+    const requestBody = {
+      articleId: currentPost.postId,
+    };
+    try {
+      await api.put(`/blog-service/blog/board/article/like/${currentPost.postId}`,
+         null, 
+         {
+        headers: {
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}`,
+        },
+      });
+      queryClient.invalidateQueries({ queryKey: ["postContent"] });
+    } catch (error) {
+      console.error("게시글 좋아요 요청 오류", error);
+    }
   };
-  // 현재 URL 복사 -> 추후 공유 방법 수정
+
+  // 공유 -> URL 복사
   const onClickCopyLink = () => {
     const currentUrl = window.location.href;
     navigator.clipboard.writeText(currentUrl).then(() => {
@@ -46,11 +58,13 @@ const PostAction: React.FC<PostProps> = ({ currentPost }) => {
     });
   };
 
+  // 신고 클릭
   const onClickReportPost = (id: number) => {
     setPostToReport(id);
     setIsReportDialogOpen(true);
   };
 
+  // 신고 취소
   const cancelReportPost = () => {
     setIsReportDialogOpen(false);
     setPostToReport(null);
@@ -58,42 +72,67 @@ const PostAction: React.FC<PostProps> = ({ currentPost }) => {
     setSelectedOption(null);
   };
 
-  const confirmReportPost = () => {
+  // 신고 API 요청
+  const confirmReportPost = async () => {
     if (postToReport === null) return;
-    setIsReportDialogOpen(false);
-    setIsReportConfirmDialogOpen(true);
+    try {
+      const response = await api.post(
+        `/blog-service/blog/article/report/${postToReport}`,
+        {
+          reportCategory: selectedOption,
+          directCategory: customInput,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}`,
+          },
+        }
+      );
+      // console.log(response)
+      setIsReportDialogOpen(false);
+      setIsReportConfirmDialogOpen(true);
+    } catch (error) {
+      console.error("게시글 신고 실패: ", error);
+    }
     setPostToReport(null);
+    setCustomInput("");
     setSelectedOption(null);
   };
 
-  // 로직 추가 예정
+  // 게시글 삭제 클릭
   const onClickDeletePost = (id: number) => {
     setPostToDelete(id);
     setIsDeleteDialogOpen(true);
   };
 
-  const confirmDeletePost = () => {
+  // 게시글 삭제 API 요청
+  const confirmDeletePost = async () => {
     if (postToDelete === null) return;
-    setIsDeleteDialogOpen(false);
-    setPostToDelete(null);
-    router.push(
-      `/blog/${params?.id}/${currentPost?.categoryId}/${currentPost?.subCategoryId}`
-    );
+    try {
+      const response = await api.delete(
+        `/blog-service/blog/board/article/${postToDelete}`,
+        {
+        data: { articleId: postToDelete },
+          headers: {
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}`,
+          },
+        }
+      );
+      setIsDeleteDialogOpen(false);
+      setPostToDelete(null);
+
+      router.push(`/category/${currentPost.childCategoryId}`);
+    } catch (error) {
+      console.error("게시글 삭제 실패:", error);
+    }
   };
 
   return (
     <div className="flex w-full h-5 justify-between">
-      {isOwnBlog ? (
-        <button className="flex items-center gap-1">
-          <BpFollowerIcon isFilled={true} />
-          <p className="text-primary-1 text-xs font-semibold">{`좋아요 ${currentPost?.likeCount}`}</p>
-        </button>
-      ) : (
-        <button className="flex items-center gap-1" onClick={onClickLike}>
-          <BpFollowerIcon isFilled={isLiking} />
-          <p className="text-primary-1 text-xs font-semibold">{`좋아요 ${newLikeCount}`}</p>
-        </button>
-      )}
+      <button className="flex items-center gap-1" onClick={onClickLike}>
+        <BpFollowerIcon isFilled={currentPost.checkRecommend} />
+        <p className="text-primary-1 text-xs font-semibold">{`좋아요 ${currentPost?.likeCount}`}</p>
+      </button>
       <div className="flex gap-4">
         <button className="flex items-center gap-1" onClick={onClickCopyLink}>
           <ShareIcon />
@@ -105,7 +144,7 @@ const PostAction: React.FC<PostProps> = ({ currentPost }) => {
             <IconBtn
               type="edit"
               content="수정"
-              onClick={() => router.push(`/blog/${blogId}/edit-post/${currentPost.postId}`)}
+              onClick={() => router.push(`/edit-post/${currentPost.postId}`)}
             />
             <IconBtn
               type="delete"
@@ -156,8 +195,7 @@ const PostAction: React.FC<PostProps> = ({ currentPost }) => {
           backBtn="취소"
           onBackBtnClick={cancelReportPost}
           redBtn="신고"
-          onBtnClick={confirmReportPost}
-        >
+          onBtnClick={confirmReportPost}>
           <DropDown
             isSmall={false}
             selection={selectedOption || ""}
@@ -185,11 +223,8 @@ const PostAction: React.FC<PostProps> = ({ currentPost }) => {
           title="감사합니다"
           content="신고가 정상적으로 접수되었어요"
           backBtn="확인"
-          onBackBtnClick={() => setIsReportConfirmDialogOpen(false)}
-        ></Dialog>
+          onBackBtnClick={() => setIsReportConfirmDialogOpen(false)}></Dialog>
       )}
     </div>
   );
-};
-
-export default PostAction;
+}
