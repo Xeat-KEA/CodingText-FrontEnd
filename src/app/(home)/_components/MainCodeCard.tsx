@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { useSetDifficulty } from "@/app/_hooks/useSetDifficulty";
 import { Code } from "@/app/(code)/_interfaces/interfaces";
+import { ALGORITHM_LIST } from "@/app/_constants/constants";
 
 export default function MainCodeCard({ code }: { code: Code }) {
   const [level, color] = useSetDifficulty(code.difficulty);
@@ -41,7 +42,12 @@ export default function MainCodeCard({ code }: { code: Code }) {
           {/* 문제 제목 */}
           <span className="main-code-card-title">{code.title}</span>
           {/* 알고리즘 */}
-          <span className="main-code-card-algorithm">{code.algorithm}</span>
+          <span className="main-code-card-algorithm">
+            {
+              ALGORITHM_LIST.find((el) => el.selection === code.algorithm)
+                ?.content
+            }
+          </span>
         </div>
         {/* 하단 컨테이너 */}
         <div className="post-card-bottom-container">
