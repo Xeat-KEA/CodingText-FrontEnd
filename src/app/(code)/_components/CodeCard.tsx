@@ -44,7 +44,9 @@ export default function CodeCard({
           {level}단계
         </div>
         <div className="w-16 text-xs text-black list-text">{1}명</div>
-        <div className="w-10 text-xs text-black list-text">{correctRate}%</div>
+        <div className="w-10 text-xs text-black list-text">
+          {correctRate.toFixed(1)}%
+        </div>
       </div>
     </Link>
   );
