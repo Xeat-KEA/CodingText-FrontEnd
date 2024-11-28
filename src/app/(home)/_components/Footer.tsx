@@ -15,6 +15,9 @@ export default function Footer() {
           약관
         </Link>
       </div>
+      <a className="text-xs text-body" href="https://storyset.com/online">
+        Online illustrations by Storyset
+      </a>
     </div>
   );
 }

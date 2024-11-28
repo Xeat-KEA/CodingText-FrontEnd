@@ -5,10 +5,10 @@ import Pagination from "@/app/_components/Pagination";
 import ProfileCard from "./ProfileCard";
 import CodeFilter from "./CodeFilter";
 import { usePathname } from "next/navigation";
-import { useCheckToken } from "@/app/_hooks/useCheckToken";
-import { useState } from "react";
-import { ProfileCardProps } from "../_interfaces/interfaces";
-import { dummyuserdata } from "@/app/(home)/_constants/constants";
+import { useTokenStore } from "@/app/stores";
+import api from "@/app/_api/config";
+import { useQuery } from "@tanstack/react-query";
+import { Statistics } from "@/app/_interfaces/interfaces";
 
 export default function CodeLayoutContainer({
   children,
@@ -17,10 +17,23 @@ export default function CodeLayoutContainer({
 }>) {
   const pathname = usePathname();
   // 로그인 여부 확인 (풀이 기록 페이지에서만 로그인으로 이동)
-  const { token } = useCheckToken(pathname === "/code/history");
+  const { accessToken, isTokenSet } = useTokenStore();
 
-  // 프로토타입 API 사용자 정보 GET
-  const [data, setData] = useState<ProfileCardProps>({});
+  // 사용자 분석 정보 API 호출
+  const fetchStatistics = async () => {
+    if (accessToken) {
+      const response = await api.get("/user-service/users/statistics", {
+        headers: { Authorization: accessToken },
+      });
+      return response.data;
+    } else {
+      return null;
+    }
+  };
+  const { data: statistics } = useQuery<Statistics>({
+    queryKey: ["statistics", isTokenSet],
+    queryFn: fetchStatistics,
+  });
 
   return (
     <>
@@ -44,11 +57,11 @@ export default function CodeLayoutContainer({
             </div>
           </div>
           {/* 회원 정보 부분 */}
-          <div className="shrink-0 lg:pl-6 max-lg:pb-6 relative">
-            <ProfileCard
-              userData={token ? dummyuserdata.userData : undefined}
-            />
-          </div>
+          {statistics !== undefined && (
+            <div className="shrink-0 lg:pl-6 max-lg:pb-6 relative">
+              <ProfileCard statistics={statistics} />
+            </div>
+          )}
         </div>
       </div>
     </>

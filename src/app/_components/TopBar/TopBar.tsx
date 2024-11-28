@@ -12,6 +12,11 @@ import ProfileImgContainer from "../ProfileImgContainer";
 import { motion } from "framer-motion";
 import TopBarMenu from "./TopBarMenu";
 import { useTokenStore, useWindowSizeStore } from "@/app/stores";
+import api from "@/app/_api/config";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { PushesResponse, UserInfo } from "@/app/_interfaces/interfaces";
+import { useInView } from "react-intersection-observer";
+import LoadingAnimation from "../LoadingAnimation";
 
 export default function TopBar() {
   const pathname = usePathname();
@@ -27,7 +32,7 @@ export default function TopBar() {
   });
 
   // 알림 읽음 여부 확인
-  const [hasNoticeRead, setHasNoticeRead] = useState(false);
+  const [hasNoticeRead, setHasNoticeRead] = useState(true);
   useEffect(() => {
     // 이후 API를 통해 새로운 알림 있는지 조건문으로 판단
     if (true) {
@@ -59,20 +64,76 @@ export default function TopBar() {
     if (isOpen.menu) onIconClick("menu", false);
   });
 
-  // 프로토타입 API 사용자 정보 GET
-  /* const [profileInfo, setProfileInfo] = useState<ProfileData>();
-  useEffect(() => {
-    api.get("/my-page/1").then((res) => setProfileInfo(res.data.data));
-  }, []); */
-
   const { windowSize } = useWindowSizeStore();
 
-  const dummyprofile = {
-    rank: "Junior",
-    nickname: "사용자명",
-    userId: 1,
-    profileImg: "/profileImg6.png",
+  // 사용자 정보 API 호출
+  const fetchUserInfo = async () => {
+    if (accessToken) {
+      const response = await api.get("/user-service/users/userInfo", {
+        headers: { Authorization: accessToken },
+      });
+
+      return response.data;
+    } else {
+      return null;
+    }
   };
+  const { data: userInfo } = useQuery<UserInfo>({
+    queryKey: ["userInfo", isTokenSet],
+    queryFn: fetchUserInfo,
+  });
+
+  // 알림 목록 API 호출
+  const fetchPushes = async ({
+    pageParam,
+  }: {
+    pageParam?: number;
+  }): Promise<PushesResponse | null> => {
+    if (accessToken) {
+      const response = await api.get("/blog-service/blog/notice/list", {
+        // 사용자에게 알림 더미 데이터가 없어 임시 토큰 사용 중
+        headers: { Authorization: accessToken },
+        params: { page: pageParam, size: 5 },
+      });
+      return response.data.data;
+    } else {
+      return null;
+    }
+  };
+  // 무한스크롤 데이터 가져오기
+  const {
+    data: pushes,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
+  } = useInfiniteQuery({
+    queryKey: ["pushes", isTokenSet, isOpen.notice],
+    queryFn: fetchPushes,
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, allPages) => {
+      if (lastPage?.pageInfo.totalPageNum === 0) {
+        return undefined;
+      }
+      if (
+        lastPage?.pageInfo.totalPageNum === lastPage?.pageInfo.currentPageNum
+      ) {
+        return undefined;
+      } else {
+        return lastPage?.pageInfo.currentPageNum;
+      }
+    },
+    // 데이터 평탄화
+    select: (data) => data.pages.flatMap((page) => page?.noticeList),
+  });
+
+  // 무한스크롤 트리거
+  const { ref, inView } = useInView();
+  useEffect(() => {
+    if (inView && !isLoading) {
+      fetchNextPage();
+    }
+  }, [inView]);
 
   return (
     <div className="fixed w-full h-16 z-50">
@@ -86,9 +147,12 @@ export default function TopBar() {
         {/* 상단바 */}
         <div
           className={`relative w-full h-16 shrink-0 flex justify-between ${
-            !pathname.startsWith("/coding-test")
-              ? "max-w-[1200px] px-12"
-              : "px-6"
+            pathname.startsWith("/coding-test")
+              ? "px-6"
+              : pathname.startsWith("/recent-post") ||
+                pathname.startsWith("/code-post")
+              ? "max-w-1000"
+              : "max-w-1200"
           }`}
         >
           {/* 탑바 좌측 요소 */}
@@ -131,7 +195,7 @@ export default function TopBar() {
                     <ProfileImgContainer
                       width={36}
                       height={36}
-                      src={dummyprofile.profileImg}
+                      src={userInfo?.profileUrl}
                     />
                   </button>
                 </>
@@ -165,11 +229,19 @@ export default function TopBar() {
           style={{
             right: `calc(8px + ${Math.max((windowSize - 1200) / 2, 0)}px)`,
           }}
-          className="absolute bg-white top-[calc(100%+8px)] w-[396px] h-[300px] flex flex-col rounded-lg shadow-1 divide-y divide-border-1 overflow-y-auto"
+          className="absolute bg-white top-[calc(100%+8px)] w-[396px] h-[300px] flex flex-col justify-center items-center rounded-lg shadow-1 divide-y divide-border-1 overflow-y-auto"
         >
-          {[1, 2, 3, 4, 5].map((el) => (
-            <NoticeCard key={el} category="시스템" blogId={el} userId={el} />
-          ))}
+          {pushes !== undefined && pushes.length !== 0 ? (
+            pushes?.map((el) => <NoticeCard key={el?.noticeId} push={el!} />)
+          ) : (
+            <span className="text-sm text-body">전달 받은 알림이 없어요!</span>
+          )}
+          {!isLoading && hasNextPage && (
+            // 노출 시 다음 데이터 fetch
+            <div ref={ref} className="w-full h-10 flex-center shrink-0">
+              <LoadingAnimation />
+            </div>
+          )}
         </div>
       )}
       {/* 프로필 팝업 */}
@@ -184,10 +256,10 @@ export default function TopBar() {
           {/* 사용자 정보 */}
           <div className="flex flex-col gap-[2px] px-6 py-4">
             <span className="text-body text-xs font-bold">
-              {dummyprofile.rank}
+              {userInfo?.tier}
             </span>
             <span className="text-base font-bold text-black">
-              {dummyprofile.nickname}
+              {userInfo?.nickName}
             </span>
           </div>
           {/* 프로필 메뉴 */}

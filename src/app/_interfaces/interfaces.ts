@@ -112,12 +112,20 @@ export interface SaveOrCancelBtnProps {
 }
 
 export interface Post {
+  articleId: number;
+  profileUrl: string;
+  nickName: string;
+  blogId: number;
   title: string;
-  isSecret?: boolean;
-  password?: string;
-  parentCategory?: number;
-  childCategory?: number;
   content: string;
+  isSecret: boolean;
+  likeCount: number;
+  replyCount: number;
+  viewCount: number;
+  createdDate: string;
+  codeId?: number;
+  thumbnailImageUrl?: string | null;
+  category?: string;
 }
 
 export interface ProfileImgSelectionProps {
@@ -132,21 +140,6 @@ export interface EditBtnProps {
   onSubmit: () => void;
 }
 
-export interface PostCardProps {
-  articleId: number;
-  profileImg?: string;
-  nickName?: string;
-  category?: string;
-  createAt: string;
-  title: string;
-  content: string;
-  thumbnail?: string;
-  likes: number;
-  comments: number;
-  views: number;
-  codeId: number | null;
-}
-
 // 프로토타입을 위한 임시
 // export interface ProfileData {
 //   userId: number;
@@ -156,10 +149,13 @@ export interface PostCardProps {
 //   codeLanguage: string;
 // }
 
-export interface NoticeCardProps {
-  category: string;
+export interface Push {
+  noticeId: number;
   blogId: number;
-  userId: number;
+  sentUserNickName: string;
+  noticeCategory: string;
+  content: string;
+  createdDate: string;
 }
 
 export interface ProfileTab {
@@ -193,6 +189,40 @@ export interface CodeDetail {
   algorithm: string;
   content: string;
   testcase: any;
+}
+
+export interface Statistics {
+  profileUrl: string;
+  nickName: string;
+  rank: number;
+  registerCount: number;
+  solvedCount: number;
+  tier: string;
+  totalScore: number;
+}
+
+export interface UserInfo {
+  nickName: string;
+  tier: string;
+  profileMessage: string;
+  profileUrl: string;
+  codeLanguage: string;
+}
+
+export interface PageInfo {
+  totalPageNum: number;
+  currentPageNum: number;
+}
+
+export interface PushesResponse {
+  pageInfo: PageInfo;
+  noticeList: Push[];
+}
+
+export interface NoticeCardProps {
+  announceId: number;
+  createdDate: string;
+  title: string;
 }
 
 // 전역 변수 관련 Interface

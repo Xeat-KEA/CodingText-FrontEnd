@@ -1,15 +1,3 @@
-export interface ProfileCardProps {
-  userData?: {
-    profileImg: string;
-    rank: string;
-    nickname: string;
-    solved: number;
-    registered: number;
-    score: number;
-    ranking: number;
-  };
-}
-
 export interface ProfileInfoProps {
   category: string;
   content: number;
@@ -27,14 +15,14 @@ export interface Code {
 }
 
 export interface History {
-  historyId: number;
-  createdAt: string;
-  title: string;
-  isCorrect: boolean;
-  registerStatus: boolean;
-  isAI: boolean;
+  codeHistoryId: number;
   codeId: number;
-  userId: number;
+  compiledAt: string;
+  createdAt: string;
+  isCorrect: boolean;
+  isCreatedByAI: boolean;
+  writtenCode: string;
+  codeTitle: string;
 }
 
 export interface CreateCodeForm {

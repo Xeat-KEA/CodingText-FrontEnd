@@ -38,9 +38,9 @@ export default function CodeEditor({
         setLang(langs.java());
       } else if (language?.selection === "python") {
         setLang(langs.python());
-      } else if (language?.selection === "js") {
+      } else if (language?.selection === "javascript") {
         setLang(langs.javascript());
-      } else if (language?.selection === "c++") {
+      } else if (language?.selection === "c_plus_plus" || "c") {
         setLang(langs.cpp());
       } else if (language?.selection === "json") {
         setLang(langs.json());

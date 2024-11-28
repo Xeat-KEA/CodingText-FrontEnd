@@ -115,7 +115,7 @@ textarea {
   }
   /* 각 항목 상위 컨테이너 */
   .main-container {
-    @apply w-full flex flex-col gap-6 lg:overflow-hidden;
+    @apply w-full flex flex-col gap-6;
   }
   /* 항목 설명 텍스트 컨테이너 */
   .main-text-container {
@@ -134,7 +134,7 @@ textarea {
     @apply text-body;
   }
   /* 메인 페이지 게시글 상위 컨테이너 */
-  .main-posts-container {
+  .main-post-list-container {
     @apply relative lg:grid lg:grid-cols-3 gap-6 flex flex-col;
   }
   /* 메인 페이지 게시글 카드 */

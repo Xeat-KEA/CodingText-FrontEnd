@@ -18,36 +18,33 @@ export default function SignUpFormContainer() {
   useEffect(() => {
     const token = localStorage.getItem("tempToken");
     setTempToken(token || "");
-    // 회원가입 중 이탈 시의 토큰 잔류 방지
-    localStorage.removeItem("tempToken");
   }, []);
+  useEffect(() => {
+    if (tempToken) {
+      localStorage.removeItem("tempToken");
+    }
+  }, [tempToken]);
 
   const [language, setLanguage] = useState("");
 
-  const [temp, setTemp] = useState();
-
-  const onValid = (data: SignUpForm) => {
+  const onValid = async (data: SignUpForm) => {
     // 데이터 post 및 validation 필요
     console.log(data);
 
-    api
-      .post("/user-service/auth/signup", data, {
+    try {
+      const {
+        data: { userId, jwtToken },
+      } = await api.post("/user-service/auth/signup", data, {
         headers: { Authorization: `Bearer ${tempToken}` },
-      })
-      .then((res) => {
-        if (res.data) {
-          localStorage.setItem("accessToken", res.data.jwtToken.accessToken);
-          if (localStorage.getItem("accessToken")) {
-            router.push("/sign-up/done");
-          }
-        }
-      })
-      .catch((err) => {
-        console.log(err);
       });
+      localStorage.setItem("accessToken", jwtToken.accessToken);
+      localStorage.setItem("refreshToken", jwtToken.refreshToken);
+      localStorage.setItem("userId", userId);
+      router.push("/sign-up/done");
+    } catch (err) {
+      console.error(err);
+    }
   };
-
-  console.log(temp);
 
   return (
     <form onSubmit={handleSubmit(onValid)} className="flex flex-col gap-8">

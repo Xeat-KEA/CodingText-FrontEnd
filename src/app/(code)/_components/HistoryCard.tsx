@@ -5,16 +5,7 @@ import { useGetYMD } from "@/app/_hooks/useGetYMD";
 import Dialog from "@/app/_components/Dialog";
 import { DialogCheckIcon } from "@/app/_components/Icons";
 
-export default function HistoryCard({
-  historyId,
-  createdAt,
-  title,
-  isCorrect,
-  registerStatus,
-  isAI,
-  codeId,
-  userId,
-}: History) {
+export default function HistoryCard({ history }: { history: History }) {
   const router = useRouter();
 
   const [isMounted, setisMounted] = useState(false);
@@ -29,28 +20,30 @@ export default function HistoryCard({
     isMounted && (
       <>
         <div className="w-full px-2 py-4 flex justify-between items-center gap-4">
-          <div className="w-full flex gap-2 items-center">
+          <div className="w-full flex gap-2 items-center overflow-hidden">
             <span className="w-20 text-xs text-body list-text">
-              {useGetYMD(createdAt)}
+              {useGetYMD(history.compiledAt)}
             </span>
             <span
               onClick={(e) => {
                 e.stopPropagation();
                 e.preventDefault();
                 router.push(
-                  `/search?keyword=${codeId}&tab=POST&category=CODE&order=ACCURACY`,
+                  `/search?keyword=${history.codeId}&tab=POST&category=CODE&order=ACCURACY`,
                   { scroll: false }
                 );
               }}
               className="w-[60px] text-xs font-semibold text-primary-1 list-text cursor-pointer hover:underline"
             >
-              {!isAI ? `#${codeId}` : "AI 생성"}
+              {history.isCreatedByAI ? "AI 생성" : `#${history.codeId}`}
             </span>
-            <div className="w-full grow text-sm text-black">{title}</div>
+            <div className="w-full text-sm text-black overflow-hidden whitespace-nowrap text-ellipsis">
+              {history.codeTitle}
+            </div>
           </div>
           <div className="flex">
             <div className="flex gap-2">
-              {isAI && registerStatus && (
+              {history.isCreatedByAI && (
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
@@ -66,7 +59,9 @@ export default function HistoryCard({
                 onClick={() => {
                   // AI 문제의 경우 다른 로직 필요
 
-                  router.push(`/coding-test/${codeId}`, { scroll: false });
+                  router.push(`/coding-test/${history.codeId}`, {
+                    scroll: false,
+                  });
                 }}
                 className="text-xs text-black font-semibold whitespace-nowrap"
               >
@@ -75,10 +70,10 @@ export default function HistoryCard({
             </div>
             <div
               className={`w-12 text-xs font-bold list-text ${
-                isCorrect ? "text-green" : "text-red"
+                history.isCorrect ? "text-green" : "text-red"
               }`}
             >
-              {isCorrect ? "정답" : "오답"}
+              {history.isCorrect ? "정답" : "오답"}
             </div>
           </div>
         </div>

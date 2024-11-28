@@ -1,14 +1,15 @@
 import { useRouter } from "next/navigation";
-import { MainPostsProps } from "../_interfaces/interfaces";
-import { MoreContentArrowIcon, SliderNextIcon, SliderPrevIcon } from "./Icons";
+import { MainPostListProps } from "../_interfaces/interfaces";
+import { MoreContentArrowIcon } from "./Icons";
 import MainPostCard from "./MainPostCard";
 
-export default function MainPosts({
+export default function MainPostList({
   title,
   subTitle,
   url,
   sliderList,
-}: MainPostsProps) {
+  hasRanking,
+}: MainPostListProps) {
   const router = useRouter();
   return (
     <div className="main-container">
@@ -24,23 +25,13 @@ export default function MainPosts({
         {subTitle && <span className="main-sub-title">{subTitle}</span>}
       </div>
       {/* 게시글 목록 */}
-      <div className="main-posts-container">
+      <div className="main-post-list-container">
         {sliderList &&
-          sliderList.map((el) => (
+          sliderList.map((el, index) => (
             <MainPostCard
-              key={el.postId}
-              postId={el.postId}
-              profileImg={el.profileImg}
-              username={el.username}
-              userId={el.userId}
-              title={el.title}
-              codeNum={el.codeNum}
-              content={el.content}
-              likeCounts={el.likeCounts}
-              commentCounts={el.commentCounts}
-              views={el.views}
-              ranking={el.ranking}
-              createdAt={el.createdAt}
+              key={el.articleId}
+              post={el}
+              ranking={hasRanking ? ((index + 1) as 1 | 2 | 3) : undefined}
             />
           ))}
       </div>

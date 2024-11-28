@@ -18,8 +18,9 @@ export const PROFILE_MENU = [
 export const PROGRAMMING_LANGUAGES: Selection[] = [
   { content: "Java", selection: "java" },
   { content: "Python", selection: "python" },
-  { content: "JavaScript", selection: "js" },
-  { content: "C++", selection: "cpp" },
+  { content: "JavaScript", selection: "javascript" },
+  { content: "C++", selection: "c_plus_plus" },
+  { content: "C", selection: "c" },
 ];
 
 // 기본 프로필 사진 경로 목록
