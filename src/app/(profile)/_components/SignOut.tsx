@@ -1,4 +1,6 @@
+import api from "@/app/_api/config";
 import Dialog from "@/app/_components/Dialog";
+import { useTokenStore } from "@/app/stores";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -8,12 +10,15 @@ export default function SignOutOrDeleteAccount() {
   // 회원 탈퇴 상태 관리 state
   const [isDeletingAccount, setIsDeletingAccount] = useState(false);
 
+  const { accessToken, setAccessToken } = useTokenStore();
+
   return (
     <>
       <div className="flex flex-col gap-8">
         <button
           onClick={() => {
-            localStorage.removeItem("token");
+            localStorage.removeItem("accessToken");
+            setAccessToken("");
             router.push("/", { scroll: false });
           }}
           className="edit-btn-red"
@@ -38,10 +43,16 @@ export default function SignOutOrDeleteAccount() {
           onBackBtnClick={() => setIsDeletingAccount((prev) => !prev)}
           redBtn="회원 탈퇴"
           onBtnClick={() => {
-            // 회원 탈퇴 POST 필요
-
-            localStorage.removeItem("token");
-            router.push("/", { scroll: false });
+            api
+              .delete("/user-service/users", {
+                headers: { Authorization: accessToken },
+              })
+              .then((res) => {
+                localStorage.clear();
+                setAccessToken("");
+                router.push("/", { scroll: false });
+              })
+              .catch((err) => console.log(err));
           }}
         />
       )}

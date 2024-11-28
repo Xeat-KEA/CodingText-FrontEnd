@@ -1,53 +1,29 @@
-import { PostResult } from "@/app/(search)/_interfaces/interfaces";
+import { Code, History } from "@/app/(code)/_interfaces/interfaces";
+import {
+  Notice,
+  NoticeCardProps,
+  PageInfo,
+  Post,
+} from "@/app/_interfaces/interfaces";
 
-export interface BannerCardProps {
-  content: string;
-  bubble: JSX.Element;
-  index: number;
-}
-
-export interface MainBoardProps {
-  title: string;
-  hasTab?: boolean;
-  postList: PostResult[];
-}
-
-export interface MainPost {
-  postId: number;
-  profileImg: string;
-  username: string;
-  userId: number;
-  codeNum?: number;
-  title: string;
-  content: string;
-  likeCounts: number;
-  commentCounts: number;
-  views: number;
-  createdAt?: string;
+export interface MainPostCardProps {
+  post: Post;
   ranking?: 1 | 2 | 3;
 }
 
-export interface MainPostsProps {
+export interface MainPostListProps {
   title: string;
   subTitle?: string;
   url?: string;
-  sliderList: MainPost[];
+  sliderList: Post[];
+  hasRanking?: boolean;
 }
 
-export interface MainCode {
-  codeNum: number;
-  difficulty: 1 | 2 | 3 | 4 | 5;
-  title: string;
-  algorithm: string;
-  rate: number;
-  participants: number;
-}
-
-export interface MainCodesProps {
+export interface MainCodeListProps {
   title: string;
   subTitle?: string;
   url: string;
-  sliderList: MainCode[];
+  sliderList: Code[];
 }
 
 export interface MainMenuBtnProps {
@@ -65,18 +41,16 @@ export interface MainNotice {
 export interface MainNoticesProps {
   title: string;
   url: string;
-  sliderList: MainNotice[];
-}
-
-export interface MainHistory {
-  codeNum: number | "ai";
-  title: string;
-  hasSolved: boolean;
-  createdAt: string;
+  sliderList: NoticeCardProps[];
 }
 
 export interface MainHistoriesProps {
   title: string;
   url: string;
-  sliderList: MainHistory[];
+  sliderList: History[];
+}
+
+export interface PostsResponse {
+  pageInfo: PageInfo;
+  articleList: Post[];
 }

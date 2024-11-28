@@ -25,8 +25,7 @@ export default function EditBlogInfo() {
       <div
         className={`w-full h-[400px] overflow-y-auto ${
           !isIntroEditing && "border border-border-2 rounded-2xl px-6 py-4"
-        }`}
-      >
+        }`}>
         {!isIntroEditing ? (
           <div
             className="prose"

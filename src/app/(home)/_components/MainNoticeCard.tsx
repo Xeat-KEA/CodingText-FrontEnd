@@ -1,17 +1,17 @@
 import { useGetYMD } from "@/app/_hooks/useGetYMD";
-import { MainNotice } from "../_interfaces/interfaces";
 import { useState } from "react";
 import Link from "next/link";
+import { Notice, NoticeCardProps } from "@/app/_interfaces/interfaces";
 
 export default function MainNoticeCard({
-  noticeId,
+  announceId,
+  createdDate,
   title,
-  createdAt,
-}: MainNotice) {
+}: NoticeCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   return (
     <Link
-      href={`/notice/${noticeId}`}
+      href={`/notice/${announceId}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       className="w-full h-[36px] flex gap-1 justify-between items-center cursor-pointer overflow-hidden"
@@ -25,7 +25,7 @@ export default function MainNoticeCard({
         {title}
       </span>
       {/* 공지사항 작성일 */}
-      <span className="text-xs text-body">{useGetYMD(createdAt)}</span>
+      <span className="text-xs text-body">{useGetYMD(createdDate)}</span>
     </Link>
   );
 }

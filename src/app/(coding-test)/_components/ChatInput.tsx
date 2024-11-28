@@ -39,7 +39,7 @@ export default function ChatInput({ onSubmit }: ChatInputProps) {
   }, [content]);
 
   return (
-    <div className="px-6 pb-8 pt-2">
+    <div className="px-6 pb-8 pt-2 bg-primary-2">
       <form
         onSubmit={handleSubmit(onValid)}
         className="relative last:w-full flex px-4 py-2 gap-3 bg-white border border-border-2 rounded-[27px]"

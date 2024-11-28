@@ -24,8 +24,7 @@ export default function CommentInput({
   return (
     <form
       onSubmit={handleSubmit(onClickSubmit)}
-      className="flex flex-col w-full justify-between  min-h-[100px] h-auto border border-border-2 rounded-xl px-6 py-4 gap-2"
-    >
+      className="flex flex-col w-full justify-between  min-h-[100px] h-auto border border-border-2 rounded-xl px-6 py-4 gap-2">
       <textarea
         className="w-full h-full resize-none"
         placeholder={
@@ -41,8 +40,7 @@ export default function CommentInput({
             </p>
             <button
               className="font-semibold text-xs text-red"
-              onClick={onCancel}
-            >
+              onClick={onCancel}>
               취소
             </button>
           </div>
@@ -50,8 +48,7 @@ export default function CommentInput({
         <div className="flex absolute right-0 items-center">
           <button
             type="submit"
-            className="px-4 py-2 bg-primary-1 text-white text-xs text-bold rounded-md"
-          >
+            className="px-4 py-2 bg-primary-1 text-white text-xs text-bold rounded-md">
             작성하기
           </button>
         </div>

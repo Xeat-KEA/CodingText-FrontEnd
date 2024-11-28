@@ -38,7 +38,7 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
   // 상위 게시판 클릭 -> 하위 게시판 토글
   const handleCategoryClick = (id: number) => {
     if (id === 0) {
-      // 코딩게시글 일경우 조건 추가 필요 -> 경로 다름 (/blog/[blogId]/code/1)
+      // 코딩게시글 일 경우 조건 추가 필요 -> 경로 다름 (/blog/[blogId]/code/1)
       router.push(`/category/0`, { scroll: false });
     } else {
       setActiveCategories((prev) =>

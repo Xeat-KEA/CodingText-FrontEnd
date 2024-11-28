@@ -33,8 +33,7 @@ export default function AdminRequestCard({ email }: AdminRequestCardProps) {
               onClick={() =>
                 setIsDialogOpen((prev) => ({ ...prev, approve: !prev.approve }))
               }
-              className="flex-center gap-1"
-            >
+              className="flex-center gap-1">
               <SmCheckIcon />
               <span className="text-xs font-semibold text-green">승인</span>
             </button>
@@ -47,8 +46,7 @@ export default function AdminRequestCard({ email }: AdminRequestCardProps) {
                   deny: !prev.deny,
                 }))
               }
-              className="flex-center gap-1"
-            >
+              className="flex-center gap-1">
               <SmDeleteIcon />
               <span className="text-xs font-semibold text-red">거부</span>
             </button>

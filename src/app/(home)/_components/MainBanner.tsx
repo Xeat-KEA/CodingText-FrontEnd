@@ -3,30 +3,15 @@ import { SliderNextIcon, SliderPrevIcon } from "./Icons";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { useHandleResize } from "@/app/_hooks/useHandleResize";
+import { useWindowSizeStore } from "@/app/stores";
+import { handleWindowResize } from "@/app/utils";
+import { BANNER_IMG_LIST } from "../_constants/constants";
 
 export default function MainBanner() {
   const router = useRouter();
 
   const [page, setPage] = useState(0);
   const [isBack, setIsBack] = useState(false);
-  const dummyBannerList = [
-    {
-      lgImg: "https://picsum.photos/id/237/1200/300",
-      smImg: "https://picsum.photos/id/237/600/300",
-      url: "/1",
-    },
-    {
-      lgImg: "https://picsum.photos/id/238/1200/300",
-      smImg: "https://picsum.photos/id/238/600/300",
-      url: "/2",
-    },
-    {
-      lgImg: "https://picsum.photos/id/239/1200/300",
-      smImg: "https://picsum.photos/id/239/600/300",
-      url: "/3",
-    },
-  ];
 
   // 버튼 클릭 시 페이지 이동 및 isBack 설정
   const [isMoving, setIsMoving] = useState(false);
@@ -36,7 +21,7 @@ export default function MainBanner() {
       setIsMoving(true);
       setIsBack(true);
       setPage((prev) =>
-        prev - 1 >= 0 ? prev - 1 : dummyBannerList.length - 1
+        prev - 1 >= 0 ? prev - 1 : BANNER_IMG_LIST.length - 1
       );
     }
   };
@@ -46,7 +31,7 @@ export default function MainBanner() {
       setIsMoving(true);
       setIsBack(false);
       setPage((prev) =>
-        prev + 1 <= dummyBannerList.length - 1 ? prev + 1 : 0
+        prev + 1 <= BANNER_IMG_LIST.length - 1 ? prev + 1 : 0
       );
     }
   };
@@ -65,7 +50,8 @@ export default function MainBanner() {
   };
 
   // 화면 크기 변경 시 state 변경
-  const windowSize = useHandleResize();
+  const { windowSize } = useWindowSizeStore();
+  handleWindowResize();
 
   // 배너 자동 전환 (다른 탭으로 이동 등 웹 페이지에서 벗어날 경우 애니메이션 비활성화)
   useEffect(() => {
@@ -76,7 +62,7 @@ export default function MainBanner() {
         interval = setInterval(() => {
           setIsBack(false);
           setPage((prev) =>
-            prev + 1 <= dummyBannerList.length - 1 ? prev + 1 : 0
+            prev + 1 <= BANNER_IMG_LIST.length - 1 ? prev + 1 : 0
           );
         }, 3500);
       } else {
@@ -125,12 +111,13 @@ export default function MainBanner() {
       </motion.button>
       {/* 페이지네이션 */}
       <div className="absolute flex gap-3 left-1/2 -translate-x-1/2 bottom-4 z-20">
-        {dummyBannerList.map((el, index) => (
+        {BANNER_IMG_LIST.map((el, index) => (
           <button
             key={index}
             onClick={(e) => {
               e.stopPropagation();
               if (!isMoving) {
+                setIsMoving(true);
                 if (index > page) {
                   setIsBack(false);
                 } else {
@@ -140,7 +127,9 @@ export default function MainBanner() {
               }
             }}
             className={`w-2 h-2 rounded-full ${
-              index === page ? "bg-primary-1" : "bg-white"
+              index === page
+                ? "bg-primary-1"
+                : "bg-white border border-border-2"
             }`}
           ></button>
         ))}
@@ -164,15 +153,19 @@ export default function MainBanner() {
           >
             {windowSize !== 0 && (
               <Image
-                onClick={() => router.push(dummyBannerList[page].url)}
+                onClick={() => {
+                  if (BANNER_IMG_LIST[page].url) {
+                    router.push(BANNER_IMG_LIST[page].url);
+                  }
+                }}
                 fill
                 sizes="100%"
                 src={
                   windowSize > 640
-                    ? dummyBannerList[page].lgImg
-                    : dummyBannerList[page].smImg
+                    ? BANNER_IMG_LIST[page].lgImg
+                    : BANNER_IMG_LIST[page].smImg
                 }
-                alt={dummyBannerList[page].url}
+                alt={BANNER_IMG_LIST[page].url}
                 priority
                 className="object-cover cursor-pointer"
               />

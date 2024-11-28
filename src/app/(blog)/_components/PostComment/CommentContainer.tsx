@@ -5,7 +5,6 @@ import {
   CompleteArticle,
 } from "@/app/(blog)/_interfaces/interfaces";
 import {
-  loggedInUserId,
   REPORT_REASONS,
 } from "@/app/(blog)/_constants/constants";
 import CommentInput from "@/app/(blog)/_components/PostComment/CommentInput";
@@ -19,13 +18,14 @@ import {
   Post_Dummy_Data,
   Report_Dummy_Data,
 } from "@/app/(admin)/_constants/constants";
-import { usePostStore } from "@/app/stores";
+import { useBlogStore, usePostStore } from "@/app/stores";
 
 // 추후에 게시글 정보 전달 (또는 추가)
 
 export default function CommentContainer() {
   const params = useParams();
   const {currentPost} = usePostStore();
+  const {currentBlogId, userBlogId} = useBlogStore();
 
   const [comments, setComments] = useState<CommentForm[]>([]);
   const [replyParentId, setReplyParentId] = useState<number>();
@@ -75,7 +75,7 @@ export default function CommentContainer() {
     const newComment: CommentForm = {
       replyId: comments.length + 1,
       postId: currentPost?.postId || 0,
-      userId: loggedInUserId,
+      userId: userBlogId,
       mentionId: mentionId,
       parentReplyId: replyParentId,
       content: data.comment,
@@ -154,7 +154,7 @@ export default function CommentContainer() {
               content={comment.content}
               createdAt={comment.createdAt}
               mentionId={comment.mentionId || null}
-              isOwnComment={comment.userId === loggedInUserId}
+              isOwnComment={comment.userId === userBlogId}
               onDelete={() => onClickDelete(comment.replyId)}
               onReport={() => onClickReportComment(comment.replyId)}
               onReplyClick={() => onClickReply(comment.replyId, comment.userId)}
@@ -169,7 +169,7 @@ export default function CommentContainer() {
                   content={reply.content}
                   createdAt={reply.createdAt}
                   mentionId={reply.mentionId || null}
-                  isOwnComment={reply.userId === loggedInUserId}
+                  isOwnComment={reply.userId === userBlogId}
                   onDelete={() => onClickDelete(reply.replyId)}
                   onReport={() => onClickReportComment(reply.replyId)}
                   onReplyClick={() => 

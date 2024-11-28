@@ -14,9 +14,8 @@ import {
   SbNewpostIcon,
 } from "./Icons";
 import { LogoIcon } from "@/app/_components/Icons";
-import { useBlogStore, useCategoryStore } from "@/app/stores";
+import { useBlogStore, useCategoryStore, useWindowSizeStore } from "@/app/stores";
 import Board from "./Sidebar-Board/Board";
-import { useHandleResize } from "@/app/_hooks/useHandleResize";
 
 export default function SideBar() {
   // 전역 변수
@@ -38,7 +37,8 @@ export default function SideBar() {
   const toggleSidebar = () => setIsCollapsed(!isCollapsed);
 
   // 화면 사이즈 감지 후 사이드 바 닫기
-  const windowSize = useHandleResize();
+  const { windowSize } = useWindowSizeStore();
+  
   useEffect(() => {
     if (windowSize < 768) {
       setIsCollapsed(true);

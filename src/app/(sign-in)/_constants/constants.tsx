@@ -1,4 +1,3 @@
-import { AppleIcon, GoogleIcon, KakaoIcon } from "../_components/Icons";
 import { SignInBtnProps } from "../_interfaces/interfaces";
 
 export const PRIVACY_POLICY =
@@ -9,18 +8,18 @@ export const TERMS =
 
 export const SOCIAL_LOGIN_BUTTON_LIST: SignInBtnProps[] = [
   {
-    icon: <GoogleIcon />,
+    image: "/social/google_login.png",
     service: "Google",
-    redirectionURL: "/sign-up",
+    redirectionURL: `${process.env.NEXT_PUBLIC_BASE_URL}/user-service/oauth2/authorization/google`,
   },
   {
-    icon: <AppleIcon />,
-    service: "Apple",
-    redirectionURL: "/sign-up",
+    image: "/social/naver_login.png",
+    service: "네이버",
+    redirectionURL: `${process.env.NEXT_PUBLIC_BASE_URL}/user-service/oauth2/authorization/naver`,
   },
   {
-    icon: <KakaoIcon />,
+    image: "/social/kakao_login_large_wide.png",
     service: "카카오",
-    redirectionURL: "/sign-up",
+    redirectionURL: `${process.env.NEXT_PUBLIC_BASE_URL}/user-service/oauth2/authorization/kakao`,
   },
 ];

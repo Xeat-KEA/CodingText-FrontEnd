@@ -9,11 +9,11 @@ export interface SignUpForm {
   verify: string;
 }
 
-export interface Report{
+export interface Report {
   reportId: number;
   reportUserId: number;
   reportedBlogId: number;
-  reportedPostId: number;
+  reportedPostId?: number;
   reportedAt: string;
   reportedCommentId?: number; // 댓글 신고
   reportedCommentUserID?: number; // 댓글 작성자 ID

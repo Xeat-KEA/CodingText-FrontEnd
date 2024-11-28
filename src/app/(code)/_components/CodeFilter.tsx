@@ -1,4 +1,4 @@
-import { CODE_FILTER_LIST } from "../_constants/constants";
+import { CODE_SORT_BY } from "../_constants/constants";
 import { ALGORITHM_LIST, DIFFICULTY_LIST } from "@/app/_constants/constants";
 import MultiSelectionDropDown from "@/app/_components/MultiSelectionDropdown";
 import ParamDropDown from "@/app/_components/ParamDropdown";
@@ -21,7 +21,7 @@ export default function CodeFilter({ hasOrder }: { hasOrder?: boolean }) {
       {hasOrder && (
         <ParamDropDown
           paramType="order"
-          list={CODE_FILTER_LIST[2].list}
+          list={CODE_SORT_BY}
           placeholder="최신순"
         />
       )}

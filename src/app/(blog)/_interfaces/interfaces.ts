@@ -32,7 +32,7 @@ export interface BlogPost {
   postId: number;
   articleReplies: number;
   blogId: number;
-  checkRecommend: boolean; // ?
+  checkRecommend: boolean;
   childCategoryId: number;
   childName: string;
   codeContent?: string;

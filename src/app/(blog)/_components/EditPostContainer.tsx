@@ -32,12 +32,12 @@ export default function EditPostContainer() {
     //     setPost(data);
     // })
 
-    const data = Post_Dummy_Data.find(
-      (post) => post.postId === Number(params.postId)
-    );
-    if (data) {
-      setPost(data);
-    }
+    // const data = Post_Dummy_Data.find(
+    //   (post) => post.postId === Number(params.postId)
+    // );
+    // if (data) {
+    //   setPost(data);
+    // }
   }, []);
 
   return (

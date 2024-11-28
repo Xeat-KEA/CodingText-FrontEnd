@@ -21,8 +21,7 @@ export default function AdminCodeCard({ codeId, title }: Code) {
       <div
         onMouseEnter={() => setIsHover(true)}
         onMouseLeave={() => setIsHover(false)}
-        className="w-full px-2 py-4 flex items-center relative"
-      >
+        className="w-full px-2 py-4 flex items-center relative">
         <div className="w-[60px] text-xs font-semibold text-primary-1 flex-center whitespace-nowrap shrink-0">
           #{codeId}
         </div>

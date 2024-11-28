@@ -1,24 +1,45 @@
 import api from "@/app/_api/config";
 import { useQuery } from "@tanstack/react-query";
-import DOMPurify from "isomorphic-dompurify";
 import ChatInput from "./ChatInput";
 import { useEffect, useRef, useState } from "react";
 import { Chat, ChatInputForm } from "../_interface/interfaces";
+import { useCheckToken } from "@/app/_hooks/useCheckToken";
+import ChatBubble from "./ChatBubble";
 
 export default function ChattingPanel() {
+  const { token, isLoaded } = useCheckToken();
   const [dummyData, setDummyData] = useState<Chat[]>([
+    { content: "hi", role: "gpt" },
+    { content: "hi", role: "gpt" },
+    { content: "hi", role: "gpt" },
+    { content: "hi", role: "gpt" },
+    { content: "hi", role: "gpt" },
+    { content: "hi", role: "gpt" },
+    { content: "hi", role: "gpt" },
     { content: "hi", role: "gpt" },
   ]);
 
   // 문제 정보 GET (자체 제공 문제)
   const fetchChats = async () => {
-    const response = await api.get("/coding-test");
-    return response.data;
+    if (isLoaded) {
+      if (token !== "") {
+        // api 호출부 추가 필요
+        return null;
+      } else {
+        // 비로그인 시 문제만 GET
+        const response = await api.get("/code-bank-service/code/non/lists/1", {
+          headers: { Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}` },
+        });
+        return response.data;
+      }
+    }
   };
   const { data, isLoading } = useQuery({
-    queryKey: ["chats"],
+    queryKey: ["chats", isLoaded],
     queryFn: fetchChats,
   });
+
+  console.log(data, isLoaded);
 
   // 채팅 입력 시 채팅 POST
   const onSubmit = async (newChat: ChatInputForm) => {
@@ -53,26 +74,22 @@ export default function ChattingPanel() {
     <>
       <div
         ref={chatContainerRef}
-        className="grow flex flex-col px-6 py-8 gap-6 overflow-y-auto"
+        className="max-md:h-[400px] grow flex flex-col px-6 py-8 gap-6 overflow-y-auto bg-primary-2"
       >
-        {dummyData?.map((chat, index) => (
-          <div
-            key={index}
-            className={`bubble ${
-              chat.role === "gpt"
-                ? "bg-white"
-                : "bg-primary-1 font-bold self-end !text-white whitespace-pre-wrap"
-            }`}
-            dangerouslySetInnerHTML={{
-              __html: DOMPurify.sanitize(chat.content),
-            }}
-          />
-        ))}
-        {/* ChatGPT가 채팅 반환 시 일시적 표시되는 스켈레톤 말풍선 */}
-        {isLoading && <div className="bubble bg-white">......</div>}
+        {token ? (
+          <>
+            {dummyData?.map((chat, index) => (
+              <ChatBubble key={index} role={chat.role} content={chat.content} />
+            ))}
+            {/* ChatGPT가 채팅 반환 시 일시적 표시되는 스켈레톤 말풍선 */}
+            {isLoading && <div className="bubble bg-white">......</div>}
+          </>
+        ) : (
+          <>{data && <ChatBubble role="gpt" content={data.content} />}</>
+        )}
       </div>
       {/* 채팅 입력칸 */}
-      <ChatInput onSubmit={onSubmit} />
+      {token && <ChatInput onSubmit={onSubmit} />}
     </>
   );
 }

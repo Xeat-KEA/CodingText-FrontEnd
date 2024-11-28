@@ -39,9 +39,7 @@ export default function PostEditor({
 
   const { content, setContent } = useTiptapStore();
   const onValid = (data: PostForm) => {
-    // 텍스트 저장을 위해 base64로 인코딩
-    const newContent = useBase64("encode", content);
-    const newPostForm: Post = { ...data, content: newContent };
+    const newPostForm: Post = { ...data, content: content };
     onBtnClick(newPostForm);
   };
 

@@ -11,3 +11,10 @@ export interface EditProfileImgDialogProps {
   onBtnClick: (img: string) => void;
   currentImg: string;
 }
+
+export interface UserInfoForm {
+  nickName: string;
+  profileUrl: string;
+  profileMessage: string;
+  codeLanguage: string;
+}

@@ -57,8 +57,7 @@ export default function RegisterCard({
       {/* 문제 열기 / 닫기 버튼 */}
       <button
         onClick={() => setIsOpened((prev) => !prev)}
-        className="flex gap-1 items-center w-fit"
-      >
+        className="flex gap-1 items-center w-fit">
         <div className={isOpened ? "rotate-90" : ""}>
           <SmShowMoreIcon isHidden={true} />
         </div>

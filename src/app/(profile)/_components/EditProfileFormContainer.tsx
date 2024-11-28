@@ -1,8 +1,7 @@
 import EditBtn from "@/app/_components/TipTapEditor/EditBtn";
 import { useImageHandler } from "@/app/_hooks/useImageHandler";
-import { ProfileData } from "@/app/_interfaces/interfaces";
 import { handleEnter } from "@/app/utils";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import EditProfileImg from "./EditProfileImg";
 import { PROGRAMMING_LANGUAGES } from "@/app/_constants/constants";
 import DropDown from "@/app/_components/DropDown";
@@ -10,27 +9,42 @@ import EditProfileImgDialog from "./EditProfileImgDialog";
 import { useForm } from "react-hook-form";
 import { useQuery } from "@tanstack/react-query";
 import api from "@/app/_api/config";
+import { UserInfoForm } from "../_interfaces/interfaces";
+import { useTokenStore } from "@/app/stores";
 
 export default function EditProfileFormContainer() {
+  const { accessToken, isTokenSet } = useTokenStore();
+
+  const [language, setLanguage] = useState("");
+
   // API 호출
   const fetchUserData = async () => {
-    const response = await api.get("/user");
-    return response.data;
+    if (accessToken) {
+      const response = await api.get("/user-service/users/userInfo", {
+        headers: { Authorization: accessToken },
+      });
+      return response.data;
+    } else {
+      return null;
+    }
   };
-  const { data, isLoading } = useQuery({
-    queryKey: ["UserData"],
+  const { data, isLoading } = useQuery<UserInfoForm>({
+    queryKey: ["UserData", isTokenSet],
     queryFn: fetchUserData,
   });
 
-  // 실제 API 호출 후 initialData 대체 가능
   // 변경사항 전체 취소를 위한 초기값 저장
-  const [initialData, setInitialData] = useState<ProfileData>({
-    nickName: "사용자",
-    profileImg: "/profileImg3.png",
-    profileMessage: "안녕하세요",
-    codeLanguage: "Java",
-    userId: 1,
-  });
+  const [initialData, setInitialData] = useState<UserInfoForm>();
+  useEffect(() => {
+    if (data) {
+      setInitialData(data);
+      setValues(data);
+      setLanguage(
+        PROGRAMMING_LANGUAGES.find((el) => el.selection === data.codeLanguage)
+          ?.content!
+      );
+    }
+  }, [isLoading]);
 
   // 정보 수정 상태 관리 state
   const [isEditing, setIsEditing] = useState({
@@ -47,13 +61,10 @@ export default function EditProfileFormContainer() {
 
   // React Hook Form
   const { register, handleSubmit, setValue, getValues, watch } =
-    useForm<ProfileData>({
+    useForm<UserInfoForm>({
       mode: "onSubmit",
       defaultValues: initialData,
     });
-  const onValid = (data: ProfileData) => {
-    console.log(data);
-  };
 
   // 수정 버튼 클릭 시
   const onEditClick = (type: "nickName" | "profileMessage") => {
@@ -70,11 +81,10 @@ export default function EditProfileFormContainer() {
     setIsEditing((prev) => ({ ...prev, [type]: !prev[type] }));
   };
 
-  // 전체 ProfileData setValue 사용 함수
-  const setValues = (data: ProfileData) => {
-    setValue("userId", data.userId);
+  // 전체 UserInfoForm setValue 사용 함수
+  const setValues = (data: UserInfoForm) => {
     setValue("nickName", data.nickName);
-    setValue("profileImg", data.profileImg);
+    setValue("profileUrl", data.profileUrl);
     setValue("codeLanguage", data.codeLanguage);
     setValue("profileMessage", data.profileMessage);
   };
@@ -90,7 +100,7 @@ export default function EditProfileFormContainer() {
     const IMG_URL = useImageHandler(files);
 
     // 반환받은 이미지 주소를 통해 editor에 이미지 삽입
-    setValue("profileImg", IMG_URL);
+    setValue("profileUrl", IMG_URL);
   };
 
   // 변경 사항 취소
@@ -105,7 +115,7 @@ export default function EditProfileFormContainer() {
     }
   };
 
-  // 확인 버튼 클릭 시
+  // 닉네임, 상태 메세지 확인 버튼 클릭 시
   const onSubmitClick = (type: "nickName" | "profileMessage") => {
     if (getValues(type) !== "") {
       setValue(type, getValues(type));
@@ -113,6 +123,21 @@ export default function EditProfileFormContainer() {
         ...prev,
         [type]: !prev[type],
       }));
+    }
+  };
+
+  // 프로필 수정 결과 POST
+  const onValid = (data: UserInfoForm) => {
+    // validation 필요
+    if (data) {
+      api
+        .put("/user-service/users/userInfo", data, {
+          headers: { Authorization: accessToken },
+        })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => console.log(err));
     }
   };
 
@@ -128,7 +153,7 @@ export default function EditProfileFormContainer() {
             <input
               onKeyDown={handleEnter}
               className="sign-in-input"
-              {...register("nickName")}
+              {...register("nickName", { required: true })}
               autoComplete="off"
             />
           )}
@@ -141,7 +166,7 @@ export default function EditProfileFormContainer() {
         </div>
         {/* 프로필 사진 변경 */}
         <EditProfileImg
-          img={watch("profileImg")}
+          img={watch("profileUrl")}
           onSelectFromPreset={() =>
             setIsEditing((prev) => ({
               ...prev,
@@ -160,7 +185,7 @@ export default function EditProfileFormContainer() {
           ) : (
             <input
               onKeyDown={handleEnter}
-              {...register("profileMessage")}
+              {...register("profileMessage", { required: true })}
               className="sign-in-input"
             />
           )}
@@ -178,9 +203,10 @@ export default function EditProfileFormContainer() {
             <DropDown
               list={PROGRAMMING_LANGUAGES}
               onSelectionClick={(selected) => {
-                setValue("codeLanguage", selected.content);
+                setValue("codeLanguage", selected.selection);
+                setLanguage(selected.content);
               }}
-              selection={watch("codeLanguage")}
+              selection={language}
               isSmall
             />
           </div>
@@ -206,10 +232,10 @@ export default function EditProfileFormContainer() {
             setIsEditing((prev) => ({ ...prev, profileImg: !prev.profileImg }))
           }
           onBtnClick={(img) => {
-            setValue("profileImg", img);
+            setValue("profileUrl", img);
             setIsEditing((prev) => ({ ...prev, profileImg: !prev.profileImg }));
           }}
-          currentImg={watch("profileImg")}
+          currentImg={watch("profileUrl")}
         />
       )}
     </>

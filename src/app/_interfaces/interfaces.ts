@@ -1,5 +1,6 @@
 import { Editor } from "@tiptap/react";
 import { BlogPost } from "../(blog)/_interfaces/interfaces";
+import { CompileResult } from "../(coding-test)/_interface/interfaces";
 
 export interface SearchBarProps {
   baseURL: string;
@@ -9,7 +10,6 @@ export interface SearchBarProps {
 
 export interface TabBarProps {
   menuList: string[];
-  dropDownList?: Selection[];
 }
 
 export interface Selection {
@@ -35,11 +35,12 @@ export interface DropDownProps {
   list?: Selection[];
   placeholder?: string;
   disabled?: boolean;
+  showListUpward?: boolean;
 }
 
 export interface ParamDropDownProps {
   isSmall?: boolean;
-  list: string[];
+  list: Selection[];
   paramType: string;
   placeholder?: string;
 }
@@ -154,11 +155,22 @@ export interface ProfileData {
   profileMessage: string;
   codeLanguage: string;
 }
+// 프로토타입을 위한 임시
+// export interface ProfileData {
+//   userId: number;
+//   nickName: string;
+//   profileImg: string;
+//   profileMessage: string;
+//   codeLanguage: string;
+// }
 
-export interface NoticeCardProps {
-  category: string;
+export interface Push {
+  noticeId: number;
   blogId: number;
-  userId: number;
+  sentUserNickName: string;
+  noticeCategory: string;
+  content: string;
+  createdDate: string;
 }
 
 export interface ProfileTab {
@@ -194,7 +206,48 @@ export interface CodeDetail {
   testcase: any;
 }
 
+export interface Statistics {
+  profileUrl: string;
+  nickName: string;
+  rank: number;
+  registerCount: number;
+  solvedCount: number;
+  tier: string;
+  totalScore: number;
+}
+
+export interface UserInfo {
+  nickName: string;
+  tier: string;
+  profileMessage: string;
+  profileUrl: string;
+  codeLanguage: string;
+}
+
+export interface PageInfo {
+  totalPageNum: number;
+  currentPageNum: number;
+}
+
+export interface PushesResponse {
+  pageInfo: PageInfo;
+  noticeList: Push[];
+}
+
+export interface NoticeCardProps {
+  announceId: number;
+  createdDate: string;
+  title: string;
+}
+
 // 전역 변수 관련 Interface
+export interface TokenStore {
+  accessToken: string;
+  setAccessToken: (token: string) => void;
+  isTokenSet: boolean;
+  setIsTokenSet: (state: boolean) => void;
+}
+
 export interface TabStore {
   tab: string;
   setTab: (newTab: string) => void;
@@ -205,7 +258,7 @@ export interface CodingTestStore {
   // 코딩 관련 state
   title: string;
   setTitle: (newTitle: string) => void;
-  language: Selection | undefined;
+  language: Selection;
   setLanguage: (newLanguage: Selection) => void;
   hasSolved: boolean;
   setHasSolved: (isCorrect: boolean) => void;
@@ -215,6 +268,12 @@ export interface CodingTestStore {
   setValue: (code: string) => void;
   memo: string;
   setMemo: (string: string) => void;
+  isRunning: boolean;
+  setIsRunning: (state: boolean) => void;
+  compiledResult: CompileResult[];
+  setCompiledResult: (result: CompileResult[]) => void;
+  compileError: string;
+  setCompileError: (error: string) => void;
 }
 
 // 텍스트 에디터 내용 Interface
@@ -242,6 +301,11 @@ export interface CodeFilterStore {
   setAlgorithm: (newList: string[]) => void;
   order: string;
   setOrder: (selected: string) => void;
+}
+
+export interface WindowSizeStore {
+  windowSize: number;
+  setWindowSize: (size: number) => void;
 }
 
 // Form 관련 인터페이스
