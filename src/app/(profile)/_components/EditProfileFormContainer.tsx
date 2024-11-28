@@ -11,6 +11,8 @@ import { useQuery } from "@tanstack/react-query";
 import api from "@/app/_api/config";
 import { UserInfoForm } from "../_interfaces/interfaces";
 import { useTokenStore } from "@/app/stores";
+import Dialog from "@/app/_components/Dialog";
+import { DialogCheckIcon } from "@/app/_components/Icons";
 
 export default function EditProfileFormContainer() {
   const { accessToken, isTokenSet } = useTokenStore();
@@ -58,6 +60,9 @@ export default function EditProfileFormContainer() {
     nickName: "",
     profileMessage: "",
   });
+
+  // 저장 완료 시 Dialog 출력
+  const [hasSaved, setHasSaved] = useState(false);
 
   // React Hook Form
   const { register, handleSubmit, setValue, getValues, watch } =
@@ -135,7 +140,7 @@ export default function EditProfileFormContainer() {
           headers: { Authorization: accessToken },
         })
         .then((res) => {
-          console.log(res);
+          setHasSaved((prev) => !prev);
         })
         .catch((err) => console.log(err));
     }
@@ -187,6 +192,7 @@ export default function EditProfileFormContainer() {
               onKeyDown={handleEnter}
               {...register("profileMessage", { required: true })}
               className="sign-in-input"
+              autoComplete="off"
             />
           )}
           <EditBtn
@@ -236,6 +242,14 @@ export default function EditProfileFormContainer() {
             setIsEditing((prev) => ({ ...prev, profileImg: !prev.profileImg }));
           }}
           currentImg={watch("profileUrl")}
+        />
+      )}
+      {hasSaved && (
+        <Dialog
+          icon={<DialogCheckIcon />}
+          backBtn="확인"
+          onBackBtnClick={() => setHasSaved((prev) => !prev)}
+          title={"변경 사항이\n저장되었어요!"}
         />
       )}
     </>
