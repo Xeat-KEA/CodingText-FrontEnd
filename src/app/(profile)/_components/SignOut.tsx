@@ -48,7 +48,7 @@ export default function SignOutOrDeleteAccount() {
                 headers: { Authorization: accessToken },
               })
               .then((res) => {
-                localStorage.removeItem("accessToken");
+                localStorage.clear();
                 setAccessToken("");
                 router.push("/", { scroll: false });
               })

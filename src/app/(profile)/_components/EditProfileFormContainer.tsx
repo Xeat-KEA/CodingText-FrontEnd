@@ -134,7 +134,9 @@ export default function EditProfileFormContainer() {
         .put("/user-service/users/userInfo", data, {
           headers: { Authorization: accessToken },
         })
-        .then((res) => console.log(res))
+        .then((res) => {
+          console.log(res);
+        })
         .catch((err) => console.log(err));
     }
   };

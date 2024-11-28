@@ -40,6 +40,7 @@ export default function SignUpFormContainer() {
       localStorage.setItem("accessToken", jwtToken.accessToken);
       localStorage.setItem("refreshToken", jwtToken.refreshToken);
       localStorage.setItem("userId", userId);
+      router.push("/sign-up/done");
     } catch (err) {
       console.error(err);
     }

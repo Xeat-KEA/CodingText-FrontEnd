@@ -32,7 +32,7 @@ export default function TopBar() {
   });
 
   // 알림 읽음 여부 확인
-  const [hasNoticeRead, setHasNoticeRead] = useState(false);
+  const [hasNoticeRead, setHasNoticeRead] = useState(true);
   useEffect(() => {
     // 이후 API를 통해 새로운 알림 있는지 조건문으로 판단
     if (true) {
