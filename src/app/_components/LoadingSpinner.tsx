@@ -1,4 +1,4 @@
-import { ProgressSpinner } from "primereact/progressspinner";
+import LoadingAnimation from "./LoadingAnimation";
 
 export default function LoadingSpinner({
   textColor,
@@ -6,12 +6,8 @@ export default function LoadingSpinner({
   textColor?: "black" | "white" | "primary";
 }) {
   return (
-    <div className="w-full h-full flex-center flex-col gap-4">
-      <ProgressSpinner
-        style={{ width: "50px", height: "50px" }}
-        strokeWidth="4"
-        animationDuration="1s"
-      />
+    <div className="w-full h-full flex-center flex-col gap-6">
+      <LoadingAnimation />
       <span
         className={`${
           textColor === "primary"

@@ -13,8 +13,11 @@ import ChattingPanel from "../../_components/ChattingPanel";
 import LoadingSpinner from "@/app/_components/LoadingSpinner";
 import { PROGRAMMING_LANGUAGES } from "@/app/_constants/constants";
 import { handleWindowResize } from "@/app/utils";
+import { useCheckToken } from "@/app/_hooks/useCheckToken";
 
 export default function CodingTestPage() {
+  const {} = useCheckToken();
+
   // 필요한 전역변수 선언
   const { isPosting, setIsPosting, setValue, setLanguage } =
     useCodingTestStore();

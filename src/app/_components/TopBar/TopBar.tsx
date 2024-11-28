@@ -32,18 +32,33 @@ export default function TopBar() {
   });
 
   // 알림 읽음 여부 확인
-  const [hasNoticeRead, setHasNoticeRead] = useState(true);
+  const [checkedNotice, setcheckedNotice] = useState(true);
   useEffect(() => {
-    // 이후 API를 통해 새로운 알림 있는지 조건문으로 판단
-    if (true) {
-      setHasNoticeRead((prev) => !prev);
+    if (accessToken) {
+      api
+        .get("/blog-service/blog/notice/check", {
+          headers: { Authorization: accessToken },
+        })
+        .then((res) => {
+          setcheckedNotice(res.data.data.noticeCheck);
+        })
+        .catch((err) => console.error(err));
     }
-  }, []);
+  }, [isTokenSet]);
 
   const onIconClick = (
     type: "notice" | "profile" | "menu",
     state?: boolean
   ) => {
+    // 알림 아이콘 클릭 시 알림 클릭 PUT 실행 및 state 변화
+    if (type === "notice" && !checkedNotice) {
+      api.put(
+        "/blog-service/blog/notice/submit",
+        {},
+        { headers: { Authorization: accessToken } }
+      );
+      setcheckedNotice(true);
+    }
     setIsOpen((prev) => ({ ...prev, [type]: state || !prev[type] }));
   };
 
@@ -183,7 +198,7 @@ export default function TopBar() {
                     className="relative"
                     onClick={() => onIconClick("notice")}
                   >
-                    {!hasNoticeRead && (
+                    {!checkedNotice && (
                       <div className="absolute w-1 h-1 rounded-full bg-red right-[2px] top-[2px]"></div>
                     )}
                     <NoticeIcon />

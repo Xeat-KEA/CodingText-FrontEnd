@@ -57,12 +57,18 @@ export const DIFFICULTY_LIST: Selection[] = [
 
 // 알고리즘 목록
 export const ALGORITHM_LIST: Selection[] = [
+  { content: "사칙연산", selection: "ARITHMETIC" },
+  { content: "구현", selection: "IMPLEMENTATION" },
+  { content: "조합론", selection: "COMBINATORICS" },
+  { content: "기하학", selection: "GEOMETRY" },
   { content: "다이나믹 프로그래밍", selection: "DP" },
-  { content: "그래프", selection: "GRAPH" },
-  { content: "탐욕법", selection: "GREEDY" },
-  { content: "힙", selection: "HEAP" },
-  { content: "해쉬", selection: "HASH" },
-  { content: "스택", selection: "STACK" },
+  { content: "위상 정렬", selection: "TOPOLOGICAL_SORT" },
+  { content: "정규 표현식", selection: "REGEX" },
+  { content: "정수론", selection: "NUMBER_THEORY" },
+  { content: "이분 매칭", selection: "BIPARTITE_MATCHING" },
+  { content: "완전 탐색", selection: "BRUTEFORCE" },
+  { content: "자료 구조", selection: "DATA_STRUCTURES" },
+  { content: "수학", selection: "MATH" },
 ];
 
 export const Notice_Dummy_Data: Notice[] = [
