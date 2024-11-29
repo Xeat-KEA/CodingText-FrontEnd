@@ -1,5 +1,5 @@
 export interface SignInForm {
-  username: string;
+  email: string;
   password: string;
 }
 
@@ -28,15 +28,6 @@ export interface UserListCardProps {
   rank: string;
   signedUpAt: string;
   onClick: () => void;
-}
-
-export interface AdminListCardProps {
-  email: string;
-  role: string;
-}
-
-export interface AdminRequestCardProps {
-  email: string;
 }
 
 export interface ManageCodeProps {
@@ -78,4 +69,10 @@ export interface SearchUserBarProps {
 export interface PushFormContainerProps {
   onSubmit: (push: string) => void;
   isDone: boolean;
+}
+
+export interface Admin {
+  id: number;
+  email: string;
+  adminRole?: "ROOT" | "GENERAL" | "NONE";
 }

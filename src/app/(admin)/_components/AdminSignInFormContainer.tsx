@@ -6,6 +6,7 @@ import Dialog from "@/app/_components/Dialog";
 import { DialogXIcon } from "@/app/_components/Icons";
 import { useRouter } from "next/navigation";
 import SignInTitle from "@/app/(sign-in)/_components/SignInTitle";
+import axios from "axios";
 
 export default function AdminSignInFormContainer() {
   const router = useRouter();
@@ -16,16 +17,40 @@ export default function AdminSignInFormContainer() {
   // 관리자 승인 대기 여부
   const [isWaiting, setIsWaiting] = useState(false);
   const onValid = async (data: SignInForm) => {
+    console.log(data);
+    if (!data.email || !data.password) {
+      // 아이디 비밀번호 미입력 시
+      return;
+    }
     try {
-      const response = await api.get("login", { data });
+      const response = await api.post("/admin-service/auth/login", data);
       // 관리자 승인 대기 처리
       if (response.data.isWaiting) {
         setIsWaiting(true);
       } else {
-        router.push("/admin/user");
+        const accessToken = response.data.jwtToken.accessToken;
+        console.log(response.data);
+
+        if (accessToken) {
+          localStorage.setItem("accessToken", accessToken);
+          router.push("/admin/user");
+        }
       }
     } catch (err) {
-      setIsCorrect(false);
+      if (axios.isAxiosError(err)) {
+        // 등록되지 않은 계정
+        if (err.response?.status === 404) {
+          setIsCorrect(false);
+        }
+        // 승인 대기 중인 계정
+        else if (err.response?.status === 403) {
+          setIsCorrect(true);
+          setIsWaiting((prev) => !prev);
+        } else {
+          console.error(err);
+          setIsCorrect(false);
+        }
+      }
     }
   };
   return (
@@ -39,7 +64,7 @@ export default function AdminSignInFormContainer() {
           {/* 아이디 비밀번호 입력 */}
           <div className="flex flex-col gap-6">
             <input
-              {...register("username", { required: true })}
+              {...register("email", { required: true })}
               className="sign-in-input"
               placeholder="이메일"
               autoComplete="off"

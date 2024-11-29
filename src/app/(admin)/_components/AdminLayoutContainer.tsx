@@ -3,19 +3,17 @@
 import ProfileSideBar from "@/app/_components/ProfileSideBar";
 import { ADMIN_TAB_LIST } from "../_constants/constants";
 import SmBackBtn from "@/app/_components/SmBackBtn";
-import { useRouter } from "next/navigation";
 
 export default function AdminLayoutContainer({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const router = useRouter();
   // 관리자 로그아웃
   const onClick = () => {
     // 토큰 삭제 로직 추가 필요
-
-    router.push("/admin/sign-in");
+    localStorage.removeItem("accessToken");
+    window.location.href = "/admin/sign-in";
   };
   return (
     <>
