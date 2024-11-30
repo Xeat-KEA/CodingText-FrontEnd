@@ -18,19 +18,19 @@ const nextConfig = {
       // 네이버
       {
         protocol: "https",
-        hostname: "**.pstatic.net",
+        hostname: "*.pstatic.net",
         pathname: "/**", // 특정 경로 패턴 허용
       },
       // 카카오
       {
-        protocol: "https",
-        hostname: "**.kakaocdn.net",
+        protocol: "http",
+        hostname: "*.kakaocdn.net",
         pathname: "/**", // 특정 경로 패턴 허용
       },
       // 구글
       {
         protocol: "https",
-        hostname: "**.googleusercontent.com",
+        hostname: "*.googleusercontent.com",
         pathname: "/**", // 특정 경로 패턴 허용
       },
     ],

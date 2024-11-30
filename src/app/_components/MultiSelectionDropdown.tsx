@@ -1,5 +1,5 @@
 import { MouseEvent, useState } from "react";
-import { MultiSelectionCheckIcon, ShowMoreIcon } from "./Icons";
+import { MultiSelectionCheckIcon, ShowMoreIcon, SmCheckBoxIcon } from "./Icons";
 import { MultiSelectionDropDownProps } from "../_interfaces/interfaces";
 import { useOutsideClick } from "../_hooks/useOutsideClick";
 import { useSetParams } from "../_hooks/useSetParams";
@@ -52,17 +52,13 @@ export default function MultiSelectionDropDown({
               onClick={(e) => onSelectionClick(e, el.selection)}
               key={index}
             >
-              <span
-                className={
-                  !searchParams
+              <span>
+                <SmCheckBoxIcon
+                  isActive={searchParams
                     .get(paramType)
                     ?.split(",")
-                    .some((item) => item === el.selection)
-                    ? "text-disabled"
-                    : "text-primary-1"
-                }
-              >
-                <MultiSelectionCheckIcon />
+                    .some((item) => item === el.selection)}
+                />
               </span>
               <span className="w-full grow flex justify-center">
                 {el.content}

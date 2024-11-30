@@ -41,6 +41,7 @@ export default function CodeHistoryPage() {
         setPage(lastPage);
       }
       setLastPage(lastPage);
+      console.log(response);
       return response.data;
     } else {
       return null;
