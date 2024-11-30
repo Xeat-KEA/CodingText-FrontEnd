@@ -17,6 +17,8 @@ export default function ChatGPTDialog({
   const ref = useOutsideClick(onBackBtnClick);
 
   const { register, handleSubmit, setValue, watch } = useForm<CreateCodeForm>();
+  const [difficulty, setDifficulty] = useState("1단계");
+  const [algorithm, setAlgorithm] = useState("");
   const onValid = (data: CreateCodeForm) => {
     if (!data.difficulty) {
       // 난이도 설정 필요
@@ -51,17 +53,19 @@ export default function ChatGPTDialog({
             <DropDown
               placeholder="난이도"
               list={DIFFICULTY_LIST}
-              selection={`${watch("difficulty")}단계`}
+              selection={difficulty}
               onSelectionClick={(selected) => {
                 setValue("difficulty", selected.selection);
+                setDifficulty(selected.content);
               }}
             />
             <DropDown
               placeholder="(선택) 알고리즘"
               list={ALGORITHM_LIST}
-              selection={watch("algorithm") || ""}
+              selection={algorithm}
               onSelectionClick={(selected) => {
                 setValue("algorithm", selected.selection);
+                setAlgorithm(selected.content);
               }}
             />
             <textarea

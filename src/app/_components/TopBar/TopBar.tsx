@@ -32,18 +32,33 @@ export default function TopBar() {
   });
 
   // 알림 읽음 여부 확인
-  const [hasNoticeRead, setHasNoticeRead] = useState(true);
+  const [checkedNotice, setcheckedNotice] = useState(true);
   useEffect(() => {
-    // 이후 API를 통해 새로운 알림 있는지 조건문으로 판단
-    if (true) {
-      setHasNoticeRead((prev) => !prev);
+    if (accessToken) {
+      api
+        .get("/blog-service/blog/notice/check", {
+          headers: { Authorization: accessToken },
+        })
+        .then((res) => {
+          setcheckedNotice(res.data.data.noticeCheck);
+        })
+        .catch((err) => console.error(err));
     }
-  }, []);
+  }, [isTokenSet]);
 
   const onIconClick = (
     type: "notice" | "profile" | "menu",
     state?: boolean
   ) => {
+    // 알림 아이콘 클릭 시 알림 클릭 PUT 실행 및 state 변화
+    if (type === "notice" && !checkedNotice) {
+      api.put(
+        "/blog-service/blog/notice/submit",
+        {},
+        { headers: { Authorization: accessToken } }
+      );
+      setcheckedNotice(true);
+    }
     setIsOpen((prev) => ({ ...prev, [type]: state || !prev[type] }));
   };
 
@@ -152,7 +167,8 @@ export default function TopBar() {
                 pathname.startsWith("/code-post")
               ? "max-w-1000"
               : "max-w-1200"
-          }`}>
+          }`}
+        >
           {/* 탑바 좌측 요소 */}
           <div className="flex items-center gap-14">
             <Link href="/" scroll={false}>
@@ -179,8 +195,9 @@ export default function TopBar() {
                   <button
                     ref={noticeRef}
                     className="relative"
-                    onClick={() => onIconClick("notice")}>
-                    {!hasNoticeRead && (
+                    onClick={() => onIconClick("notice")}
+                  >
+                    {!checkedNotice && (
                       <div className="absolute w-1 h-1 rounded-full bg-red right-[2px] top-[2px]"></div>
                     )}
                     <NoticeIcon />
@@ -225,15 +242,23 @@ export default function TopBar() {
           style={{
             right: `calc(8px + ${Math.max((windowSize - 1200) / 2, 0)}px)`,
           }}
-          className="absolute bg-white top-[calc(100%+8px)] w-[396px] h-[300px] flex flex-col justify-center items-center rounded-lg shadow-1 divide-y divide-border-1 overflow-y-auto">
+          className="absolute bg-white top-[calc(100%+8px)] w-[396px] h-[300px] flex flex-col items-center rounded-lg shadow-1 divide-y divide-border-1 overflow-y-auto"
+        >
           {pushes !== undefined && pushes.length !== 0 ? (
             pushes?.map((el) => <NoticeCard key={el?.noticeId} push={el!} />)
           ) : (
-            <span className="text-sm text-body">전달 받은 알림이 없어요!</span>
+            <span className="text-sm text-body h-full flex items-center">
+              전달 받은 알림이 없어요!
+            </span>
           )}
           {!isLoading && hasNextPage && (
             // 노출 시 다음 데이터 fetch
-            <div ref={ref} className="w-full h-10 flex-center shrink-0">
+            <div
+              ref={ref}
+              className={`w-full flex-center shrink-0 ${
+                isLoading ? "h-full" : "h-10"
+              }`}
+            >
               <LoadingAnimation />
             </div>
           )}

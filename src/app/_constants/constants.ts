@@ -1,5 +1,4 @@
 import { Selection } from "../_interfaces/interfaces";
-import { Notice } from "../_interfaces/interfaces";
 
 // 탑바 메뉴
 export const TOP_BAR_MENU = [
@@ -57,32 +56,21 @@ export const DIFFICULTY_LIST: Selection[] = [
 
 // 알고리즘 목록
 export const ALGORITHM_LIST: Selection[] = [
+  { content: "사칙연산", selection: "ARITHMETIC" },
+  { content: "구현", selection: "IMPLEMENTATION" },
+  { content: "조합론", selection: "COMBINATORICS" },
+  { content: "기하학", selection: "GEOMETRY" },
   { content: "다이나믹 프로그래밍", selection: "DP" },
+  { content: "위상 정렬", selection: "TOPOLOGICAL_SORT" },
+  { content: "정규 표현식", selection: "REGEX" },
+  { content: "정수론", selection: "NUMBER_THEORY" },
+  { content: "이분 매칭", selection: "BIPARTITE_MATCHING" },
+  { content: "완전 탐색", selection: "BRUTEFORCE" },
+  { content: "자료 구조", selection: "DATA_STRUCTURES" },
+  { content: "수학", selection: "MATH" },
   { content: "그래프", selection: "GRAPH" },
-  { content: "탐욕법", selection: "GREEDY" },
+  { content: "그리디 알고리즘", selection: "GREEDY" },
+  { content: "해시", selection: "HASH" },
   { content: "힙", selection: "HEAP" },
-  { content: "해쉬", selection: "HASH" },
   { content: "스택", selection: "STACK" },
-];
-
-export const Notice_Dummy_Data: Notice[] = [
-  {
-    noticeId: 1,
-    noticeTitle: "공지사항 1",
-    noticeContent: "7LKr67KI7Ke4IOqzteyngOyCrO2VreyeheuLiOuLpC4=",
-    noticedAt: "2024.10.30",
-  },
-  {
-    noticeId: 2,
-    noticeTitle: "공지사항 2 제목 공지사항 2 공지사항 2 공지사항 2",
-    noticeContent: "65GQ67KI7Ke4IOqzteyngOyCrO2VreyeheuLiOuLpC4=",
-    noticedAt: "2024.09.03",
-  },
-  {
-    noticeId: 3,
-    noticeTitle: "공지사항 3",
-    noticeContent:
-      "PGgxPuyEuOuyiOynuCDqs7Xsp4Dsgqztla3snoXri4jri6QuPC9oMT48cD7qs7Xsp4Dsgqztla0g64K07Jqp7J20IOyXrOq4sOyXkCDstpTqsIDrkKAg7JiI7KCV7J6F64uI64ukLjwvcD48cD7tlYTsmpTtlZwg6rK97JqwIOuNlCDrp47snYAg7KCV67O066W8IO2ZleyduO2VmOyEuOyalC48L3A+",
-    noticedAt: "2024.07.11",
-  },
 ];

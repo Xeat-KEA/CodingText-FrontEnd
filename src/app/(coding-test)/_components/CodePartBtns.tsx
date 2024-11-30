@@ -1,6 +1,10 @@
 import DropDown from "@/app/_components/DropDown";
 import { PROGRAMMING_LANGUAGES } from "@/app/_constants/constants";
-import { useCodingTestStore, useWindowSizeStore } from "@/app/stores";
+import {
+  useCodingTestStore,
+  useTokenStore,
+  useWindowSizeStore,
+} from "@/app/stores";
 import { useParams, useRouter } from "next/navigation";
 import { CodePartBtnsProps } from "../_interface/interfaces";
 import { useEffect, useRef, useState } from "react";
@@ -12,7 +16,7 @@ export default function CodePartBtns({
   onCompile,
   onSubmit,
 }: CodePartBtnsProps) {
-  const { token } = useCheckToken();
+  const { accessToken } = useTokenStore();
 
   const router = useRouter();
   const { id } = useParams();
@@ -60,7 +64,7 @@ export default function CodePartBtns({
         />
       </div>
       {/* 하단 버튼 */}
-      {token ? (
+      {accessToken ? (
         // 로그인 시의 버튼
         <div className="flex gap-4">
           {/* 글 쓰기 버튼 (정답 시에만 활성화) */}

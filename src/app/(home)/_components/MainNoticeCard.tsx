@@ -1,7 +1,7 @@
 import { useGetYMD } from "@/app/_hooks/useGetYMD";
 import { useState } from "react";
 import Link from "next/link";
-import { Notice, NoticeCardProps } from "@/app/_interfaces/interfaces";
+import { NoticeCardProps } from "@/app/_interfaces/interfaces";
 
 export default function MainNoticeCard({
   announceId,

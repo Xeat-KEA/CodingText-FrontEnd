@@ -7,7 +7,11 @@ import { usePathValue } from "@/app/_hooks/usePathValue";
 import { useBlogStore } from "@/app/stores";
 
 export default function BlindPostPage() {
+<<<<<<< HEAD
   const { userBlogId } = useBlogStore();
+=======
+  const { blogId } = useBlogStore();
+>>>>>>> origin/develop
   const router = useRouter();
   const previousURL = usePathValue();
 
