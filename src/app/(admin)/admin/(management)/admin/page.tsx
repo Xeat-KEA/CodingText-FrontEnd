@@ -26,7 +26,7 @@ export default function AdminManagementPage() {
     }
   };
   const { data } = useQuery<Admin[]>({
-    queryKey: ["adminList", isTokenSet, accessToken, tab],
+    queryKey: ["adminList", isTokenSet, tab],
     queryFn: fetchAdminList,
     select: (data) => {
       if (tab === "관리자") {

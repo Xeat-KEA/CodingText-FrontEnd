@@ -4,10 +4,8 @@ import IconBtn from "@/app/_components/IconBtn";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-export default function AdminCodeCard({ codeId, title }: Code) {
+export default function AdminCodeCard({ code }: { code: Code }) {
   const router = useRouter();
-
-  const [isHover, setIsHover] = useState(false);
 
   const [isDeleting, setIsDeleting] = useState(false);
   const onDelete = () => {
@@ -18,30 +16,25 @@ export default function AdminCodeCard({ codeId, title }: Code) {
 
   return (
     <>
-      <div
-        onMouseEnter={() => setIsHover(true)}
-        onMouseLeave={() => setIsHover(false)}
-        className="w-full px-2 py-4 flex items-center relative">
+      <div className="w-full px-2 py-4 flex items-center relative">
         <div className="w-[60px] text-xs font-semibold text-primary-1 flex-center whitespace-nowrap shrink-0">
-          #{codeId}
+          #{code.codeId}
         </div>
         <span className="w-full grow text-sm text-black whitespace-nowrap">
-          {title}
+          {code.title}
         </span>
-        {isHover && (
-          <div className="flex gap-4 absolute right-2 top-1/2 -translate-y-1/2">
-            <IconBtn
-              type="edit"
-              content="수정"
-              onClick={() => router.push(`/admin/code/${codeId}`)}
-            />
-            <IconBtn
-              type="delete"
-              content="삭제"
-              onClick={() => setIsDeleting((prev) => !prev)}
-            />
-          </div>
-        )}
+        <div className="flex gap-4 absolute right-2 top-1/2 -translate-y-1/2">
+          <IconBtn
+            type="edit"
+            content="수정"
+            onClick={() => router.push(`/admin/code/${code.codeId}`)}
+          />
+          <IconBtn
+            type="delete"
+            content="삭제"
+            onClick={() => setIsDeleting((prev) => !prev)}
+          />
+        </div>
       </div>
       {isDeleting && (
         <Dialog

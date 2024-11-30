@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { usePaginationStore } from "@/app/stores";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import api from "@/app/_api/config";
@@ -8,7 +8,6 @@ import CodeListTopBar from "../../_components/CodeListTopBar";
 import { Code } from "../../_interfaces/interfaces";
 import { useQuery } from "@tanstack/react-query";
 import CodeCard from "../../_components/CodeCard";
-import Pagination from "@/app/_components/Pagination";
 
 export default function CodeListPage() {
   const router = useRouter();

@@ -21,12 +21,16 @@ export interface Report {
   directReason?: string; // 직접 입력
 }
 
-export interface UserListCardProps {
-  userId: number;
-  nickname: string;
+export interface AdminUserInfo {
   email: string;
-  rank: string;
-  signedUpAt: string;
+  nickName: string;
+  registerDate: string;
+  tier: string;
+  userId: string;
+}
+
+export interface UserListCardProps {
+  userInfo: AdminUserInfo;
   onClick: () => void;
 }
 
