@@ -4,27 +4,35 @@ import { useState } from "react";
 import Dialog from "@/app/_components/Dialog";
 import { Admin } from "../_interfaces/interfaces";
 import api from "@/app/_api/config";
-import { DialogXIcon } from "@/app/_components/Icons";
+import { DialogCheckIcon, DialogXIcon } from "@/app/_components/Icons";
 import { useTokenStore } from "@/app/stores";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function AdminRequestCard({ id, email }: Admin) {
-  const { accessToken, isTokenSet } = useTokenStore();
+  const { accessToken } = useTokenStore();
 
   const [isDialogOpen, setIsDialogOpen] = useState({
     approve: false,
     deny: false,
     error: false,
+    done: false,
   });
 
+  const queryClient = useQueryClient();
   const onApprove = async () => {
     try {
       // 관리자 승인 POST 필요
       const response = await api.post(
         "/admin-service/admins/permit",
         { adminId: id, isPermit: true },
-        { headers: { AdminId: accessToken } }
+        { headers: { Authorization: accessToken } }
       );
-      setIsDialogOpen({ approve: false, deny: false, error: false });
+      setIsDialogOpen({
+        approve: false,
+        deny: false,
+        error: false,
+        done: true,
+      });
     } catch (err) {
       setIsDialogOpen((prev) => ({ ...prev, error: !prev.error }));
     }
@@ -36,9 +44,14 @@ export default function AdminRequestCard({ id, email }: Admin) {
       const response = await api.post(
         "/admin-service/admins/permit",
         { adminId: id, isPermit: false },
-        { headers: { AdminId: accessToken } }
+        { headers: { Authorization: accessToken } }
       );
-      setIsDialogOpen({ approve: false, deny: false, error: false });
+      setIsDialogOpen({
+        approve: false,
+        deny: false,
+        error: false,
+        done: true,
+      });
     } catch (err) {
       setIsDialogOpen((prev) => ({ ...prev, error: !prev.error }));
     }
@@ -109,6 +122,20 @@ export default function AdminRequestCard({ id, email }: Admin) {
           onBackBtnClick={() =>
             setIsDialogOpen((prev) => ({ ...prev, error: !prev.error }))
           }
+        />
+      )}
+      {isDialogOpen.done && (
+        <Dialog
+          icon={<DialogCheckIcon />}
+          title={"완료되었어요"}
+          backBtn="확인"
+          onBackBtnClick={() => {
+            queryClient.invalidateQueries({
+              queryKey: ["adminList"],
+              exact: false,
+            });
+            setIsDialogOpen((prev) => ({ ...prev, done: !prev.done }));
+          }}
         />
       )}
     </>
