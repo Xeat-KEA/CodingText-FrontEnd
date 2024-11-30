@@ -30,8 +30,8 @@ export default function CodeListPage() {
     }
   }, [searchParams, router, pathname]);
 
-  const algorithm = searchParams.get("algorithm") || "";
-  const difficulty = searchParams.get("difficulty") || "";
+  const algorithms = searchParams.get("algorithms") || "";
+  const difficulties = searchParams.get("difficulties") || "";
   const order = searchParams.get("order") || "createdAt";
   const keyword = searchParams.get("keyword") || "";
   const searchBy = searchParams.get("filter") || "title";
@@ -42,8 +42,8 @@ export default function CodeListPage() {
     const response = await api.get("/code-bank-service/code/lists", {
       headers: { Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}` },
       params: {
-        algorithm,
-        difficulty,
+        algorithms,
+        difficulties,
         searchBy: searchBy,
         searchText: searchBy === "title" ? keyword : Number(keyword),
         sortBy: order,
@@ -60,7 +60,7 @@ export default function CodeListPage() {
     return response.data;
   };
   const { data } = useQuery<{ content: Code[] }>({
-    queryKey: ["codeList", algorithm, difficulty, order, page, keyword],
+    queryKey: ["codeList", algorithms, difficulties, order, page, keyword],
     queryFn: fetchCodeList,
   });
 
