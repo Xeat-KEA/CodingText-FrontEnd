@@ -1,7 +1,6 @@
 import { useForm } from "react-hook-form";
 import { CommentInputProps } from "../../_interfaces/interfaces";
 import { useBlogStore } from "@/app/stores";
-import { Profile_Dummy_Data } from "@/app/(admin)/_constants/constants";
 
 export default function CommentInput({
   target,
@@ -12,8 +11,8 @@ export default function CommentInput({
   const { register, handleSubmit, reset } = useForm();
   const { userBlogId, profile } = useBlogStore();
 
+
   // 수정 필요
-  const mentionProfile = Profile_Dummy_Data.find((profile) => profile.blogId === mentionId);
 
   // 댓글
   const onClickSubmit = (data: any) => {

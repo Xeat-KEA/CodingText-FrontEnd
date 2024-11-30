@@ -6,16 +6,12 @@ import { ReplyIcon } from "../Icons";
 import api from "@/app/_api/config";
 import { useEffect, useState } from "react";
 import { BlogProfile } from "@/app/_interfaces/interfaces";
-import {
-  Comment_Dummy_Data,
-  Profile_Dummy_Data,
-} from "@/app/(admin)/_constants/constants";
 import { usePathname } from "next/navigation";
 import IconBtn from "@/app/_components/IconBtn";
 
 const Comment: React.FC<CommentProps> = ({
   replyId,
-  userId,
+  blogId,
   mentionId,
   content,
   createdAt,
@@ -33,22 +29,14 @@ const Comment: React.FC<CommentProps> = ({
 
   }
   
-  useEffect(() => {
-    // api.get(`/user-list`).then((res) => {
-    //   const userData = res.data.data
-    //   setProfileData(userData);
-    // })
 
-    setProfileData(Profile_Dummy_Data);
-  }, []);
+  // // 댓글 작성자의 프로필
+  // const userProfile = profileData.find((profile) => profile.blogId === userId);
 
-  // 댓글 작성자의 프로필
-  const userProfile = profileData.find((profile) => profile.blogId === userId);
-
-  // // 언급된 사용자의 프로필
-  const mentionProfile = profileData.find(
-    (profile) => profile.blogId === mentionId
-  );
+  // // // 언급된 사용자의 프로필
+  // const mentionProfile = profileData.find(
+  //   (profile) => profile.blogId === mentionId
+  // );
 
   return (
     <div className={`${mentionId ? "pl-12" : ""}`}>
@@ -57,11 +45,11 @@ const Comment: React.FC<CommentProps> = ({
           <div className="flex gap-2 items-center">
             {/* 프로필 이미지 */}
             {/* 수정 필요 - 댓글 작성자와 언급된 자 프로필*/}
-            {userProfile?.profileImg && (
+            {userProfile?.profileUrl && (
               <div className="profile-image w-120 h-120 relative">
                 <Image
-                  src={userProfile.profileImg}
-                  alt={`${userProfile?.nickName}의 프로필 이미지`}
+                  src={userProfile.profileUrl}
+                  alt={`${userProfile?.userName}의 프로필 이미지`}
                   width={24}
                   height={24}
                   className="rounded-full"
@@ -70,7 +58,7 @@ const Comment: React.FC<CommentProps> = ({
               </div>
             )}
             <p className="text-xs text-body font-semibold">
-              {userProfile?.nickName}
+              {userProfile?.userName}
             </p>
           </div>
           <p className="text-xs text-body font-body">
@@ -81,7 +69,7 @@ const Comment: React.FC<CommentProps> = ({
         <div className="text-sm text-body font-regular">
           {mentionProfile && (
             <p className="text-sm text-primary-1 font-semibold">
-              @{mentionProfile.nickName}
+              @{mentionProfile.userName}
             </p>
           )}
           {content}

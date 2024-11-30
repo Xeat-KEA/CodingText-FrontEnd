@@ -8,10 +8,13 @@ import { useBlogStore, useCategoryStore } from "@/app/stores";
 import api from "@/app/_api/config";
 import { usePathname, useRouter } from "next/navigation";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useCheckToken } from "@/app/_hooks/useCheckToken";
 // 제목의 최대 길이 설정 (임시로 10자로 제한)
 const MAX_TITLE_LENGTH = 10;
 
 export default function Board() {
+  const { accessToken, isTokenSet } = useCheckToken();
+
   const pathname = usePathname();
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -37,7 +40,8 @@ export default function Board() {
 
   // 상/하위 게시판 추가 함수
   const handleAddCategory = async (title: string, parentId?: number) => {
-    const trimmedTitle = title.trim().slice(0, MAX_TITLE_LENGTH);
+    if(accessToken){
+      const trimmedTitle = title.trim().slice(0, MAX_TITLE_LENGTH);
     if (!trimmedTitle) return;
 
     //   게시판 5개 이상 추가 제한 (코딩테스트 기본 값)
@@ -48,37 +52,30 @@ export default function Board() {
       return;
     }
 
-    try {
-      if (parentId) {
-        setIsAddingChildCategory(parentId, false);
-        await api.post(
-          "/blog-service/blog/board/child",
-          {
-            parentCategoryId: parentId,
-            childName: trimmedTitle,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}`,
-            },
-          }
-        );
-      } else {
-        setIsAddingCategory(false);
-        await api.post(
-          "/blog-service/blog/board/parent",
-          { parentName: trimmedTitle },
-          {
-            headers: {
-              Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}`,
-            },
-          }
-        );
-      }
-      // 추가 후 데이터 갱신
-      queryClient.invalidateQueries({ queryKey: ["boardCategories"] });
-    } catch (error) {
-      console.error("카테고리 추가 실패:", error);
+    if (parentId) {
+      setIsAddingChildCategory(parentId, false);
+      await api.post(
+        "/blog-service/blog/board/child",
+        {
+          parentCategoryId: parentId,
+          childName: trimmedTitle,
+        },
+        {
+          headers: { Authorization: accessToken },
+        }
+      );
+    } else {
+      setIsAddingCategory(false);
+      await api.post(
+        "/blog-service/blog/board/parent",
+        { parentName: trimmedTitle },
+        {
+          headers: { Authorization: accessToken },
+        }
+      );
+    }
+    // 추가 후 데이터 갱신
+    queryClient.invalidateQueries({ queryKey: ["boardCategories", isTokenSet, currentBlogId] });
     }
   };
 
@@ -143,7 +140,7 @@ export default function Board() {
       {/* 상위 게시판 전체 */}
       <p
         className={`flex items-center relative text-black text-sm font-regular h-10 pl-6 py-2 cursor-pointer ${
-          pathname === `/category/0` ? "font-bold" : ""
+          pathname === `/blog/${currentBlogId}/category` ? "font-bold" : ""
         }`}
         onClick={() => router.push(`/blog/${currentBlogId}/category`)}>
         전체

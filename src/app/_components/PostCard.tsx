@@ -16,11 +16,11 @@ export default function PostCard({ post }: { post: Post }) {
 
   const decodedContent = useBase64("decode", post.content);
 
-  const { blogId } = useBlogStore();
+  const { currentBlogId } = useBlogStore();
 
   return (
     <Link
-      href={`/blog/${blogId}/post/${post.articleId}`} // 블로그 Id 수정 필요
+      href={`/post/${post.articleId}`} // 블로그 Id 수정 필요
       className="w-full flex flex-col gap-2 py-6 cursor-pointer"
     >
       <div className="post-card-top-container">

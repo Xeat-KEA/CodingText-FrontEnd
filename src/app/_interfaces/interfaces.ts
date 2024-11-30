@@ -86,7 +86,7 @@ export interface PostEditorProps {
   isCodingTest?: boolean;
   isEditing?: boolean;
   onCancelClick: () => void;
-  onBtnClick: (data: Post) => void;
+  onBtnClick: (data: PostForm) => void;
   initialData?: Post; // 초기 게시글 데이터
 }
 
@@ -113,12 +113,20 @@ export interface SaveOrCancelBtnProps {
 }
 
 export interface Post {
-  parentCategory?: number;
-  childCategory?: number;
+  articleId: number;
+  profileUrl: string;
+  nickName: string;
+  blogId: number;
   title: string;
   content: string;
-  isSecret?: boolean;
-  password?: string;
+  isSecret: boolean;
+  likeCount: number;
+  replyCount: number;
+  viewCount: number;
+  createdDate: string;
+  codeId?: number;
+  thumbnailImageUrl?: string | null;
+  category?: string;
 }
 
 export interface ProfileImgSelectionProps {
@@ -217,6 +225,7 @@ export interface Statistics {
 }
 
 export interface UserInfo {
+  blogId: number;
   nickName: string;
   tier: string;
   profileMessage: string;
@@ -311,6 +320,7 @@ export interface WindowSizeStore {
 // Form 관련 인터페이스
 export interface PostForm {
   title: string;
+    content: string;
   isSecret?: boolean;
   password?: string;
   parentCategory?: number;
@@ -352,6 +362,7 @@ export interface BlogProfile {
   followCount: number;
   followCheck: boolean;
   profileUrl: string;
+  mainContent: string;
 }
 
 export interface BlogMainContent {

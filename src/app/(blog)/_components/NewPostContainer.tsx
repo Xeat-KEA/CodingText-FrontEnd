@@ -2,21 +2,25 @@ import api from "@/app/_api/config";
 import Dialog from "@/app/_components/Dialog";
 import { DialogCheckIcon } from "@/app/_components/Icons";
 import PostEditor from "@/app/_components/PostEditor/PostEditor";
-import { Post } from "@/app/_interfaces/interfaces";
+import { useBase64 } from "@/app/_hooks/useBase64";
+import { useCheckToken } from "@/app/_hooks/useCheckToken";
+import { Post, PostForm } from "@/app/_interfaces/interfaces";
 import { useBlogStore } from "@/app/stores";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 // 추후 토큰값으로 접근한게 아니면 페이지 내쫓기
 
 export default function NewPostContainer() {
+  const { accessToken, isTokenSet } = useCheckToken();
+
   const router = useRouter();
   const searchParams = useSearchParams();
   const queryClient = useQueryClient();
-  const { userBlogId } = useBlogStore();
+  const { userBlogId, currentBlogId } = useBlogStore();
 
-  const [newPost, setNewPost] = useState<Post>();
+  const [newPost, setNewPost] = useState<PostForm>();
   const [newPostId, setNewPostId] = useState<number>();
 
   const [isCancelDialogOpen, setIsCancelDialogOpen] = useState(false);
@@ -26,47 +30,29 @@ export default function NewPostContainer() {
   const setUserBlogId = useBlogStore((state) => state.setUserBlogId);
   const setCurrentBlogId = useBlogStore((state) => state.setCurrentBlogId);
 
-  // 토큰 값으로 조회한 사용자 블로그 아이디
   useEffect(() => {
-    api
-      .get(`/blog-service/blog`, {
-        headers: {
-          Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}`,
-        },
-      })
-      .then((res) => {
-        const { blogId } = res.data.data;
-        if (blogId && blogId !== -1) {
-          setUserBlogId(blogId);
-          setCurrentBlogId(blogId);
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching blogId:", error);
-      });
-  }, [userBlogId]);
-
-  useEffect(() => {
-    // 게시판 목록 재요청
-    queryClient.invalidateQueries({ queryKey: ["boardCategories"] });
-  }, []);
+    if (accessToken && userBlogId !== -1) {
+      setCurrentBlogId(userBlogId);
+      queryClient.invalidateQueries({ queryKey: ["boardCategories"] });
+    }
+  }, [accessToken, userBlogId]);
 
   // 새 게시글 등록 버튼 클릭
-  const onClickBtn = (data: Post) => {
+  const onClickBtn = (data: PostForm) => {
+    const contentDe = data.content && useBase64("encode", data.content);
+
     // 작성된 글 validation 후 POST 필요
     const requestBody = {
       childCategoryId: data.childCategory,
       title: data.title,
-      content: data.content,
+      content: contentDe,
       isSecret: data.isSecret,
       password: data.password || null,
     };
 
     api
       .post(`/blog-service/blog/board/article`, requestBody, {
-        headers: {
-          Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}`,
-        },
+        headers: { Authorization: accessToken },
       })
       .then((res) => {
         const { articleId } = res.data.data;

@@ -63,10 +63,14 @@ export interface CommentForm {
 
 export interface CommentProps {
   replyId: number;
-  userId: number;
-  mentionId: number | null;
+  blogId: number;
+  userName: string;
+  profileUrl: string;
   content: string;
-  createdAt: string;
+  createdDate: string;
+
+  
+  mentionId: number | null;
   isOwnComment: boolean;
   onReplyClick: (replyId: number, userId: number) => void;
   onDelete: (replyId: number) => void;

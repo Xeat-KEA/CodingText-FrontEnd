@@ -11,8 +11,12 @@ import IconBtn from "@/app/_components/IconBtn";
 import api from "@/app/_api/config";
 import { useParams } from "next/navigation";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useCheckToken } from "@/app/_hooks/useCheckToken";
 
 export default function BlogProfile() {
+  // 로그인 여부 확인
+  const { accessToken, isTokenSet } = useCheckToken();
+
   const params = useParams();
   const queryClient = useQueryClient();
 
@@ -36,20 +40,26 @@ export default function BlogProfile() {
 
   // 블로그 홈 정보 조회
   const fetchBlogProfileData = async () => {
-    const response = await api.get(`/blog-service/blog/home/${currentBlogId}`, {
-      headers: {
-        Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}`,
-      },
-    });
-    setProfile(response.data.data);
-    return response.data.data;
+    try {
+      const response = await api.get(
+        `/blog-service/blog/home/${currentBlogId}`,
+        {
+          headers: { Authorization: accessToken },
+        }
+      );
+      setProfile(response.data.data);
+      return response.data.data;
+    } catch (error) {
+      console.error("블로그 프로필 조회 실패:", error);
+      return null;
+    }
   };
 
-  const { data, isLoading, isError } = useQuery({
+  const { data } = useQuery({
     queryKey: ["blogProfile", currentBlogId],
     queryFn: fetchBlogProfileData,
-    placeholderData: profile,
-    enabled: currentBlogId !== -1,
+    // placeholderData: profile,
+    enabled: currentBlogId !== -1 && !!accessToken,
   });
 
   // 팔로우 API 요청
@@ -60,9 +70,7 @@ export default function BlogProfile() {
         `/blog-service/blog/home/follow/${currentBlogId}`,
         null,
         {
-          headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}`,
-          },
+          headers: { Authorization: accessToken },
         }
       );
 
@@ -99,9 +107,7 @@ export default function BlogProfile() {
           directCategory: customInput,
         },
         {
-          headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}`,
-          },
+          headers: { Authorization: accessToken },
         }
       );
 
@@ -145,7 +151,7 @@ export default function BlogProfile() {
                 {profile.profileMessage}
               </p>
               <div className="flex items-center gap-4 mt-2">
-                {isOwnBlog ? (
+                {!isOwnBlog ? (
                   <>
                     <button
                       className="flex items-center gap-1"

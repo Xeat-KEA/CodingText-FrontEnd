@@ -142,8 +142,7 @@ export default function TopBar() {
         initial={{ height: 64 }}
         animate={{ height: isOpen.menu ? "auto" : 64 }}
         transition={{ duration: 0.3, type: "tween" }}
-        className="w-full h-full bg-white border-b border-border-1 flex max-lg:flex-col lg:justify-center overflow-hidden"
-      >
+        className="w-full h-full bg-white border-b border-border-1 flex max-lg:flex-col lg:justify-center overflow-hidden">
         {/* 상단바 */}
         <div
           className={`relative w-full h-16 shrink-0 flex justify-between ${
@@ -153,8 +152,7 @@ export default function TopBar() {
                 pathname.startsWith("/code-post")
               ? "max-w-1000"
               : "max-w-1200"
-          }`}
-        >
+          }`}>
           {/* 탑바 좌측 요소 */}
           <div className="flex items-center gap-14">
             <Link href="/" scroll={false}>
@@ -163,7 +161,7 @@ export default function TopBar() {
             {/* 메뉴 (화면 크기 lg 이상) */}
             {isTokenSet && (
               <ul className="flex h-full items-center gap-2 max-lg:hidden">
-                <TopBarMenu token={accessToken} />
+                <TopBarMenu token={accessToken} blogId={userInfo?.blogId ?? null}/>
               </ul>
             )}
           </div>
@@ -181,8 +179,7 @@ export default function TopBar() {
                   <button
                     ref={noticeRef}
                     className="relative"
-                    onClick={() => onIconClick("notice")}
-                  >
+                    onClick={() => onIconClick("notice")}>
                     {!hasNoticeRead && (
                       <div className="absolute w-1 h-1 rounded-full bg-red right-[2px] top-[2px]"></div>
                     )}
@@ -190,8 +187,7 @@ export default function TopBar() {
                   </button>
                   <button
                     ref={profileRef}
-                    onClick={() => onIconClick("profile")}
-                  >
+                    onClick={() => onIconClick("profile")}>
                     <ProfileImgContainer
                       width={36}
                       height={36}
@@ -219,7 +215,7 @@ export default function TopBar() {
               placeholder="검색어를 입력해주세요"
             />
           </div>
-          <TopBarMenu token={accessToken} />
+          <TopBarMenu token={accessToken} blogId={userInfo?.blogId ?? null}/>
         </div>
       </motion.nav>
       {/* 알림 팝업 */}
@@ -229,8 +225,7 @@ export default function TopBar() {
           style={{
             right: `calc(8px + ${Math.max((windowSize - 1200) / 2, 0)}px)`,
           }}
-          className="absolute bg-white top-[calc(100%+8px)] w-[396px] h-[300px] flex flex-col justify-center items-center rounded-lg shadow-1 divide-y divide-border-1 overflow-y-auto"
-        >
+          className="absolute bg-white top-[calc(100%+8px)] w-[396px] h-[300px] flex flex-col justify-center items-center rounded-lg shadow-1 divide-y divide-border-1 overflow-y-auto">
           {pushes !== undefined && pushes.length !== 0 ? (
             pushes?.map((el) => <NoticeCard key={el?.noticeId} push={el!} />)
           ) : (
@@ -251,8 +246,7 @@ export default function TopBar() {
           style={{
             right: `calc(8px + ${Math.max((windowSize - 1200) / 2, 0)}px)`,
           }}
-          className="absolute bg-white top-[calc(100%+8px)] w-[160px] flex flex-col rounded-lg shadow-1 divide-y divide-border-1"
-        >
+          className="absolute bg-white top-[calc(100%+8px)] w-[160px] flex flex-col rounded-lg shadow-1 divide-y divide-border-1">
           {/* 사용자 정보 */}
           <div className="flex flex-col gap-[2px] px-6 py-4">
             <span className="text-body text-xs font-bold">

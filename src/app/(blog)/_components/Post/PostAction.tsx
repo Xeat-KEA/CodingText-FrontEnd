@@ -10,8 +10,11 @@ import { REPORT_REASONS } from "../../_constants/constants";
 import IconBtn from "@/app/_components/IconBtn";
 import api from "@/app/_api/config";
 import { useQueryClient } from "@tanstack/react-query";
+import { useCheckToken } from "@/app/_hooks/useCheckToken";
 
 export default function PostAction() {
+  const { accessToken, isTokenSet } = useCheckToken();
+
   const queryClient = useQueryClient();
 
   const { currentPost, isCodingPost } = usePostStore();
@@ -40,9 +43,7 @@ export default function PostAction() {
       await api.put(`/blog-service/blog/board/article/like/${currentPost.postId}`,
          null, 
          {
-        headers: {
-          Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}`,
-        },
+          headers: { Authorization: accessToken },
       });
       queryClient.invalidateQueries({ queryKey: ["postContent"] });
     } catch (error) {
@@ -83,9 +84,7 @@ export default function PostAction() {
           directCategory: customInput,
         },
         {
-          headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}`,
-          },
+          headers: { Authorization: accessToken },
         }
       );
       // console.log(response)
@@ -113,9 +112,7 @@ export default function PostAction() {
         `/blog-service/blog/board/article/${postToDelete}`,
         {
         data: { articleId: postToDelete },
-          headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}`,
-          },
+        headers: { Authorization: accessToken },
         }
       );
       setIsDeleteDialogOpen(false);

@@ -3,7 +3,12 @@ import PostContent from "@/app/(blog)/_components/Post/PostContent";
 import PostHeader from "@/app/(blog)/_components/Post/PostHeader";
 import CommentContainer from "./PostComment/CommentContainer";
 import BackBtn from "@/app/_components/BackBtn";
-import { useBlogStore, useCategoryStore, usePostStore } from "@/app/stores";
+import {
+  useBlogStore,
+  useCategoryStore,
+  usePostStore,
+  useTokenStore,
+} from "@/app/stores";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { BlogPost } from "@/app/(blog)/_interfaces/interfaces";
@@ -12,6 +17,8 @@ import { Post_Dummy_Data } from "@/app/(admin)/_constants/constants";
 import { useQuery } from "@tanstack/react-query";
 
 export default function PostContainer() {
+  const { accessToken, isTokenSet } = useTokenStore();
+
   //  전역변수
   const { userBlogId, currentBlogId } = useBlogStore();
   const { boardCategories } = useCategoryStore();
@@ -24,7 +31,9 @@ export default function PostContainer() {
   const setIsCodingPost = usePostStore((state) => state.setIsCodinPost);
 
   const setCategoryId = useCategoryStore((state) => state.setCategoryId);
-  const setChildCategoryId = useCategoryStore((state) => state.setChildCategoryId);
+  const setChildCategoryId = useCategoryStore(
+    (state) => state.setChildCategoryId
+  );
 
   // 블라인드 게시물
   const [isBlind, setIsBlind] = useState(false);
@@ -36,13 +45,12 @@ export default function PostContainer() {
 
   // 게시글 내용 api 연결
   const fetchPostData = async () => {
+   if(accessToken){
     try {
       const response = await api.get(
         `/blog-service/blog/board/${params.postId}`,
         {
-          headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}`,
-          },
+          headers: { Authorization: accessToken },
         }
       );
       const postData = response.data.data;
@@ -61,12 +69,13 @@ export default function PostContainer() {
       console.error("게시글 내용 반환 오류: ", error);
       return null;
     }
+   }
   };
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ["postContent", params.postId],
     queryFn: fetchPostData,
-    enabled: Number(params.postId) !== -1,
+    enabled: isTokenSet && !!accessToken,
   });
 
   useEffect(() => {

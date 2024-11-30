@@ -14,10 +14,18 @@ import {
   SbNewpostIcon,
 } from "./Icons";
 import { LogoIcon } from "@/app/_components/Icons";
-import { useBlogStore, useCategoryStore, useWindowSizeStore } from "@/app/stores";
+import {
+  useBlogStore,
+  useCategoryStore,
+  useWindowSizeStore,
+} from "@/app/stores";
 import Board from "./Sidebar-Board/Board";
+import { useCheckToken } from "@/app/_hooks/useCheckToken";
 
 export default function SideBar() {
+  // 로그인 여부 확인
+  const { accessToken, isTokenSet } = useCheckToken();
+
   // 전역 변수
   const { userBlogId, currentBlogId, isOwnBlog } = useBlogStore();
   // const { boardCategories } = useCategoryStore();
@@ -38,7 +46,7 @@ export default function SideBar() {
 
   // 화면 사이즈 감지 후 사이드 바 닫기
   const { windowSize } = useWindowSizeStore();
-  
+
   useEffect(() => {
     if (windowSize < 768) {
       setIsCollapsed(true);
@@ -55,23 +63,25 @@ export default function SideBar() {
   }, [pathname]);
 
   // 토큰 값으로 조회한 사용자 블로그 아이디
-  useEffect(() => {
-    api
-      .get(`/blog-service/blog`, {
-        headers: {
-          Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}`,
-        },
-      })
-      .then((res) => {
-        const { blogId } = res.data.data;
-        if (blogId && blogId !== -1) {
-          setUserBlogId(blogId);
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching blogId:", error);
+  const fetchUserBlogId = async () => {
+    if (accessToken) {
+      const response = await api.get(`/blog-service/blog`, {
+        headers: { Authorization: accessToken },
       });
-  }, [userBlogId, params]);
+      const { blogId } = response.data.data;
+      if (blogId && blogId !== -1 && blogId !== userBlogId) {
+        setUserBlogId(blogId);
+      }
+      return response.data.data;
+    } else {
+      return null;
+    }
+  };
+
+  const { data: userBlogIdData } = useQuery({
+    queryKey: ["userBlogIdData", isTokenSet],
+    queryFn: fetchUserBlogId,
+  });
 
   // 블로그 소유 여부
   useEffect(() => {
@@ -85,9 +95,7 @@ export default function SideBar() {
     const response = await api.get(
       `/blog-service/blog/board/list/${currentBlogId}`,
       {
-        headers: {
-          Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}`,
-        },
+        headers: { Authorization: accessToken },
       }
     );
 
@@ -113,10 +121,10 @@ export default function SideBar() {
     return boardData;
   };
 
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["boardCategories"],
+  const { data:boardCategories } = useQuery({
+    queryKey: ["boardCategories", isTokenSet, currentBlogId],
     queryFn: fetchBoardCategories,
-    enabled: currentBlogId !== -1,
+    enabled: currentBlogId !== -1 && !!accessToken,
   });
 
   // 사이드바 페이지 이동 컴포넌트

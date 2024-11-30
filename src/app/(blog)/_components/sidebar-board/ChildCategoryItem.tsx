@@ -4,23 +4,28 @@ import { useState } from "react";
 import { useBlogStore, useCategoryStore } from "@/app/stores";
 import { useParams } from "next/navigation";
 import api from "@/app/_api/config";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useCheckToken } from "@/app/_hooks/useCheckToken";
 
 const MAX_TITLE_LENGTH = 10;
-
 
 const ChildCategoryItem: React.FC<ChildCategoryItemProps> = ({
   childCategory,
   category,
   handleDeleteCategory,
 }) => {
+  const { accessToken, isTokenSet } = useCheckToken();
+
   // 전역 변수
-  const { userBlogId, isOwnBlog } = useBlogStore();
-  const {categoryId, childCategoryId} = useCategoryStore();
+  const { userBlogId, currentBlogId, isOwnBlog } = useBlogStore();
+  const { categoryId, childCategoryId, boardCategories } = useCategoryStore();
   const params = useParams();
   const queryClient = useQueryClient();
   const [editid, setEditid] = useState<{ [categoryId: number]: number | null }>(
     {}
+  );
+  const setBoardCategories = useCategoryStore(
+    (state) => state.setBoardCategories
   );
   const [editChildCategoryTitle, setEditChildCategoryTitle] =
     useState<string>("");
@@ -45,23 +50,48 @@ const ChildCategoryItem: React.FC<ChildCategoryItemProps> = ({
   };
 
   // 하위 수정 저장
-  const saveEditChildCategory = async (categoryId: number, childCategoryId: number) => {
-    const trimmedTitle = editChildCategoryTitle.trim().slice(0, MAX_TITLE_LENGTH);
+  const saveEditChildCategory = async (
+    categoryId: number,
+    childCategoryId: number
+  ) => {
+    const trimmedTitle = editChildCategoryTitle
+      .trim()
+      .slice(0, MAX_TITLE_LENGTH);
     try {
-      await api.put(`/blog-service/blog/board/child/${childCategoryId}`, 
-        {childName: trimmedTitle,},
+      await api.put(
+        `/blog-service/blog/board/child/${childCategoryId}`,
+        { childName: trimmedTitle },
         {
-          headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}`,
-          },
+          headers: { Authorization: accessToken },
         }
       );
 
+      // 하위 데이터 갱신
+      // const fetchChildList = async () => {
+      //   const response = await api.get(
+      //     `/blog-service/blog/board/childList/${categoryId}`,
+      //     {
+      //       headers: { Authorization: accessToken },
+      //     }
+      //   );
+      //   const { childCategories } = response.data.data;
+
+      //   // 특정 부모 카테고리의 하위 데이터만 업데이트
+      //   setBoardCategories((prevCategories) =>
+      //     prevCategories.map((category) =>
+      //       category.id === categoryId
+      //         ? { ...category, childCategories: childCategories }
+      //         : category
+      //     )
+      //   );
+      //   console.log(boardCategories)
+      // };
+
+      // // 하위 데이터 가져오기 실행
+      // await fetchChildList();
+
       setEditid((prevState) => ({ ...prevState, [categoryId]: null }));
       setEditChildCategoryTitle("");
-
-      // 추가 후 데이터 갱신
-      queryClient.invalidateQueries({ queryKey: ["boardCategories"] });
     } catch (error) {
       console.log("하위 수정 저장 실패: ", error);
     }
@@ -114,12 +144,16 @@ const ChildCategoryItem: React.FC<ChildCategoryItemProps> = ({
         )
       ) : (
         <>
-          <Link href={`/category/${childCategory.id}`}>
+          <Link
+            href={
+              category.id === 1
+                ? `/blog/${currentBlogId}/code/${childCategory.id}`
+                : `/category/${childCategory.id}`
+            }>
             <p
               className={
-                ( Number(params.categoryId) == childCategory.id) ||
-                (params.postId &&
-                  Number(childCategoryId) == childCategory.id)
+                Number(params.categoryId) == childCategory.id ||
+                (params.postId && Number(childCategoryId) == childCategory.id)
                   ? "font-bold"
                   : ""
               }>

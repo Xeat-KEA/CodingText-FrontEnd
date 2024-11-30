@@ -13,11 +13,6 @@ import Dialog from "@/app/_components/Dialog";
 import { DialogCheckIcon, DialogReportIcon } from "@/app/_components/Icons";
 import DropDown from "@/app/_components/DropDown";
 import { useParams, usePathname } from "next/navigation";
-import {
-  Comment_Dummy_Data,
-  Post_Dummy_Data,
-  Report_Dummy_Data,
-} from "@/app/(admin)/_constants/constants";
 import { useBlogStore, usePostStore } from "@/app/stores";
 
 // 추후에 게시글 정보 전달 (또는 추가)
@@ -28,8 +23,8 @@ export default function CommentContainer() {
   const {currentBlogId, userBlogId} = useBlogStore();
 
   const [comments, setComments] = useState<CommentForm[]>([]);
-  const [replyParentId, setReplyParentId] = useState<number>();
-  const [mentionId, setMentionId] = useState<number>();
+  const [replyParentId, setReplyParentId] = useState<number | null>();
+  const [mentionId, setMentionId] = useState<number | null>();
 
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [commentToDelete, setCommentToDelete] = useState<number | null>(null);
@@ -44,20 +39,8 @@ export default function CommentContainer() {
   const pathname = usePathname();
   const isAdminPage = pathname.includes("/admin/report/");
 
-  useEffect(() => {
-    const reportPost = Report_Dummy_Data.find(
-      (report) => report.reportId === Number(params.id)
-    );
-    const currentPostId = Post_Dummy_Data.find(
-      (post) =>
-        post.blogId === reportPost?.reportedBlogId &&
-        post.postId === reportPost.reportedPostId
-    )?.postId;
-    const commentsList = Comment_Dummy_Data.filter(
-      (comment) => comment.postId === currentPostId
-    );
-    // setComments(currentPost.articleReplies);
-  }, [params.id]);
+  console.log(currentPost);
+
 
   // 답글 버튼 클릭
   const onClickReply = (commentId: number, userId: number) => {

@@ -7,8 +7,8 @@ import { Code_Post_Dummy_Data } from "@/app/(admin)/_constants/constants";
 import CodeEditor from "@/app/(coding-test)/_components/CodeEditor";
 import { useCodingTestStore, usePostStore } from "@/app/stores";
 
-  export default function PostContent(){
-  const {isCodingPost, currentPost} = usePostStore();
+export default function PostContent() {
+  const { isCodingPost, currentPost } = usePostStore();
   const { setLanguage, setValue } = useCodingTestStore();
 
   useEffect(() => {
@@ -61,7 +61,7 @@ import { useCodingTestStore, usePostStore } from "@/app/stores";
             "문제",
             visibleSections.codeContent,
             "codeContent",
-            <div className="w-full text-black border border-border2 rounded-xl mb-6 p-4">
+            <div className="w-full h-80 text-black border border-border2 rounded-xl mb-6 p-4 overflow-y-auto">
               <div
                 className="prose"
                 dangerouslySetInnerHTML={{
@@ -109,4 +109,4 @@ import { useCodingTestStore, usePostStore } from "@/app/stores";
       )}
     </div>
   );
-};
+}

@@ -6,6 +6,7 @@ import ChildCategoryItem from "./ChildCategoryItem";
 import AddCategory from "./AddCategory";
 import api from "@/app/_api/config";
 import { useQueryClient } from "@tanstack/react-query";
+import { useCheckToken } from "@/app/_hooks/useCheckToken";
 // 제목의 최대 길이 설정 (임시로 10자로 제한)
 const MAX_TITLE_LENGTH = 10;
 
@@ -14,6 +15,9 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
   handleAddCategory,
   handleDeleteCategory,
 }) => {
+    // 로그인 여부 확인
+    const { accessToken, isTokenSet } = useCheckToken();
+
   // 전역 변수
   const { userBlogId, currentBlogId, isOwnBlog } = useBlogStore();
   const {
@@ -58,9 +62,7 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
         `/blog-service/blog/board/parent/${id}`,
         { parentName: trimmedTitle },
         {
-          headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}`,
-          },
+          headers: { Authorization: accessToken },
         }
       );
 
@@ -109,7 +111,7 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
         ) : (
           <>
             <p
-              className={`${pathname.startsWith(`/category/${category.id}`) ? "font-bold" : ""} cursor-pointer`}
+              className={`${pathname === `/category/${category.id}`? "font-bold" : ""} cursor-pointer`}
               onClick={() => handleCategoryClick(category.id)}>
               {category.title}
             </p>
@@ -141,9 +143,13 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
           {/* 하위 게시판 전체 */}
           <p
             className={`flex items-center relative text-xs font-regular h-8 py-2 cursor-pointer ${
-              pathname === `/category/${category.id}` ? "font-bold" : ""
+              pathname === `/category/${category.id}` || pathname === `/blog/${currentBlogId}/code` ? "font-bold" : ""
             }`}
-            onClick={() => router.push(`/category/${category.id}`)}>
+            onClick={() => router.push(
+              category.id === 1
+              ? `/blog/${currentBlogId}/code`
+              : `/category/${category.id}`
+            )}>
             전체
           </p>
 

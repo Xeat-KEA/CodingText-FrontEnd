@@ -4,42 +4,39 @@ import Pagination from "@/app/_components/Pagination";
 import PostCard from "@/app/_components/PostCard";
 import SearchBar from "@/app/_components/SearchBar";
 import { TAB_BAR_ORDER_FILTER } from "@/app/_constants/constants";
+import { useCheckToken } from "@/app/_hooks/useCheckToken";
 import { usePathValue } from "@/app/_hooks/usePathValue";
-import { useBlogStore, useCategoryStore, usePaginationStore } from "@/app/stores";
+import {
+  useBlogStore,
+  useCategoryStore,
+  usePaginationStore,
+} from "@/app/stores";
 import { useQuery } from "@tanstack/react-query";
 import { useParams, usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function BlogListContainer() {
+  const { accessToken, isTokenSet } = useCheckToken();
+
   usePathValue();
 
   const { currentBlogId, userBlogId } = useBlogStore();
-  const {boardCategories} = useCategoryStore();
-  const setUserBlogId = useBlogStore((state) => state.setUserBlogId);
+  const { boardCategories } = useCategoryStore();
+  // const setUserBlogId = useBlogStore((state) => state.setUserBlogId);
   const setCurrentBlogId = useBlogStore((state) => state.setCurrentBlogId);
   const params = useParams();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [filter, setFilter] = useState("ACCURACY");
 
-  // 토큰 값으로 조회한 사용자 블로그 아이디
+  // 현재 블로그 아이디 조회
   useEffect(() => {
-    api
-      .get(`/blog-service/blog`, {
-        headers: {
-          Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}`,
-        },
-      })
-      .then((res) => {
-        const { blogId } = res.data.data;
-        if (blogId && blogId !== -1) {
-          setUserBlogId(blogId);
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching blogId:", error);
-      });
-  }, [userBlogId]);
+    const blogId = Number(params.id);
+    if (blogId && blogId !== -1) {
+      setCurrentBlogId(blogId);
+    }
+  }, [params.id, setCurrentBlogId]);
+
 
   useEffect(() => {
     // filter 변경 시 다시 GET 하는 로직 필요
@@ -55,34 +52,35 @@ export default function BlogListContainer() {
 
   const [result, setResult] = useState<PostResult[]>([]);
 
-  // 프로토타입 더미 데이터 GET
-  // useEffect(() => {
-  //   api.get("/article-list").then((res) => {
-  //     // 날짜 내림차순
-  //     const sortedData = res.data.data.sort((a: PostResult, b: PostResult) =>
-  //       a.createAt > b.createAt ? -1 : 1
-  //     );
-  //     setResult(sortedData);
-  //   });
-  // }, []);
-
   // 블로그 전체 게시글 목록 조회
   const fetchAllListData = async () => {
     const response = await api.get(
-      `/blog-service/blog/board/article/${userBlogId}`,
+      `/blog-service/blog/board/article/${currentBlogId}`,
       {
         params: { page: 0, size: 5 },
       }
     );
     console.log(response.data.data);
-    setCurrentBlogId(response.data.data.blogId);
+    setResult(response.data.data.articleList);
     return response.data.data;
   };
   const { data, isLoading, isError } = useQuery({
     queryKey: ["allPosts", userBlogId],
     queryFn: fetchAllListData,
-    enabled: Number(params.categoryId) === 0,
+    enabled:
+      pathname === `/blog/${currentBlogId}/category` &&
+      currentBlogId !== -1 &&
+      !!accessToken,
   });
+
+  // 게시글 목록 조회 API 수정 중
+  // 특정 상위게시글 전체 목록 조회
+  // const fetchParentList = async() => {
+  //   const response = await api.get(
+  //     `/blog-service/blog/board/childList/${}`,
+
+  //   )
+  // }
 
   // 페이지네이션
   const { page, setPage, setLastPage } = usePaginationStore();
@@ -121,16 +119,17 @@ export default function BlogListContainer() {
                 key={index}
                 className={`${index >= 2 && "border-t border-border2"}`}>
                 <PostCard
-                  articleId={el.articleId}
-                  profileImg={`/profileImg${(el.articleId % 6) + 1}.png`}
-                  category={"1단계"} // 게시판 추가 후 수정 필요
-                  createAt={el.createAt}
-                  title={el.title}
-                  content={el.content}
-                  likes={el.likeCount}
-                  comments={el.replyCount}
-                  views={el.replyCount} // 조회수 추가 후 수정 필요
-                  codeId={el.codeId}
+                  // articleId={el.articleId}
+                  // profileImg={`/profileImg${(el.articleId % 6) + 1}.png`}
+                  // category={"1단계"} // 게시판 추가 후 수정 필요
+                  // createAt={el.createdDate}
+                  // title={el.title}
+                  // content={el.content}
+                  // likes={el.likeCount}
+                  // comments={el.replyCount}
+                  // views={el.replyCount} // 조회수 추가 후 수정 필요
+                  // codeId={el.codeId}
+                  post={el}
                 />
               </div>
             ))

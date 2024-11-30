@@ -54,17 +54,17 @@ export const Report_Dummy_Data: Report[] = [
   },
 ];
 
-export const Profile_Dummy_Data: BlogProfile[] = [
-  {
-    blogId: 101,
-    profileUrl: "/profileImg1.png",
-    userName: "개발자",
-    tier: "sophomore",
-    profileMessage: "안녕하세요, 개발자입니다",
-    followCount: 3,
-    followCheck: false,
-  }
-]
+// export const Profile_Dummy_Data: BlogProfile[] = [
+//   {
+//     blogId: 11,
+//     profileUrl: "/profileImg1.png",
+//     userName: "개발자",
+//     tier: "sophomore",
+//     profileMessage: "안녕하세요, 개발자입니다",
+//     followCount: 3,
+//     followCheck: false,
+//   }
+// ]
 
 export const Post_Dummy_Data = [
   {
