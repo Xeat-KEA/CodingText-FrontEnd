@@ -25,11 +25,12 @@ export default function RegisterCard({ code, testcases }: RegisterCardProps) {
   // 새 문제 생성 버튼 클릭 시
   const { setContent } = useTiptapStore();
   const { setIsRegistering } = useRegisterStore();
+  const jsonTestCases = JSON.stringify(testcases, null, 2);
   const onClick = () => {
     // 제목, 코드, 테스트케이스 초기값으로 저장
     setTitle(code.title);
     setContent(code.content);
-    setValue("");
+    setValue(jsonTestCases);
     // 등록된 코드 생성 state 설정
     setIsRegistering(true);
 
@@ -75,10 +76,7 @@ export default function RegisterCard({ code, testcases }: RegisterCardProps) {
           <div className="edit-container">
             <span className="edit-title">테스트케이스</span>
             <div className="rounded-lg overflow-hidden">
-              <CodeEditor
-                defaultValue={JSON.stringify(testcases, null, 2)}
-                isViewer
-              />
+              <CodeEditor defaultValue={jsonTestCases} isViewer />
             </div>
           </div>
           {/* 문제 생성 버튼 */}

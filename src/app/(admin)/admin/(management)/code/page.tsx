@@ -8,6 +8,7 @@ import { Code } from "@/app/(code)/_interfaces/interfaces";
 import api from "@/app/_api/config";
 import Pagination from "@/app/_components/Pagination";
 import SearchBar from "@/app/_components/SearchBar";
+import { useCheckToken } from "@/app/_hooks/useCheckToken";
 import { usePaginationStore } from "@/app/stores";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
@@ -18,6 +19,8 @@ export default function AdminCodePage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
+
+  const {} = useCheckToken("/admin/sign-in");
 
   // 기본 query parameters 설정
   useEffect(() => {

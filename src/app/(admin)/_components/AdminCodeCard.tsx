@@ -3,15 +3,44 @@ import Dialog from "@/app/_components/Dialog";
 import IconBtn from "@/app/_components/IconBtn";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import AdminResponseDialogs from "./AdminResponseDialogs";
+import { useQueryClient } from "@tanstack/react-query";
+import { useTokenStore } from "@/app/stores";
+import api from "@/app/_api/config";
 
 export default function AdminCodeCard({ code }: { code: Code }) {
   const router = useRouter();
+  const { accessToken } = useTokenStore();
 
-  const [isDeleting, setIsDeleting] = useState(false);
-  const onDelete = () => {
-    // 문제 삭제 API POST 필요
+  const [isDialogOpen, setIsDialogOpen] = useState({
+    delete: false,
+    error: false,
+    done: false,
+  });
+  const onDelete = async () => {
+    try {
+      const response = await api.delete(
+        `/code-bank-service/admin/delete/${code.codeId}`,
+        {
+          headers: { Authorization: accessToken },
+        }
+      );
+      setIsDialogOpen({ delete: false, error: false, done: true });
+    } catch (err) {
+      setIsDialogOpen((prev) => ({ ...prev, error: !prev.error }));
+    }
+  };
 
-    setIsDeleting((prev) => !prev);
+  const queryClient = useQueryClient();
+  const onError = () =>
+    setIsDialogOpen((prev) => ({ ...prev, error: !prev.error }));
+
+  const onDone = () => {
+    queryClient.invalidateQueries({
+      queryKey: ["codeList"],
+      exact: false,
+    });
+    setIsDialogOpen((prev) => ({ ...prev, done: !prev.done }));
   };
 
   return (
@@ -32,21 +61,31 @@ export default function AdminCodeCard({ code }: { code: Code }) {
           <IconBtn
             type="delete"
             content="삭제"
-            onClick={() => setIsDeleting((prev) => !prev)}
+            onClick={() =>
+              setIsDialogOpen((prev) => ({ ...prev, delete: !prev.delete }))
+            }
           />
         </div>
       </div>
-      {isDeleting && (
+      {isDialogOpen.delete && (
         <Dialog
           title="문제를 삭제할까요?"
           content="삭제 후 복구할 수 없어요!"
           isWarning
           backBtn="취소"
-          onBackBtnClick={() => setIsDeleting((prev) => !prev)}
+          onBackBtnClick={() =>
+            setIsDialogOpen((prev) => ({ ...prev, delete: !prev.delete }))
+          }
           redBtn="삭제"
           onBtnClick={onDelete}
         />
       )}
+      <AdminResponseDialogs
+        isDone={isDialogOpen.done}
+        isError={isDialogOpen.error}
+        onDone={onDone}
+        onError={onError}
+      />
     </>
   );
 }
