@@ -37,7 +37,7 @@ export default function UserManagementDetailPage() {
       {/* 사용자 상세 정보 및 초기화 페이지 */}
       <div className="flex flex-col gap-8 py-8 border-t border-border-2">
         {data && <UserDetailInfo userDetail={data} />}
-        <SaveOrCancelBtn saveBtn="변경 사항 저장" onCancel={onCancel} />
+        <SaveOrCancelBtn onCancel={onCancel} />
       </div>
     </>
   );
