@@ -1,31 +1,39 @@
 "use client";
 
+import RegisterCard from "@/app/(admin)/_components/RegisterCard";
 import RegisterTopBar from "@/app/(admin)/_components/RegisterTopBar";
+import { RegisterCardProps } from "@/app/(admin)/_interfaces/interfaces";
 import api from "@/app/_api/config";
 import Pagination from "@/app/_components/Pagination";
 import { useCheckToken } from "@/app/_hooks/useCheckToken";
+import { usePaginationStore } from "@/app/stores";
 import { useQuery } from "@tanstack/react-query";
 
 export default function RegisterPage() {
   const { accessToken, isTokenSet } = useCheckToken("/admin/sign-in");
+  const { page, setPage, setLastPage } = usePaginationStore();
 
   const fetchPendingList = async () => {
     if (accessToken) {
       const response = await api.get(
-        "/code-bank-service/admin/register/pendingLists",
+        "/code-bank-service/admin/register/pendinglists",
         { headers: { Authorization: accessToken } }
       );
-      console.log("hi");
-      return response.data;
+      // 페이지 정보 초기화
+      const lastPage = response.data.totalPages - 1;
+      if (page > lastPage) {
+        setPage(lastPage);
+      }
+      setLastPage(lastPage);
+      return response.data.content;
     } else {
       return null;
     }
   };
-  const { data } = useQuery({
+  const { data } = useQuery<RegisterCardProps[]>({
     queryKey: ["pendingList", isTokenSet],
     queryFn: fetchPendingList,
   });
-  console.log(data);
 
   return (
     <div className="flex flex-col gap-6">
@@ -33,16 +41,13 @@ export default function RegisterPage() {
       <div className="flex flex-col">
         <RegisterTopBar />
         <div className="flex flex-col divide-y divide-border-2">
-          {/* {dummy.map((el, index) => (
+          {data?.map((el) => (
             <RegisterCard
-              key={index}
-              createdAt={el.createdAt}
-              nickName={el.nickName}
-              title={el.title}
-              content={el.content}
-              testcase={el.testcase}
+              key={el.code.codeId}
+              code={el.code}
+              testcases={el.testcases}
             />
-          ))} */}
+          ))}
         </div>
       </div>
       <Pagination />

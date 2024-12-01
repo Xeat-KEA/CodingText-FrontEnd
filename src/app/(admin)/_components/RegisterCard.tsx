@@ -12,13 +12,7 @@ import CodeEditor from "@/app/(coding-test)/_components/CodeEditor";
 import { SmLinkArrowIcon } from "@/app/_components/Icons";
 import { useRouter } from "next/navigation";
 
-export default function RegisterCard({
-  createdAt,
-  nickName,
-  title,
-  content,
-  testcase,
-}: RegisterCardProps) {
+export default function RegisterCard({ code, testcases }: RegisterCardProps) {
   const router = useRouter();
   const [isOpened, setIsOpened] = useState(false);
 
@@ -33,9 +27,9 @@ export default function RegisterCard({
   const { setIsRegistering } = useRegisterStore();
   const onClick = () => {
     // 제목, 코드, 테스트케이스 초기값으로 저장
-    setTitle(title);
-    setContent(content);
-    setValue(testcase);
+    setTitle(code.title);
+    setContent(code.content);
+    setValue("");
     // 등록된 코드 생성 state 설정
     setIsRegistering(true);
 
@@ -47,17 +41,18 @@ export default function RegisterCard({
       {/* 건의된 문제 정보 */}
       <div className="w-full flex">
         <span className="w-[80px] shrink-0 flex-center text-xs text-body">
-          {useGetYMD(createdAt)}
+          {useGetYMD(code.createdAt)}
         </span>
         <span className="w-[100px] shrink-0 flex-center text-xs font-bold text-black">
-          {nickName}
+          {"김치"}
         </span>
-        <span className="w-full grow text-xs text-black">{title}</span>
+        <span className="w-full grow text-xs text-black">{code.title}</span>
       </div>
       {/* 문제 열기 / 닫기 버튼 */}
       <button
         onClick={() => setIsOpened((prev) => !prev)}
-        className="flex gap-1 items-center w-fit">
+        className="flex gap-1 items-center w-fit"
+      >
         <div className={isOpened ? "rotate-90" : ""}>
           <SmShowMoreIcon isHidden={true} />
         </div>
@@ -71,14 +66,19 @@ export default function RegisterCard({
             <span className="edit-title">문제</span>
             <div
               className="prose sign-in-input"
-              dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content) }}
+              dangerouslySetInnerHTML={{
+                __html: DOMPurify.sanitize(code.content),
+              }}
             />
           </div>
           {/* 테스트케이스 표시 */}
           <div className="edit-container">
             <span className="edit-title">테스트케이스</span>
             <div className="rounded-lg overflow-hidden">
-              <CodeEditor defaultValue={testcase} isViewer />
+              <CodeEditor
+                defaultValue={JSON.stringify(testcases, null, 2)}
+                isViewer
+              />
             </div>
           </div>
           {/* 문제 생성 버튼 */}

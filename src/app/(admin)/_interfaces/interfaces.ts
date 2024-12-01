@@ -1,3 +1,5 @@
+import { Code } from "@/app/(code)/_interfaces/interfaces";
+
 export interface SignInForm {
   email: string;
   password: string;
@@ -48,12 +50,14 @@ export interface ManageCodeProps {
   codeId?: number;
 }
 
+export interface TestCase {
+  input: string;
+  output: string;
+}
+
 export interface RegisterCardProps {
-  createdAt: string;
-  nickName: string;
-  title: string;
-  content: string;
-  testcase: string;
+  code: Code;
+  testcases: TestCase[];
 }
 
 export interface RegisterStore {

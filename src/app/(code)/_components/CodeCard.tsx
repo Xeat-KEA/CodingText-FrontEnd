@@ -45,7 +45,7 @@ export default function CodeCard({
         </div>
         <div className="w-16 text-xs text-black list-text">{1}명</div>
         <div className="w-10 text-xs text-black list-text">
-          {correctRate.toFixed(1)}%
+          {correctRate?.toFixed(1)}%
         </div>
       </div>
     </Link>

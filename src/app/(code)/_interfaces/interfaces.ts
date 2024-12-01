@@ -7,7 +7,7 @@ export interface Code {
   algorithm: string;
   codeId: number;
   content: string;
-  correctRate: number;
+  correctRate?: number;
   createdAt: string;
   difficulty: "LEVEL1" | "LEVEL2" | "LEVEL3" | "LEVEL4" | "LEVEL5";
   registerStatus: string;
