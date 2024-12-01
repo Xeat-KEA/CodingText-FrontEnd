@@ -29,6 +29,16 @@ export interface AdminUserInfo {
   userId: string;
 }
 
+export interface AdminUserDetail {
+  blogId: number;
+  blogIntro: string;
+  email: string;
+  nickName: string;
+  profileMessage: string;
+  profileUrl: string;
+  userId: string;
+}
+
 export interface UserListCardProps {
   userInfo: AdminUserInfo;
   onClick: () => void;
@@ -79,4 +89,11 @@ export interface Admin {
   id: number;
   email: string;
   adminRole?: "ROOT" | "GENERAL" | "NONE";
+}
+
+export interface AdminResponseDialogsProps {
+  isError: boolean;
+  isDone: boolean;
+  onError: () => void;
+  onDone: () => void;
 }

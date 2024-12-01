@@ -7,13 +7,15 @@ import { useCheckToken } from "@/app/_hooks/useCheckToken";
 import { useQuery } from "@tanstack/react-query";
 
 export default function RegisterPage() {
-  const { accessToken, isTokenSet } = useCheckToken();
+  const { accessToken, isTokenSet } = useCheckToken("/admin/sign-in");
+
   const fetchPendingList = async () => {
     if (accessToken) {
       const response = await api.get(
         "/code-bank-service/admin/register/pendingLists",
         { headers: { Authorization: accessToken } }
       );
+      console.log("hi");
       return response.data;
     } else {
       return null;
@@ -23,6 +25,7 @@ export default function RegisterPage() {
     queryKey: ["pendingList", isTokenSet],
     queryFn: fetchPendingList,
   });
+  console.log(data);
 
   return (
     <div className="flex flex-col gap-6">

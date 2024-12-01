@@ -3,10 +3,9 @@ import { useState } from "react";
 import Dialog from "@/app/_components/Dialog";
 import { Admin } from "../_interfaces/interfaces";
 import api from "@/app/_api/config";
-import { DialogCheckIcon, DialogXIcon } from "@/app/_components/Icons";
 import { useTokenStore } from "@/app/stores";
 import { useQueryClient } from "@tanstack/react-query";
-import { isAxiosError } from "axios";
+import AdminResponseDialogs from "./AdminResponseDialogs";
 
 export default function AdminListCard({ email, id, adminRole }: Admin) {
   const { accessToken } = useTokenStore();
@@ -27,8 +26,18 @@ export default function AdminListCard({ email, id, adminRole }: Admin) {
     }
   };
 
-  const queryClient = useQueryClient();
+  const onError = () =>
+    setIsDialogOpen((prev) => ({ ...prev, error: !prev.error }));
 
+  const onDone = () => {
+    queryClient.invalidateQueries({
+      queryKey: ["adminList"],
+      exact: false,
+    });
+    setIsDialogOpen((prev) => ({ ...prev, done: !prev.done }));
+  };
+
+  const queryClient = useQueryClient();
   return (
     <>
       <div className="w-full p-2 flex gap-4 justify-between items-center">
@@ -68,31 +77,12 @@ export default function AdminListCard({ email, id, adminRole }: Admin) {
           onBtnClick={onDelete}
         />
       )}
-      {isDialogOpen.error && (
-        <Dialog
-          icon={<DialogXIcon />}
-          title={"요청이\n거부되었어요"}
-          content={"권한이 없거나\n서버에 오류가 있어요"}
-          backBtn="확인"
-          onBackBtnClick={() =>
-            setIsDialogOpen((prev) => ({ ...prev, error: !prev.error }))
-          }
-        />
-      )}
-      {isDialogOpen.done && (
-        <Dialog
-          icon={<DialogCheckIcon />}
-          title={"완료되었어요"}
-          backBtn="확인"
-          onBackBtnClick={() => {
-            queryClient.invalidateQueries({
-              queryKey: ["adminList"],
-              exact: false,
-            });
-            setIsDialogOpen((prev) => ({ ...prev, done: !prev.done }));
-          }}
-        />
-      )}
+      <AdminResponseDialogs
+        isDone={isDialogOpen.done}
+        isError={isDialogOpen.error}
+        onDone={onDone}
+        onError={onError}
+      />
     </>
   );
 }

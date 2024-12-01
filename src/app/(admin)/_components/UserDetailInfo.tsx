@@ -1,31 +1,85 @@
-import api from "@/app/_api/config";
 import ProfileImgContainer from "@/app/_components/ProfileImgContainer";
-import { useQuery } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import DOMPurify from "isomorphic-dompurify";
+import { AdminUserDetail } from "../_interfaces/interfaces";
+import { useState } from "react";
+import AdminResponseDialogs from "./AdminResponseDialogs";
+import Dialog from "@/app/_components/Dialog";
+import api from "@/app/_api/config";
+import { useTokenStore } from "@/app/stores";
 
-export default function UserDetailInfo({ userId }: { userId: number }) {
-  const fetchData = async () => {
-    const response = await api.get("/admin/user", { data: userId });
-    return response.data;
-  };
-  const { data } = useQuery({ queryKey: ["userDetail"], queryFn: fetchData });
+export default function UserDetailInfo({
+  userDetail,
+}: {
+  userDetail: AdminUserDetail;
+}) {
+  const { accessToken, isTokenSet } = useTokenStore();
+  const [isDialogOpen, setIsDialogOpen] = useState({
+    error: false,
+    done: false,
+  });
+  const [selected, setSelected] = useState<
+    "nickName" | "profileUrl" | "profileMessage" | "blogIntro" | ""
+  >("");
 
-  const dummyData = {
-    email: "xeatcodingtext@gachon.ac.kr",
-    nickname: "코딩텍스트",
-    profileImg: "/profileImg3.png",
-    status: "안녕하세요 코딩텍스트입니다.",
-    blogIntro: "<h2>Hello</h2>",
-  };
-
-  const onReset = (
-    type: "nickname" | "profileImg" | "status" | "blogIntro"
+  const queryClient = useQueryClient();
+  const onReset = async (
+    type: "nickName" | "profileUrl" | "profileMessage" | "blogIntro"
   ) => {
-    // API를 통해 사용자 정보 초기화 후 반환값 재설정 필요
-    if (type === "nickname") {
-    } else if (type === "profileImg") {
-    } else if (type === "status") {
+    try {
+      // API를 통해 사용자 정보 초기화 후 반환값 재설정 필요
+      if (type === "nickName") {
+        const response = await api.post(
+          "/user-service/users/init/nickname",
+          {},
+          {
+            headers: { Authorization: accessToken },
+            params: { UserId: userDetail.userId },
+          }
+        );
+      } else if (type === "profileUrl") {
+        const response = await api.post(
+          "/user-service/users/init/profile",
+          {},
+          {
+            headers: { Authorization: accessToken },
+            params: { UserId: userDetail.userId },
+          }
+        );
+      } else if (type === "profileMessage") {
+        const response = await api.post(
+          "/user-service/users/init/message",
+          {},
+          {
+            headers: { Authorization: accessToken },
+            params: { UserId: userDetail.userId },
+          }
+        );
+      } else if ((type = "blogIntro")) {
+        const response = await api.post(
+          "/user-service/users/init",
+          {},
+          {
+            headers: { Authorization: accessToken },
+            params: { UserId: userDetail.userId },
+          }
+        );
+      }
+      setIsDialogOpen((prev) => ({ ...prev, done: !prev.done }));
+    } catch (err) {
+      setIsDialogOpen((prev) => ({ ...prev, error: !prev.error }));
     }
+  };
+
+  const onError = () =>
+    setIsDialogOpen((prev) => ({ ...prev, error: !prev.error }));
+
+  const onDone = () => {
+    queryClient.invalidateQueries({
+      queryKey: ["userDetail"],
+      exact: false,
+    });
+    setIsDialogOpen((prev) => ({ ...prev, done: !prev.done }));
   };
 
   return (
@@ -33,15 +87,16 @@ export default function UserDetailInfo({ userId }: { userId: number }) {
       {/* 이메일 */}
       <div className="edit-container">
         <span className="edit-title">이메일</span>
-        <span className="text-sm-content">{dummyData.email}</span>
+        <span className="text-sm-content">{userDetail.email}</span>
       </div>
       {/* 닉네임 */}
       <div className="edit-container">
         <span className="edit-title">닉네임</span>
-        <span className="text-xl-content">{dummyData.nickname}</span>
+        <span className="text-xl-content">{userDetail.nickName}</span>
         <button
-          onClick={() => onReset("nickname")}
-          className="edit-btn-primary">
+          onClick={() => setSelected("nickName")}
+          className="edit-btn-primary"
+        >
           초기화
         </button>
       </div>
@@ -51,19 +106,23 @@ export default function UserDetailInfo({ userId }: { userId: number }) {
         <ProfileImgContainer
           width={120}
           height={120}
-          src={dummyData.profileImg}
+          src={userDetail.profileUrl}
         />
         <button
-          onClick={() => onReset("profileImg")}
-          className="edit-btn-primary">
+          onClick={() => setSelected("profileUrl")}
+          className="edit-btn-primary"
+        >
           초기화
         </button>
       </div>
       {/* 상태 메세지 */}
       <div className="edit-container">
         <span className="edit-title">상태 메세지</span>
-        <span className="edit-sm-content">{dummyData.status}</span>
-        <button onClick={() => onReset("status")} className="edit-btn-primary">
+        <span className="edit-sm-content">{userDetail.profileMessage}</span>
+        <button
+          onClick={() => setSelected("profileMessage")}
+          className="edit-btn-primary"
+        >
           초기화
         </button>
       </div>
@@ -74,17 +133,41 @@ export default function UserDetailInfo({ userId }: { userId: number }) {
           <div
             className="prose"
             dangerouslySetInnerHTML={{
-              __html: DOMPurify.sanitize(dummyData.blogIntro),
+              __html: DOMPurify.sanitize(userDetail.blogIntro),
             }}
           />
         </div>
         <button
-          onClick={() => onReset("blogIntro")}
+          onClick={() => setSelected("blogIntro")}
           className="edit-btn-primary"
         >
           초기화
         </button>
       </div>
+      {selected && (
+        <Dialog
+          backBtn="취소"
+          onBackBtnClick={() => setSelected("")}
+          title={`${userDetail.nickName} 님의\n${
+            selected === "nickName"
+              ? "닉네임을"
+              : selected === "profileUrl"
+              ? "프로필 사진을"
+              : selected === "profileMessage"
+              ? "상태 메세지를"
+              : "블로그 소개글을"
+          } 초기화할까요?`}
+          isTitleSm
+          redBtn="초기화"
+          onBtnClick={() => onReset(selected)}
+        />
+      )}
+      <AdminResponseDialogs
+        isDone={isDialogOpen.done}
+        isError={isDialogOpen.error}
+        onDone={onDone}
+        onError={onError}
+      />
     </>
   );
 }

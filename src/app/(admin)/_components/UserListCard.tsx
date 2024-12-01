@@ -1,9 +1,11 @@
 import { useGetYMD } from "@/app/_hooks/useGetYMD";
 import { UserListCardProps } from "../_interfaces/interfaces";
+import Link from "next/link";
 
 export default function UserListCard({ userInfo, onClick }: UserListCardProps) {
   return (
-    <div
+    <Link
+      href={`/admin/user/${userInfo.userId}`}
       onClick={onClick}
       className="w-full h-[36px] px-2 flex gap-4 justify-between items-center cursor-pointer"
     >
@@ -23,6 +25,6 @@ export default function UserListCard({ userInfo, onClick }: UserListCardProps) {
           {useGetYMD(userInfo.registerDate)}
         </div>
       </div>
-    </div>
+    </Link>
   );
 }

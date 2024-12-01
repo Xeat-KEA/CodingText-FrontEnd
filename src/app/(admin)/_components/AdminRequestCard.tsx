@@ -4,9 +4,9 @@ import { useState } from "react";
 import Dialog from "@/app/_components/Dialog";
 import { Admin } from "../_interfaces/interfaces";
 import api from "@/app/_api/config";
-import { DialogCheckIcon, DialogXIcon } from "@/app/_components/Icons";
 import { useTokenStore } from "@/app/stores";
 import { useQueryClient } from "@tanstack/react-query";
+import AdminResponseDialogs from "./AdminResponseDialogs";
 
 export default function AdminRequestCard({ id, email }: Admin) {
   const { accessToken } = useTokenStore();
@@ -55,6 +55,17 @@ export default function AdminRequestCard({ id, email }: Admin) {
     } catch (err) {
       setIsDialogOpen((prev) => ({ ...prev, error: !prev.error }));
     }
+  };
+
+  const onError = () =>
+    setIsDialogOpen((prev) => ({ ...prev, error: !prev.error }));
+
+  const onDone = () => {
+    queryClient.invalidateQueries({
+      queryKey: ["adminList"],
+      exact: false,
+    });
+    setIsDialogOpen((prev) => ({ ...prev, done: !prev.done }));
   };
 
   return (
@@ -113,31 +124,12 @@ export default function AdminRequestCard({ id, email }: Admin) {
           onBtnClick={onDeny}
         />
       )}
-      {isDialogOpen.error && (
-        <Dialog
-          icon={<DialogXIcon />}
-          title={"요청이\n거부되었어요"}
-          content={"다시 한번\n시도해주세요"}
-          backBtn="확인"
-          onBackBtnClick={() =>
-            setIsDialogOpen((prev) => ({ ...prev, error: !prev.error }))
-          }
-        />
-      )}
-      {isDialogOpen.done && (
-        <Dialog
-          icon={<DialogCheckIcon />}
-          title={"완료되었어요"}
-          backBtn="확인"
-          onBackBtnClick={() => {
-            queryClient.invalidateQueries({
-              queryKey: ["adminList"],
-              exact: false,
-            });
-            setIsDialogOpen((prev) => ({ ...prev, done: !prev.done }));
-          }}
-        />
-      )}
+      <AdminResponseDialogs
+        isDone={isDialogOpen.done}
+        isError={isDialogOpen.error}
+        onDone={onDone}
+        onError={onError}
+      />
     </>
   );
 }

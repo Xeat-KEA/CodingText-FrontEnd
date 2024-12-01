@@ -12,7 +12,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 
 export default function UserManagementPage() {
   const router = useRouter();
-  const { accessToken, isTokenSet } = useCheckToken();
+  const { accessToken, isTokenSet } = useCheckToken("/admin/sign-in");
   const { page, setPage, setLastPage } = usePaginationStore();
 
   const searchParams = useSearchParams();

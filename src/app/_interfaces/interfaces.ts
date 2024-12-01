@@ -107,7 +107,7 @@ export interface ProfileImgContainerProps {
 }
 
 export interface SaveOrCancelBtnProps {
-  saveBtn: string;
+  saveBtn?: string;
   onCancel: () => void;
 }
 
