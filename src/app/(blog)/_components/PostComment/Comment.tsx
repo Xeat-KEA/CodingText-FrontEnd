@@ -1,55 +1,43 @@
 import Image from "next/image";
-import { useBlogStore } from "@/app/stores";
 import { CommentProps } from "../../_interfaces/interfaces";
 import { useCalculateDate } from "@/app/_hooks/useCalculateDate";
 import { ReplyIcon } from "../Icons";
-import api from "@/app/_api/config";
-import { useEffect, useState } from "react";
-import { BlogProfile } from "@/app/_interfaces/interfaces";
 import { usePathname } from "next/navigation";
 import IconBtn from "@/app/_components/IconBtn";
 
 const Comment: React.FC<CommentProps> = ({
   replyId,
   blogId,
-  mentionId,
+  userName,
+  profileUrl,
+  mentionedUserName,
   content,
-  createdAt,
+  createdDate,
   isOwnComment,
   onReplyClick,
+  onEdit,
+  isEditing,
+  onCancelEdit,
+  editedContent,
+  onUpdateComment,
+  confirmEdit,
   onDelete,
   onReport,
 }) => {
   const pathname = usePathname();
   const isAdminPage = pathname.includes("/admin/report/");
 
-  const [profileData, setProfileData] = useState<BlogProfile[]>([]);
-
-  const fetchCommentData = async() => {
-
-  }
-  
-
-  // // 댓글 작성자의 프로필
-  // const userProfile = profileData.find((profile) => profile.blogId === userId);
-
-  // // // 언급된 사용자의 프로필
-  // const mentionProfile = profileData.find(
-  //   (profile) => profile.blogId === mentionId
-  // );
-
   return (
-    <div className={`${mentionId ? "pl-12" : ""}`}>
+    <div className={`${mentionedUserName ? "pl-12" : ""}`}>
       <div className="flex flex-col w-full gap-4 py-4 border-b border-border-2">
         <div className="flex w-full justify-between items-center">
           <div className="flex gap-2 items-center">
             {/* 프로필 이미지 */}
-            {/* 수정 필요 - 댓글 작성자와 언급된 자 프로필*/}
-            {userProfile?.profileUrl && (
+            {profileUrl && (
               <div className="profile-image w-120 h-120 relative">
                 <Image
-                  src={userProfile.profileUrl}
-                  alt={`${userProfile?.userName}의 프로필 이미지`}
+                  src={profileUrl}
+                  alt={`${userName}의 프로필 이미지`}
                   width={24}
                   height={24}
                   className="rounded-full"
@@ -57,22 +45,28 @@ const Comment: React.FC<CommentProps> = ({
                 />
               </div>
             )}
-            <p className="text-xs text-body font-semibold">
-              {userProfile?.userName}
-            </p>
+            <p className="text-xs text-body font-semibold">{userName}</p>
           </div>
           <p className="text-xs text-body font-body">
-            {useCalculateDate(createdAt)}
+            {useCalculateDate(createdDate)}
           </p>
         </div>
 
         <div className="text-sm text-body font-regular">
-          {mentionProfile && (
+          {mentionedUserName && (
             <p className="text-sm text-primary-1 font-semibold">
-              @{mentionProfile.userName}
+              @{mentionedUserName}
             </p>
           )}
-          {content}
+          {isEditing ? (
+            <textarea
+              value={editedContent}
+              onChange={(e) => onUpdateComment(e.target.value)}
+              className="w-full bg-bg-1 pl-4 p-2 rounded-md text-sm text-body font-regular"
+            />
+          ) : (
+            content
+          )}
         </div>
 
         {isAdminPage ? (
@@ -83,20 +77,42 @@ const Comment: React.FC<CommentProps> = ({
               onClick={() => onDelete(replyId)}
             />
           </div>
-        ) : (
+        ) : isEditing ? (
+          <div className="flex w-full h-5 justify-between items-center">
+          <button
+            className="text-xs text-body font-semibold"
+            onClick={onCancelEdit}
+          >
+            취소
+          </button>
+          <button
+            className="text-xs text-primary-1 font-semibold"
+            onClick={() => confirmEdit(editedContent)}
+          >
+            수정 완료
+          </button>
+        </div>
+        ):(
           <div className="flex w-full h-5 justify-between items-center">
             <button
               className="flex items-center gap-1"
-              onClick={() => onReplyClick(replyId, userId)}>
+              onClick={() => onReplyClick(replyId, blogId)}>
               <ReplyIcon />
               <p className="text-black text-xs font-semibold ">답글</p>
             </button>
             {isOwnComment ? (
-              <IconBtn
-                type="delete"
-                content="삭제"
-                onClick={() => onDelete(replyId)}
-              />
+              <div className="flex gap-4">
+                <IconBtn
+                  type="edit"
+                  content="수정"
+                  onClick={() => onEdit(replyId)}
+                />
+                <IconBtn
+                  type="delete"
+                  content="삭제"
+                  onClick={() => onDelete(replyId)}
+                />
+              </div>
             ) : (
               <IconBtn
                 type="report"

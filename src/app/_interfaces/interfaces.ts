@@ -87,7 +87,7 @@ export interface PostEditorProps {
   isEditing?: boolean;
   onCancelClick: () => void;
   onBtnClick: (data: PostForm) => void;
-  initialData?: Post; // 초기 게시글 데이터
+  initialData?: PostForm; // 초기 게시글 데이터
 }
 
 export interface CategoryDropDownProps {
@@ -320,7 +320,7 @@ export interface WindowSizeStore {
 // Form 관련 인터페이스
 export interface PostForm {
   title: string;
-    content: string;
+  content: string;
   isSecret?: boolean;
   password?: string;
   parentCategory?: number;
@@ -412,7 +412,7 @@ export interface CategoryStore {
 }
 
 // 게시글 관련
-export interface PostStore{
+export interface PostStore {
   currentPost: BlogPost;
   setCurrentPost: (post: BlogPost) => void;
   isCodingPost: boolean;

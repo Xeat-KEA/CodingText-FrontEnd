@@ -5,14 +5,11 @@ import { useBlogStore } from "@/app/stores";
 export default function CommentInput({
   target,
   mentionId,
+  mentionedUserName,
   onSubmit,
   onCancel,
 }: CommentInputProps) {
   const { register, handleSubmit, reset } = useForm();
-  const { userBlogId, profile } = useBlogStore();
-
-
-  // 수정 필요
 
   // 댓글
   const onClickSubmit = (data: any) => {
@@ -35,7 +32,7 @@ export default function CommentInput({
         {target === "reply" && (
           <div className="flex items-center gap-2">
             <p className="font-bold text-sm text-body">
-              {mentionProfile?.nickName} 님에게 답글
+              {mentionedUserName} 님에게 답글
             </p>
             <button
               className="font-semibold text-xs text-red"

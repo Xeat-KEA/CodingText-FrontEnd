@@ -3,7 +3,6 @@ import { SmShowMoreIcon } from "../Icons";
 import { useEffect, useState } from "react";
 import { PostProps } from "../../_interfaces/interfaces"; // 게시물 내용 받기
 import { useBase64 } from "@/app/_hooks/useBase64";
-import { Code_Post_Dummy_Data } from "@/app/(admin)/_constants/constants";
 import CodeEditor from "@/app/(coding-test)/_components/CodeEditor";
 import { useCodingTestStore, usePostStore } from "@/app/stores";
 

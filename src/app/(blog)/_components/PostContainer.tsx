@@ -13,7 +13,6 @@ import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { BlogPost } from "@/app/(blog)/_interfaces/interfaces";
 import api from "@/app/_api/config";
-import { Post_Dummy_Data } from "@/app/(admin)/_constants/constants";
 import { useQuery } from "@tanstack/react-query";
 
 export default function PostContainer() {
@@ -21,7 +20,6 @@ export default function PostContainer() {
 
   //  전역변수
   const { userBlogId, currentBlogId } = useBlogStore();
-  const { boardCategories } = useCategoryStore();
   const { currentPost } = usePostStore();
   const params = useParams();
   const router = useRouter();
@@ -45,35 +43,36 @@ export default function PostContainer() {
 
   // 게시글 내용 api 연결
   const fetchPostData = async () => {
-   if(accessToken){
-    try {
-      const response = await api.get(
-        `/blog-service/blog/board/${params.postId}`,
-        {
-          headers: { Authorization: accessToken },
+    if (accessToken) {
+      // 회원 -> 추후 비회원 로직 추가
+      try {
+        const response = await api.get(
+          `/blog-service/blog/board/${params.postId}`,
+          {
+            headers: { Authorization: accessToken },
+          }
+        );
+        const postData = response.data.data;
+        if (postData) {
+          setCurrentBlogId(postData.blogId);
+          setChildCategoryId(postData.childCategoryId);
+          setIsCodingPost(postData.codeId !== undefined);
+          const mappedPostData = {
+            ...postData,
+            postId: postData.articleId,
+          };
+          setCurrentPost(mappedPostData);
         }
-      );
-      const postData = response.data.data;
-      if (postData) {
-        setCurrentBlogId(postData.blogId);
-        setChildCategoryId(postData.childCategoryId);
-        setIsCodingPost(postData.codeId !== undefined);
-        const mappedPostData = {
-          ...postData,
-          postId: postData.articleId,
-        };
-        setCurrentPost(mappedPostData);
+        return currentPost;
+      } catch (error) {
+        console.error("게시글 내용 반환 오류: ", error);
+        return null;
       }
-      return currentPost;
-    } catch (error) {
-      console.error("게시글 내용 반환 오류: ", error);
-      return null;
     }
-   }
   };
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["postContent", params.postId],
+    queryKey: ["postContent", isTokenSet, params.postId],
     queryFn: fetchPostData,
     enabled: isTokenSet && !!accessToken,
   });
@@ -103,11 +102,7 @@ export default function PostContainer() {
 
             {/* 게시물 헤더 */}
             <div className="w-full">
-              {currentPost ? (
-                <PostHeader />
-              ) : (
-                <p>게시물을 불러오는 중입니다.</p>
-              )}
+              <PostHeader />
             </div>
 
             {/* 구분선 */}

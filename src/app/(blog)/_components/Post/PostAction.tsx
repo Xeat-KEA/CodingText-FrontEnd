@@ -73,7 +73,6 @@ export default function PostAction() {
     setSelectedOption(null);
   };
 
-  // 신고 API 요청
   const confirmReportPost = async () => {
     if (postToReport === null) return;
     try {
@@ -87,12 +86,11 @@ export default function PostAction() {
           headers: { Authorization: accessToken },
         }
       );
-      // console.log(response)
-      setIsReportDialogOpen(false);
-      setIsReportConfirmDialogOpen(true);
     } catch (error) {
       console.error("게시글 신고 실패: ", error);
     }
+    setIsReportDialogOpen(false);
+    setIsReportConfirmDialogOpen(true);
     setPostToReport(null);
     setCustomInput("");
     setSelectedOption(null);
@@ -137,7 +135,6 @@ export default function PostAction() {
         </button>
         {isOwnBlog ? (
           <>
-            {/* 전달 사항 수정 필요 */}
             <IconBtn
               type="edit"
               content="수정"

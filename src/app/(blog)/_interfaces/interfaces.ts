@@ -30,7 +30,7 @@ export interface ChildCategoryItemProps {
 }
 export interface BlogPost {
   postId: number;
-  articleReplies: number;
+  articleReplies: CommentProps[];
   blogId: number;
   checkRecommend: boolean;
   childCategoryId: number;
@@ -51,14 +51,10 @@ export interface BlogPost {
 }
 
 export interface CommentForm {
-  replyId: number;
   postId: number;
-  userId: number;
-  mentionId?: number;
+  mentionedUserBlogId?: number;
   parentReplyId?: number;
   content: string;
-  createdAt: string;
-  modifiedAt: string;
 }
 
 export interface CommentProps {
@@ -66,15 +62,30 @@ export interface CommentProps {
   blogId: number;
   userName: string;
   profileUrl: string;
+  parentReplyId?: number;
+  mentionedUserName?: string;
   content: string;
   createdDate: string;
+  childReplies?: CommentProps[];
 
-  
-  mentionId: number | null;
   isOwnComment: boolean;
   onReplyClick: (replyId: number, userId: number) => void;
+  onEdit: (replyId: number) => void;
+  isEditing: boolean;
+  onCancelEdit: () => void;
+  editedContent: string;
+  onUpdateComment: (content: string) => void;
+  confirmEdit: (content: string) => Promise<void>;
   onDelete: (replyId: number) => void;
   onReport: (replyId: number) => void;
+}
+
+export interface CommentInputProps {
+  target: string;
+  mentionId?: number;
+  mentionedUserName?: string;
+  onSubmit: (data: { comment: string }) => void;
+  onCancel: () => void;
 }
 
 export interface PostProps {
@@ -89,32 +100,4 @@ export interface BpFollowerIconProps {
 
 export interface SmShowMoreIconProps {
   isHidden: Boolean;
-}
-
-export interface CommentInputProps {
-  target?: string;
-  mentionId: number | null;
-  onSubmit: (data: { comment: string }) => void;
-  onCancel?: () => void;
-}
-
-export interface CompleteArticle {
-  postId: number;
-  blogId: number;
-  categoryId: number;
-  childCategoryId: number;
-  language: string;
-  title: string;
-  content: string;
-  viewCount: number;
-  reportCount: number;
-  codeContent: string;
-  codeId: number;
-  createAt: string;
-  likeCount: number;
-  nickName: string;
-  commentCount: number;
-  writtenCode: string;
-  createdAt: string;
-  modifiedAt: string;
 }

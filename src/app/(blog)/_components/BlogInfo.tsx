@@ -24,7 +24,7 @@ export default function BlogInfo() {
   return (
     <>
       {/* 블로그 소개글 */}
-      <div className="w-226 h-[400px] border border-border2 rounded-xl mb-6 p-4">
+      <div className="w-226 min-h-[400px] border border-border2 rounded-xl mb-6 p-4">
         {profile && blogIntro && (
           <div
             className="prose"

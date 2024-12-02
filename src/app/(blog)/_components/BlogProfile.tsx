@@ -17,12 +17,9 @@ export default function BlogProfile() {
   // 로그인 여부 확인
   const { accessToken, isTokenSet } = useCheckToken();
 
-  const params = useParams();
   const queryClient = useQueryClient();
 
   const { userBlogId, currentBlogId, isOwnBlog, profile } = useBlogStore();
-  const setCurrentBlogId = useBlogStore((state) => state.setCurrentBlogId);
-  const setProfile = useBlogStore((profile) => profile.setProfile);
   const [blogToReport, setBlogToReport] = useState<number | null>(null);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [customInput, setCustomInput] = useState("");
@@ -30,39 +27,6 @@ export default function BlogProfile() {
   const [isReportConfirmDialogOpen, setIsReportConfirmDialogOpen] =
     useState(false);
 
-  // 현재 블로그 아이디 조회
-  useEffect(() => {
-    const blogId = Number(params.id);
-    if (blogId && blogId !== -1) {
-      setCurrentBlogId(blogId);
-    }
-  }, [params.id, setCurrentBlogId]);
-
-  // 블로그 홈 정보 조회
-  const fetchBlogProfileData = async () => {
-    try {
-      const response = await api.get(
-        `/blog-service/blog/home/${currentBlogId}`,
-        {
-          headers: { Authorization: accessToken },
-        }
-      );
-      setProfile(response.data.data);
-      return response.data.data;
-    } catch (error) {
-      console.error("블로그 프로필 조회 실패:", error);
-      return null;
-    }
-  };
-
-  const { data } = useQuery({
-    queryKey: ["blogProfile", currentBlogId],
-    queryFn: fetchBlogProfileData,
-    // placeholderData: profile,
-    enabled: currentBlogId !== -1 && !!accessToken,
-  });
-
-  // 팔로우 API 요청
   const onClickFollow = async () => {
     try {
       // 팔로우/언팔로우 API 요청 보내기
@@ -75,19 +39,17 @@ export default function BlogProfile() {
       );
 
       // 프로필 데이터 다시 가져오기
-      queryClient.invalidateQueries({ queryKey: ["blogProfile"] });
+      queryClient.invalidateQueries({ queryKey: ["blogInfo"] });
     } catch (error) {
       console.error("팔로우 요청 오류", error);
     }
   };
 
-  // 신고 클릭
   const onClickReportBlog = (id: number) => {
     setBlogToReport(id);
     setIsReportDialogOpen(true);
   };
 
-  // 신고 취소
   const cancelReportBlog = () => {
     setIsReportDialogOpen(false);
     setBlogToReport(null);
@@ -95,7 +57,6 @@ export default function BlogProfile() {
     setSelectedOption(null);
   };
 
-  // 신고 API 연결
   const confirmReportBlog = async () => {
     if (blogToReport === null) return;
 

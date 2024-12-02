@@ -96,6 +96,7 @@ export const useBlogStore = create<BlogStore>((set) => ({
     profileUrl: "",
     tier: "Sophomore",
     userName: "default",
+    mainContent: "",
   },
   setProfile: (profile) => set({ profile }),
   blogContent: {
@@ -145,7 +146,7 @@ export const useCategoryStore = create<CategoryStore>((set) => ({
 export const usePostStore = create<PostStore>((set) => ({
   currentPost: {
     postId: -1,
-    articleReplies: -1,
+    articleReplies: [],
     blogId: -1,
     checkRecommend: false, // ?
     childCategoryId: -1,
