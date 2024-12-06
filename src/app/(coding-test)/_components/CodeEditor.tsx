@@ -74,7 +74,7 @@ export default function CodeEditor({
   return (
     <ReactCodeMirror
       className="w-full"
-      value={value}
+      value={!isViewer ? value : defaultValue}
       onChange={(e) => {
         setValue(e);
       }}

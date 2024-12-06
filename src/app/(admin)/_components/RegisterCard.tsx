@@ -17,14 +17,10 @@ export default function RegisterCard({ code, testcases }: CodeDetail) {
   const [isOpened, setIsOpened] = useState(false);
 
   // 테스트케이스용 코드 에디터 언어 설정
-  const { setLanguage, setValue, setTitle } = useCodingTestStore();
+  const { setLanguage } = useCodingTestStore();
   useEffect(() => {
     setLanguage({ content: "json", selection: "json" });
   }, []);
-
-  // 새 문제 생성 버튼 클릭 시
-  const { setContent } = useTiptapStore();
-  const { setIsRegistering } = useRegisterStore();
   const jsonTestCases = JSON.stringify(testcases, null, 2);
 
   return (

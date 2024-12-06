@@ -2,7 +2,7 @@
 
 import RegisterCard from "@/app/(admin)/_components/RegisterCard";
 import RegisterTopBar from "@/app/(admin)/_components/RegisterTopBar";
-import { RegisterCardProps } from "@/app/(admin)/_interfaces/interfaces";
+import { CodeDetail } from "@/app/(admin)/_interfaces/interfaces";
 import api from "@/app/_api/config";
 import Pagination from "@/app/_components/Pagination";
 import { useCheckToken } from "@/app/_hooks/useCheckToken";
@@ -30,7 +30,7 @@ export default function RegisterPage() {
       return null;
     }
   };
-  const { data } = useQuery<RegisterCardProps[]>({
+  const { data } = useQuery<CodeDetail[]>({
     queryKey: ["pendingList", isTokenSet],
     queryFn: fetchPendingList,
   });
