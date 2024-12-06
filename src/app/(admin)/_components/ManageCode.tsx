@@ -3,23 +3,22 @@ import SaveOrCancelBtn from "@/app/_components/SaveOrCancelBtn";
 import TiptapEditor from "@/app/_components/TipTapEditor/TiptapEditor";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import {
-  ALGORITHM_LIST,
-  DIFFICULTY_LIST,
-  PROGRAMMING_LANGUAGES,
-} from "@/app/_constants/constants";
+import { ALGORITHM_LIST, DIFFICULTY_LIST } from "@/app/_constants/constants";
 import { useForm } from "react-hook-form";
 import CodeEditor from "@/app/(coding-test)/_components/CodeEditor";
 import { useCodingTestStore, useTiptapStore } from "@/app/stores";
-import Dialog from "@/app/_components/Dialog";
-import { DialogCheckIcon } from "@/app/_components/Icons";
-import { CodeDetail, ManageCodeProps } from "../_interfaces/interfaces";
+import {
+  CodeDetail,
+  EditCodeDetail,
+  ManageCodeProps,
+} from "../_interfaces/interfaces";
 import { Code } from "@/app/(code)/_interfaces/interfaces";
 
 export default function ManageCode({
   code,
   testcases,
-  onSubmit,
+  onAdd,
+  onEdit,
 }: ManageCodeProps) {
   const router = useRouter();
   const pathname = usePathname();
@@ -35,11 +34,27 @@ export default function ManageCode({
       content !== "<p></p>" &&
       value.length !== 0
     ) {
-      const newData: CodeDetail = {
-        code: { ...data, content },
-        testcases: JSON.parse(value),
-      };
-      onSubmit(newData);
+      if (code) {
+        // 수정, 정식 등록 시
+        const newData: EditCodeDetail = {
+          ...data,
+          codeId: code.codeId,
+          content,
+          testcases: JSON.parse(value),
+        };
+        {
+          onEdit && onEdit(newData);
+        }
+      } else {
+        // 새 문제 생성 시
+        const newData: CodeDetail = {
+          code: { ...data, content },
+          testcases: JSON.parse(value),
+        };
+        {
+          onAdd && onAdd(newData);
+        }
+      }
     } else {
     }
   };
@@ -47,12 +62,13 @@ export default function ManageCode({
   // 에디터 초기값 설정
   const { content, setContent } = useTiptapStore();
   const { value, setValue: setTestcase, setLanguage } = useCodingTestStore();
-  const [isLoading, setIsLoading] = useState(true);
   const [selection, setSelection] = useState({ difficulty: "", algorithm: "" });
+  // TiptapEditor Key 갱신용 초기값 감지 State
+  const [initialValue, setInitialValue] = useState("");
   useEffect(() => {
-    setIsLoading(true);
     if (code) {
       setContent(code.content);
+      setInitialValue(code.content);
       const difficulty = DIFFICULTY_LIST.find(
         (el) => el.selection === code.difficulty
       );
@@ -82,8 +98,7 @@ export default function ManageCode({
     } else {
       setTestcase(JSON.stringify([{ input: "", output: "" }], null, 2));
     }
-    setIsLoading(false);
-  }, []);
+  }, [code, testcases]);
 
   return (
     <>
@@ -134,7 +149,9 @@ export default function ManageCode({
         {/* 문제 입력 */}
         <div className="edit-container">
           <span className="edit-title">문제</span>
-          <div className="h-[400px]">{!isLoading && <TiptapEditor />}</div>
+          <div className="h-[400px]">
+            <TiptapEditor key={initialValue} />
+          </div>
         </div>
         {/* 테스트케이스 입력 */}
         <div className="edit-container">
@@ -151,6 +168,8 @@ export default function ManageCode({
             saveBtn={
               pathname.startsWith("/admin/code/new-code")
                 ? "새 문제 생성"
+                : pathname.startsWith("/admin/code/register")
+                ? "등록"
                 : "수정"
             }
             onCancel={() => router.back()}

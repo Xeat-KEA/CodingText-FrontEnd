@@ -1,18 +1,22 @@
 "use client";
 
+import AdminResponseDialogs from "@/app/(admin)/_components/AdminResponseDialogs";
 import ManageCode from "@/app/(admin)/_components/ManageCode";
 import {
-  CodeDetail,
+  EditCodeDetail,
   ManageCodeProps,
 } from "@/app/(admin)/_interfaces/interfaces";
 import api from "@/app/_api/config";
+import Dialog from "@/app/_components/Dialog";
 import { useCheckToken } from "@/app/_hooks/useCheckToken";
 import { useQuery } from "@tanstack/react-query";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function EditCodePage() {
   const { codeId } = useParams();
   const { accessToken, isTokenSet } = useCheckToken("/admin/sign-in");
+  const router = useRouter();
 
   const fetchCodeDetail = async () => {
     if (accessToken) {
@@ -20,7 +24,7 @@ export default function EditCodePage() {
         `/code-bank-service/admin/codeLists/${codeId}`,
         { headers: { Authorization: accessToken } }
       );
-      return response.data.codeWithTestcases;
+      return response.data;
     } else {
       return null;
     }
@@ -30,13 +34,71 @@ export default function EditCodePage() {
     queryFn: fetchCodeDetail,
   });
 
-  const onSubmit = (newData: CodeDetail) => {};
+  const [isDialogOpen, setIsDialogOpen] = useState({
+    submit: false,
+    error: false,
+    done: false,
+  });
+
+  const postData = async (newData: EditCodeDetail) => {
+    try {
+      const response = await api.put(
+        `/code-bank-service/admin/edit/${codeId}`,
+        newData,
+        {
+          headers: { Authorization: accessToken },
+        }
+      );
+      setIsDialogOpen((prev) => ({ ...prev, done: !prev.done }));
+      setTempData(null);
+    } catch (err) {
+      setIsDialogOpen((prev) => ({ ...prev, error: !prev.error }));
+    }
+  };
+
+  const [tempData, setTempData] = useState<EditCodeDetail | null>();
+  const onSubmit = (newData: EditCodeDetail) => {
+    setTempData(newData);
+    setIsDialogOpen((prev) => ({ ...prev, submit: !prev.submit }));
+  };
+
+  const onError = () =>
+    setIsDialogOpen((prev) => ({ ...prev, error: !prev.error }));
+
+  const onDone = () => {
+    setIsDialogOpen((prev) => ({ ...prev, done: !prev.done }));
+    router.push("/admin/code");
+  };
 
   return (
-    <ManageCode
-      code={data?.code}
-      testcases={data?.testcases}
-      onSubmit={onSubmit}
-    />
+    <>
+      {data && (
+        <ManageCode
+          code={data.code}
+          testcases={data.testcases}
+          onEdit={onSubmit}
+        />
+      )}
+      {/* 문제 생성 / 수정 완료 */}
+      {isDialogOpen.submit && (
+        <Dialog
+          title={"문제를 수정할까요?"}
+          isTitleSm
+          backBtn="취소"
+          onBackBtnClick={() => {
+            setIsDialogOpen((prev) => ({ ...prev, submit: !prev.submit }));
+            setTempData(null);
+          }}
+          primaryBtn="수정"
+          onBtnClick={() => tempData && postData(tempData)}
+        />
+      )}
+      <AdminResponseDialogs
+        isDone={isDialogOpen.done}
+        isError={isDialogOpen.error}
+        onDone={onDone}
+        onError={onError}
+      />
+    </>
   );
 }

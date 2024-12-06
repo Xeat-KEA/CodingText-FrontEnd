@@ -84,7 +84,6 @@ export default function AdminCodePage() {
     ],
     queryFn: fetchCodeList,
   });
-  console.log(data);
 
   return (
     <div className="flex flex-col gap-6">

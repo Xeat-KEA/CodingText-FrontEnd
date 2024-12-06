@@ -12,7 +12,11 @@ import { SmLinkArrowIcon } from "@/app/_components/Icons";
 import { useRouter } from "next/navigation";
 import { CodeDetail } from "../_interfaces/interfaces";
 
-export default function RegisterCard({ code, testcases }: CodeDetail) {
+export default function RegisterCard({
+  nickName,
+  code,
+  testcases,
+}: CodeDetail) {
   const router = useRouter();
   const [isOpened, setIsOpened] = useState(false);
 
@@ -31,7 +35,7 @@ export default function RegisterCard({ code, testcases }: CodeDetail) {
           {useGetYMD(code.createdAt)}
         </span>
         <span className="w-[100px] shrink-0 flex-center text-xs font-bold text-black">
-          {"김치"}
+          {nickName}
         </span>
         <span className="w-full grow text-xs text-black">{code.title}</span>
       </div>

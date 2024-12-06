@@ -6,8 +6,9 @@ import { CodeDetail } from "@/app/(admin)/_interfaces/interfaces";
 import api from "@/app/_api/config";
 import Dialog from "@/app/_components/Dialog";
 import { useCheckToken } from "@/app/_hooks/useCheckToken";
+import { useTiptapStore } from "@/app/stores";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function NewCodePage() {
   const router = useRouter();
@@ -44,9 +45,14 @@ export default function NewCodePage() {
     router.push("/admin/code");
   };
 
+  const { content, setContent } = useTiptapStore();
+  useEffect(() => {
+    setContent("");
+  }, []);
+
   return (
     <>
-      <ManageCode onSubmit={onSubmit} />
+      <ManageCode key={content} onAdd={onSubmit} />
       {/* 문제 생성 / 수정 완료 */}
       {isDialogOpen.submit && (
         <Dialog

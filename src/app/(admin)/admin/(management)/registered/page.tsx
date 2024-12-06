@@ -34,7 +34,6 @@ export default function RegisterPage() {
     queryKey: ["pendingList", isTokenSet],
     queryFn: fetchPendingList,
   });
-  console.log(data);
 
   return (
     <div className="flex flex-col gap-6">
@@ -45,6 +44,7 @@ export default function RegisterPage() {
           {data?.map((el) => (
             <RegisterCard
               key={el.code.codeId}
+              nickName={el.nickName}
               code={el.code}
               testcases={el.testcases}
             />

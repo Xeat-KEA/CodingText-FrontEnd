@@ -52,14 +52,25 @@ export interface Testcase {
 }
 
 export interface CodeDetail {
+  nickName?: string;
   code: Code;
+  testcases: Testcase[];
+}
+
+export interface EditCodeDetail {
+  codeId: number;
+  title: string;
+  content: string;
+  difficulty: string;
+  algorithm: string;
   testcases: Testcase[];
 }
 
 export interface ManageCodeProps {
   code?: Code;
   testcases?: Testcase[];
-  onSubmit: (newData: CodeDetail) => void;
+  onAdd?: (newData: CodeDetail) => void;
+  onEdit?: (newData: EditCodeDetail) => void;
 }
 
 export interface RegisterStore {
