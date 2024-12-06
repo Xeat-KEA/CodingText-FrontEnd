@@ -56,7 +56,7 @@ export default function AdminCodeCard({ code }: { code: Code }) {
           <IconBtn
             type="edit"
             content="수정"
-            onClick={() => router.push(`/admin/code/${code.codeId}`)}
+            onClick={() => router.push(`/admin/code/edit/${code.codeId}`)}
           />
           <IconBtn
             type="delete"

@@ -1,6 +1,5 @@
 import { SmShowMoreIcon } from "@/app/(blog)/_components/Icons";
 import { useGetYMD } from "@/app/_hooks/useGetYMD";
-import { RegisterCardProps } from "../_interfaces/interfaces";
 import { useEffect, useState } from "react";
 import DOMPurify from "isomorphic-dompurify";
 import {
@@ -11,8 +10,9 @@ import {
 import CodeEditor from "@/app/(coding-test)/_components/CodeEditor";
 import { SmLinkArrowIcon } from "@/app/_components/Icons";
 import { useRouter } from "next/navigation";
+import { CodeDetail } from "../_interfaces/interfaces";
 
-export default function RegisterCard({ code, testcases }: RegisterCardProps) {
+export default function RegisterCard({ code, testcases }: CodeDetail) {
   const router = useRouter();
   const [isOpened, setIsOpened] = useState(false);
 
@@ -26,16 +26,6 @@ export default function RegisterCard({ code, testcases }: RegisterCardProps) {
   const { setContent } = useTiptapStore();
   const { setIsRegistering } = useRegisterStore();
   const jsonTestCases = JSON.stringify(testcases, null, 2);
-  const onClick = () => {
-    // 제목, 코드, 테스트케이스 초기값으로 저장
-    setTitle(code.title);
-    setContent(code.content);
-    setValue(jsonTestCases);
-    // 등록된 코드 생성 state 설정
-    setIsRegistering(true);
-
-    router.push("/admin/code/new-code");
-  };
 
   return (
     <div className="flex flex-col gap-2 px-2 py-3">
@@ -80,7 +70,10 @@ export default function RegisterCard({ code, testcases }: RegisterCardProps) {
             </div>
           </div>
           {/* 문제 생성 버튼 */}
-          <button onClick={onClick} className="flex gap-2 items-center w-fit">
+          <button
+            onClick={() => router.push(`/admin/code/register/${code.codeId}`)}
+            className="flex gap-2 items-center w-fit"
+          >
             <span className="edit-btn-primary">새 문제 생성으로 이동</span>
             <SmLinkArrowIcon />
           </button>

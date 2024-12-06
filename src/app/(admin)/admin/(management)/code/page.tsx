@@ -16,6 +16,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
 export default function AdminCodePage() {
+  const { accessToken, isTokenSet } = useCheckToken("/admin/sign-in");
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -47,30 +48,43 @@ export default function AdminCodePage() {
   // 코드 리스트 불러오기
   const { page, setPage, setLastPage } = usePaginationStore();
   const fetchCodeList = async () => {
-    const response = await api.get("/code-bank-service/code/lists", {
-      headers: { Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}` },
-      params: {
-        algorithms,
-        difficulties,
-        searchBy: searchBy,
-        searchText: searchBy === "title" ? keyword : Number(keyword),
-        sortBy: order,
-        page,
-        size: 10,
-      },
-    });
-    // 페이지 정보 초기화
-    const lastPage = response.data.totalPages - 1;
-    if (page > lastPage) {
-      setPage(lastPage);
+    if (accessToken) {
+      const response = await api.get("/code-bank-service/admin/codeLists", {
+        headers: { Authorization: accessToken },
+        params: {
+          algorithms,
+          difficulties,
+          searchBy: searchBy,
+          searchText: searchBy === "title" ? keyword : Number(keyword),
+          sortBy: order,
+          page,
+          size: 10,
+        },
+      });
+      // 페이지 정보 초기화
+      const lastPage = response.data.totalPages - 1;
+      if (page > lastPage) {
+        setPage(lastPage);
+      }
+      setLastPage(lastPage);
+      return response.data.content;
+    } else {
+      return null;
     }
-    setLastPage(lastPage);
-    return response.data.content;
   };
   const { data } = useQuery<Code[]>({
-    queryKey: ["codeList", algorithms, difficulties, order, page, keyword],
+    queryKey: [
+      "codeList",
+      algorithms,
+      difficulties,
+      order,
+      page,
+      keyword,
+      isTokenSet,
+    ],
     queryFn: fetchCodeList,
   });
+  console.log(data);
 
   return (
     <div className="flex flex-col gap-6">

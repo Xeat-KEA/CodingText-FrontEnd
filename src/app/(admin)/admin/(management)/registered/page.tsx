@@ -34,6 +34,7 @@ export default function RegisterPage() {
     queryKey: ["pendingList", isTokenSet],
     queryFn: fetchPendingList,
   });
+  console.log(data);
 
   return (
     <div className="flex flex-col gap-6">

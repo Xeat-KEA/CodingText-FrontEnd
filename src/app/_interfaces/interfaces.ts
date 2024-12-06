@@ -185,14 +185,6 @@ export interface SmCheckBoxBtnProps {
   content: string;
 }
 
-export interface CodeDetail {
-  title: string;
-  difficulty: string;
-  algorithm: string;
-  content: string;
-  testcase: any;
-}
-
 export interface Statistics {
   profileUrl: string;
   nickName: string;

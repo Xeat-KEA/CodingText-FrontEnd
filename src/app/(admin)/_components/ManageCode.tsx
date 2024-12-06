@@ -1,29 +1,32 @@
 import DropDown from "@/app/_components/DropDown";
 import SaveOrCancelBtn from "@/app/_components/SaveOrCancelBtn";
 import TiptapEditor from "@/app/_components/TipTapEditor/TiptapEditor";
-import { useRouter } from "next/navigation";
-import { ManageCodeProps } from "../_interfaces/interfaces";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { ALGORITHM_LIST, DIFFICULTY_LIST } from "@/app/_constants/constants";
-import { useForm } from "react-hook-form";
-import { CodeDetail } from "@/app/_interfaces/interfaces";
-import CodeEditor from "@/app/(coding-test)/_components/CodeEditor";
 import {
-  useCodingTestStore,
-  useRegisterStore,
-  useTiptapStore,
-} from "@/app/stores";
+  ALGORITHM_LIST,
+  DIFFICULTY_LIST,
+  PROGRAMMING_LANGUAGES,
+} from "@/app/_constants/constants";
+import { useForm } from "react-hook-form";
+import CodeEditor from "@/app/(coding-test)/_components/CodeEditor";
+import { useCodingTestStore, useTiptapStore } from "@/app/stores";
 import Dialog from "@/app/_components/Dialog";
 import { DialogCheckIcon } from "@/app/_components/Icons";
-import api from "@/app/_api/config";
-import { useQuery } from "@tanstack/react-query";
-import { useInitiateEditor } from "@/app/_hooks/useInitiateEditor";
+import { CodeDetail, ManageCodeProps } from "../_interfaces/interfaces";
+import { Code } from "@/app/(code)/_interfaces/interfaces";
 
-export default function ManageCode({ codeId }: ManageCodeProps) {
+export default function ManageCode({
+  code,
+  testcases,
+  onSubmit,
+}: ManageCodeProps) {
   const router = useRouter();
+  const pathname = usePathname();
 
-  const { register, handleSubmit, setValue, watch } = useForm<CodeDetail>();
-  const onValid = (data: CodeDetail) => {
+  // FormData Handling
+  const { register, handleSubmit, setValue } = useForm<Code>();
+  const onValid = (data: Code) => {
     // 빈 값 필터링
     if (
       data.title &&
@@ -33,69 +36,54 @@ export default function ManageCode({ codeId }: ManageCodeProps) {
       value.length !== 0
     ) {
       const newData: CodeDetail = {
-        ...data,
-        content: content,
-        testcase: value,
+        code: { ...data, content },
+        testcases: JSON.parse(value),
       };
-      // newData POST 필요
-
-      console.log(newData);
-      setIsDone((prev) => !prev);
+      onSubmit(newData);
     } else {
     }
-  };
-
-  // 문제 수정일 경우 문제 데이터 GET
-  const fetchData = async () => {
-    const response = await api.get(`/admin/${codeId}`);
-    return response.data;
-  };
-  const { data } = useQuery({ queryKey: ["codeDetail"], queryFn: fetchData });
-  const dummy: CodeDetail = {
-    title: "문제 제목",
-    difficulty: "1",
-    algorithm: "입출력",
-    content: `<h3>문제 : 최단 거리 구하기</h3>
-<p>두 노드 간의 최단 거리를 구하세요.</p>
-<ul>
-  <li><p>조건 1 : 노드는 0부터 N-1까지의 번호를 가집니다.</p></li>
-  <li><p>조건 2 : 간선은 방향성이 없으며, 양방향으로 이동 가능합니다.</p></li>
-  <li><p>조건 3 : 특정 노드에서 출발하여 다른 모든 노드로 가는 최단 거리를 구하세요.</p></li>
-  <li><p>조건 4 : 간선은 가중치가 1입니다.</p></li>
-</ul>`,
-    testcase: { input: "1 2", output: "3" },
   };
 
   // 에디터 초기값 설정
-  const { content } = useTiptapStore();
-  const { title, setLanguage, value } = useCodingTestStore();
-  const initiateEditor = useInitiateEditor();
-  const [isLoaded, setIsLoaded] = useState(false);
-  const { isRegistering } = useRegisterStore();
+  const { content, setContent } = useTiptapStore();
+  const { value, setValue: setTestcase, setLanguage } = useCodingTestStore();
+  const [isLoading, setIsLoading] = useState(true);
+  const [selection, setSelection] = useState({ difficulty: "", algorithm: "" });
   useEffect(() => {
-    // 코드 에디터 언어 JSON으로 설정
-    setLanguage({ content: "json", selection: "json" });
-    if (codeId) {
-      // 문제 수정일 경우 초기값 설정
-      setValue("title", dummy.title);
-      setValue("difficulty", dummy.difficulty);
-      setValue("algorithm", dummy.algorithm);
-      initiateEditor("text", dummy.content);
-      initiateEditor("code", JSON.stringify(dummy.testcase));
-      // 초기값 설정 끝난 뒤 isLoaded 설정
-      setIsLoaded(true);
-    } else if (isRegistering) {
-      // 건의된 문제를 등록할 때는 제목만 수동 설정 (내용은 전역 변수로 제어)
-      setValue("title", title);
-      setIsLoaded(true);
-    } else {
-      // 문제 생성일 경우 초기값 전부 초기화 후 isLoaded 설정
-      initiateEditor("both");
-      setIsLoaded(true);
+    setIsLoading(true);
+    if (code) {
+      setContent(code.content);
+      const difficulty = DIFFICULTY_LIST.find(
+        (el) => el.selection === code.difficulty
+      );
+      const algorithm = ALGORITHM_LIST.find(
+        (el) => el.selection === code.algorithm
+      );
+      setValue("title", code.title);
+      setValue(
+        "difficulty",
+        difficulty?.selection as
+          | "LEVEL1"
+          | "LEVEL2"
+          | "LEVEL3"
+          | "LEVEL4"
+          | "LEVEL5"
+      );
+      setValue("algorithm", algorithm?.selection || "");
+      setSelection({
+        difficulty: difficulty?.content || "",
+        algorithm: algorithm?.content || "",
+      });
     }
-  }, []);
 
-  const [isDone, setIsDone] = useState(false);
+    setLanguage({ content: "", selection: "json" });
+    if (testcases) {
+      setTestcase(JSON.stringify(testcases, null, 2));
+    } else {
+      setTestcase(JSON.stringify([{ input: "", output: "" }], null, 2));
+    }
+    setIsLoading(false);
+  }, []);
 
   return (
     <>
@@ -110,20 +98,34 @@ export default function ManageCode({ codeId }: ManageCodeProps) {
           <span className="edit-title">분류</span>
           <div className="flex gap-4">
             <DropDown
-              selection={
-                watch("difficulty") ? `${watch("difficulty")}단계` : ""
-              }
-              onSelectionClick={(selected) =>
-                setValue("difficulty", selected.selection)
-              }
+              selection={selection.difficulty}
+              onSelectionClick={(selected) => {
+                setValue(
+                  "difficulty",
+                  selected.selection as
+                    | "LEVEL1"
+                    | "LEVEL2"
+                    | "LEVEL3"
+                    | "LEVEL4"
+                    | "LEVEL5"
+                );
+                setSelection((prev) => ({
+                  ...prev,
+                  difficulty: selected.content,
+                }));
+              }}
               placeholder="난이도"
               list={DIFFICULTY_LIST}
             />
             <DropDown
-              selection={watch("algorithm")}
-              onSelectionClick={(selected) =>
-                setValue("algorithm", selected.content)
-              }
+              selection={selection.algorithm}
+              onSelectionClick={(selected) => {
+                setValue("algorithm", selected.selection);
+                setSelection((prev) => ({
+                  ...prev,
+                  algorithm: selected.content,
+                }));
+              }}
               placeholder="알고리즘"
               list={ALGORITHM_LIST}
             />
@@ -132,7 +134,7 @@ export default function ManageCode({ codeId }: ManageCodeProps) {
         {/* 문제 입력 */}
         <div className="edit-container">
           <span className="edit-title">문제</span>
-          <div className="h-[400px]">{isLoaded && <TiptapEditor />}</div>
+          <div className="h-[400px]">{!isLoading && <TiptapEditor />}</div>
         </div>
         {/* 테스트케이스 입력 */}
         <div className="edit-container">
@@ -146,21 +148,15 @@ export default function ManageCode({ codeId }: ManageCodeProps) {
         {/* 저장 / 취소 버튼 */}
         <div className="self-end">
           <SaveOrCancelBtn
-            saveBtn={!codeId ? "새 문제 생성" : "수정"}
+            saveBtn={
+              pathname.startsWith("/admin/code/new-code")
+                ? "새 문제 생성"
+                : "수정"
+            }
             onCancel={() => router.back()}
           />
         </div>
       </form>
-      {/* 문제 생성 / 수정 완료 */}
-      {isDone && (
-        <Dialog
-          icon={<DialogCheckIcon />}
-          title={`문제가 ${!codeId ? "생성" : "수정"}되었어요`}
-          backBtn="확인"
-          onBackBtnClick={() => router.push("/admin/code")}
-          blockOutsideClick
-        />
-      )}
     </>
   );
 }

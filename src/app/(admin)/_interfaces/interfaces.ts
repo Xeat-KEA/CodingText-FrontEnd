@@ -46,18 +46,20 @@ export interface UserListCardProps {
   onClick: () => void;
 }
 
-export interface ManageCodeProps {
-  codeId?: number;
-}
-
-export interface TestCase {
+export interface Testcase {
   input: string;
   output: string;
 }
 
-export interface RegisterCardProps {
+export interface CodeDetail {
   code: Code;
-  testcases: TestCase[];
+  testcases: Testcase[];
+}
+
+export interface ManageCodeProps {
+  code?: Code;
+  testcases?: Testcase[];
+  onSubmit: (newData: CodeDetail) => void;
 }
 
 export interface RegisterStore {

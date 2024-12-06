@@ -2,7 +2,6 @@ import Pagination from "@/app/_components/Pagination";
 import { useEffect, useState } from "react";
 import { Notice } from "@/app/_interfaces/interfaces";
 import NoticeCard from "@/app/_components/NoticeCard";
-import { Notice_Dummy_Data } from "@/app/_constants/constants";
 import { usePaginationStore } from "@/app/stores";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
@@ -22,9 +21,7 @@ export default function AdminNoticeContainer() {
   }, [data]);
 
   // 추후 데이터 API
-  useEffect(() => {
-    setData(Notice_Dummy_Data);
-  }, []);
+  useEffect(() => {}, []);
 
   return (
     <div className="top-container">
@@ -54,7 +51,8 @@ export default function AdminNoticeContainer() {
           <div className="flex w-full justify-end items-center">
             <Link
               href={"/admin/notice/write"}
-              className="px-4 py-2 bg-primary text-white text-xs text-bold rounded-md">
+              className="px-4 py-2 bg-primary text-white text-xs text-bold rounded-md"
+            >
               새 공지사항 작성
             </Link>
           </div>
