@@ -5,10 +5,7 @@ import BlogHomeContainer from "../../_components/BlogHomeContainer";
 
 export default function BlogHomePage() {
   // 로그인 여부 확인
-const { accessToken, isTokenSet } = useCheckToken();
+  const {} = useCheckToken();
 
-
-  return(
-    <BlogHomeContainer/>
-  )
+  return <BlogHomeContainer />;
 }

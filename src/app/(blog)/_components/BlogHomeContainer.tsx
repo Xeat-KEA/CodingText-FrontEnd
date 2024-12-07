@@ -1,15 +1,14 @@
-import { useCheckToken } from "@/app/_hooks/useCheckToken";
 import BlogProfile from "./BlogProfile";
 import BlogInfo from "./BlogInfo";
 import { useQuery } from "@tanstack/react-query";
 import api from "@/app/_api/config";
-import { useBlogStore } from "@/app/stores";
+import { useBlogStore, useTokenStore } from "@/app/stores";
 import { useEffect } from "react";
 import { useParams } from "next/navigation";
 
 export default function BlogHomeContainer() {
   // 로그인 여부 확인
-  const { accessToken, isTokenSet } = useCheckToken();
+  const { accessToken, isTokenSet } = useTokenStore();
   const params = useParams();
 
   const { userBlogId, currentBlogId, isOwnBlog, profile } = useBlogStore();
@@ -43,7 +42,7 @@ export default function BlogHomeContainer() {
     }
   };
 
-  const { data:blogInfo } = useQuery({
+  const { data: blogInfo, isLoading } = useQuery({
     queryKey: ["blogInfo", isTokenSet, currentBlogId],
     queryFn: fetchBlogProfileData,
     enabled: currentBlogId !== -1 && !!accessToken,
@@ -51,18 +50,20 @@ export default function BlogHomeContainer() {
 
   return (
     <>
-      <div className="top-container">
-        <div className="max-w-1000 min-h-screen">
-          {/* 블로그 프로필 정보 */}
-          <BlogProfile />
+      {!isLoading && (
+        <div className="top-container">
+          <div className="max-w-1000 min-h-screen">
+            {/* 블로그 프로필 정보 */}
+            <BlogProfile />
 
-          {/* 구분선 */}
-          <hr className="division my-6" />
+            {/* 구분선 */}
+            <hr className="division my-6" />
 
-          {/* 블로그 소개 정보 */}
-          <BlogInfo />
+            {/* 블로그 소개 정보 */}
+            <BlogInfo />
+          </div>
         </div>
-      </div>
+      )}
     </>
   );
 }

@@ -1,20 +1,14 @@
 import DOMPurify from "isomorphic-dompurify";
 import Link from "next/link";
-import api from "@/app/_api/config";
 import { BpEditIcon } from "./Icons";
 import { useBlogStore } from "@/app/stores";
 import { useBase64 } from "@/app/_hooks/useBase64";
-import { useQuery } from "@tanstack/react-query";
-import { useCheckToken } from "@/app/_hooks/useCheckToken";
 
 export default function BlogInfo() {
-  // 로그인 여부 확인
-  const { accessToken, isTokenSet } = useCheckToken();
 
   // 전역 변수
   const { currentBlogId, isOwnBlog, profile, blogContent } = useBlogStore();
   // const setBlogContent = useBlogStore((profile) => profile.setBlogContent);
-
 
   // 소개글 디코딩
   const blogIntro = profile.mainContent 

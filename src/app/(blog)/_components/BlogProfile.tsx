@@ -4,18 +4,16 @@ import { useEffect, useState } from "react"; // useState 훅 임포트
 import Dialog from "@/app/_components/Dialog";
 import { DialogCheckIcon, DialogReportIcon } from "@/app/_components/Icons";
 import Link from "next/link";
-import { useBlogStore } from "@/app/stores";
+import { useBlogStore, useTokenStore } from "@/app/stores";
 import { REPORT_REASONS } from "../_constants/constants";
 import DropDown from "@/app/_components/DropDown";
 import IconBtn from "@/app/_components/IconBtn";
 import api from "@/app/_api/config";
-import { useParams } from "next/navigation";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useCheckToken } from "@/app/_hooks/useCheckToken";
+import {  useQueryClient } from "@tanstack/react-query";
 
 export default function BlogProfile() {
   // 로그인 여부 확인
-  const { accessToken, isTokenSet } = useCheckToken();
+  const { accessToken, isTokenSet } = useTokenStore();
 
   const queryClient = useQueryClient();
 
