@@ -36,9 +36,7 @@ export default function PostAction() {
   // 좋아요 API 연결
   const onClickLike = async () => {
     if (!currentPost) return;
-    const requestBody = {
-      articleId: currentPost.postId,
-    };
+
     try {
       await api.put(`/blog-service/blog/board/article/like/${currentPost.postId}`,
          null, 

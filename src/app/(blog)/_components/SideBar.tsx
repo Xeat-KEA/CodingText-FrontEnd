@@ -21,18 +21,19 @@ import {
 } from "@/app/stores";
 import Board from "./Sidebar-Board/Board";
 import { useCheckToken } from "@/app/_hooks/useCheckToken";
+import { handleWindowResize } from "@/app/utils";
 
 export default function SideBar() {
+  handleWindowResize();
+
   // 로그인 여부 확인
   const { accessToken, isTokenSet } = useCheckToken();
 
   // 전역 변수
   const { userBlogId, currentBlogId, isOwnBlog } = useBlogStore();
-  // const { boardCategories } = useCategoryStore();
   const params = useParams();
   const pathname = usePathname();
   const setUserBlogId = useBlogStore((state) => state.setUserBlogId);
-  // const setCurrentBlogId = useBlogStore((state) => state.setCurrentBlogId);
   const setIsOwnBlog = useBlogStore((state) => state.setIsOwnBlog);
   const [sideUserName, setSideUserName] = useState("");
   const setBoardCategories = useCategoryStore(
@@ -48,7 +49,7 @@ export default function SideBar() {
   const { windowSize } = useWindowSizeStore();
 
   useEffect(() => {
-    if (windowSize < 768) {
+    if (windowSize < 1300) {
       setIsCollapsed(true);
     }
   }, [windowSize]);
@@ -103,7 +104,6 @@ export default function SideBar() {
     setSideUserName(response.data.data.userName);
 
     setBoardCategories([]);
-    setActiveCategories([]);
 
     // 데이터 형식 변환
     const transformedCategories = boardData.map((category: any) => ({
@@ -121,7 +121,7 @@ export default function SideBar() {
     return boardData;
   };
 
-  const { data:boardCategories } = useQuery({
+  const { data: boardCategories } = useQuery({
     queryKey: ["boardCategories", isTokenSet, currentBlogId],
     queryFn: fetchBoardCategories,
     enabled: currentBlogId !== -1 && !!accessToken,
