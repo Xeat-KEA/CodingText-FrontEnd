@@ -21,8 +21,7 @@ export default function PostCard({ post }: { post: Post }) {
   return (
     <Link
       href={`/post/${post.articleId}`} // 블로그 Id 수정 필요
-      className="w-full flex flex-col gap-2 py-6 cursor-pointer"
-    >
+      className="w-full flex flex-col gap-2 py-6 cursor-pointer">
       <div className="post-card-top-container">
         {post.nickName && post.profileUrl && (
           <>
@@ -33,8 +32,7 @@ export default function PostCard({ post }: { post: Post }) {
                 e.stopPropagation();
                 // 사용자 클릭 시 해당 사용자 블로그로 이동
               }}
-              className="post-card-profile-container"
-            >
+              className="post-card-profile-container">
               <ProfileImgContainer
                 width={24}
                 height={24}
@@ -70,8 +68,7 @@ export default function PostCard({ post }: { post: Post }) {
                     { scroll: false }
                   );
                 }}
-                className="post-card-code-number"
-              >
+                className="post-card-code-number">
                 #{post.codeId}&nbsp;
               </button>
             )}

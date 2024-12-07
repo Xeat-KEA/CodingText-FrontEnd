@@ -1,12 +1,11 @@
 import React, { useCallback, useState } from "react";
 import { CategoryItemProps } from "../../_interfaces/interfaces";
-import { useBlogStore, useCategoryStore } from "@/app/stores";
+import { useBlogStore, useCategoryStore, useTokenStore } from "@/app/stores";
 import { usePathname, useRouter } from "next/navigation";
 import ChildCategoryItem from "./ChildCategoryItem";
 import AddCategory from "./AddCategory";
 import api from "@/app/_api/config";
 import { useQueryClient } from "@tanstack/react-query";
-import { useCheckToken } from "@/app/_hooks/useCheckToken";
 // 제목의 최대 길이 설정 (임시로 10자로 제한)
 const MAX_TITLE_LENGTH = 10;
 
@@ -15,8 +14,8 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
   handleAddCategory,
   handleDeleteCategory,
 }) => {
-    // 로그인 여부 확인
-    const { accessToken, isTokenSet } = useCheckToken();
+  // 로그인 여부 확인
+  const { accessToken, isTokenSet } = useTokenStore();
 
   // 전역 변수
   const { userBlogId, currentBlogId, isOwnBlog } = useBlogStore();
@@ -33,6 +32,7 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
   const [editCategoryId, setEditCategoryId] = useState<number | null>(null);
   const [editCategoryTitle, setEditCategoryTitle] = useState<string>("");
   const [hoveredCategoryId, setHoveredCategoryId] = useState<boolean>(false);
+
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       saveEditCategory(category.id);
@@ -41,16 +41,13 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
 
   // 상위 게시판 클릭 -> 하위 게시판 토글
   const handleCategoryClick = (id: number) => {
-    if (id === 0) {
-      // 코딩게시글 일 경우 조건 추가 필요 -> 경로 다름 (/blog/[blogId]/code/1)
-      router.push(`/category/0`, { scroll: false });
-    } else {
-      setActiveCategories((prev) =>
-        prev.includes(id)
-          ? prev.filter((activeId) => activeId !== id)
-          : [...prev, id]
-      );
-    }
+    setActiveCategories((prev) => {
+      if (prev.includes(id)) {
+        return prev.filter((activeId) => activeId !== id);
+      } else {
+        return [...prev, id];
+      }
+    });
   };
 
   // 상위 수정 저장
@@ -66,10 +63,11 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
         }
       );
 
-      setEditCategoryId(null);
-      setEditCategoryTitle("");
       // 추가 후 데이터 갱신
       queryClient.invalidateQueries({ queryKey: ["boardCategories"] });
+
+      setEditCategoryId(null);
+      setEditCategoryTitle("");
     } catch (error) {
       console.error("상위 수정 저장 실패: ", error);
     }
@@ -111,7 +109,7 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
         ) : (
           <>
             <p
-              className={`${pathname === `/category/${category.id}`? "font-bold" : ""} cursor-pointer`}
+              className={`cursor-pointer`}
               onClick={() => handleCategoryClick(category.id)}>
               {category.title}
             </p>
@@ -143,13 +141,20 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
           {/* 하위 게시판 전체 */}
           <p
             className={`flex items-center relative text-xs font-regular h-8 py-2 cursor-pointer ${
-              pathname === `/category/${category.id}` || pathname === `/blog/${currentBlogId}/code` ? "font-bold" : ""
+              pathname ===
+              (category.id === 1
+                ? `/blog/${currentBlogId}/code`
+                : `/category/${category.id}`)
+                ? "font-bold"
+                : ""
             }`}
-            onClick={() => router.push(
-              category.id === 1
-              ? `/blog/${currentBlogId}/code`
-              : `/category/${category.id}`
-            )}>
+            onClick={() =>
+              router.push(
+                category.id === 1
+                  ? `/blog/${currentBlogId}/code`
+                  : `/category/${category.id}`
+              )
+            }>
             전체
           </p>
 

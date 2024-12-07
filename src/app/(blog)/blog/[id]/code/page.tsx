@@ -7,7 +7,7 @@ import { useCheckToken } from "@/app/_hooks/useCheckToken";
 
 export default function CodeAllListPage() {
   // 로그인 여부 확인
-  const { accessToken, isTokenSet } = useCheckToken();
+  const {} = useCheckToken();
 
   return (
     <BlogListContainer />

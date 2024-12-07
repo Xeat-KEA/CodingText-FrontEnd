@@ -1,11 +1,10 @@
 import Link from "next/link";
 import { ChildCategoryItemProps } from "../../_interfaces/interfaces";
 import { useState } from "react";
-import { useBlogStore, useCategoryStore } from "@/app/stores";
+import { useBlogStore, useCategoryStore, useTokenStore } from "@/app/stores";
 import { useParams } from "next/navigation";
 import api from "@/app/_api/config";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useCheckToken } from "@/app/_hooks/useCheckToken";
 
 const MAX_TITLE_LENGTH = 10;
 
@@ -14,11 +13,12 @@ const ChildCategoryItem: React.FC<ChildCategoryItemProps> = ({
   category,
   handleDeleteCategory,
 }) => {
-  const { accessToken, isTokenSet } = useCheckToken();
+  const { accessToken, isTokenSet } = useTokenStore();
 
   // 전역 변수
   const { userBlogId, currentBlogId, isOwnBlog } = useBlogStore();
-  const { categoryId, childCategoryId, boardCategories } = useCategoryStore();
+  const { categoryId, childCategoryId, boardCategories, setActiveCategories } =
+    useCategoryStore();
   const params = useParams();
   const queryClient = useQueryClient();
   const [editid, setEditid] = useState<{ [categoryId: number]: number | null }>(
@@ -30,6 +30,26 @@ const ChildCategoryItem: React.FC<ChildCategoryItemProps> = ({
   const [editChildCategoryTitle, setEditChildCategoryTitle] =
     useState<string>("");
   const [hoveredId, setHoveredId] = useState<Boolean>(false);
+
+  // // 하위 데이터 갱신
+  // const fetchChildList = async (categoryId: number) => {
+  //   const response = await api.get(
+  //     `/blog-service/blog/board/childList/${categoryId}`,
+  //     {
+  //       headers: { Authorization: accessToken },
+  //     }
+  //   );
+
+  //   const childData = response.data.data.childCategories;
+  //   console.log(response);
+  //   return childData;
+  // };
+
+  // const { data: childList } = useQuery({
+  //   queryKey: ["childList", category.id], // category.id 별로 구분
+  //   queryFn: () => fetchChildList(category.id),
+  //   enabled: !!accessToken && currentBlogId !== -1,
+  // });
 
   // 하위 게시판 수정 요청
   const handleEditChildCategory = async (
@@ -66,29 +86,7 @@ const ChildCategoryItem: React.FC<ChildCategoryItemProps> = ({
         }
       );
 
-      // 하위 데이터 갱신
-      // const fetchChildList = async () => {
-      //   const response = await api.get(
-      //     `/blog-service/blog/board/childList/${categoryId}`,
-      //     {
-      //       headers: { Authorization: accessToken },
-      //     }
-      //   );
-      //   const { childCategories } = response.data.data;
-
-      //   // 특정 부모 카테고리의 하위 데이터만 업데이트
-      //   setBoardCategories((prevCategories) =>
-      //     prevCategories.map((category) =>
-      //       category.id === categoryId
-      //         ? { ...category, childCategories: childCategories }
-      //         : category
-      //     )
-      //   );
-      //   console.log(boardCategories)
-      // };
-
-      // // 하위 데이터 가져오기 실행
-      // await fetchChildList();
+      queryClient.invalidateQueries({ queryKey: ["boardCategories"] });
 
       setEditid((prevState) => ({ ...prevState, [categoryId]: null }));
       setEditChildCategoryTitle("");
@@ -152,8 +150,13 @@ const ChildCategoryItem: React.FC<ChildCategoryItemProps> = ({
             }>
             <p
               className={
-                Number(params.categoryId) == childCategory.id ||
-                (params.postId && Number(childCategoryId) == childCategory.id)
+                category.id === 1
+                  ? Number(params.codeId) === childCategory.id
+                    ? "font-bold"
+                    : ""
+                  : Number(params.categoryId) === childCategory.id ||
+                    (params.postId &&
+                      Number(childCategoryId) === childCategory.id)
                   ? "font-bold"
                   : ""
               }>

@@ -4,22 +4,21 @@ import Dialog from "@/app/_components/Dialog";
 import { FailIcon } from "@/app/_components/Icons";
 import CategoryItem from "./CategoryItem";
 import AddCategory from "./AddCategory";
-import { useBlogStore, useCategoryStore } from "@/app/stores";
+import { useBlogStore, useCategoryStore, useTokenStore } from "@/app/stores";
 import api from "@/app/_api/config";
 import { usePathname, useRouter } from "next/navigation";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useCheckToken } from "@/app/_hooks/useCheckToken";
+import { useQueryClient } from "@tanstack/react-query";
 // 제목의 최대 길이 설정 (임시로 10자로 제한)
 const MAX_TITLE_LENGTH = 10;
 
 export default function Board() {
-  const { accessToken, isTokenSet } = useCheckToken();
+  const { accessToken, isTokenSet } = useTokenStore();
 
   const pathname = usePathname();
   const router = useRouter();
   const queryClient = useQueryClient();
 
-  const { userBlogId, currentBlogId, isOwnBlog } = useBlogStore();
+  const { currentBlogId, isOwnBlog } = useBlogStore();
   const {
     boardCategories,
     isAddingCategory,
@@ -139,8 +138,8 @@ export default function Board() {
       </p>
       {/* 상위 게시판 전체 */}
       <p
-        className={`flex items-center relative text-black text-sm font-regular h-10 pl-6 py-2 cursor-pointer ${
-          pathname === `/blog/${currentBlogId}/category` ? "font-bold" : ""
+        className={`flex items-center relative text-black text-sm font-regular h-10 pl-6 py-2 cursor-pointer 
+          ${pathname === `/blog/${currentBlogId}/category` ? "font-bold" : ""
         }`}
         onClick={() => router.push(`/blog/${currentBlogId}/category`)}>
         전체
