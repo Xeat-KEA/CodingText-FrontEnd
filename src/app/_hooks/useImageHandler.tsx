@@ -1,12 +1,32 @@
-export const useImageHandler = (files: FileList) => {
+import api from "../_api/config";
+
+export const useImageHandler = async (files: FileList, accessToken: string) => {
   const file = files[0];
   const formData = new FormData();
-  formData.append("file", file);
 
-  // 백엔드에 이미지 post
-  /* const imgHash = await postManager.uploadImage(formData, accessToken); // 백엔드에게 이미지 Post요청 후 URL 받기
-    const IMG_URL = `${BASE_URL}${imgHash}`; */
-  const IMG_URL = "https://picsum.photos/id/237/300/200";
+  const timestamp = new Date().toISOString().replace(/[-:.]/g, "");
+  const newFileName = `img${timestamp}${file.name.substring(file.name.lastIndexOf("."))}`;
+  
+  formData.append("image", file, newFileName);
 
-  return IMG_URL;
+  try {
+    const response = await api.post(
+      "/blog-service/blog/image/upload",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: accessToken,
+        },
+      }
+    );
+
+    const { uploadImageUrl } = response.data;
+    console.log(response);
+
+    return uploadImageUrl;
+  } catch (error) {
+    console.error("이미지 업로드 실패:", error);
+    return null;
+  }
 };

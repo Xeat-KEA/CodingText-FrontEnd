@@ -80,6 +80,7 @@ export interface CodeEditorProps {
 
 export interface ToolBarProps {
   editor: Editor | null;
+  accessToken: string;
 }
 
 export interface PostEditorProps {

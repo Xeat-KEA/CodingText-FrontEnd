@@ -16,11 +16,10 @@ import {
 } from "./icons";
 import { useImageHandler } from "@/app/_hooks/useImageHandler";
 
-export default function ToolBar({ editor }: ToolBarProps) {
+export default function  ToolBar({ editor, accessToken }: ToolBarProps) {
   if (!editor) {
     return null;
   }
-
   // Link 기능
   const handleLink = () => {
     // 이미 링크가 적용되었을 때
@@ -57,7 +56,7 @@ export default function ToolBar({ editor }: ToolBarProps) {
     }
 
     // 이미지 업로드 및 주소 반환
-    const IMG_URL = useImageHandler(files);
+    const IMG_URL = await useImageHandler(files, accessToken);
 
     // 반환받은 이미지 주소를 통해 editor에 이미지 삽입
     editor.commands.setImage({

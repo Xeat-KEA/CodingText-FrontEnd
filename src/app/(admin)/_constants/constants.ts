@@ -1,6 +1,5 @@
-import { Post, BlogProfile, ProfileTab } from "@/app/_interfaces/interfaces";
+import { ProfileTab } from "@/app/_interfaces/interfaces";
 import { Report } from "../_interfaces/interfaces";
-import { CommentProps } from "../../(blog)/_interfaces/interfaces";
 
 export const ADMIN_TAB_LIST: ProfileTab[] = [
   { content: "사용자 관리", url: "/admin/user" },
@@ -66,77 +65,77 @@ export const Report_Dummy_Data: Report[] = [
 //   }
 // ]
 
-export const Post_Dummy_Data = [
-  {
-    postId: 1,
-    blogId: 101,
-    categoryId: 1,
-    subCategoryId: 2,
-    title: "일반 게시글",
-    content:
-      "7J6E7IucIOqyjOyLnOusvOyeheuLiOuLpC4K6rCc67Cc7J6Q7J6F64uI64ukLgrrsJjqsJHsirXri4jri6Qu",
-    viewCount: 75,
-    isSecret: true,
-    isBlind: true,
-    password: "mypassword",
-    likeCount: 5,
-    reportCount: 0,
-    commentCount: 0,
-    createdAt: "2024-03-05 09:00",
-    modifiedAt: "2024-03-05 09:00",
-  },
-  {
-    postId: 2,
-    blogId: 101,
-    categoryId: 1,
-    subCategoryId: 2,
-    title: "코딩 게시글",
-    content:
-      "7J6E7IucIOqyjOyLnOusvOyeheuLiOuLpC4K6rCc67Cc7J6Q7J6F64uI64ukLgrrsJjqsJHsirXri4jri6Qu",
-    viewCount: 75,
-    isSecret: false,
-    isBlind: false,
-    password: "",
-    likeCount: 5,
-    reportCount: 0,
-    commentCount: 0,
-    createdAt: "2024-03-05 09:00",
-    modifiedAt: "2024-03-05 09:00",
-  },
-];
+// export const Post_Dummy_Data = [
+//   {
+//     postId: 1,
+//     blogId: 101,
+//     categoryId: 1,
+//     subCategoryId: 2,
+//     title: "일반 게시글",
+//     content:
+//       "7J6E7IucIOqyjOyLnOusvOyeheuLiOuLpC4K6rCc67Cc7J6Q7J6F64uI64ukLgrrsJjqsJHsirXri4jri6Qu",
+//     viewCount: 75,
+//     isSecret: true,
+//     isBlind: true,
+//     password: "mypassword",
+//     likeCount: 5,
+//     reportCount: 0,
+//     commentCount: 0,
+//     createdAt: "2024-03-05 09:00",
+//     modifiedAt: "2024-03-05 09:00",
+//   },
+//   {
+//     postId: 2,
+//     blogId: 101,
+//     categoryId: 1,
+//     subCategoryId: 2,
+//     title: "코딩 게시글",
+//     content:
+//       "7J6E7IucIOqyjOyLnOusvOyeheuLiOuLpC4K6rCc67Cc7J6Q7J6F64uI64ukLgrrsJjqsJHsirXri4jri6Qu",
+//     viewCount: 75,
+//     isSecret: false,
+//     isBlind: false,
+//     password: "",
+//     likeCount: 5,
+//     reportCount: 0,
+//     commentCount: 0,
+//     createdAt: "2024-03-05 09:00",
+//     modifiedAt: "2024-03-05 09:00",
+//   },
+// ];
 
-export const Code_Post_Dummy_Data = [
-  {
-    codePostId: 100,
-    postId: 1,
-    difficulty: "1단계",
-    codeId: 1000,
-    language: "javascript",
-    codeContent: "PGgzPuusuOygnDog7ZmA7IiYIOynneyImCDqtazrtoTtlZjquLA8L2gzPg==",
-    writtenCode: "SGVsbG8gV29ybGQ=",
-  },
-];
+// export const Code_Post_Dummy_Data = [
+//   {
+//     codePostId: 100,
+//     postId: 1,
+//     difficulty: "1단계",
+//     codeId: 1000,
+//     language: "javascript",
+//     codeContent: "PGgzPuusuOygnDog7ZmA7IiYIOynneyImCDqtazrtoTtlZjquLA8L2gzPg==",
+//     writtenCode: "SGVsbG8gV29ybGQ=",
+//   },
+// ];
 
-export const Comment_Dummy_Data = [
-  {
-    replyId: 1,
-    postId: 1,
-    userId: 101,
-    mentionId: null,
-    parentReplyId: null,
-    content: "첫 번째 게시물에 대한 첫 번째 댓글입니다.",
-    createdAt: "2024-10-19 14:32:00",
-    modifiedAt: "2024-10-19 14:32:00",
-  },
-  {
-    replyId: 2,
-    postId: 1,
-    userId: 101,
-    mentionId: 101,
-    parentReplyId: 1,
-    content: "첫 번째 댓글에 동의합니다! 정말 좋은 의견이에요.",
-    createdAt: "2024-10-19 16:30:00",
-    modifiedAt: "2024-10-19 16:30:00",
-  },
-];
+// export const Comment_Dummy_Data = [
+//   {
+//     replyId: 1,
+//     postId: 1,
+//     userId: 101,
+//     mentionId: null,
+//     parentReplyId: null,
+//     content: "첫 번째 게시물에 대한 첫 번째 댓글입니다.",
+//     createdAt: "2024-10-19 14:32:00",
+//     modifiedAt: "2024-10-19 14:32:00",
+//   },
+//   {
+//     replyId: 2,
+//     postId: 1,
+//     userId: 101,
+//     mentionId: 101,
+//     parentReplyId: 1,
+//     content: "첫 번째 댓글에 동의합니다! 정말 좋은 의견이에요.",
+//     createdAt: "2024-10-19 16:30:00",
+//     modifiedAt: "2024-10-19 16:30:00",
+//   },
+// ];
 export const ADMIN_MANAGEMENT_TAB = ["관리자", "승인 대기"];
