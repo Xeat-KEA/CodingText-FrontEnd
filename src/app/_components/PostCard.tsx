@@ -1,5 +1,10 @@
 import { Post } from "../_interfaces/interfaces";
-import { CommentCountIcon, LikeCountIcon, ReportIcon } from "./Icons";
+import {
+  CommentCountIcon,
+  LikeCountIcon,
+  ReportIcon,
+  SecretPostIcon,
+} from "./Icons";
 import { useCalculateDate } from "../_hooks/useCalculateDate";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -14,8 +19,7 @@ export default function PostCard({ post }: { post: Post }) {
 
   const date = useCalculateDate(post.createdDate);
 
-  const decodedContent = useBase64("decode", post.content);
-
+  const decodedContent = post.isSecret ? "비밀번호를 입력하여 게시글을 확인하세요." : useBase64("decode", post.content);
   const { currentBlogId } = useBlogStore();
 
   return (
@@ -57,7 +61,9 @@ export default function PostCard({ post }: { post: Post }) {
       <div className="post-card-middle-container">
         {/* 게시글 내용 */}
         <div className="post-card-content-container">
-          <span className="post-card-title">
+          <span className="flex items-center gap-2 post-card-title">
+            {post.isSecret && <SecretPostIcon />}
+
             {post.codeId && (
               <button
                 onClick={(e) => {
@@ -82,7 +88,7 @@ export default function PostCard({ post }: { post: Post }) {
           />
         </div>
         {/* 썸네일 */}
-        {post.thumbnailImageUrl && (
+        {!post.isSecret && post.thumbnailImageUrl && (
           <div className="rounded-lg shrink-0">
             <Image
               src={post.thumbnailImageUrl}

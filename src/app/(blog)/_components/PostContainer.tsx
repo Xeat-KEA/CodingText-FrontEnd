@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import { BlogPost } from "@/app/(blog)/_interfaces/interfaces";
 import api from "@/app/_api/config";
 import { useQuery } from "@tanstack/react-query";
+import Dialog from "@/app/_components/Dialog";
 
 export default function PostContainer() {
   const { accessToken, isTokenSet } = useTokenStore();
@@ -39,7 +40,10 @@ export default function PostContainer() {
   // 비밀글
   const [isSecret, setIsSecret] = useState(false);
   const [password, setPassword] = useState<string>("");
-  // 비밀번호 입력 dialog 추가
+  const [passwordDialog, setPasswordDialog] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string>("");
+
+  const [isLoaded, setIsLoaded] = useState(true);
 
   // 게시글 내용 api 연결
   const fetchPostData = async () => {
@@ -53,16 +57,20 @@ export default function PostContainer() {
           }
         );
         const postData = response.data.data;
+        console.log(postData);
         if (postData) {
           setCurrentBlogId(postData.blogId);
           setChildCategoryId(postData.childCategoryId);
           setIsCodingPost(postData.codeId !== undefined);
+          setIsBlind(postData.isBlind);
+          setIsSecret(postData.isSecret);
           const mappedPostData = {
             ...postData,
             postId: postData.articleId,
           };
           setCurrentPost(mappedPostData);
         }
+        setIsLoaded(false);
         return currentPost;
       } catch (error) {
         console.error("게시글 내용 반환 오류: ", error);
@@ -79,13 +87,40 @@ export default function PostContainer() {
 
   useEffect(() => {
     if (isBlind) {
-      router.push("/blind");
+      router.replace("/blind");
     }
-  }, [isBlind, router]);
+    if (isSecret) {
+      setPasswordDialog(true);
+    }
+  }, [isBlind, isSecret, router]);
 
+  const checkPassword = async () => {
+    try {
+      const response = await api.get(
+        `/blog-service/blog/board/password/${params.postId}`,
+        {
+          params: { password },
+          headers: { Authorization: accessToken },
+        }
+      );
+      console.log(response);
+      if (response.data.statusCode === 200) {
+        setPasswordDialog(false);
+        setIsSecret(false);
+      } else if (response.data.statusCode === 404) {
+        setPassword("");
+        setErrorMessage("비밀번호가 일치하지 않습니다.");
+      }
+    } catch (error) {
+      console.error("비밀번호 확인 오류: ", error);
+      setErrorMessage("오류가 발생했습니다. 다시 시도해주세요.");
+    }
+  };
+  if (isLoaded) return null;
+  
   return (
     <>
-      {!isBlind && (
+      {!isBlind && !isSecret && (
         <div className="top-container">
           <div className="max-w-800 min-h-screen flex flex-col gap-6 py-12">
             {/* 목록으로 버튼*/}
@@ -133,6 +168,26 @@ export default function PostContainer() {
             </div>
           </div>
         </div>
+      )}
+      {passwordDialog && (
+        <Dialog
+          title="비밀번호를 입력해 주세요"
+          content={errorMessage}
+          isWarning={passwordDialog}
+          backBtn="취소"
+          onBackBtnClick={() => router.back()}
+          redBtn="확인"
+          onBtnClick={() => checkPassword()}>
+          <div>
+            <input
+              type="password"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              placeholder={"비밀번호를 입력해주세요."}
+              className="w-full border pl-4 p-2 rounded-md text-sm font-regular"
+            />
+          </div>
+        </Dialog>
       )}
     </>
   );
