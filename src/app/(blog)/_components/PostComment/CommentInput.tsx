@@ -1,22 +1,17 @@
 import { useForm } from "react-hook-form";
 import { CommentInputProps } from "../../_interfaces/interfaces";
 import { useBlogStore } from "@/app/stores";
-import { Profile_Dummy_Data } from "@/app/(admin)/_constants/constants";
 
 export default function CommentInput({
   target,
   mentionId,
+  mentionedUserName,
   onSubmit,
   onCancel,
 }: CommentInputProps) {
   const { register, handleSubmit, reset } = useForm();
-  const { profile } = useBlogStore();
 
-  // 수정 필요
-  const mentionProfile = Profile_Dummy_Data.find(
-    (profile) => profile.userId === mentionId
-  );
-
+  // 댓글
   const onClickSubmit = (data: any) => {
     onSubmit(data);
     reset();
@@ -37,7 +32,7 @@ export default function CommentInput({
         {target === "reply" && (
           <div className="flex items-center gap-2">
             <p className="font-bold text-sm text-body">
-              {mentionProfile?.nickName} 님에게 답글
+              {mentionedUserName} 님에게 답글
             </p>
             <button
               className="font-semibold text-xs text-red"

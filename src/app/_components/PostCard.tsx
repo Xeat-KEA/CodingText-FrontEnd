@@ -1,5 +1,10 @@
 import { Post } from "../_interfaces/interfaces";
-import { CommentCountIcon, LikeCountIcon, ReportIcon } from "./Icons";
+import {
+  CommentCountIcon,
+  LikeCountIcon,
+  ReportIcon,
+  SecretPostIcon,
+} from "./Icons";
 import { useCalculateDate } from "../_hooks/useCalculateDate";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -14,15 +19,13 @@ export default function PostCard({ post }: { post: Post }) {
 
   const date = useCalculateDate(post.createdDate);
 
-  const decodedContent = useBase64("decode", post.content);
-
-  const { blogId } = useBlogStore();
+  const decodedContent = post.isSecret ? "비밀번호를 입력하여 게시글을 확인하세요." : useBase64("decode", post.content);
+  const { currentBlogId } = useBlogStore();
 
   return (
     <Link
-      href={`/blog/${blogId}/post/${post.articleId}`} // 블로그 Id 수정 필요
-      className="w-full flex flex-col gap-2 py-6 cursor-pointer"
-    >
+      href={`/post/${post.articleId}`} // 블로그 Id 수정 필요
+      className="w-full flex flex-col gap-2 py-6 cursor-pointer">
       <div className="post-card-top-container">
         {post.nickName && post.profileUrl && (
           <>
@@ -33,8 +36,7 @@ export default function PostCard({ post }: { post: Post }) {
                 e.stopPropagation();
                 // 사용자 클릭 시 해당 사용자 블로그로 이동
               }}
-              className="post-card-profile-container"
-            >
+              className="post-card-profile-container">
               <ProfileImgContainer
                 width={24}
                 height={24}
@@ -59,7 +61,9 @@ export default function PostCard({ post }: { post: Post }) {
       <div className="post-card-middle-container">
         {/* 게시글 내용 */}
         <div className="post-card-content-container">
-          <span className="post-card-title">
+          <span className="flex items-center gap-2 post-card-title">
+            {post.isSecret && <SecretPostIcon />}
+
             {post.codeId && (
               <button
                 onClick={(e) => {
@@ -70,8 +74,7 @@ export default function PostCard({ post }: { post: Post }) {
                     { scroll: false }
                   );
                 }}
-                className="post-card-code-number"
-              >
+                className="post-card-code-number">
                 #{post.codeId}&nbsp;
               </button>
             )}
@@ -85,7 +88,7 @@ export default function PostCard({ post }: { post: Post }) {
           />
         </div>
         {/* 썸네일 */}
-        {post.thumbnailImageUrl && (
+        {!post.isSecret && post.thumbnailImageUrl && (
           <div className="rounded-lg shrink-0">
             <Image
               src={post.thumbnailImageUrl}

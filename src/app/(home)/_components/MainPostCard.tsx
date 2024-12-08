@@ -23,7 +23,7 @@ export default function MainPostCard({ post, ranking }: MainPostCardProps) {
       }}
     >
       <Link
-        href={`/blog/${post.articleId}`}
+        href={`/post/${post.articleId}`}
         className="main-post-card"
         scroll={false}
       >

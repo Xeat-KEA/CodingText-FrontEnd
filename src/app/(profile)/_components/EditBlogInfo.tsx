@@ -1,21 +1,38 @@
 import api from "@/app/_api/config";
 import EditBtn from "@/app/_components/TipTapEditor/EditBtn";
 import TiptapEditor from "@/app/_components/TipTapEditor/TiptapEditor";
-import { useTiptapStore } from "@/app/stores";
+import { useBase64 } from "@/app/_hooks/useBase64";
+import { useCheckToken } from "@/app/_hooks/useCheckToken";
+import { useBlogStore, useTiptapStore } from "@/app/stores";
 import { useQuery } from "@tanstack/react-query";
 import DOMPurify from "isomorphic-dompurify";
 import { useState } from "react";
 
 export default function EditBlogInfo() {
+  // 로그인 여부 확인
+  const { accessToken, isTokenSet } = useCheckToken();
+
   // API 호출
   const fetchBlogData = async () => {
-    const response = await api.get("/blog");
-    return response.data;
+    if (accessToken) {
+      const response = await api.get(`/blog-service/blog/home/mainContent`, {
+        headers: { Authorization: accessToken },
+      });
+      return response.data.data.mainContetent;
+    }
   };
-  const { data } = useQuery({ queryKey: ["BlogData"], queryFn: fetchBlogData });
+  const { data } = useQuery({
+    queryKey: ["BlogData", isTokenSet],
+    queryFn: fetchBlogData,
+    enabled: isTokenSet && !!accessToken,
+  });
+
+  const mainContentDe = data
+  ? useBase64("decode", data)
+  : data
 
   // 변경 사항 취소를 위한 초기값
-  const [blogData, setBlogData] = useState("");
+  const [blogData, setBlogData] = useState(mainContentDe);
   const [isIntroEditing, setIsIntroEditing] = useState(false);
   const { content, setContent } = useTiptapStore();
 
