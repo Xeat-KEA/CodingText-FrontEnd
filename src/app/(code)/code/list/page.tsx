@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { usePaginationStore } from "@/app/stores";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import api from "@/app/_api/config";
@@ -8,7 +8,6 @@ import CodeListTopBar from "../../_components/CodeListTopBar";
 import { Code } from "../../_interfaces/interfaces";
 import { useQuery } from "@tanstack/react-query";
 import CodeCard from "../../_components/CodeCard";
-import Pagination from "@/app/_components/Pagination";
 
 export default function CodeListPage() {
   const router = useRouter();
@@ -31,8 +30,8 @@ export default function CodeListPage() {
     }
   }, [searchParams, router, pathname]);
 
-  const algorithm = searchParams.get("algorithm") || "";
-  const difficulty = searchParams.get("difficulty") || "";
+  const algorithms = searchParams.get("algorithms") || "";
+  const difficulties = searchParams.get("difficulties") || "";
   const order = searchParams.get("order") || "createdAt";
   const keyword = searchParams.get("keyword") || "";
   const searchBy = searchParams.get("filter") || "title";
@@ -43,8 +42,8 @@ export default function CodeListPage() {
     const response = await api.get("/code-bank-service/code/lists", {
       headers: { Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}` },
       params: {
-        algorithm,
-        difficulty,
+        algorithms,
+        difficulties,
         searchBy: searchBy,
         searchText: searchBy === "title" ? keyword : Number(keyword),
         sortBy: order,
@@ -61,7 +60,7 @@ export default function CodeListPage() {
     return response.data;
   };
   const { data } = useQuery<{ content: Code[] }>({
-    queryKey: ["codeList", algorithm, difficulty, order, page, keyword],
+    queryKey: ["codeList", algorithms, difficulties, order, page, keyword],
     queryFn: fetchCodeList,
   });
 

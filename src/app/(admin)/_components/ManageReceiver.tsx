@@ -13,7 +13,11 @@ export default function ManageReceiver({
     <div className="flex flex-col gap-4">
       <div className="edit-container">
         <span className="edit-title">알림 수신자 추가</span>
-        <SmCheckBoxBtn isActive={isAll} onClick={onAllClick} />
+        <SmCheckBoxBtn
+          isActive={isAll}
+          onClick={onAllClick}
+          content="모든 사용자에게 전달"
+        />
       </div>
       {/* 사용자 추가 입력칸 */}
       <div className="flex flex-col gap-2">
@@ -26,14 +30,16 @@ export default function ManageReceiver({
         <div
           className={`w-full max-w-[240px] h-[160px] px-6 py-4 flex flex-col gap-2 border border-border-2 rounded-lg overflow-y-auto ${
             isAll ? "bg-bg-1" : "bg-white"
-          }`}>
+          }`}
+        >
           {receivers.map((el) => (
             <div key={el} className="flex w-full justify-between items-center">
               <span className="text-black">{el}</span>
               <button
                 className="edit-btn-red"
                 onClick={() => onDelete(el)}
-                disabled={isAll}>
+                disabled={isAll}
+              >
                 취소
               </button>
             </div>

@@ -1,5 +1,7 @@
+import { Code } from "@/app/(code)/_interfaces/interfaces";
+
 export interface SignInForm {
-  username: string;
+  email: string;
   password: string;
 }
 
@@ -21,34 +23,54 @@ export interface Report {
   directReason?: string; // 직접 입력
 }
 
-export interface UserListCardProps {
-  userId: number;
-  nickname: string;
+export interface AdminUserInfo {
   email: string;
-  rank: string;
-  signedUpAt: string;
+  nickName: string;
+  registerDate: string;
+  tier: string;
+  userId: string;
+}
+
+export interface AdminUserDetail {
+  blogId: number;
+  blogIntro: string;
+  email: string;
+  nickName: string;
+  profileMessage: string;
+  profileUrl: string;
+  userId: string;
+}
+
+export interface UserListCardProps {
+  userInfo: AdminUserInfo;
   onClick: () => void;
 }
 
-export interface AdminListCardProps {
-  email: string;
-  role: string;
+export interface Testcase {
+  input: string;
+  output: string;
 }
 
-export interface AdminRequestCardProps {
-  email: string;
+export interface CodeDetail {
+  nickName?: string;
+  code: Code;
+  testcases: Testcase[];
+}
+
+export interface EditCodeDetail {
+  codeId: number;
+  title: string;
+  content: string;
+  difficulty: string;
+  algorithm: string;
+  testcases: Testcase[];
 }
 
 export interface ManageCodeProps {
-  codeId?: number;
-}
-
-export interface RegisterCardProps {
-  createdAt: string;
-  nickName: string;
-  title: string;
-  content: string;
-  testcase: string;
+  code?: Code;
+  testcases?: Testcase[];
+  onAdd?: (newData: CodeDetail) => void;
+  onEdit?: (newData: EditCodeDetail) => void;
 }
 
 export interface RegisterStore {
@@ -83,6 +105,18 @@ export interface PushFormContainerProps {
 export interface Notice {
   announceId: number;
   title: string;
-  content: string;
+  content?: string;
   createdDate: string;
+}
+export interface Admin {
+  id: number;
+  email: string;
+  adminRole?: "ROOT" | "GENERAL" | "NONE";
+}
+
+export interface AdminResponseDialogsProps {
+  isError: boolean;
+  isDone: boolean;
+  onError: () => void;
+  onDone: () => void;
 }
