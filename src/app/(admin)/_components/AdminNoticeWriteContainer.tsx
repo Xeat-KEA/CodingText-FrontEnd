@@ -9,28 +9,48 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { NoticeForm } from "@/app/_interfaces/interfaces";
 import { Notice } from "@/app/_interfaces/interfaces";
+import api from "@/app/_api/config";
+import { useCheckToken } from "@/app/_hooks/useCheckToken";
 
 export default function AdminNoticeWriteContainer() {
+  const { accessToken, isTokenSet } = useCheckToken("/admin/sign-in");
   const router = useRouter();
   const { content, setContent } = useTiptapStore();
   const { register, handleSubmit, setValue } = useForm<NoticeForm>({
     defaultValues: {
-      noticeTitle: "",
-      noticeContent: "",
+      title: "",
+      content: "",
     },
   });
-  const onValid = (data: NoticeForm) => {
+  const onValid = async (data: NoticeForm) => {
     const encodedContent = useBase64("encode", content);
-    const newNotice: Notice = {
+    const newNotice: NoticeForm = {
       ...data,
-      noticeContent: encodedContent,
-      noticeId: 10, // 실제 등록 시 서버에서 생성된 ID로 대체
-      noticedAt: new Date().toISOString(),
+      // content: encodedContent,
     };
+    const requestBody = {
+      title: newNotice.title,
+      content: newNotice.content,
+      adminId: 1, // 수정 필요
+    };
+    try {
+      const response = await api.post(
+        "/admin-service/admins/announce",
+        requestBody,
+        {
+          headers: { Authorization: accessToken },
+        }
+      );
 
-    // API를 통해 등록 처리 로직 추가
-    // console.log("새 공지사항 등록:", newNotice);
-    setIsSubmitDialogOpen(true);
+      console.log(requestBody);
+      if (response.status === 200) {
+        setIsSubmitDialogOpen(true);
+        router.replace(`/admin/notice/${response.data.announceId}`);
+        console.log(response);
+      }
+    } catch (error) {
+      console.error("공지사항 등록 실패:", error);
+    }
   };
 
   const [isCancelDialogOpen, setIsCancelDialogOpen] = useState(false);
@@ -59,13 +79,18 @@ export default function AdminNoticeWriteContainer() {
             className="grow post-input"
             placeholder="제목을 입력해주세요"
             autoComplete="off"
-            {...register("noticeTitle", { required: "제목을 입력해 주세요" })}
+            {...register("title", { required: "제목을 입력해 주세요" })}
           />
         </div>
 
         {/* 공지사항 내용 */}
         <div className="h-[400px]">
-          <TiptapEditor />
+          {/* <TiptapEditor /> */}
+          <textarea
+            className="w-full h-full p-2 border border-gray-300 rounded"
+            placeholder="공지사항 내용을 입력해주세요"
+            {...register("content", { required: "내용을 입력해 주세요" })}
+          />{" "}
         </div>
 
         {/* 하단 버튼 */}

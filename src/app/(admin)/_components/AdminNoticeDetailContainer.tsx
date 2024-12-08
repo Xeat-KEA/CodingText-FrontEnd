@@ -11,8 +11,12 @@ import NoticeEditBtn from "./NoticeEditBtn";
 import IconBtn from "@/app/_components/IconBtn";
 import Dialog from "@/app/_components/Dialog";
 import { Notice } from "../_interfaces/interfaces";
+import { useCheckToken } from "@/app/_hooks/useCheckToken";
+import { useQuery } from "@tanstack/react-query";
 
 export default function AdminNoticeDetailContainer() {
+  const { accessToken, isTokenSet } = useCheckToken("/admin/sign-in");
+
   const router = useRouter();
   const params = useParams();
   const pathname = usePathname();
@@ -24,20 +28,26 @@ export default function AdminNoticeDetailContainer() {
 
   // API 호출
   const fetchNoticeData = async () => {
+    if (!accessToken) return null;
     const response = await api.get(
-      `/admin-service/admins/announce/${params.id}`
+      `/admin-service/admins/announce/${params.id}`,
+      { headers: { Authorization: accessToken } }
     );
 
     console.log(response);
-    setCurrentNotice(response.data.data);
-    return response.data;
+    setCurrentNotice(response.data);
+    return response.data.content;
   };
+  const { data: noticData } = useQuery({
+    queryKey: ["noticeData"],
+    queryFn: fetchNoticeData,
+  });
 
+  // 기존 공지사항 내용 디코딩 결과 -> 현재 인코딩 안된 상태로 전달됨
+  // const contentDe =
+  //   currentNotice && useBase64("decode", currentNotice.content || "");
 
-
-  // 기존 공지사항 내용 디코딩 결과
-  const contentDe =
-    currentNotice && useBase64("decode", currentNotice.content);
+  const contentDe = currentNotice?.content;
 
   const [noticeData, setNoticeData] = useState("");
   const [isEditing, setIsEditing] = useState(false);
@@ -79,9 +89,7 @@ export default function AdminNoticeDetailContainer() {
           </div>
 
           <div className="flex w-full text-xl font-semibold">
-            <p className="text-black line-clamp-2">
-              {currentNotice?.title}
-            </p>
+            <p className="text-black line-clamp-2">{currentNotice?.title}</p>
           </div>
         </div>
 
@@ -94,7 +102,7 @@ export default function AdminNoticeDetailContainer() {
             <div
               className="prose"
               dangerouslySetInnerHTML={{
-                __html: DOMPurify.sanitize(noticeData),
+                __html: DOMPurify.sanitize(String(noticeData)),
               }}
             />
           </div>

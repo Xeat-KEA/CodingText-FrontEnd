@@ -7,34 +7,42 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import api from "../_api/config";
+import { useCheckToken } from "../_hooks/useCheckToken";
 
 export default function NoticeContainer() {
+  const { accessToken, isTokenSet } = useCheckToken();
+
   const pathname = usePathname();
   const isAdmin = pathname.includes("/admin");
 
-  const [data, setData] = useState<Notice[]>([]);
-
   // 페이지네이션
   const { page, setPage, setLastPage } = usePaginationStore();
-  // 첫 페이지 초기화
-  useEffect(() => {
-    setPage(1);
-    setLastPage(Math.ceil(data.length / 10));
-  }, [data]);
 
   // 추후 데이터 API
-//   const fetchUserNoticeList = async () => {
-//     const response = await api.get(`/user-service/users/announce`, {
-//       params: { page: 0, size: 5 },
-//     });
-//     console.log(response);
-//     // setData(response.data.content);
-//   };
+  const fetchUserNoticeList = async () => {
+    if (accessToken) {
+      const response = await api.get(`/user-service/users/announce`, {
+        params: { page: 0, size: 5 },
+        headers: { Authorization: accessToken },
+      });
+      console.log(response);
 
-//   const { data: userNoticList } = useQuery({
-//     queryKey: ["userNoticeList"],
-//     queryFn: fetchUserNoticeList,
-//   });
+      // 페이지 정보 초기화
+      const lastPage = response.data.totalPages - 1;
+      if (page > lastPage) {
+        setPage(lastPage);
+      }
+      setLastPage(lastPage);
+      return response.data.content;
+    } else {
+      return null;
+    }
+  };
+
+  const { data } = useQuery<Notice[]>({
+    queryKey: ["userNoticeList", isTokenSet],
+    queryFn: fetchUserNoticeList,
+  });
 
   return (
     <div className="top-container">
@@ -46,8 +54,9 @@ export default function NoticeContainer() {
 
         {/* // 공지사항 리스트 */}
         <div className="w-full flex flex-col mb-6 divide-y divide-border-2 border-b border-border-2">
-          {data.map((el) => (
+          {data?.map((el) => (
             <NoticeCard
+              key={el.announceId}
               announceId={el.announceId}
               title={el.title}
               createdDate={el.createdDate}
