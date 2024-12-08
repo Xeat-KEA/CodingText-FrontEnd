@@ -79,3 +79,10 @@ export interface PushFormContainerProps {
   onSubmit: (push: string) => void;
   isDone: boolean;
 }
+
+export interface Notice {
+  announceId: number;
+  title: string;
+  content: string;
+  createdDate: string;
+}

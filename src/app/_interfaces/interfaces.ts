@@ -373,14 +373,13 @@ export interface BlogStore {
 }
 
 export interface Notice {
-  noticeId: number;
-  noticeTitle: string;
-  noticeContent: string;
-  noticedAt: string;
+  announceId: number;
+  title: string;
+  content?: string;
+  createdDate: string;
 }
 
 export interface NoticeForm {
-  noticeTitle: string;
-  noticeContent: string;
-  noticedAt: string;
+  title: string;
+  content: string;
 }

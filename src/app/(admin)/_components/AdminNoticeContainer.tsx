@@ -2,10 +2,11 @@ import Pagination from "@/app/_components/Pagination";
 import { useEffect, useState } from "react";
 import { Notice } from "@/app/_interfaces/interfaces";
 import NoticeCard from "@/app/_components/NoticeCard";
-import { Notice_Dummy_Data } from "@/app/_constants/constants";
 import { usePaginationStore } from "@/app/stores";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import api from "@/app/_api/config";
+import { useQuery } from "@tanstack/react-query";
 
 export default function AdminNoticeContainer() {
   const pathname = usePathname();
@@ -21,10 +22,18 @@ export default function AdminNoticeContainer() {
     setLastPage(Math.ceil(data.length / 10));
   }, [data]);
 
-  // 추후 데이터 API
-  useEffect(() => {
-    setData(Notice_Dummy_Data);
-  }, []);
+  // // 추후 데이터 API
+  // const fetchNoticeList = async () => {
+  //   const response = await api.get(`/admin-service/admins/announce`, {
+  //     params: { page: 0, size: 5 },
+  //   });
+  //   console.log(response);
+  // };
+
+  // const { data:noticList} = useQuery({
+  //   queryKey: ["noticeList"],
+  //   queryFn: fetchNoticeList,
+  // });
 
   return (
     <div className="top-container">
@@ -38,10 +47,9 @@ export default function AdminNoticeContainer() {
           <div className="w-full flex flex-col mb-6 divide-y divide-border-2 border-b border-border-2">
             {data.map((el) => (
               <NoticeCard
-                noticeId={el.noticeId}
-                noticeTitle={el.noticeTitle}
-                noticeContent={el.noticeContent}
-                noticedAt={el.noticedAt}
+                announceId={el.announceId}
+                title={el.title}
+                createdDate={el.createdDate}
               />
             ))}
           </div>
