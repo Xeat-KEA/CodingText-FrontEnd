@@ -7,6 +7,7 @@ import { SignUpForm } from "../_interfaces/interfaces";
 import { useState } from "react";
 import Dialog from "@/app/_components/Dialog";
 import { DialogCheckIcon } from "@/app/_components/Icons";
+import api from "@/app/_api/config";
 
 export default function AdminSignUpFormContainer() {
   const router = useRouter();
@@ -22,8 +23,14 @@ export default function AdminSignUpFormContainer() {
     if (data.password !== data.verify) {
     } else {
       // API 호출 구현 필요
-
-      setIsDone((prev) => !prev);
+      const submitForm = { email: data.email, password: data.password };
+      api
+        .post("/admin-service/auth/signup", submitForm)
+        .then((res) => {
+          console.log(res);
+          setIsDone((prev) => !prev);
+        })
+        .catch((err) => console.error(err));
     }
   };
 
@@ -35,7 +42,8 @@ export default function AdminSignUpFormContainer() {
         <SignInTitle title="관리자 회원가입" />
         <form
           onSubmit={handleSubmit(onValid)}
-          className="flex flex-col w-full gap-8">
+          className="flex flex-col w-full gap-8"
+        >
           {/* 아이디 비밀번호 입력 */}
           <div className="flex flex-col gap-6">
             <input
@@ -69,7 +77,8 @@ export default function AdminSignUpFormContainer() {
             <button
               type="button"
               onClick={() => router.push("/admin/sign-in")}
-              className="edit-btn text-body font-semibold">
+              className="edit-btn text-body font-semibold"
+            >
               뒤로
             </button>
           </div>

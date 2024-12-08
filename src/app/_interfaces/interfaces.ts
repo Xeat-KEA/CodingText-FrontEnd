@@ -107,7 +107,7 @@ export interface ProfileImgContainerProps {
 }
 
 export interface SaveOrCancelBtnProps {
-  saveBtn: string;
+  saveBtn?: string;
   onCancel: () => void;
 }
 
@@ -131,6 +131,7 @@ export interface Post {
 export interface ProfileImgSelectionProps {
   seletedImg: string;
   onSelectionClick: (seleted: string) => void;
+  isDisabled?: boolean;
 }
 
 export interface EditBtnProps {
@@ -181,14 +182,7 @@ export interface IconBtnProps {
 export interface SmCheckBoxBtnProps {
   isActive: boolean;
   onClick: () => void;
-}
-
-export interface CodeDetail {
-  title: string;
-  difficulty: string;
-  algorithm: string;
   content: string;
-  testcase: any;
 }
 
 export interface Statistics {

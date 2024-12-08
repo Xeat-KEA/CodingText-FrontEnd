@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useTokenStore } from "../stores";
 
-export const useCheckToken = () => {
+export const useCheckToken = (url?: string) => {
   const { accessToken, setAccessToken, isTokenSet, setIsTokenSet } =
     useTokenStore();
 
@@ -10,6 +10,8 @@ export const useCheckToken = () => {
       const storedToken = localStorage.getItem("accessToken");
       if (storedToken) {
         setAccessToken(storedToken);
+      } else if (!storedToken && url) {
+        window.location.href = url;
       }
       setIsTokenSet(true);
     }

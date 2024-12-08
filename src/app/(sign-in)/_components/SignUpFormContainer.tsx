@@ -6,6 +6,8 @@ import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import api from "@/app/_api/config";
 import { useEffect, useState } from "react";
+import { SmCheckBoxIcon } from "@/app/_components/Icons";
+import SmCheckBoxBtn from "@/app/_components/SmCheckBoxBtn";
 
 export default function SignUpFormContainer() {
   const router = useRouter();
@@ -29,7 +31,6 @@ export default function SignUpFormContainer() {
 
   const onValid = async (data: SignUpForm) => {
     // 데이터 post 및 validation 필요
-    console.log(data);
 
     try {
       const {
@@ -76,7 +77,18 @@ export default function SignUpFormContainer() {
           onSelectionClick={(selected) => {
             setValue("basicProfileUrl", selected);
           }}
+          isDisabled={watch("useSocialProfile")}
         />
+        <div>
+          <SmCheckBoxBtn
+            isActive={watch("useSocialProfile")}
+            content="소셜 아이디 프로필 사진 사용"
+            onClick={() => {
+              const currentValue = watch("useSocialProfile");
+              setValue("useSocialProfile", !currentValue);
+            }}
+          />
+        </div>
       </div>
       <button type="submit" className="btn-primary">
         완료

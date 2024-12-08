@@ -2,28 +2,53 @@
 
 import AdminResponseDialogs from "@/app/(admin)/_components/AdminResponseDialogs";
 import ManageCode from "@/app/(admin)/_components/ManageCode";
-import { CodeDetail } from "@/app/(admin)/_interfaces/interfaces";
+import {
+  EditCodeDetail,
+  ManageCodeProps,
+} from "@/app/(admin)/_interfaces/interfaces";
 import api from "@/app/_api/config";
 import Dialog from "@/app/_components/Dialog";
 import { useCheckToken } from "@/app/_hooks/useCheckToken";
-import { useTiptapStore } from "@/app/stores";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useParams, useRouter } from "next/navigation";
+import { useState } from "react";
 
-export default function NewCodePage() {
+export default function RegisterCodePage() {
+  const { codeId } = useParams();
+  const { accessToken, isTokenSet } = useCheckToken("/admin/sign-in");
   const router = useRouter();
+
+  const fetchCodeDetail = async () => {
+    if (accessToken) {
+      const response = await api.get(
+        `/code-bank-service/admin/register/pendinglists/${codeId}`,
+        { headers: { Authorization: accessToken } }
+      );
+      return response.data;
+    } else {
+      return null;
+    }
+  };
+  const { data } = useQuery<ManageCodeProps>({
+    queryKey: ["codeDetail", isTokenSet],
+    queryFn: fetchCodeDetail,
+  });
+
   const [isDialogOpen, setIsDialogOpen] = useState({
     submit: false,
     error: false,
     done: false,
   });
 
-  const { accessToken } = useCheckToken("/admin/sign-in");
-  const postData = async (newData: CodeDetail) => {
+  const postData = async (newData: EditCodeDetail) => {
     try {
-      const response = await api.post("/code-bank-service/admin/add", newData, {
-        headers: { Authorization: accessToken },
-      });
+      const response = await api.put(
+        `/code-bank-service/admin/register/${codeId}/permit`,
+        newData,
+        {
+          headers: { Authorization: accessToken },
+        }
+      );
       setIsDialogOpen((prev) => ({ ...prev, done: !prev.done }));
       setTempData(null);
     } catch (err) {
@@ -31,8 +56,8 @@ export default function NewCodePage() {
     }
   };
 
-  const [tempData, setTempData] = useState<CodeDetail | null>();
-  const onSubmit = (newData: CodeDetail) => {
+  const [tempData, setTempData] = useState<EditCodeDetail | null>();
+  const onSubmit = (newData: EditCodeDetail) => {
     setTempData(newData);
     setIsDialogOpen((prev) => ({ ...prev, submit: !prev.submit }));
   };
@@ -45,25 +70,24 @@ export default function NewCodePage() {
     router.push("/admin/code");
   };
 
-  const { content, setContent } = useTiptapStore();
-  useEffect(() => {
-    setContent("");
-  }, []);
-
   return (
     <>
-      <ManageCode key={content} onAdd={onSubmit} />
+      <ManageCode
+        code={data?.code}
+        testcases={data?.testcases}
+        onEdit={onSubmit}
+      />
       {/* 문제 생성 / 수정 완료 */}
       {isDialogOpen.submit && (
         <Dialog
-          title={"새 문제를 생성할까요?"}
+          title={"문제를 정식으로 등록할까요?"}
           isTitleSm
           backBtn="취소"
           onBackBtnClick={() => {
             setIsDialogOpen((prev) => ({ ...prev, submit: !prev.submit }));
             setTempData(null);
           }}
-          primaryBtn="생성"
+          primaryBtn="등록"
           onBtnClick={() => tempData && postData(tempData)}
         />
       )}

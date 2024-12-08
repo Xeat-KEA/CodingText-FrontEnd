@@ -38,7 +38,8 @@ export default function CodePostPage() {
       initialPageParam: 0,
       getNextPageParam: (lastPage, allPages) => {
         if (
-          lastPage.pageInfo.totalPageNum === lastPage.pageInfo.currentPageNum
+          lastPage.pageInfo.totalPageNum + 1 ===
+          lastPage.pageInfo.currentPageNum
         ) {
           return undefined;
         } else {

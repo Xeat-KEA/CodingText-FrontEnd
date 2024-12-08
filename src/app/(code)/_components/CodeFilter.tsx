@@ -10,12 +10,12 @@ export default function CodeFilter({ hasOrder }: { hasOrder?: boolean }) {
       <MultiSelectionDropDown
         placeholder="난이도"
         list={DIFFICULTY_LIST}
-        paramType="difficulty"
+        paramType="difficulties"
       />
       <MultiSelectionDropDown
         placeholder="알고리즘"
         list={ALGORITHM_LIST}
-        paramType="algorithm"
+        paramType="algorithms"
       />
       {/* 문제 목록 페이지에서만 렌더링 */}
       {hasOrder && (
