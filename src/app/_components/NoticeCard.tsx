@@ -4,10 +4,9 @@ import Link from "next/link";
 import { PageMoveIcon } from "./Icons";
 
 export default function NoticeCard({
-    noticeId,
-    noticeTitle,
-    noticeContent,
-    noticedAt
+    announceId,
+    title,
+    createdDate
 }: Notice) {
     const router = useRouter();
     const pathname = usePathname();
@@ -15,7 +14,7 @@ export default function NoticeCard({
 
     const onClickReport = () => {
         if(!isAdmin) {
-            router.push(`/notice/${noticeId}`);
+            router.push(`/notice/${announceId}`);
         }
     }
     return (
@@ -26,11 +25,11 @@ export default function NoticeCard({
             {isAdmin ? (
                 <>
                     <div className="flex gap-4 items-center">
-                        <div className="w-20 text-xs text-body font-regular">{noticedAt}</div>
-                        <div className="text-sm text-black font-regular">{noticeTitle}</div>
+                        <div className="w-20 text-xs text-body font-regular">{createdDate}</div>
+                        <div className="text-sm text-black font-regular">{title}</div>
                     </div>
                     <Link
-                        href={`/admin/notice/${noticeId}`}
+                        href={`/admin/notice/${announceId}`}
                         className="flex items-center gap-2 text-xs text-primary font-semibold">
                         {"해당 공지사항 표시"}
                         <PageMoveIcon />
@@ -38,8 +37,8 @@ export default function NoticeCard({
                 </>
             ) : (
                 <>
-                    <span className="text-sm text-black font-regular">{noticeTitle}</span>
-                    <span className="text-xs text-body font-regular">{noticedAt}</span>
+                    <span className="text-sm text-black font-regular">{title}</span>
+                    <span className="text-xs text-body font-regular">{createdDate}</span>
                 </>
             )
             }

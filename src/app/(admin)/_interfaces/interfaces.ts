@@ -102,6 +102,12 @@ export interface PushFormContainerProps {
   isDone: boolean;
 }
 
+export interface Notice {
+  announceId: number;
+  title: string;
+  content?: string;
+  createdDate: string;
+}
 export interface Admin {
   id: number;
   email: string;
