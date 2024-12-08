@@ -16,11 +16,11 @@ export default function AdminNoticeContainer() {
 
   // 페이지네이션
   const { page, setPage, setLastPage } = usePaginationStore();
-  
+
   const fetchNoticeList = async () => {
     if (accessToken) {
       const response = await api.get(`/admin-service/admins/announce`, {
-        params: { page: 0, size: 5 },
+        params: { page: page, size: 10 },
         headers: { Authorization: accessToken },
       });
 
@@ -30,13 +30,14 @@ export default function AdminNoticeContainer() {
         setPage(lastPage);
       }
       setLastPage(lastPage);
+
       return response.data.content;
     }
     return null;
   };
 
   const { data } = useQuery<Notice[]>({
-    queryKey: ["noticeList", isTokenSet],
+    queryKey: ["noticeList", page, isTokenSet],
     queryFn: fetchNoticeList,
   });
 

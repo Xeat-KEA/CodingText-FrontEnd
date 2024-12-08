@@ -22,10 +22,9 @@ export default function NoticeContainer() {
   const fetchUserNoticeList = async () => {
     if (accessToken) {
       const response = await api.get(`/user-service/users/announce`, {
-        params: { page: 0, size: 5 },
+        params: { page: page, size: 10 },
         headers: { Authorization: accessToken },
       });
-      console.log(response);
 
       // 페이지 정보 초기화
       const lastPage = response.data.totalPages - 1;
@@ -33,6 +32,7 @@ export default function NoticeContainer() {
         setPage(lastPage);
       }
       setLastPage(lastPage);
+
       return response.data.content;
     } else {
       return null;
@@ -40,7 +40,7 @@ export default function NoticeContainer() {
   };
 
   const { data } = useQuery<Notice[]>({
-    queryKey: ["userNoticeList", isTokenSet],
+    queryKey: ["userNoticeList", page, isTokenSet],
     queryFn: fetchUserNoticeList,
   });
 
