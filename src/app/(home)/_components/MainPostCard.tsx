@@ -11,7 +11,7 @@ import { useCalculateDate } from "@/app/_hooks/useCalculateDate";
 
 export default function MainPostCard({ post, ranking }: MainPostCardProps) {
   const router = useRouter();
-  const decodedContent = useBase64("decode", post.content);
+  const decodedContent = useBase64("decode", post.content || "");
 
   return (
     <motion.div
