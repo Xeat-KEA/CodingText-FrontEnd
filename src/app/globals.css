@@ -309,7 +309,7 @@ textarea {
   }
   /* 게시글 내용 */
   .post-card-content {
-    @apply text-sm text-body h-[60px] overflow-hidden text-ellipsis line-clamp-3;
+    @apply text-sm text-body min-h-[60px] overflow-hidden text-ellipsis line-clamp-3;
   }
   /* 하단 상위 컨테이너 */
   .post-card-bottom-container {
