@@ -193,6 +193,7 @@ export interface Statistics {
   solvedCount: number;
   tier: string;
   totalScore: number;
+  blogId: number;
 }
 
 export interface UserInfo {

@@ -8,8 +8,11 @@ import { SEARCH_TAB_MENU_LIST } from "../_constants/constants";
 import PostResults from "../_components/PostResults";
 import BlogResults from "../_components/BlogResults";
 import SelectionBar from "../_components/SelectionBar";
+import { useCheckToken } from "@/app/_hooks/useCheckToken";
 
 export default function SearchPage() {
+  const {} = useCheckToken();
+
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -43,7 +46,7 @@ export default function SearchPage() {
   return (
     <>
       <div className="top-container pt-16">
-        <div className="max-w-1200 flex p-12">
+        <div className="max-w-1200 flex p-8">
           <div className="flex flex-col w-full gap-6">
             <SearchBar baseURL={pathname} />
             <SelectionBar menuList={SEARCH_TAB_MENU_LIST} />

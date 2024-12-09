@@ -13,6 +13,7 @@ import {
   ManageCodeProps,
 } from "../_interfaces/interfaces";
 import { Code } from "@/app/(code)/_interfaces/interfaces";
+import { useBase64 } from "@/app/_hooks/useBase64";
 
 export default function ManageCode({
   code,
@@ -39,7 +40,7 @@ export default function ManageCode({
         const newData: EditCodeDetail = {
           ...data,
           codeId: code.codeId,
-          content,
+          content: useBase64("encode", content),
           testcases: JSON.parse(value),
         };
         {
@@ -48,7 +49,7 @@ export default function ManageCode({
       } else {
         // 새 문제 생성 시
         const newData: CodeDetail = {
-          code: { ...data, content },
+          code: { ...data, content: useBase64("encode", content) },
           testcases: JSON.parse(value),
         };
         {

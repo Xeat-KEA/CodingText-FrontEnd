@@ -24,10 +24,18 @@ export default function NewCodePage() {
       const response = await api.post("/code-bank-service/admin/add", newData, {
         headers: { Authorization: accessToken },
       });
-      setIsDialogOpen((prev) => ({ ...prev, done: !prev.done }));
+      setIsDialogOpen((prev) => ({
+        ...prev,
+        submit: !prev.submit,
+        done: !prev.done,
+      }));
       setTempData(null);
     } catch (err) {
-      setIsDialogOpen((prev) => ({ ...prev, error: !prev.error }));
+      setIsDialogOpen((prev) => ({
+        ...prev,
+        submit: !prev.submit,
+        error: !prev.error,
+      }));
     }
   };
 
@@ -45,14 +53,16 @@ export default function NewCodePage() {
     router.push("/admin/code");
   };
 
+  const [isLoading, setIsLoading] = useState(false);
   const { content, setContent } = useTiptapStore();
   useEffect(() => {
     setContent("");
+    setIsLoading(true);
   }, []);
 
   return (
     <>
-      <ManageCode key={content} onAdd={onSubmit} />
+      <ManageCode key={isLoading + ""} onAdd={onSubmit} />
       {/* 문제 생성 / 수정 완료 */}
       {isDialogOpen.submit && (
         <Dialog

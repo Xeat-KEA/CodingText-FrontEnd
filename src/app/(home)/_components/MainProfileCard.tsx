@@ -1,6 +1,7 @@
 import ProfileInfo from "@/app/(code)/_components/ProfileInfo";
 import ProfileImgContainer from "@/app/_components/ProfileImgContainer";
 import { Statistics } from "@/app/_interfaces/interfaces";
+import Link from "next/link";
 
 export default function MainProfileCard({
   statistics,
@@ -34,8 +35,12 @@ export default function MainProfileCard({
         </div>
       </div>
       <div className="flex gap-4">
-        <button className="btn-default w-full">내 정보 수정</button>
-        <button className="btn-primary w-full">내 블로그로</button>
+        <Link href="/edit/profile" className="btn-default w-full">
+          내 정보 수정
+        </Link>
+        <Link href={`/blog${statistics.blogId}`} className="btn-primary w-full">
+          내 블로그로
+        </Link>
       </div>
     </div>
   );

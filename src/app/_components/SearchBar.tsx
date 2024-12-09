@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { SearchBarProps, SearchForm } from "../_interfaces/interfaces";
-import { LgSearchIcon } from "./Icons";
+import { LgSearchIcon, SmSearchIcon } from "./Icons";
 import { useForm } from "react-hook-form";
 import { useRouter, useSearchParams } from "next/navigation";
 import DropDown from "./DropDown";
@@ -64,17 +64,17 @@ export default function SearchBar({
       )}
       <form
         onSubmit={handleSubmit(onValid)}
-        className="flex gap-2 w-full border border-border-2 rounded-full px-6 py-3"
+        className="flex gap-2 w-full border border-border-2 rounded-full px-6 py-3 overflow-hidden"
       >
         <input
           {...register("keyword", {
             required: baseURL ? false : true,
           })}
-          className="grow"
+          className="w-full text-overflow-ellipsis"
           placeholder={placeholder || "검색어를 입력해주세요"}
           autoComplete="off"
         />
-        <button type="submit">
+        <button className="shrink-0" type="submit">
           <LgSearchIcon />
         </button>
       </form>

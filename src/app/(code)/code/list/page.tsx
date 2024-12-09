@@ -8,8 +8,11 @@ import CodeListTopBar from "../../_components/CodeListTopBar";
 import { Code } from "../../_interfaces/interfaces";
 import { useQuery } from "@tanstack/react-query";
 import CodeCard from "../../_components/CodeCard";
+import { useCheckToken } from "@/app/_hooks/useCheckToken";
 
 export default function CodeListPage() {
+  const {} = useCheckToken();
+
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
