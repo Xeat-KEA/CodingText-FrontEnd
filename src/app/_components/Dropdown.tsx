@@ -11,6 +11,7 @@ export default function DropDown({
   onSelectionClick,
   placeholder,
   showListUpward,
+  isError,
 }: DropDownProps) {
   const [isListOpen, setIsListOpen] = useState(false);
   const ref = useOutsideClick(
@@ -29,7 +30,7 @@ export default function DropDown({
           : "border-r border-border-2"
       } ${isListOpen && "z-10"} ${
         list?.length === 0 ? "bg-bg-1" : "bg-white cursor-pointer"
-      }`}
+      } ${isError && "!border-red"}`}
     >
       <div className={`${isListOpen && "rotate-180"}`}>
         <ShowMoreIcon />
