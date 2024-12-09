@@ -7,11 +7,16 @@ export default function ProfileImgSelection({
   seletedImg,
   onSelectionClick,
   isDisabled,
+  isError,
 }: ProfileImgSelectionProps) {
   const [profileImg, setProfileImg] = useState(seletedImg);
 
   return (
-    <div className="relative w-full px-4 py-6 grid grid-cols-3 place-items-center gap-4 border border-border-2 rounded-lg overflow-hidden">
+    <div
+      className={`relative w-full px-4 py-6 grid grid-cols-3 place-items-center gap-4 border border-border-2 rounded-lg overflow-hidden  ${
+        isError && "!border-red"
+      }`}
+    >
       {isDisabled && (
         <div className="absolute w-full h-full bg-black opacity-20" />
       )}

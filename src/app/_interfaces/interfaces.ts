@@ -35,6 +35,7 @@ export interface DropDownProps {
   placeholder?: string;
   disabled?: boolean;
   showListUpward?: boolean;
+  isError?: boolean;
 }
 
 export interface ParamDropDownProps {
@@ -132,6 +133,7 @@ export interface ProfileImgSelectionProps {
   seletedImg: string;
   onSelectionClick: (seleted: string) => void;
   isDisabled?: boolean;
+  isError?: boolean;
 }
 
 export interface EditBtnProps {
