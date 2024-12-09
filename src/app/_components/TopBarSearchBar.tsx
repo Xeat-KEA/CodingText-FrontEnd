@@ -3,7 +3,10 @@ import { useRouter } from "next/navigation";
 import { SearchBarProps, SearchForm } from "@/app/_interfaces/interfaces";
 import { SmSearchIcon } from "./Icons";
 
-export default function SmSearchBar({ baseURL, placeholder }: SearchBarProps) {
+export default function TopBarSearchBar({
+  baseURL,
+  placeholder,
+}: SearchBarProps) {
   const router = useRouter();
 
   const { register, handleSubmit, setValue } = useForm<SearchForm>();
