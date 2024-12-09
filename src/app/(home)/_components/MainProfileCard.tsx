@@ -8,6 +8,7 @@ export default function MainProfileCard({
 }: {
   statistics: Statistics;
 }) {
+  console.log(statistics);
   return (
     <div className="lg:w-[360px] w-full flex flex-col gap-6 shrink-0 p-6 border border-border-2 rounded-xl">
       <div className="flex gap-4 items-center">
@@ -38,7 +39,10 @@ export default function MainProfileCard({
         <Link href="/edit/profile" className="btn-default w-full">
           내 정보 수정
         </Link>
-        <Link href={`/blog${statistics.blogId}`} className="btn-primary w-full">
+        <Link
+          href={`/blog/${statistics.blogId}`}
+          className="btn-primary w-full"
+        >
           내 블로그로
         </Link>
       </div>
