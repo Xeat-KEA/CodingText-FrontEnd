@@ -19,17 +19,17 @@ export default function TopBarSearchBar({
     <div className="flex items-center gap-4">
       <form
         onSubmit={handleSubmit(onValid)}
-        className="flex gap-2 w-full border border-border-2 rounded-full px-4 py-2"
+        className="flex gap-2 w-full border border-border-2 rounded-full px-4 py-2 overflow-hidden"
       >
         <input
           {...register("keyword", {
             required: true,
           })}
-          className="grow text-xs"
+          className="grow text-xs text-ellipsis"
           placeholder={placeholder || "검색어를 입력해주세요"}
           autoComplete="off"
         />
-        <button type="submit">
+        <button className="shrink-0" type="submit">
           <SmSearchIcon />
         </button>
       </form>
