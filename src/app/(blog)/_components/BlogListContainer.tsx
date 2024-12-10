@@ -1,17 +1,43 @@
-import { PostResult } from "@/app/(search)/_interfaces/interfaces";
 import api from "@/app/_api/config";
 import Pagination from "@/app/_components/Pagination";
 import PostCard from "@/app/_components/PostCard";
 import SearchBar from "@/app/_components/SearchBar";
 import { TAB_BAR_ORDER_FILTER } from "@/app/_constants/constants";
-import { usePaginationStore } from "@/app/stores";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathValue } from "@/app/_hooks/usePathValue";
+import { Post } from "@/app/_interfaces/interfaces";
+import {
+  useBlogStore,
+  useCategoryStore,
+  usePaginationStore,
+  useTokenStore,
+} from "@/app/stores";
+import { useQuery } from "@tanstack/react-query";
+import { useParams, usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function BlogListContainer() {
+  usePathValue();
+  const { accessToken, isTokenSet } = useTokenStore();
+
+  const { currentBlogId, userBlogId } = useBlogStore();
+  const { boardCategories } = useCategoryStore();
+  const setCurrentBlogId = useBlogStore((state) => state.setCurrentBlogId);
+  const params = useParams();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [filter, setFilter] = useState("ACCURACY");
+
+  // 페이지네이션
+  const { page, setPage, setLastPage } = usePaginationStore();
+
+  // 현재 블로그 아이디 조회
+  useEffect(() => {
+    const blogId = Number(params.id);
+    if (blogId && blogId !== -1) {
+      setCurrentBlogId(blogId);
+    }
+  }, [params.id, setCurrentBlogId]);
+
   useEffect(() => {
     // filter 변경 시 다시 GET 하는 로직 필요
   }, [filter]);
@@ -24,27 +50,71 @@ export default function BlogListContainer() {
     }
   }, [searchParams]);
 
-  const [result, setResult] = useState<PostResult[]>([]);
+  const [result, setResult] = useState<Post[]>([]);
 
-  // 프로토타입 더미 데이터 GET
-  useEffect(() => {
-    api.get("/article-list").then((res) => {
-      // 날짜 내림차순
-      const sortedData = res.data.data.sort((a: PostResult, b: PostResult) =>
-        a.createAt > b.createAt ? -1 : 1
-      );
-      setResult(sortedData);
-    });
-  }, []);
+  const getBoardType = (boardId: number) => {
+    if (pathname === `/blog/${currentBlogId}/category`) {
+      return "ALL";
+    }
+    if (pathname.includes(`/blog/${currentBlogId}/code`)) {
+      return params.codeId ? "CHILD" : "PARENT";
+    }
 
-  // 페이지네이션
-  const { page, setPage, setLastPage } = usePaginationStore();
-  // 첫 페이지 초기화
-  useEffect(() => {
-    setPage(1);
-    setLastPage(Math.ceil(result.length / 10));
-  }, [result]);
-  // Page 변화 감지 후 문제 리스트 다시 GET 하는 과정 필요
+    if (params.categoryId) {
+      if (params.childCategoryId) {
+        return "CHILD";
+      }
+      return "PARENT";
+    }
+
+    return "UNKNOWN";
+  };
+
+  // 블로그 게시글 목록 조회
+  const fetchPostListData = async () => {
+    const boardType = getBoardType(
+      Number(params.categoryId) || Number(params.codeId)
+    );
+
+    let endpoint = "";
+    let queryParams: Record<string, any> = { page: page, size: 5 };
+
+    if (boardType === "ALL") {
+      endpoint = `/blog-service/blog/board/article/${currentBlogId}`;
+    } else if (boardType === "PARENT") {
+      const categoryId =
+        pathname === `/blog/${currentBlogId}/code`
+          ? 1
+          : Number(params.categoryId);
+      endpoint = `/blog-service/blog/board/article/parent/${categoryId}`;
+      queryParams.blogId = currentBlogId !== -1 ? currentBlogId : null;
+    } else if (boardType === "CHILD") {
+      const categoryId = params.childCategoryId || params.codeId;
+      endpoint = `/blog-service/blog/board/article/child/${categoryId}`;
+      queryParams.blogId = currentBlogId !== -1 ? currentBlogId : null;
+    }
+
+    const response = await api.get(endpoint, { params: queryParams });
+
+    setResult(response.data.data.articleList);
+    setCurrentBlogId(response.data.data.blogId || params.id);
+    
+    console.log(currentBlogId);
+
+    // 페이지 정보 초기화
+    const lastPage = response.data.data.pageInfo.totalPageNum;
+    if (page > lastPage) {
+      setPage(lastPage);
+    }
+    setLastPage(lastPage);
+
+    return response.data.data.articleList;
+  };
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["postList", page, currentBlogId],
+    queryFn: fetchPostListData,
+    enabled: !!accessToken,
+  });
 
   return (
     <div className="top-container">
@@ -69,22 +139,11 @@ export default function BlogListContainer() {
         </div>
         <div className="flex flex-col divide-y divide-border-2">
           {result.length !== 0 ? (
-            result.slice((page - 1) * 10, page * 10).map((el, index) => (
+            result.map((el, index) => (
               <div
                 key={index}
                 className={`${index >= 2 && "border-t border-border2"}`}>
-                <PostCard
-                  articleId={el.articleId}
-                  profileImg={`/profileImg${(el.articleId % 6) + 1}.png`}
-                  category={"1단계"} // 게시판 추가 후 수정 필요
-                  createAt={el.createAt}
-                  title={el.title}
-                  content={el.content}
-                  likes={el.likeCount}
-                  comments={el.replyCount}
-                  views={el.replyCount} // 조회수 추가 후 수정 필요
-                  codeId={el.codeId}
-                />
+                <PostCard post={el} />
               </div>
             ))
           ) : (

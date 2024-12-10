@@ -14,7 +14,7 @@ export default function Dialog({
   primaryBtn,
   redBtn,
   onBtnClick,
-  children, // 추가
+  children,
   blockOutsideClick,
 }: DialogProps) {
   const ref = !blockOutsideClick ? useOutsideClick(onBackBtnClick) : null;
@@ -23,28 +23,27 @@ export default function Dialog({
       <div className="absolute w-full h-full px-12 flex-center">
         <div
           ref={ref}
-          className="w-full max-w-[400px] flex flex-col gap-6 bg-white p-6 rounded-2xl shadow-1"
-        >
-          <div className="flex flex-col items-center gap-4 py-6">
-            {icon && icon}
-            <div className="flex flex-col gap-2 text-center">
-              <span
-                className={`whitespace-pre-wrap text-black font-semibold ${
-                  isTitleSm ? "text-lg" : "text-xl"
-                }`}
-              >
-                {title}
-              </span>
-              <span
-                className={`whitespace-pre-wrap ${
-                  isWarning ? "font-bold text-red" : "text-body"
-                }`}
-              >
-                {content}
-              </span>
+          className="w-full max-w-[400px] flex flex-col gap-6 bg-white p-6 rounded-2xl shadow-1">
+          <div>
+            <div className="flex flex-col items-center gap-4 py-6">
+              {icon && icon}
+              <div className="flex flex-col gap-2 text-center">
+                <span
+                  className={`whitespace-pre-wrap text-black font-semibold ${
+                    isTitleSm ? "text-lg" : "text-xl"
+                  }`}>
+                  {title}
+                </span>
+                <span
+                  className={`whitespace-pre-wrap ${
+                    isWarning ? "font-bold text-red" : "text-body"
+                  }`}>
+                  {content}
+                </span>
+              </div>
             </div>
+            {children}
           </div>
-          {children}
           <div className="flex gap-4">
             {/* 뒤로가기 버튼 */}
             <button onClick={onBackBtnClick} className="btn-default w-full">

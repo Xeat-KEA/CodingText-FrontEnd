@@ -3,10 +3,12 @@ import StarterKit from "@tiptap/starter-kit";
 import ToolBar from "./ToolBar";
 import Link from "@tiptap/extension-link";
 import Image from "@tiptap/extension-image";
-import { useTiptapStore } from "@/app/stores";
+import { useTiptapStore, useTokenStore } from "@/app/stores";
 
 export default function TiptapEditor() {
+  const { accessToken } = useTokenStore();
   const { content, setContent } = useTiptapStore();
+
   const editor = useEditor({
     editorProps: {
       attributes: {
@@ -31,7 +33,7 @@ export default function TiptapEditor() {
 
   return (
     <div className="flex flex-col w-full h-full border border-border-2 rounded-lg overflow-hidden cursor-text">
-      <ToolBar editor={editor} />
+      <ToolBar editor={editor} accessToken={accessToken} />
       <EditorContent
         className="w-full h-full overflow-y-auto break-all"
         editor={editor}

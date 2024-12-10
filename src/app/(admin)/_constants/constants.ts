@@ -1,6 +1,5 @@
-import { Post, BlogProfile, ProfileTab } from "@/app/_interfaces/interfaces";
+import { ProfileTab } from "@/app/_interfaces/interfaces";
 import { Report } from "../_interfaces/interfaces";
-import { CommentProps } from "../../(blog)/_interfaces/interfaces";
 
 export const ADMIN_TAB_LIST: ProfileTab[] = [
   { content: "사용자 관리", url: "/admin/user" },
@@ -54,17 +53,17 @@ export const Report_Dummy_Data: Report[] = [
   },
 ];
 
-export const Profile_Dummy_Data: BlogProfile[] = [
-  {
-    userId: 101,
-    profileImg: "/profileImg1.png",
-    nickName: "개발자",
-    rank: "sophomore",
-    profileMessage: "안녕하세요, 개발자입니다",
-    FollowerCount: 3,
-    blogProfile: "",
-  },
-];
+// export const Profile_Dummy_Data: BlogProfile[] = [
+//   {
+//     blogId: 11,
+//     profileUrl: "/profileImg1.png",
+//     userName: "개발자",
+//     tier: "sophomore",
+//     profileMessage: "안녕하세요, 개발자입니다",
+//     followCount: 3,
+//     followCheck: false,
+//   }
+// ]
 
 export const Post_Dummy_Data = [
   {

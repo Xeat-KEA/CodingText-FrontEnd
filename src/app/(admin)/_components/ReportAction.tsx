@@ -98,7 +98,7 @@ export default function ReportAction() {
                         placeholder="분류"
                     />
                     {selectedOption === "직접 입력" && (
-                        <div>
+                        <div className="mt-6">
                             <textarea
                                 value={customInput}
                                 onChange={(event) => setCustomInput(event.target.value)}

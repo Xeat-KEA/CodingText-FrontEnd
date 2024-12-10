@@ -7,13 +7,18 @@ export interface BlogCardProps {
 
 export interface PostResult {
   articleId: number;
-  title: string;
+  blogId: number;
+  childName: string;
   content: string;
+  createdDate: string;
+  isBlind: boolean;
+  isSecret: boolean;
   likeCount: number;
   replyCount: number;
-  createAt: string;
-  nickName: string;
-  codeId: number | null;
+  title: string;
+  viewCount: number;
+
+  codeId?: number | null;
 }
 
 export interface BlogResult {
