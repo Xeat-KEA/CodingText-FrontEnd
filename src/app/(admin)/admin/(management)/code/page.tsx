@@ -1,29 +1,89 @@
 "use client";
 
 import AdminCodeCard from "@/app/(admin)/_components/AdminCodeCard";
+import CodeCard from "@/app/(code)/_components/CodeCard";
 import CodeFilter from "@/app/(code)/_components/CodeFilter";
 import CodeListTopBar from "@/app/(code)/_components/CodeListTopBar";
+import { Code } from "@/app/(code)/_interfaces/interfaces";
+import api from "@/app/_api/config";
 import Pagination from "@/app/_components/Pagination";
 import SearchBar from "@/app/_components/SearchBar";
-import { ALGORITHM_LIST } from "@/app/_constants/constants";
-import { useRegisterStore } from "@/app/stores";
+import { useCheckToken } from "@/app/_hooks/useCheckToken";
+import { usePaginationStore } from "@/app/stores";
+import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
-const dummy = [
-  { codeId: 1, title: "문제 1", difficulty: 1, algorithm: ALGORITHM_LIST[0] },
-  { codeId: 2, title: "문제 2", difficulty: 2, algorithm: ALGORITHM_LIST[1] },
-  { codeId: 3, title: "문제 3", difficulty: 3, algorithm: ALGORITHM_LIST[2] },
-  { codeId: 4, title: "문제 4", difficulty: 4, algorithm: ALGORITHM_LIST[3] },
-  { codeId: 5, title: "문제 5", difficulty: 5, algorithm: ALGORITHM_LIST[4] },
-];
-
 export default function AdminCodePage() {
-  // 건의된 문제 생성 여부 state 설정
-  const { setIsRegistering } = useRegisterStore();
+  const { accessToken, isTokenSet } = useCheckToken("/admin/sign-in");
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+
+  const {} = useCheckToken("/admin/sign-in");
+
+  // 기본 query parameters 설정
   useEffect(() => {
-    setIsRegistering(false);
-  }, []);
+    const currentParams = new URLSearchParams(searchParams.toString());
+    let updated = false;
+
+    if (!currentParams.get("order")) {
+      currentParams.set("order", "createdAt");
+      updated = true;
+    }
+
+    // 기본값이 설정된 경우에만 URL을 업데이트
+    if (updated) {
+      router.replace(`${pathname}?${currentParams.toString()}`);
+    }
+  }, [searchParams, router, pathname]);
+
+  const algorithms = searchParams.get("algorithms") || "";
+  const difficulties = searchParams.get("difficulties") || "";
+  const order = searchParams.get("order") || "createdAt";
+  const keyword = searchParams.get("keyword") || "";
+  const searchBy = searchParams.get("filter") || "title";
+
+  // 코드 리스트 불러오기
+  const { page, setPage, setLastPage } = usePaginationStore();
+  const fetchCodeList = async () => {
+    if (accessToken) {
+      const response = await api.get("/code-bank-service/admin/codeLists", {
+        headers: { Authorization: accessToken },
+        params: {
+          algorithms,
+          difficulties,
+          searchBy: searchBy,
+          searchText: searchBy === "title" ? keyword : Number(keyword),
+          sortBy: order,
+          page,
+          size: 10,
+        },
+      });
+      // 페이지 정보 초기화
+      const lastPage = response.data.totalPages - 1;
+      if (page > lastPage) {
+        setPage(lastPage);
+      }
+      setLastPage(lastPage);
+      return response.data.content;
+    } else {
+      return null;
+    }
+  };
+  const { data } = useQuery<Code[]>({
+    queryKey: [
+      "codeList",
+      algorithms,
+      difficulties,
+      order,
+      page,
+      keyword,
+      isTokenSet,
+    ],
+    queryFn: fetchCodeList,
+  });
 
   return (
     <div className="flex flex-col gap-6">
@@ -39,8 +99,8 @@ export default function AdminCodePage() {
       <div className="flex flex-col">
         <CodeListTopBar isAdmin />
         <div className="flex flex-col divide-y divide-border-2">
-          {dummy.map((el, index) => (
-            <AdminCodeCard key={index} codeId={el.codeId} title={el.title} />
+          {data?.map((el) => (
+            <AdminCodeCard key={el.codeId} code={el} />
           ))}
         </div>
       </div>

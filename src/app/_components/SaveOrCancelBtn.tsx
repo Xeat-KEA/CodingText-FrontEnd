@@ -9,9 +9,11 @@ export default function SaveOrCancelBtn({
       <button type="button" onClick={onCancel} className="sm-btn-default">
         취소
       </button>
-      <button type="submit" className="sm-btn-primary">
-        {saveBtn}
-      </button>
+      {saveBtn && (
+        <button type="submit" className="sm-btn-primary">
+          {saveBtn}
+        </button>
+      )}
     </div>
   );
 }

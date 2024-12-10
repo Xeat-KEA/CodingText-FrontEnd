@@ -1,13 +1,14 @@
 import DOMPurify from "isomorphic-dompurify";
 import Link from "next/link";
 import { BpEditIcon } from "./Icons";
-import { useBlogStore } from "@/app/stores";
+import { useBlogStore, useTokenStore } from "@/app/stores";
 import { useBase64 } from "@/app/_hooks/useBase64";
 import { profileProps } from "@/app/_interfaces/interfaces";
 
 export default function BlogInfo({ profile }: profileProps) {
   // 전역 변수
   const { currentBlogId, isOwnBlog } = useBlogStore();
+  const { accessToken } = useTokenStore();
 
   // 소개글 디코딩
   const blogIntro = profile?.mainContent
@@ -28,7 +29,7 @@ export default function BlogInfo({ profile }: profileProps) {
         )}
       </div>
       {/* 블로그 정보 수정 버튼 */}
-      {isOwnBlog && (
+      {isOwnBlog && accessToken && (
         <Link
           // 경로 수정 필요
           href="/edit/blog"

@@ -135,6 +135,7 @@ export default function EditProfileFormContainer() {
   // 프로필 수정 결과 POST
   const onValid = (data: UserInfoForm) => {
     // validation 필요
+    console.log(data);
     if (data) {
       api
         .put("/user-service/users/userInfo", data, {

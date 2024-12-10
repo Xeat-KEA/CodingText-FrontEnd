@@ -2,29 +2,44 @@ import Pagination from "@/app/_components/Pagination";
 import { useEffect, useState } from "react";
 import { Notice } from "@/app/_interfaces/interfaces";
 import NoticeCard from "@/app/_components/NoticeCard";
-import { Notice_Dummy_Data } from "@/app/_constants/constants";
-import { usePaginationStore } from "@/app/stores";
+import { usePaginationStore, useTokenStore } from "@/app/stores";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import api from "@/app/_api/config";
+import { useQuery } from "@tanstack/react-query";
+import { useCheckToken } from "@/app/_hooks/useCheckToken";
 
 export default function AdminNoticeContainer() {
-  const pathname = usePathname();
-  const isAdmin = pathname.includes("/admin");
+  const { accessToken, isTokenSet } = useCheckToken("/admin/sign-in");
 
-  const [data, setData] = useState<Notice[]>([]);
+  const pathname = usePathname();
 
   // 페이지네이션
   const { page, setPage, setLastPage } = usePaginationStore();
-  // 첫 페이지 초기화
-  useEffect(() => {
-    setPage(1);
-    setLastPage(Math.ceil(data.length / 10));
-  }, [data]);
 
-  // 추후 데이터 API
-  useEffect(() => {
-    setData(Notice_Dummy_Data);
-  }, []);
+  const fetchNoticeList = async () => {
+    if (accessToken) {
+      const response = await api.get(`/admin-service/admins/announce`, {
+        params: { page: page, size: 10 },
+        headers: { Authorization: accessToken },
+      });
+
+      // 페이지 정보 초기화
+      const lastPage = response.data.totalPages - 1;
+      if (page > lastPage) {
+        setPage(lastPage);
+      }
+      setLastPage(lastPage);
+
+      return response.data.content;
+    }
+    return null;
+  };
+
+  const { data } = useQuery<Notice[]>({
+    queryKey: ["noticeList", page, isTokenSet],
+    queryFn: fetchNoticeList,
+  });
 
   return (
     <div className="top-container">
@@ -36,12 +51,12 @@ export default function AdminNoticeContainer() {
             <div className="list-topbar-tab">공지사항 제목</div>
           </div>
           <div className="w-full flex flex-col mb-6 divide-y divide-border-2 border-b border-border-2">
-            {data.map((el) => (
+            {data?.map((el) => (
               <NoticeCard
-                noticeId={el.noticeId}
-                noticeTitle={el.noticeTitle}
-                noticeContent={el.noticeContent}
-                noticedAt={el.noticedAt}
+                key={el.announceId}
+                announceId={el.announceId}
+                title={el.title}
+                createdDate={el.createdDate}
               />
             ))}
           </div>
@@ -50,15 +65,13 @@ export default function AdminNoticeContainer() {
         <Pagination />
 
         {/* // "새 게시글 작성" 버튼 */}
-        {isAdmin && (
-          <div className="flex w-full justify-end items-center">
-            <Link
-              href={"/admin/notice/write"}
-              className="px-4 py-2 bg-primary text-white text-xs text-bold rounded-md">
-              새 공지사항 작성
-            </Link>
-          </div>
-        )}
+        <div className="flex w-full justify-end items-center">
+          <Link
+            href={"/admin/notice/write"}
+            className="px-4 py-2 bg-primary-1 text-white text-xs text-bold rounded-md">
+            새 공지사항 작성
+          </Link>
+        </div>
       </div>
     </div>
   );

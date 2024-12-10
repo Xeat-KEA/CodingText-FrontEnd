@@ -17,8 +17,8 @@ export default function CodeHistoryPage() {
   const { page, setPage, setLastPage } = usePaginationStore();
 
   const searchParams = useSearchParams();
-  const algorithm = searchParams.get("algorithm") || "";
-  const difficulty = searchParams.get("difficulty") || "";
+  const algorithms = searchParams.get("algorithms") || "";
+  const difficulties = searchParams.get("difficulties") || "";
   const keyword = searchParams.get("keyword") || "";
   const searchBy = searchParams.get("filter") || "title";
 
@@ -27,8 +27,8 @@ export default function CodeHistoryPage() {
       const response = await api.get("/code-bank-service/code/history/user", {
         headers: { Authorization: accessToken },
         params: {
-          algorithm,
-          difficulty,
+          algorithms,
+          difficulties,
           searchBy: searchBy,
           searchText: searchBy === "title" ? keyword : Number(keyword),
           page,
@@ -41,13 +41,21 @@ export default function CodeHistoryPage() {
         setPage(lastPage);
       }
       setLastPage(lastPage);
+      console.log(response);
       return response.data;
     } else {
       return null;
     }
   };
   const { data } = useQuery({
-    queryKey: ["historyList", isTokenSet, algorithm, difficulty, keyword, page],
+    queryKey: [
+      "historyList",
+      isTokenSet,
+      algorithms,
+      difficulties,
+      keyword,
+      page,
+    ],
     queryFn: fetchHistoryList,
     select: (data) => data.content,
   });

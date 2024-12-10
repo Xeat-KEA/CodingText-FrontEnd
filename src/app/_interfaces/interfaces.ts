@@ -109,7 +109,7 @@ export interface ProfileImgContainerProps {
 }
 
 export interface SaveOrCancelBtnProps {
-  saveBtn: string;
+  saveBtn?: string;
   onCancel: () => void;
 }
 
@@ -135,6 +135,7 @@ export interface Post {
 export interface ProfileImgSelectionProps {
   seletedImg: string;
   onSelectionClick: (seleted: string) => void;
+  isDisabled?: boolean;
 }
 
 export interface EditBtnProps {
@@ -207,14 +208,7 @@ export interface IconBtnProps {
 export interface SmCheckBoxBtnProps {
   isActive: boolean;
   onClick: () => void;
-}
-
-export interface CodeDetail {
-  title: string;
-  difficulty: string;
-  algorithm: string;
   content: string;
-  testcase: any;
 }
 
 export interface Statistics {
@@ -431,14 +425,13 @@ export interface PostStore {
 }
 
 export interface Notice {
-  noticeId: number;
-  noticeTitle: string;
-  noticeContent: string;
-  noticedAt: string;
+  announceId: number;
+  title: string;
+  content?: string;
+  createdDate: string;
 }
 
 export interface NoticeForm {
-  noticeTitle: string;
-  noticeContent: string;
-  noticedAt: string;
+  title: string;
+  content: string;
 }
