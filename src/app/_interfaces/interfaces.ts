@@ -167,14 +167,6 @@ export interface ProfileData {
   profileMessage: string;
   codeLanguage: string;
 }
-// 프로토타입을 위한 임시
-// export interface ProfileData {
-//   userId: number;
-//   nickName: string;
-//   profileImg: string;
-//   profileMessage: string;
-//   codeLanguage: string;
-// }
 
 export interface Push {
   noticeId: number;

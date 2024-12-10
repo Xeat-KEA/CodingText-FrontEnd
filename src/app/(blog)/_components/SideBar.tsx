@@ -32,8 +32,6 @@ export default function SideBar() {
 
   // 전역 변수
   const { userBlogId, currentBlogId, isOwnBlog } = useBlogStore();
-  const params = useParams();
-  const pathname = usePathname();
   const setUserBlogId = useBlogStore((state) => state.setUserBlogId);
   const setIsOwnBlog = useBlogStore((state) => state.setIsOwnBlog);
   const [sideUserName, setSideUserName] = useState("");

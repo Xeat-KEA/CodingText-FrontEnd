@@ -1,11 +1,13 @@
 import React, { useCallback, useState } from "react";
 import { CategoryItemProps } from "../../_interfaces/interfaces";
 import { useBlogStore, useCategoryStore, useTokenStore } from "@/app/stores";
-import { usePathname, useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import ChildCategoryItem from "./ChildCategoryItem";
 import AddCategory from "./AddCategory";
 import api from "@/app/_api/config";
 import { useQueryClient } from "@tanstack/react-query";
+import { motion, AnimatePresence } from "framer-motion"; // Framer Motion 임포트
+
 // 제목의 최대 길이 설정 (임시로 10자로 제한)
 const MAX_TITLE_LENGTH = 10;
 
@@ -27,6 +29,7 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
   } = useCategoryStore();
   const router = useRouter();
   const pathname = usePathname();
+  const params = useParams();
   const queryClient = useQueryClient();
 
   const [editCategoryId, setEditCategoryId] = useState<number | null>(null);
@@ -76,7 +79,7 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
   return (
     <div className="board" key={category.id}>
       <div
-        className="flex items-center relative text-black text-sm font-regular h-10 pl-6 py-2 cursor-pointer"
+        className="flex items-center relative text-black bg-white text-sm font-regular h-10 pl-6 py-2 cursor-pointer"
         onMouseEnter={() => setHoveredCategoryId(true)}
         onMouseLeave={() => setHoveredCategoryId(false)}>
         {editCategoryId === category.id ? (
@@ -109,7 +112,13 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
         ) : (
           <>
             <p
-              className={`cursor-pointer`}
+              className={`cursor-pointer ${
+                category.id === Number(params.categoryId) ||
+                (category.id === 1 &&
+                  pathname.includes(`/blog/${currentBlogId}/code`))
+                  ? "font-bold"
+                  : ""
+              }`}
               onClick={() => handleCategoryClick(category.id)}>
               {category.title}
             </p>
@@ -136,59 +145,66 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
         )}
       </div>
 
-      {activeCategories.includes(category.id) && category.childCategories && (
-        <div className="pl-10">
-          {/* 하위 게시판 전체 */}
-          <p
-            className={`flex items-center relative text-xs font-regular h-8 py-2 cursor-pointer ${
-              pathname ===
-              (category.id === 1
-                ? `/blog/${currentBlogId}/code`
-                : `/category/${category.id}`)
-                ? "font-bold"
-                : ""
-            }`}
-            onClick={() =>
-              router.push(
-                category.id === 1
+      <AnimatePresence>
+        {activeCategories.includes(category.id) && category.childCategories && (
+          <motion.div
+            className="pl-10 bg-white "
+            initial={{ height: 0 }}
+            animate={{ height: "auto" }}
+            exit={{ height: 0 }}
+            transition={{ duration: 0.2 }}>
+            {/* 하위 게시판 전체 */}
+            <p
+              className={`flex items-center relative bg-white text-xs font-regular h-8 py-2  cursor-pointer ${
+                pathname ===
+                (category.id === 1
                   ? `/blog/${currentBlogId}/code`
-                  : `/category/${category.id}`
-              )
-            }>
-            전체
-          </p>
+                  : `/category/${category.id}`)
+                  ? "font-bold"
+                  : ""
+              }`}
+              onClick={() =>
+                router.push(
+                  category.id === 1
+                    ? `/blog/${currentBlogId}/code`
+                    : `/category/${category.id}`
+                )
+              }>
+              전체
+            </p>
 
-          {/* 하위 게시판 목록 */}
-          {category.childCategories.map((childCategory) => (
-            <ChildCategoryItem
-              key={childCategory.id}
-              childCategory={childCategory}
-              category={category}
-              currentPath={pathname}
-              handleDeleteCategory={handleDeleteCategory}
-            />
-          ))}
+            {/* 하위 게시판 목록 */}
+            {category.childCategories.map((childCategory) => (
+              <ChildCategoryItem
+                key={childCategory.id}
+                childCategory={childCategory}
+                category={category}
+                currentPath={pathname}
+                handleDeleteCategory={handleDeleteCategory}
+              />
+            ))}
 
-          {/* 하위 게시판 추가 */}
-          {isOwnBlog && category.id !== 1 && (
-            <>
-              {isAddingChildCategory[category.id] ? (
-                <AddCategory
-                  handleAddCategory={handleAddCategory}
-                  parentId={category.id}
-                  isChildCategory={true}
-                />
-              ) : (
-                <button
-                  onClick={() => setIsAddingChildCategory(category.id, true)}
-                  className="text-2xs text-disabled h-8 py-2">
-                  새 하위 게시판 추가
-                </button>
-              )}
-            </>
-          )}
-        </div>
-      )}
+            {/* 하위 게시판 추가 */}
+            {isOwnBlog && category.id !== 1 && (
+              <>
+                {isAddingChildCategory[category.id] ? (
+                  <AddCategory
+                    handleAddCategory={handleAddCategory}
+                    parentId={category.id}
+                    isChildCategory={true}
+                  />
+                ) : (
+                  <button
+                    onClick={() => setIsAddingChildCategory(category.id, true)}
+                    className="bg-white text-2xs text-disabled h-8 py-2">
+                    새 하위 게시판 추가
+                  </button>
+                )}
+              </>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
