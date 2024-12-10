@@ -31,27 +31,6 @@ const ChildCategoryItem: React.FC<ChildCategoryItemProps> = ({
     useState<string>("");
   const [hoveredId, setHoveredId] = useState<Boolean>(false);
 
-  // // 하위 데이터 갱신
-  // const fetchChildList = async (categoryId: number) => {
-  //   const response = await api.get(
-  //     `/blog-service/blog/board/childList/${categoryId}`,
-  //     {
-  //       headers: { Authorization: accessToken },
-  //     }
-  //   );
-
-  //   const childData = response.data.data.childCategories;
-  //   console.log(response);
-  //   return childData;
-  // };
-
-  // const { data: childList } = useQuery({
-  //   queryKey: ["childList", category.id], // category.id 별로 구분
-  //   queryFn: () => fetchChildList(category.id),
-  //   enabled: !!accessToken && currentBlogId !== -1,
-  // });
-
-  // 하위 게시판 수정 요청
   const handleEditChildCategory = async (
     categoryId: number,
     id: number,
@@ -69,7 +48,6 @@ const ChildCategoryItem: React.FC<ChildCategoryItemProps> = ({
     setEditChildCategoryTitle("");
   };
 
-  // 하위 수정 저장
   const saveEditChildCategory = async (
     categoryId: number,
     childCategoryId: number
@@ -146,7 +124,7 @@ const ChildCategoryItem: React.FC<ChildCategoryItemProps> = ({
             href={
               category.id === 1
                 ? `/blog/${currentBlogId}/code/${childCategory.id}`
-                : `/category/${childCategory.id}`
+                : `/category/${category.id}/${childCategory.id}`
             }>
             <p
               className={
@@ -154,7 +132,7 @@ const ChildCategoryItem: React.FC<ChildCategoryItemProps> = ({
                   ? Number(params.codeId) === childCategory.id
                     ? "font-bold"
                     : ""
-                  : Number(params.categoryId) === childCategory.id ||
+                  : Number(params.childCategoryId) === childCategory.id ||
                     (params.postId &&
                       Number(childCategoryId) === childCategory.id)
                   ? "font-bold"

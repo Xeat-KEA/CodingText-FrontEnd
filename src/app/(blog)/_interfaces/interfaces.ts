@@ -29,7 +29,7 @@ export interface ChildCategoryItemProps {
   ) => void;
 }
 export interface BlogPost {
-  postId: number;
+  articleId: number;
   articleReplies: CommentProps[];
   blogId: number;
   checkRecommend: boolean;

@@ -128,6 +128,8 @@ export interface Post {
   codeId?: number;
   thumbnailImageUrl?: string | null;
   category?: string;
+
+  childName?: string;
 }
 
 export interface ProfileImgSelectionProps {
@@ -320,12 +322,17 @@ export interface WindowSizeStore {
 
 // Form 관련 인터페이스
 export interface PostForm {
+  articleId?: number;
   title: string;
-  content: string;
+  isBlind?: boolean;
   isSecret?: boolean;
   password?: string;
-  parentCategory?: number;
-  childCategory?: number;
+  content: string;
+  parentCategoryId?: number;
+  parentName?: string;
+  childCategoryId?: number;
+  childName?: string;
+  originalImageList?: string[];
 }
 
 export interface SearchForm {
@@ -366,6 +373,9 @@ export interface BlogProfile {
   mainContent: string;
 }
 
+export interface profileProps {
+  profile: BlogProfile;
+}
 export interface BlogMainContent {
   blogId: number;
   mainContent: string;

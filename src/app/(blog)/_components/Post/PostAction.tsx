@@ -38,7 +38,7 @@ export default function PostAction() {
     if (!currentPost) return;
 
     try {
-      await api.put(`/blog-service/blog/board/article/like/${currentPost.postId}`,
+      await api.put(`/blog-service/blog/board/article/like/${currentPost.articleId}`,
          null, 
          {
           headers: { Authorization: accessToken },
@@ -136,19 +136,19 @@ export default function PostAction() {
             <IconBtn
               type="edit"
               content="수정"
-              onClick={() => router.push(`/edit-post/${currentPost.postId}`)}
+              onClick={() => router.push(`/edit-post/${currentPost.articleId}`)}
             />
             <IconBtn
               type="delete"
               content="삭제"
-              onClick={() => onClickDeletePost(Number(currentPost?.postId))}
+              onClick={() => onClickDeletePost(Number(currentPost?.articleId))}
             />
           </>
         ) : (
           <IconBtn
             type="report"
             content="신고"
-            onClick={() => onClickReportPost(Number(currentPost?.postId))}
+            onClick={() => onClickReportPost(Number(currentPost?.articleId))}
           />
         )}
       </div>
@@ -196,7 +196,7 @@ export default function PostAction() {
             placeholder="분류"
           />
           {selectedOption === "직접 입력" && (
-            <div>
+            <div className="mt-6">
               <textarea
                 value={customInput}
                 onChange={(event) => setCustomInput(event.target.value)}

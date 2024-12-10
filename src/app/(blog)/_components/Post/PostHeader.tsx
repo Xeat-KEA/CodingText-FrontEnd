@@ -5,7 +5,6 @@ import { PostProps } from "../../_interfaces/interfaces";
 import { usePathname } from "next/navigation";
 import {
   Code_Post_Dummy_Data,
-  Profile_Dummy_Data,
 } from "@/app/(admin)/_constants/constants";
 import Image from "next/image";
 import { usePostStore } from "@/app/stores";
@@ -14,11 +13,6 @@ export default function PostHeader() {
   const { currentPost, isCodingPost } = usePostStore();
   const pathname = usePathname();
   const isAdminPage = pathname.includes("/admin/report/");
-
-  // 프로토타입용 -> 수정 필요
-  // const reportedUser = Profile_Dummy_Data.find(
-  //   (profile) => profile.blogId === currentPost.blogId
-  // );
 
   return (
     <div className="flex flex-col w-full h-[90px] justify-center gap-2">

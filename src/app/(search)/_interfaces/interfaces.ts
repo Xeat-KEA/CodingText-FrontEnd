@@ -11,6 +11,8 @@ export interface PostResult {
   childName: string;
   content: string;
   createdDate: string;
+  isBlind: boolean;
+  isSecret: boolean;
   likeCount: number;
   replyCount: number;
   title: string;

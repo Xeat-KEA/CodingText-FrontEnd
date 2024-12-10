@@ -124,6 +124,7 @@ export default function Board() {
       }
       // 삭제 후 데이터 갱신
       queryClient.invalidateQueries({ queryKey: ["boardCategories"] });
+      
       setIsDialogOpen(false);
       setCategoryToDelete(null);
     } catch (error) {

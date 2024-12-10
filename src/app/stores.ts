@@ -145,7 +145,7 @@ export const useCategoryStore = create<CategoryStore>((set) => ({
 // 게시글 관련 정보 저장 전역 변수
 export const usePostStore = create<PostStore>((set) => ({
   currentPost: {
-    postId: -1,
+    articleId: -1,
     articleReplies: [],
     blogId: -1,
     checkRecommend: false, // ?

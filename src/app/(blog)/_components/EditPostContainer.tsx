@@ -1,64 +1,113 @@
 import Dialog from "@/app/_components/Dialog";
 import { DialogCheckIcon } from "@/app/_components/Icons";
 import PostEditor from "@/app/_components/PostEditor/PostEditor";
-import { Post } from "@/app/_interfaces/interfaces";
+import { Post, PostForm } from "@/app/_interfaces/interfaces";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import api from "@/app/_api/config";
-import { useBlogStore, useTiptapStore } from "@/app/stores";
+import {
+  useBlogStore,
+  usePostStore,
+  useTiptapStore,
+  useTokenStore,
+} from "@/app/stores";
 import { PostProps } from "../_interfaces/interfaces";
-import { Post_Dummy_Data } from "@/app/(admin)/_constants/constants";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useBase64 } from "@/app/_hooks/useBase64";
+import BackBtn from "@/app/_components/BackBtn";
 
 export default function EditPostContainer() {
+  const { accessToken, isTokenSet } = useTokenStore();
+  const { content, setContent } = useTiptapStore();
+
+  const queryClient = useQueryClient();
+
   const params = useParams();
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const { id, postId } = useParams();
-  const [post, setPost] = useState<Post>(); // 현재 게시글 상태
+  // const [post, setPost] = useState<PostForm>(); // 현재 게시글 상태
   const [isCancelDialogOpen, setIsCancelDialogOpen] = useState(false);
   const [isPostedDialogOpen, setIsPostedDialogOpen] = useState(false);
-  const { content, setContent } = useTiptapStore();
-  const { userBlogId } = useBlogStore();
 
+  const { userBlogId, currentBlogId } = useBlogStore();
+  const setCurrentBlogId = useBlogStore((state) => state.setCurrentBlogId);
 
-  const handlePostUpdate = (data: Post) => {
-    setPost(data);
-    setContent(data?.content);
-  };
-
+  // 현재 블로그 ID 조회
   useEffect(() => {
-    // api.get(`/article/${postId}`).then((res) =>
-    //     const data = res.data.data
-    //     setPost(data);
-    // })
+    if (userBlogId !== -1) {
+      setCurrentBlogId(userBlogId);
+      queryClient.invalidateQueries({ queryKey: ["boardCategories"] });
+    }
+  }, [accessToken, userBlogId]);
 
-    // const data = Post_Dummy_Data.find(
-    //   (post) => post.postId === Number(params.postId)
-    // );
-    // if (data) {
-    //   setPost(data);
-    // }
-  }, []);
+  // 게시글 수정 내용 반환
+  const fetchEditPostData = async () => {
+    if (accessToken) {
+      try {
+        const response = await api.get(
+          `/blog-service/blog/board/article/edit/${params.postId}`
+        );
+        return response.data.data;
+      } catch (error) {
+        console.error("수정 게시글 내용 반환 오류: ", error);
+        return null;
+      }
+    }
+  };
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["editPostContent", isTokenSet, params.postId],
+    queryFn: fetchEditPostData,
+    enabled: isTokenSet && !!accessToken,
+  });
+
+  const handlePostUpdate = async (data: PostForm) => {
+    const contentDe = data.content ? useBase64("encode", data.content) : "";
+    const updatedData = {
+      ...data,
+      content: contentDe,
+    };
+    const response = api.put(
+      `/blog-service/blog/board/article/${params.postId}`,
+      updatedData,
+      {
+        headers: { Authorization: accessToken },
+      }
+    );
+    // post 후 새 게시글 id 반환
+    setIsPostedDialogOpen((prev) => !prev);
+  };
 
   return (
     <>
-      <div className="top-container">
-        <div className="max-w-1000 h-screen py-20">
-         {post && (
-           <PostEditor
-           initialData={post} // 초기 데이터로 현재 게시글 정보 전달
-           onBtnClick={(data) => {
-             // 작성된 글 validation 후 POST 필요
-             handlePostUpdate(data);
-             // post 후 새 게시글 id 반환
-             setIsPostedDialogOpen((prev) => !prev);
-           }}
-           onCancelClick={() => setIsCancelDialogOpen((prev) => !prev)}
-           isEditing={true}
-         />
-         )}
+      {accessToken && (
+        <div className="top-container h-screen">
+          <div className="max-w-1000 py-6 h-full flex flex-col">
+            {/* 목록으로 버튼*/}
+            <div className="w-full mb-4">
+              <BackBtn
+                title="홈으로"
+                onClick={() =>
+                  router.push(`/blog/${userBlogId}`, {
+                    scroll: false,
+                  })
+                }
+              />
+            </div>
+            {data && (
+              <div className="grow overflow-y-auto">
+                <PostEditor
+                  initialData={data} // 초기 데이터로 현재 게시글 정보 전달
+                  onBtnClick={(data) => {
+                    // 작성된 글 validation 후 POST 필요
+                    handlePostUpdate(data);
+                  }}
+                  onCancelClick={() => setIsCancelDialogOpen((prev) => !prev)}
+                  isEditing={true}
+                />
+              </div>
+            )}
+          </div>
         </div>
-      </div>
+      )}
       {isCancelDialogOpen && (
         <Dialog
           title={"게시글 작성을\n그만두시겠어요?"}
@@ -77,11 +126,11 @@ export default function EditPostContainer() {
           content="수정된 게시글을 확인해보세요"
           backBtn="내 블로그 홈으로"
           onBackBtnClick={() =>
-            router.push(`/blog/${userBlogId}`, { scroll: false })
+            router.replace(`/blog/${userBlogId}`, { scroll: false })
           }
           primaryBtn="게시글 페이지로"
           onBtnClick={() =>
-            router.push(`/post/${params.postId}`, { scroll: false })
+            router.replace(`/post/${params.postId}`, { scroll: false })
           }
           blockOutsideClick
         />

@@ -11,16 +11,18 @@ export default function BlogHomeContainer() {
   const { accessToken, isTokenSet } = useTokenStore();
   const params = useParams();
 
-  const { userBlogId, currentBlogId, isOwnBlog, profile } = useBlogStore();
+  const { currentBlogId } = useBlogStore();
 
   const setCurrentBlogId = useBlogStore((state) => state.setCurrentBlogId);
   const setProfile = useBlogStore((profile) => profile.setProfile);
 
   // 현재 블로그 아이디 조회
   useEffect(() => {
-    const blogId = Number(params?.id || -1); // 기본값 처리
-    if (blogId !== -1) {
-      setCurrentBlogId(blogId);
+    if (typeof window !== undefined) {
+      const blogId = Number(params?.id || -1); // 기본값 처리
+      if (blogId !== -1) {
+        setCurrentBlogId(blogId);
+      }
     }
   }, [params.id, setCurrentBlogId]);
 
@@ -42,7 +44,7 @@ export default function BlogHomeContainer() {
     }
   };
 
-  const { data: blogInfo, isLoading } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["blogInfo", isTokenSet, currentBlogId],
     queryFn: fetchBlogProfileData,
     enabled: currentBlogId !== -1 && !!accessToken,
@@ -54,13 +56,13 @@ export default function BlogHomeContainer() {
         <div className="top-container">
           <div className="max-w-1000 min-h-screen">
             {/* 블로그 프로필 정보 */}
-            <BlogProfile />
+            <BlogProfile profile={data} />
 
             {/* 구분선 */}
             <hr className="division my-6" />
 
             {/* 블로그 소개 정보 */}
-            <BlogInfo />
+            <BlogInfo profile={data} />
           </div>
         </div>
       )}

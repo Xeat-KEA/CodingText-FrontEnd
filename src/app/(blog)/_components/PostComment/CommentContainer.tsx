@@ -69,7 +69,7 @@ export default function CommentContainer() {
 
   const submitComment = async (data: { comment: string }) => {
     const requestBody = {
-      articleId: currentPost.postId,
+      articleId: currentPost.articleId,
       parentReplyId: parentReplyId,
       mentionedUserBlogId: mentionId,
       content: data.comment,
@@ -84,7 +84,6 @@ export default function CommentContainer() {
           }
         );
       }
-      // 게시글 데이터 다시 가져오기
       queryClient.invalidateQueries({ queryKey: ["postContent"] });
     } catch (error) {
       console.error("댓글 작성 오류: ", error);
@@ -106,7 +105,8 @@ export default function CommentContainer() {
   const updateComment = (content: string) => {
     setEditedContent(content);
   }
-  const confirmEditComment = async (content: string) => {
+
+  const confirmEditComment = async () => {
     if(commentToEdit === null) return;
     try{
       const response = await api.put(
@@ -140,7 +140,6 @@ export default function CommentContainer() {
           headers: { Authorization: accessToken },
         }
       );
-      // 게시글 데이터 다시 가져오기
       queryClient.invalidateQueries({ queryKey: ["postContent"] });
     } catch (error) {
       console.error("댓글 삭제 실패:", error);
@@ -203,13 +202,7 @@ export default function CommentContainer() {
       {comments.map((comment) => (
         <div key={comment.replyId}>
           <Comment
-            key={comment.replyId}
-            replyId={comment.replyId}
-            blogId={comment.blogId}
-            userName={comment.userName}
-            profileUrl={comment.profileUrl}
-            content={comment.content}
-            createdDate={comment.createdDate}
+          {...comment}
             isOwnComment={comment.blogId === userBlogId}
             onEdit={() => onClickEdit(comment.replyId, comment.content)}
             isEditing={commentToEdit === comment.replyId}
@@ -225,15 +218,8 @@ export default function CommentContainer() {
           />
           {comment.childReplies?.map((reply) => (
             <Comment
+              {...reply}
               key={reply.replyId}
-              replyId={reply.replyId}
-              blogId={reply.blogId}
-              userName={reply.userName}
-              profileUrl={reply.profileUrl}
-              parentReplyId={reply.parentReplyId}
-              mentionedUserName={reply.mentionedUserName}
-              content={reply.content}
-              createdDate={reply.createdDate}
               isOwnComment={reply.blogId === userBlogId}
               onEdit={() => onClickEdit(reply.replyId, reply.content)}
               isEditing={commentToEdit === reply.replyId}

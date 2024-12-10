@@ -5,8 +5,10 @@ export const useImageHandler = async (files: FileList, accessToken: string) => {
   const formData = new FormData();
 
   const timestamp = new Date().toISOString().replace(/[-:.]/g, "");
-  const newFileName = `img${timestamp}${file.name.substring(file.name.lastIndexOf("."))}`;
-  
+  const newFileName = `img${timestamp}${file.name.substring(
+    file.name.lastIndexOf(".")
+  )}`;
+
   formData.append("image", file, newFileName);
 
   try {
@@ -22,7 +24,6 @@ export const useImageHandler = async (files: FileList, accessToken: string) => {
     );
 
     const { uploadImageUrl } = response.data;
-    console.log(response);
 
     return uploadImageUrl;
   } catch (error) {

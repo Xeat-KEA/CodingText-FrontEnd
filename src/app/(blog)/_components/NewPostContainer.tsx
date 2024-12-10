@@ -1,4 +1,5 @@
 import api from "@/app/_api/config";
+import BackBtn from "@/app/_components/BackBtn";
 import Dialog from "@/app/_components/Dialog";
 import { DialogCheckIcon } from "@/app/_components/Icons";
 import PostEditor from "@/app/_components/PostEditor/PostEditor";
@@ -30,6 +31,7 @@ export default function NewPostContainer() {
   const setCurrentBlogId = useBlogStore((state) => state.setCurrentBlogId);
 
   useEffect(() => {
+    queryClient.invalidateQueries({ queryKey: ["userBlogIdData"] });
     if (userBlogId !== -1) {
       setCurrentBlogId(userBlogId);
       queryClient.invalidateQueries({ queryKey: ["boardCategories"] });
@@ -40,7 +42,7 @@ export default function NewPostContainer() {
     const contentDe = data.content && useBase64("encode", data.content);
 
     const requestBody = {
-      childCategoryId: data.childCategory,
+      childCategoryId: data.childCategoryId,
       title: data.title,
       content: contentDe,
       isSecret: data.isSecret,
@@ -77,13 +79,26 @@ export default function NewPostContainer() {
   return (
     <>
       {accessToken && (
-        <div className="top-container">
-          <div className="max-w-1000 h-screen py-20">
-            <PostEditor
-              onBtnClick={(data) => onClickBtn(data)}
-              onCancelClick={() => setIsCancelDialogOpen((prev) => !prev)}
-              isEditing={isEditing}
-            />
+        <div className="top-container h-screen">
+          <div className="max-w-1000 py-6 h-full flex flex-col">
+            {/* 목록으로 버튼*/}
+            <div className="w-full mb-4">
+              <BackBtn
+                title="홈으로"
+                onClick={() =>
+                  router.push(`/blog/${userBlogId}`, {
+                    scroll: false,
+                  })
+                }
+              />
+            </div>
+            <div className="grow overflow-y-auto">
+              <PostEditor
+                onBtnClick={(data) => onClickBtn(data)}
+                onCancelClick={() => setIsCancelDialogOpen((prev) => !prev)}
+                isEditing={isEditing}
+              />
+            </div>
           </div>
         </div>
       )}

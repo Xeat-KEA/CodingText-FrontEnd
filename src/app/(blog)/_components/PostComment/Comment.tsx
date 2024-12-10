@@ -4,6 +4,7 @@ import { useCalculateDate } from "@/app/_hooks/useCalculateDate";
 import { ReplyIcon } from "../Icons";
 import { usePathname } from "next/navigation";
 import IconBtn from "@/app/_components/IconBtn";
+import ProfileImgContainer from "@/app/_components/ProfileImgContainer";
 
 const Comment: React.FC<CommentProps> = ({
   replyId,
@@ -35,14 +36,7 @@ const Comment: React.FC<CommentProps> = ({
             {/* 프로필 이미지 */}
             {profileUrl && (
               <div className="profile-image w-120 h-120 relative">
-                <Image
-                  src={profileUrl}
-                  alt={`${userName}의 프로필 이미지`}
-                  width={24}
-                  height={24}
-                  className="rounded-full"
-                  priority
-                />
+                <ProfileImgContainer width={24} height={24} src={profileUrl} />
               </div>
             )}
             <p className="text-xs text-body font-semibold">{userName}</p>
@@ -62,7 +56,7 @@ const Comment: React.FC<CommentProps> = ({
             <textarea
               value={editedContent}
               onChange={(e) => onUpdateComment(e.target.value)}
-              className="w-full bg-bg-1 pl-4 p-2 rounded-md text-sm text-body font-regular"
+              className="w-full bg-bg-1 pl-4 p-2 rounded-lg text-sm text-body font-regular resize-none"
             />
           ) : (
             content
@@ -79,20 +73,18 @@ const Comment: React.FC<CommentProps> = ({
           </div>
         ) : isEditing ? (
           <div className="flex w-full h-5 justify-between items-center">
-          <button
-            className="text-xs text-body font-semibold"
-            onClick={onCancelEdit}
-          >
-            취소
-          </button>
-          <button
-            className="text-xs text-primary-1 font-semibold"
-            onClick={() => confirmEdit(editedContent)}
-          >
-            수정 완료
-          </button>
-        </div>
-        ):(
+            <button
+              className="text-xs text-body font-semibold"
+              onClick={onCancelEdit}>
+              취소
+            </button>
+            <button
+              className="text-xs text-primary-1 font-semibold"
+              onClick={() => confirmEdit(editedContent)}>
+              수정 완료
+            </button>
+          </div>
+        ) : (
           <div className="flex w-full h-5 justify-between items-center">
             <button
               className="flex items-center gap-1"

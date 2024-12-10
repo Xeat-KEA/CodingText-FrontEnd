@@ -9,15 +9,17 @@ import { REPORT_REASONS } from "../_constants/constants";
 import DropDown from "@/app/_components/DropDown";
 import IconBtn from "@/app/_components/IconBtn";
 import api from "@/app/_api/config";
-import {  useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
+import { profileProps } from "@/app/_interfaces/interfaces";
+import ProfileImgContainer from "@/app/_components/ProfileImgContainer";
 
-export default function BlogProfile() {
+export default function BlogProfile({ profile }: profileProps) {
   // 로그인 여부 확인
   const { accessToken, isTokenSet } = useTokenStore();
 
   const queryClient = useQueryClient();
 
-  const { userBlogId, currentBlogId, isOwnBlog, profile } = useBlogStore();
+  const { userBlogId, currentBlogId, isOwnBlog } = useBlogStore();
   const [blogToReport, setBlogToReport] = useState<number | null>(null);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [customInput, setCustomInput] = useState("");
@@ -88,14 +90,11 @@ export default function BlogProfile() {
           <div className="profile-card flex items-center space-x-6">
             {/* 프로필 이미지 */}
             {profile.profileUrl && (
-              <div className="profile-image w-120 h-120 relative">
-                <Image
-                  src={profile.profileUrl}
-                  alt={`${profile.userName}의 프로필 이미지`}
+              <div className="profile-image w-120 h-120 relative shrink-0">
+                <ProfileImgContainer
                   width={120}
                   height={120}
-                  className="rounded-full"
-                  priority
+                  src={profile.profileUrl}
                 />
               </div>
             )}
@@ -169,7 +168,7 @@ export default function BlogProfile() {
             placeholder="분류"
           />
           {selectedOption === "직접 입력" && (
-            <div>
+            <div className="mt-6">
               <textarea
                 value={customInput}
                 onChange={(event) => setCustomInput(event.target.value)}

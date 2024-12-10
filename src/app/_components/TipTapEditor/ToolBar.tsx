@@ -15,11 +15,15 @@ import {
   StrikeIcon,
 } from "./icons";
 import { useImageHandler } from "@/app/_hooks/useImageHandler";
+import { useTokenStore } from "@/app/stores";
 
-export default function  ToolBar({ editor, accessToken }: ToolBarProps) {
+export default function  ToolBar({ editor }: ToolBarProps) {
+  const { accessToken, isTokenSet } = useTokenStore();
+
   if (!editor) {
     return null;
   }
+  
   // Link 기능
   const handleLink = () => {
     // 이미 링크가 적용되었을 때

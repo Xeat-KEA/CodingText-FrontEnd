@@ -6,6 +6,7 @@ export default function EditProfileImg({
   onSelectFromPreset,
   onUploadImg,
 }: EditProfileImgProps) {
+  
   return (
     <div className="flex flex-col gap-3">
       <span className="edit-title">프로필 사진</span>

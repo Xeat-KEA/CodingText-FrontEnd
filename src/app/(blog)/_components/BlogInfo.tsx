@@ -3,17 +3,16 @@ import Link from "next/link";
 import { BpEditIcon } from "./Icons";
 import { useBlogStore } from "@/app/stores";
 import { useBase64 } from "@/app/_hooks/useBase64";
+import { profileProps } from "@/app/_interfaces/interfaces";
 
-export default function BlogInfo() {
-
+export default function BlogInfo({ profile }: profileProps) {
   // 전역 변수
-  const { currentBlogId, isOwnBlog, profile, blogContent } = useBlogStore();
-  // const setBlogContent = useBlogStore((profile) => profile.setBlogContent);
+  const { currentBlogId, isOwnBlog } = useBlogStore();
 
   // 소개글 디코딩
-  const blogIntro = profile.mainContent 
-  ? useBase64("decode", profile.mainContent) 
-  : profile.mainContent;
+  const blogIntro = profile?.mainContent
+    ? useBase64("decode", profile.mainContent)
+    : "";
 
   return (
     <>
