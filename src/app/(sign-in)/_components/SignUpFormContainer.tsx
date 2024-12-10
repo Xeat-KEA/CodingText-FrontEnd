@@ -13,13 +13,11 @@ export default function SignUpFormContainer() {
   const {
     register,
     handleSubmit,
-    getValues,
     setValue,
     watch,
     formState: { errors },
     setError,
     clearErrors,
-    setFocus,
   } = useForm<SignUpForm>({
     defaultValues: { useSocialProfile: false },
     mode: "onBlur",
@@ -39,29 +37,14 @@ export default function SignUpFormContainer() {
 
   const [language, setLanguage] = useState("");
 
-  // 닉네임 validation
-  const onNickNameBlur = async () => {
-    const currentNickName = getValues("nickName");
-    if (currentNickName !== "") {
-      const { data: isDuplicated } = await api.post(
-        "/user-service/auth/nickname",
-        {},
-        { params: { nickname: currentNickName } }
-      );
-      if (isDuplicated) {
-        setError("nickName", {
-          type: "custom",
-          message: "중복된 닉네임이에요",
-        });
-      } else {
-        clearErrors("nickName");
-      }
-    } else {
-      setError("nickName", {
-        type: "custom",
-        message: "닉네임을 입력해주세요",
-      });
-    }
+  // 닉네임 중복 검사 validation
+  const checkNickNameExists = async (nickname: string) => {
+    const { data: isNickNameExists } = await api.post(
+      "/user-service/auth/nickname",
+      {},
+      { params: { nickname }, headers: { Authorization: tempToken } }
+    );
+    return isNickNameExists ? "이미 가입된 닉네임이에요" : undefined;
   };
 
   const onValid = async (data: SignUpForm) => {
@@ -73,7 +56,7 @@ export default function SignUpFormContainer() {
       });
       return;
     }
-    if (!data.basicProfileUrl || !data.useSocialProfile) {
+    if (!data.basicProfileUrl && !data.useSocialProfile) {
       setError("basicProfileUrl", {
         type: "custom",
         message: "프로필 사진을 선택해주세요",
@@ -95,7 +78,6 @@ export default function SignUpFormContainer() {
       console.error(err);
     }
   };
-  console.log(errors.nickName, errors.nickName?.message);
 
   return (
     <form onSubmit={handleSubmit(onValid)} className="flex flex-col gap-10">
@@ -104,12 +86,17 @@ export default function SignUpFormContainer() {
         <span className="text-sm text-black">닉네임</span>
         <input
           {...register("nickName", {
-            required: { value: true, message: "닉네임을 입력해주세요" },
+            required: "닉네임을 입력해주세요",
+            pattern: {
+              value: /^[가-힣a-zA-Z0-9]{2,8}$/,
+              message:
+                "한글, 영어, 숫자 2자 ~ 8자 (공백, 초성, 특수문자 입력 불가)",
+            },
+            validate: async (nickName) => await checkNickNameExists(nickName),
           })}
           className={`sign-in-input ${errors.nickName && "!border-red"}`}
           placeholder="닉네임"
           autoComplete="off"
-          onBlur={onNickNameBlur}
         />
         {errors.nickName && (
           <span className="absolute top-[calc(100%+4px)] left-0 whitespace-nowrap text-xs font-bold text-red">
@@ -146,6 +133,7 @@ export default function SignUpFormContainer() {
           seletedImg={watch("basicProfileUrl")}
           onSelectionClick={(selected) => {
             setValue("basicProfileUrl", selected);
+            clearErrors("basicProfileUrl");
           }}
           isDisabled={watch("useSocialProfile")}
           isError={errors.basicProfileUrl !== undefined}
@@ -157,6 +145,7 @@ export default function SignUpFormContainer() {
             onClick={() => {
               const currentValue = watch("useSocialProfile");
               setValue("useSocialProfile", !currentValue);
+              clearErrors("basicProfileUrl");
             }}
           />
         </div>
