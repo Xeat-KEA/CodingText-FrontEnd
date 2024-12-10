@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
@@ -42,26 +43,24 @@ export default function SideBar() {
   const setActiveCategories = useCategoryStore(
     (state) => state.setActiveCategories
   );
-  const [isCollapsed, setIsCollapsed] = useState(false); // 최소화
-  const toggleSidebar = () => setIsCollapsed(!isCollapsed);
+  const [isCollapsed, setIsCollapsed] = useState(true);
+  const [isHovered, setIsHovered] = useState(false);
+
+  const toggleSidebar = () => {
+    setIsCollapsed(!isCollapsed);
+    setIsHovered(false);
+  };
+  const handleMouseEnter = () => setIsHovered(true);
+  const handleMouseLeave = () => setIsHovered(false);
 
   // 화면 사이즈 감지 후 사이드 바 닫기
   const { windowSize } = useWindowSizeStore();
 
   useEffect(() => {
-    if (windowSize < 1300) {
+    if (windowSize < 1000) {
       setIsCollapsed(true);
     }
   }, [windowSize]);
-
-  // 새 글 작성 또는 편집 페이지에서 사이드바 닫기
-  useEffect(() => {
-    if (pathname?.includes("new-post") || pathname?.includes("edit-post")) {
-      setIsCollapsed(true);
-    } else {
-      setIsCollapsed(false);
-    }
-  }, [pathname]);
 
   // 토큰 값으로 조회한 사용자 블로그 아이디
   const fetchUserBlogId = async () => {
@@ -139,35 +138,51 @@ export default function SideBar() {
   }) => (
     <Link
       href={href}
-      className={`flex items-center h-6 py-6 text-black ${
-        isCollapsed
-          ? "justify-center w-6 ml-2"
-          : "justify-between w-60 pl-6 pr-2"
-      }`}>
-      {!isCollapsed && <p className="text-xs">{label}</p>}
+      className="flex items-center h-6 py-6 text-black justify-between w-60 pl-6 pr-2">
+      <p className="text-xs">{label}</p>
       <Icon />
     </Link>
   );
 
   return (
-    <nav
-      className={`fixed top-0 left-0 h-screen bg-white border-r transition-all duration-150 z-20 
-        ${isCollapsed ? "w-10" : "w-60"}`}>
+    <motion.nav
+      initial={{ x: -200 }}
+      animate={{
+        x: !isCollapsed || isHovered ? "0px" : "-200px",
+      }}
+      transition={{ type: "tween" }}
+      className={`fixed top-0 left-0 h-screen bg-white border-r shadow-xl z-20 ${
+        isHovered && isCollapsed ? "rounded-r-3xl" : ""
+      }`}
+      onMouseEnter={isHovered ? handleMouseEnter : undefined}
+      onMouseLeave={isHovered ? handleMouseLeave : undefined}
+      onClick={(e) => {
+        const target = e.target as HTMLElement;
+        if (!target.closest("button, a")) {
+          setIsCollapsed(false);
+        }
+      }}>
       {/* 사이드바 상단 요소 */}
       <div
-        className={`flex items-center h-8 mt-5 mb-3 mr-2 ${
-          isCollapsed ? "justify-center w-6 ml-2" : "justify-between w-52 ml-6"
-        }`}>
-        {!isCollapsed && (
-          <Link href="/">
-            <LogoIcon />
-          </Link>
-        )}
-        <button
-          onClick={toggleSidebar}
-          className={`focus:outline-none ${isCollapsed && "rotate-180"}`}>
-          <SbHiddenIcon />
-        </button>
+        className="flex items-center h-8 mt-5 mb-3 justify-between w-60 pl-6 pr-2"
+        onMouseEnter={!isHovered ? handleMouseEnter : undefined}
+        onMouseLeave={!isHovered ? handleMouseLeave : undefined}>
+        <Link href="/">
+          <LogoIcon />
+        </Link>
+        {(isCollapsed && !isHovered) || !isCollapsed ? (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              toggleSidebar();
+            }}
+            className={`focus:outline-none ${
+              // !isCollapsed || (isCollapsed && isHovered) ? "rotate-180" : ""
+              isCollapsed ? "" : "rotate-180"
+            }`}>
+            <SbHiddenIcon />
+          </button>
+        ) : null}
       </div>
 
       <SidebarLink
@@ -179,15 +194,16 @@ export default function SideBar() {
       <div
         className={`flex-1 overflow-y-auto`}
         style={{ maxHeight: "calc(100vh - 252px)" }}>
-        {!isCollapsed && (
-          <div className="relative overflow-x-hidden">
-            <Board />
-          </div>
-        )}
+        <div className="relative overflow-x-hidden">
+          <Board />
+        </div>
       </div>
 
       {/* 하단 요소 */}
-      <div className="absolute bottom-2 w-full bg-white z-10">
+      <div
+        className={`absolute bottom-2 w-full bg-white z-10 ${
+          !isCollapsed || isHovered ? "rounded-br-3xl" : ""
+        }`}>
         <SidebarLink href="/" label="문제 풀러 가기" Icon={SbGotestIcon} />
         {isOwnBlog ? (
           <SidebarLink
@@ -203,6 +219,6 @@ export default function SideBar() {
           />
         )}
       </div>
-    </nav>
+    </motion.nav>
   );
 }
