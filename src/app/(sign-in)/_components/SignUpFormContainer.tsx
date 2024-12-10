@@ -40,7 +40,6 @@ export default function SignUpFormContainer() {
 
   // 닉네임 중복 검사 validation
   const checkNickNameExists = async (nickname: string) => {
-    console.log("checked");
     const { data: isNickNameExists } = await api.post(
       "/user-service/auth/nickname",
       {},
@@ -101,9 +100,7 @@ export default function SignUpFormContainer() {
           autoComplete="off"
         />
         {errors.nickName && (
-          <span className="absolute top-[calc(100%+4px)] left-0 whitespace-nowrap text-xs font-bold text-red">
-            {errors.nickName.message}
-          </span>
+          <span className="form-error-text">{errors.nickName.message}</span>
         )}
       </div>
       {/* 언어 선택 */}
@@ -122,7 +119,7 @@ export default function SignUpFormContainer() {
             isError={errors.codeLanguage !== undefined}
           />
           {errors.codeLanguage && (
-            <span className="absolute top-[calc(100%+4px)] left-0 whitespace-nowrap text-xs font-bold text-red">
+            <span className="form-error-text">
               {errors.codeLanguage.message}
             </span>
           )}
@@ -156,7 +153,7 @@ export default function SignUpFormContainer() {
           />
         </div>
         {errors.basicProfileUrl && (
-          <span className="absolute top-[calc(100%+4px)] left-0 whitespace-nowrap text-xs font-bold text-red">
+          <span className="form-error-text">
             {errors.basicProfileUrl.message}
           </span>
         )}
