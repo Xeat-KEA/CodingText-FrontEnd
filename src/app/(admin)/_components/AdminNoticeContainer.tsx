@@ -20,7 +20,7 @@ export default function AdminNoticeContainer() {
   const fetchNoticeList = async () => {
     if (accessToken) {
       const response = await api.get(`/admin-service/admins/announce`, {
-        params: { page: page, size: 10 },
+        params: { page: page, size: 9 },
         headers: { Authorization: accessToken },
       });
 

@@ -105,7 +105,7 @@ export interface PushFormContainerProps {
 export interface Notice {
   announceId: number;
   title: string;
-  content?: string;
+  content: string;
   createdDate: string;
 }
 export interface Admin {
