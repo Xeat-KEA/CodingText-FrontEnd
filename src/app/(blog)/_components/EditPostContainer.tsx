@@ -65,15 +65,23 @@ export default function EditPostContainer() {
       ...data,
       content: contentDe,
     };
-    const response = api.put(
-      `/blog-service/blog/board/article/${params.postId}`,
-      updatedData,
-      {
-        headers: { Authorization: accessToken },
+    try {
+      const response = await api.put(
+        `/blog-service/blog/board/article/${params.postId}`,
+        updatedData,
+        {
+          headers: { Authorization: accessToken },
+        }
+      );
+      if (response.data.statusCode === 200) {
+        // post 후 새 게시글 id 반환
+        setIsPostedDialogOpen((prev) => !prev);
+      } else {
+        console.error("게시글 수정 실패:", response);
       }
-    );
-    // post 후 새 게시글 id 반환
-    setIsPostedDialogOpen((prev) => !prev);
+    } catch (error) {
+      console.error("게시글 수정 오류:", error);
+    }
   };
 
   return (
