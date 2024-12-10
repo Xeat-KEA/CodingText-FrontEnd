@@ -14,13 +14,14 @@ export default function SignUpFormContainer() {
     register,
     handleSubmit,
     setValue,
-    watch,
+    getValues,
     formState: { errors },
     setError,
     clearErrors,
   } = useForm<SignUpForm>({
     defaultValues: { useSocialProfile: false },
     mode: "onBlur",
+    reValidateMode: "onBlur",
   });
 
   // 회원가입 중에 토큰 임시 저장 및 localStorage에서의 토큰 삭제
@@ -39,6 +40,7 @@ export default function SignUpFormContainer() {
 
   // 닉네임 중복 검사 validation
   const checkNickNameExists = async (nickname: string) => {
+    console.log("checked");
     const { data: isNickNameExists } = await api.post(
       "/user-service/auth/nickname",
       {},
@@ -130,22 +132,26 @@ export default function SignUpFormContainer() {
       <div className="flex flex-col gap-2 relative">
         <span className="text-sm text-black">프로필 사진 선택</span>
         <ProfileImgSelection
-          seletedImg={watch("basicProfileUrl")}
+          seletedImg={getValues("basicProfileUrl")}
           onSelectionClick={(selected) => {
             setValue("basicProfileUrl", selected);
-            clearErrors("basicProfileUrl");
+            if (errors.basicProfileUrl) {
+              clearErrors("basicProfileUrl");
+            }
           }}
-          isDisabled={watch("useSocialProfile")}
+          isDisabled={getValues("useSocialProfile")}
           isError={errors.basicProfileUrl !== undefined}
         />
         <div>
           <SmCheckBoxBtn
-            isActive={watch("useSocialProfile")}
+            isActive={getValues("useSocialProfile")}
             content="소셜 아이디 프로필 사진 사용"
             onClick={() => {
-              const currentValue = watch("useSocialProfile");
+              const currentValue = getValues("useSocialProfile");
               setValue("useSocialProfile", !currentValue);
-              clearErrors("basicProfileUrl");
+              if (errors.basicProfileUrl) {
+                clearErrors("basicProfileUrl");
+              }
             }}
           />
         </div>
