@@ -11,12 +11,17 @@ import SmSearchBar from "../SmSearchBar";
 import ProfileImgContainer from "../ProfileImgContainer";
 import { motion } from "framer-motion";
 import TopBarMenu from "./TopBarMenu";
-import { useTokenStore, useWindowSizeStore } from "@/app/stores";
+import {
+  useCodingTestStore,
+  useTokenStore,
+  useWindowSizeStore,
+} from "@/app/stores";
 import api from "@/app/_api/config";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { PushesResponse, UserInfo } from "@/app/_interfaces/interfaces";
 import { useInView } from "react-intersection-observer";
 import LoadingAnimation from "../LoadingAnimation";
+import { PROGRAMMING_LANGUAGES } from "@/app/_constants/constants";
 
 export default function TopBar() {
   const pathname = usePathname();
@@ -81,13 +86,17 @@ export default function TopBar() {
 
   const { windowSize } = useWindowSizeStore();
 
+  const { setLanguage } = useCodingTestStore();
   // 사용자 정보 API 호출
   const fetchUserInfo = async () => {
     if (accessToken) {
       const response = await api.get("/user-service/users/userInfo", {
         headers: { Authorization: accessToken },
       });
-
+      const userLanguage = PROGRAMMING_LANGUAGES.find(
+        (el) => el.selection === response.data.codeLanguage
+      );
+      setLanguage(userLanguage || { content: "Java", selection: "java" });
       return response.data;
     } else {
       return null;
@@ -157,7 +166,8 @@ export default function TopBar() {
         initial={{ height: 64 }}
         animate={{ height: isOpen.menu ? "auto" : 64 }}
         transition={{ duration: 0.3, type: "tween" }}
-        className="w-full h-full bg-white border-b border-border-1 flex max-lg:flex-col lg:justify-center overflow-hidden">
+        className="w-full h-full bg-white border-b border-border-1 flex max-lg:flex-col lg:justify-center overflow-hidden"
+      >
         {/* 상단바 */}
         <div
           className={`relative w-full h-16 shrink-0 flex justify-between ${
@@ -177,7 +187,10 @@ export default function TopBar() {
             {/* 메뉴 (화면 크기 lg 이상) */}
             {isTokenSet && (
               <ul className="flex h-full items-center gap-2 max-lg:hidden">
-                <TopBarMenu token={accessToken} blogId={userInfo?.blogId ?? null}/>
+                <TopBarMenu
+                  token={accessToken}
+                  blogId={userInfo?.blogId ?? null}
+                />
               </ul>
             )}
           </div>
@@ -204,7 +217,8 @@ export default function TopBar() {
                   </button>
                   <button
                     ref={profileRef}
-                    onClick={() => onIconClick("profile")}>
+                    onClick={() => onIconClick("profile")}
+                  >
                     <ProfileImgContainer
                       width={36}
                       height={36}
@@ -232,7 +246,7 @@ export default function TopBar() {
               placeholder="검색어를 입력해주세요"
             />
           </div>
-          <TopBarMenu token={accessToken} blogId={userInfo?.blogId ?? null}/>
+          <TopBarMenu token={accessToken} blogId={userInfo?.blogId ?? null} />
         </div>
       </motion.nav>
       {/* 알림 팝업 */}
@@ -271,7 +285,8 @@ export default function TopBar() {
           style={{
             right: `calc(8px + ${Math.max((windowSize - 1200) / 2, 0)}px)`,
           }}
-          className="absolute bg-white top-[calc(100%+8px)] w-[160px] flex flex-col rounded-lg shadow-1 divide-y divide-border-1">
+          className="absolute bg-white top-[calc(100%+8px)] w-[160px] flex flex-col rounded-lg shadow-1 divide-y divide-border-1"
+        >
           {/* 사용자 정보 */}
           <div className="flex flex-col gap-[2px] px-6 py-4">
             <span className="text-body text-xs font-bold">
