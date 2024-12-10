@@ -42,7 +42,34 @@ export default function PostContainer() {
 
   const [isLoaded, setIsLoaded] = useState(true);
 
-  // 게시글 내용 api 연결
+  // 비회원용 게시글 내용 api 연결
+  const fetchNonUserPostData = async () => {
+    try {
+      const response = await api.get(
+        `/blog-service/blog/board/nonUser/${params.postId}`
+      );
+      const postData = response.data.data;
+      if (postData) {
+        setCurrentBlogId(postData.blogId);
+        setChildCategoryId(postData.childCategoryId);
+        setIsCodingPost(postData.codeId !== undefined);
+        setIsBlind(postData.isBlind);
+        setIsSecret(postData.isSecret);
+        setCurrentPost(postData);
+      }
+      setIsLoaded(false);
+      return postData;
+    } catch (error) {
+      console.error("비회원 게시글 반환오류:", error);
+      return null;
+    }
+  };
+  const { data: nonUserPostData } = useQuery({
+    queryKey: ["nonUserPostContent", isTokenSet, params.postId],
+    queryFn: fetchNonUserPostData,
+  });
+
+  // 회원용 게시글 내용 api 연결
   const fetchPostData = async () => {
     if (accessToken) {
       // 회원 -> 추후 비회원 로직 추가
@@ -71,7 +98,11 @@ export default function PostContainer() {
     }
   };
 
-  const { data, isLoading, isError } = useQuery({
+  const {
+    data: postData,
+    isLoading,
+    isError,
+  } = useQuery({
     queryKey: ["postContent", isTokenSet, params.postId],
     queryFn: fetchPostData,
     enabled: isTokenSet && !!accessToken,

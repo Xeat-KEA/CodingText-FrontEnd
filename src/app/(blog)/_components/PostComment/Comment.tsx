@@ -5,6 +5,7 @@ import { ReplyIcon } from "../Icons";
 import { usePathname } from "next/navigation";
 import IconBtn from "@/app/_components/IconBtn";
 import ProfileImgContainer from "@/app/_components/ProfileImgContainer";
+import { useTokenStore } from "@/app/stores";
 
 const Comment: React.FC<CommentProps> = ({
   replyId,
@@ -27,6 +28,7 @@ const Comment: React.FC<CommentProps> = ({
 }) => {
   const pathname = usePathname();
   const isAdminPage = pathname.includes("/admin/report/");
+  const { accessToken, isTokenSet } = useTokenStore();
 
   return (
     <div className={`${mentionedUserName ? "pl-12" : ""}`}>
@@ -86,32 +88,36 @@ const Comment: React.FC<CommentProps> = ({
           </div>
         ) : (
           <div className="flex w-full h-5 justify-between items-center">
-            <button
-              className="flex items-center gap-1"
-              onClick={() => onReplyClick(replyId, blogId)}>
-              <ReplyIcon />
-              <p className="text-black text-xs font-semibold ">답글</p>
-            </button>
-            {isOwnComment ? (
-              <div className="flex gap-4">
-                <IconBtn
-                  type="edit"
-                  content="수정"
-                  onClick={() => onEdit(replyId)}
-                />
-                <IconBtn
-                  type="delete"
-                  content="삭제"
-                  onClick={() => onDelete(replyId)}
-                />
-              </div>
-            ) : (
-              <IconBtn
-                type="report"
-                content="신고"
-                onClick={() => onReport(replyId)}
-              />
+            {accessToken && (
+              <button
+                className="flex items-center gap-1"
+                onClick={() => onReplyClick(replyId, blogId)}>
+                <ReplyIcon />
+                <p className="text-black text-xs font-semibold ">답글</p>
+              </button>
             )}
+            {accessToken ? (
+              isOwnComment ? (
+                <div className="flex gap-4">
+                  <IconBtn
+                    type="edit"
+                    content="수정"
+                    onClick={() => onEdit(replyId)}
+                  />
+                  <IconBtn
+                    type="delete"
+                    content="삭제"
+                    onClick={() => onDelete(replyId)}
+                  />
+                </div>
+              ) : (
+                <IconBtn
+                  type="report"
+                  content="신고"
+                  onClick={() => onReport(replyId)}
+                />
+              )
+            ) : null}
           </div>
         )}
       </div>

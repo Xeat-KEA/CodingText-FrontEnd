@@ -74,6 +74,7 @@ export default function SideBar() {
       }
       return response.data.data;
     } else {
+      setUserBlogId(-1);
       return null;
     }
   };
@@ -85,7 +86,7 @@ export default function SideBar() {
 
   // 블로그 소유 여부
   useEffect(() => {
-    if (userBlogId !== -1 && currentBlogId !== -1) {
+    if (accessToken && userBlogId !== -1 && currentBlogId !== -1) {
       setIsOwnBlog(userBlogId === currentBlogId);
     }
   }, [userBlogId, currentBlogId]);
@@ -93,10 +94,7 @@ export default function SideBar() {
   // 게시판 목록 api 연결
   const fetchBoardCategories = async () => {
     const response = await api.get(
-      `/blog-service/blog/board/list/${currentBlogId}`,
-      {
-        headers: { Authorization: accessToken },
-      }
+      `/blog-service/blog/board/list/${currentBlogId}`
     );
 
     const boardData = response.data.data.categoryList;
@@ -123,7 +121,7 @@ export default function SideBar() {
   const { data: boardCategories } = useQuery({
     queryKey: ["boardCategories", isTokenSet, currentBlogId],
     queryFn: fetchBoardCategories,
-    enabled: currentBlogId !== -1 && !!accessToken,
+    enabled: currentBlogId !== -1,
   });
 
   // 사이드바 페이지 이동 컴포넌트
@@ -204,7 +202,7 @@ export default function SideBar() {
         className={`absolute bottom-2 w-full bg-white z-10 ${
           !isCollapsed || isHovered ? "rounded-br-3xl" : ""
         }`}>
-        <SidebarLink href="/" label="문제 풀러 가기" Icon={SbGotestIcon} />
+        <SidebarLink href="/code/list" label="문제 풀러 가기" Icon={SbGotestIcon} />
         {isOwnBlog ? (
           <SidebarLink
             href={`/new-post`}
@@ -213,8 +211,10 @@ export default function SideBar() {
           />
         ) : (
           <SidebarLink
-            href={`/blog/${userBlogId}`}
-            label="내 블로그로"
+            href={!accessToken ? `/sign-in` : `/blog/${userBlogId}`}
+            label={
+              !accessToken ? "로그인 후 블로그 홈으로 이동" : "내 블로그로"
+            }
             Icon={SbMyblogIcon}
           />
         )}

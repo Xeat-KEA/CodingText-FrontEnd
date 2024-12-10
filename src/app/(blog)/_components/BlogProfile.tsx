@@ -109,7 +109,14 @@ export default function BlogProfile({ profile }: profileProps) {
                 {profile.profileMessage}
               </p>
               <div className="flex items-center gap-4 mt-2">
-                {!isOwnBlog ? (
+                {isOwnBlog || (!isOwnBlog && !accessToken) ? (
+                  <>
+                    <button className="flex items-center gap-1">
+                      <BpFollowerIcon isFilled={true} />
+                      <p className="text-primary-1 text-xs font-semibold">{`팔로워 ${profile.followCount}`}</p>
+                    </button>
+                  </>
+                ) : (
                   <>
                     <button
                       className="flex items-center gap-1"
@@ -123,13 +130,6 @@ export default function BlogProfile({ profile }: profileProps) {
                       content="신고"
                       onClick={() => onClickReportBlog(profile.blogId)}
                     />
-                  </>
-                ) : (
-                  <>
-                    <button className="flex items-center gap-1">
-                      <BpFollowerIcon isFilled={true} />
-                      <p className="text-primary-1 text-xs font-semibold">{`팔로워 ${profile.followCount}`}</p>
-                    </button>
                   </>
                 )}
               </div>

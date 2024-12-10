@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { CommentInputProps } from "../../_interfaces/interfaces";
-import { useBlogStore } from "@/app/stores";
+import { useBlogStore, useTokenStore } from "@/app/stores";
 
 export default function CommentInput({
   target,
@@ -9,6 +9,8 @@ export default function CommentInput({
   onSubmit,
   onCancel,
 }: CommentInputProps) {
+  const { accessToken, isTokenSet } = useTokenStore();
+
   const { register, handleSubmit, reset } = useForm();
 
   // 댓글
@@ -23,8 +25,13 @@ export default function CommentInput({
       className="flex flex-col w-full justify-between  min-h-[100px] h-auto border border-border-2 rounded-xl px-6 py-4 gap-2">
       <textarea
         className="w-full h-full resize-none"
+        readOnly={!accessToken}
         placeholder={
-          target === "reply" ? "답글을 남겨보세요" : "댓글을 남겨보세요"
+          !accessToken
+            ? "로그인 후 댓글을 작성할 수 있습니다"
+            : target === "reply"
+            ? "답글을 남겨보세요"
+            : "댓글을 남겨보세요"
         }
         {...register("comment", { required: "댓글을 입력해주세요." })}
       />
@@ -42,11 +49,13 @@ export default function CommentInput({
           </div>
         )}
         <div className="flex absolute right-0 items-center">
-          <button
-            type="submit"
-            className="px-4 py-2 bg-primary-1 text-white text-xs text-bold rounded-md">
-            작성하기
-          </button>
+          {accessToken && (
+            <button
+              type="submit"
+              className="px-4 py-2 bg-primary-1 text-white text-xs text-bold rounded-md">
+              작성하기
+            </button>
+          )}
         </div>
       </div>
     </form>

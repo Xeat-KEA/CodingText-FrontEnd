@@ -38,11 +38,13 @@ export default function PostAction() {
     if (!currentPost) return;
 
     try {
-      await api.put(`/blog-service/blog/board/article/like/${currentPost.articleId}`,
-         null, 
-         {
+      await api.put(
+        `/blog-service/blog/board/article/like/${currentPost.articleId}`,
+        null,
+        {
           headers: { Authorization: accessToken },
-      });
+        }
+      );
       queryClient.invalidateQueries({ queryKey: ["postContent"] });
     } catch (error) {
       console.error("게시글 좋아요 요청 오류", error);
@@ -107,8 +109,8 @@ export default function PostAction() {
       const response = await api.delete(
         `/blog-service/blog/board/article/${postToDelete}`,
         {
-        data: { articleId: postToDelete },
-        headers: { Authorization: accessToken },
+          data: { articleId: postToDelete },
+          headers: { Authorization: accessToken },
         }
       );
       setIsDeleteDialogOpen(false);
@@ -122,10 +124,17 @@ export default function PostAction() {
 
   return (
     <div className="flex w-full h-5 justify-between">
-      <button className="flex items-center gap-1" onClick={onClickLike}>
-        <BpFollowerIcon isFilled={currentPost.checkRecommend} />
-        <p className="text-primary-1 text-xs font-semibold">{`좋아요 ${currentPost?.likeCount}`}</p>
-      </button>
+      {accessToken ? (
+        <button className="flex items-center gap-1" onClick={onClickLike}>
+          <BpFollowerIcon isFilled={currentPost.checkRecommend} />
+          <p className="text-primary-1 text-xs font-semibold">{`좋아요 ${currentPost?.likeCount}`}</p>
+        </button>
+      ) : (
+        <button className="flex items-center gap-1">
+          <BpFollowerIcon isFilled={true} />
+          <p className="text-primary-1 text-xs font-semibold">{`좋아요 ${currentPost?.likeCount}`}</p>
+        </button>
+      )}
       <div className="flex gap-4">
         <button className="flex items-center gap-1" onClick={onClickCopyLink}>
           <ShareIcon />
@@ -145,11 +154,17 @@ export default function PostAction() {
             />
           </>
         ) : (
-          <IconBtn
-            type="report"
-            content="신고"
-            onClick={() => onClickReportPost(Number(currentPost?.articleId))}
-          />
+          <>
+            {accessToken && (
+              <IconBtn
+                type="report"
+                content="신고"
+                onClick={() =>
+                  onClickReportPost(Number(currentPost?.articleId))
+                }
+              />
+            )}
+          </>
         )}
       </div>
 
