@@ -80,9 +80,6 @@ export default function TopBar() {
     if (isOpen.menu) onIconClick("menu", false);
   });
 
-  const { windowSize } = useWindowSizeStore();
-  handleWindowResize();
-
   // 사용자 정보 API 호출
   const fetchUserInfo = async () => {
     if (accessToken) {
@@ -152,12 +149,14 @@ export default function TopBar() {
     }
   }, [inView]);
 
+  const { windowSize } = useWindowSizeStore();
+  handleWindowResize();
   const maxWidth = pathname.startsWith("/coding-test")
     ? 0
     : pathname.startsWith("/recent-post") || pathname.startsWith("/code-post")
     ? 1000
     : 1200;
-  const pushLocation = `calc(8px + ${Math.max(
+  const popUpLocation = `calc(8px + ${Math.max(
     (windowSize - maxWidth) / 2,
     0
   )}px)`;
@@ -254,7 +253,7 @@ export default function TopBar() {
         <div
           ref={noticePopupRef}
           style={{
-            right: pushLocation,
+            right: popUpLocation,
           }}
           className="absolute bg-white top-[calc(100%+8px)] w-[396px] h-[300px] flex flex-col items-center rounded-lg shadow-1 divide-y divide-border-1 overflow-y-auto"
         >
@@ -283,7 +282,7 @@ export default function TopBar() {
         <div
           ref={profilePopupRef}
           style={{
-            right: `calc(8px + ${Math.max((windowSize - 1200) / 2, 0)}px)`,
+            right: popUpLocation,
           }}
           className="absolute bg-white top-[calc(100%+8px)] w-[160px] flex flex-col rounded-lg shadow-1 divide-y divide-border-1"
         >
