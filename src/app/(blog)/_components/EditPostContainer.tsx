@@ -11,7 +11,6 @@ import {
   useTiptapStore,
   useTokenStore,
 } from "@/app/stores";
-import { PostProps } from "../_interfaces/interfaces";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useBase64 } from "@/app/_hooks/useBase64";
 import BackBtn from "@/app/_components/BackBtn";
