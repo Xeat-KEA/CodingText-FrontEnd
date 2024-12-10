@@ -34,19 +34,17 @@ export default function CompileResultCard({
         </div>
       </div>
       <div className="flex gap-8">
-        {isCorrect && (
-          <div className="w-full flex flex-col gap-2">
-            <span className="text-body text-sm">정답</span>
-            <div className="prose bg-bg-1 px-4 py-2 rounded-lg">
-              <pre className="!p-0 !m-0 !bg-transparent !text-primary-1">
-                <code>{output}</code>
-              </pre>
-            </div>
+        <div className="w-full h-full flex flex-col gap-2">
+          <span className="text-body text-sm">정답</span>
+          <div className="prose bg-bg-1 px-4 py-2 rounded-lg h-full">
+            <pre className="!p-0 !m-0 !bg-transparent !text-primary-1">
+              <code>{output}</code>
+            </pre>
           </div>
-        )}
-        <div className="w-full flex flex-col gap-2">
+        </div>
+        <div className="w-full h-full flex flex-col gap-2">
           <span className="text-body text-sm">출력 결과</span>
-          <div className="prose bg-bg-1 px-4 py-2 rounded-lg">
+          <div className="prose bg-bg-1 px-4 py-2 rounded-lg h-full">
             <pre
               className={`!p-0 !m-0 !bg-transparent ${
                 !isCorrect ? "!text-red" : "!text-primary-1"

@@ -19,14 +19,22 @@ export default function CodingTestPage() {
   const {} = useCheckToken();
 
   // 필요한 전역변수 선언
-  const { isPosting, setIsPosting, setValue, setLanguage } =
-    useCodingTestStore();
+  const {
+    isPosting,
+    setIsPosting,
+    setValue,
+    setLanguage,
+    setCompiledResult,
+    setCompileError,
+  } = useCodingTestStore();
   const { setContent } = useTiptapStore();
   // 페이지 진입 시 전역변수 초기화
   useEffect(() => {
     setIsPosting(false);
     setValue("");
     setContent("");
+    setCompileError("");
+    setCompiledResult([]);
     setLanguage(PROGRAMMING_LANGUAGES[0]);
   }, []);
 

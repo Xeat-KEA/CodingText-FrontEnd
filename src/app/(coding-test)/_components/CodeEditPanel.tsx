@@ -1,4 +1,8 @@
-import { useCodingTestStore, useWindowSizeStore } from "@/app/stores";
+import {
+  useCodingTestStore,
+  useTokenStore,
+  useWindowSizeStore,
+} from "@/app/stores";
 import { useState } from "react";
 import Dialog from "@/app/_components/Dialog";
 import { DialogCheckIcon, DialogXIcon } from "@/app/_components/Icons";
@@ -15,19 +19,20 @@ export default function CodeEditPanel() {
   const router = useRouter();
   const { id } = useParams();
 
+  const { accessToken } = useTokenStore();
+
   // 코딩 테스트 관련 전역 변수
   const {
     value,
     setIsPosting,
     language,
-    setHasSolved,
     isRunning,
     setIsRunning,
     setCompiledResult,
     setCompileError,
   } = useCodingTestStore();
 
-  const [isCorrect, setIsCorrect] = useState(true);
+  const [isCorrect, setIsCorrect] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isPageChanging, setIsPageChanging] = useState(false);
 
@@ -49,7 +54,7 @@ export default function CodeEditPanel() {
           data,
           {
             headers: {
-              Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}`,
+              Authorization: accessToken,
             },
           }
         );
@@ -70,10 +75,39 @@ export default function CodeEditPanel() {
   };
 
   // 코드 제출 시
-  const onSubmit = () => {
-    setIsCorrect(true);
-    setHasSolved(true);
-    setIsDialogOpen((prev) => !prev);
+  const onSubmit = async () => {
+    // 코드를 base64로 인코딩하여 백에 전달
+    const encodedCode = useBase64("encode", value);
+    const data = {
+      codeId: Number(id),
+      language: language.selection,
+      code: encodedCode,
+    };
+    if (!isRunning) {
+      try {
+        setIsRunning(true);
+        setCompileError("");
+        const response = await api.post(
+          "/code-compile-service/code/submit",
+          data,
+          {
+            headers: {
+              Authorization: accessToken,
+            },
+          }
+        );
+        if (response.status === 200) {
+          setIsCorrect((prev) => !prev);
+          setIsDialogOpen((prev) => !prev);
+        }
+        setIsRunning(false);
+      } catch (err: any) {
+        if (isAxiosError(err)) {
+          setIsDialogOpen((prev) => !prev);
+        }
+        setIsRunning(false);
+      }
+    }
   };
 
   // 새로고침, 페이지 닫기, 뒤로가기 방지
