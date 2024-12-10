@@ -17,6 +17,7 @@ import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { PushesResponse, UserInfo } from "@/app/_interfaces/interfaces";
 import { useInView } from "react-intersection-observer";
 import LoadingAnimation from "../LoadingAnimation";
+import { handleWindowResize } from "@/app/utils";
 
 export default function TopBar() {
   const pathname = usePathname();
@@ -80,6 +81,7 @@ export default function TopBar() {
   });
 
   const { windowSize } = useWindowSizeStore();
+  handleWindowResize();
 
   // 사용자 정보 API 호출
   const fetchUserInfo = async () => {
@@ -149,6 +151,16 @@ export default function TopBar() {
       fetchNextPage();
     }
   }, [inView]);
+
+  const maxWidth = pathname.startsWith("/coding-test")
+    ? 0
+    : pathname.startsWith("/recent-post") || pathname.startsWith("/code-post")
+    ? 1000
+    : 1200;
+  const pushLocation = `calc(8px + ${Math.max(
+    (windowSize - maxWidth) / 2,
+    0
+  )}px)`;
 
   return (
     <div className="fixed w-full h-16 z-50">
@@ -242,7 +254,7 @@ export default function TopBar() {
         <div
           ref={noticePopupRef}
           style={{
-            right: `calc(8px + ${Math.max((windowSize - 1200) / 2, 0)}px)`,
+            right: pushLocation,
           }}
           className="absolute bg-white top-[calc(100%+8px)] w-[396px] h-[300px] flex flex-col items-center rounded-lg shadow-1 divide-y divide-border-1 overflow-y-auto"
         >
