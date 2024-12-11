@@ -80,7 +80,7 @@ export default function MainBanner() {
   }, [page]);
 
   return (
-    <div className="top-container h-[320px] relative">
+    <div className="top-container h-[320px] relative overflow-hidden">
       {/* 이전 / 다음 버튼 */}
       <motion.button
         initial={{ color: "rgb(200, 200, 200)" }}

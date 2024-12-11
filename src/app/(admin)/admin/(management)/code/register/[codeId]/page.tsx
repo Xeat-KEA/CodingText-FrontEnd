@@ -8,6 +8,7 @@ import {
 } from "@/app/(admin)/_interfaces/interfaces";
 import api from "@/app/_api/config";
 import Dialog from "@/app/_components/Dialog";
+import { useBase64 } from "@/app/_hooks/useBase64";
 import { useCheckToken } from "@/app/_hooks/useCheckToken";
 import { useQuery } from "@tanstack/react-query";
 import { useParams, useRouter } from "next/navigation";
@@ -32,6 +33,12 @@ export default function RegisterCodePage() {
   const { data } = useQuery<ManageCodeProps>({
     queryKey: ["codeDetail", isTokenSet],
     queryFn: fetchCodeDetail,
+    select: (data) => {
+      if (data.code) {
+        data.code.content = useBase64("decode", data.code.content);
+      }
+      return data;
+    },
   });
 
   const [isDialogOpen, setIsDialogOpen] = useState({
@@ -49,10 +56,18 @@ export default function RegisterCodePage() {
           headers: { Authorization: accessToken },
         }
       );
-      setIsDialogOpen((prev) => ({ ...prev, done: !prev.done }));
+      setIsDialogOpen((prev) => ({
+        ...prev,
+        submit: !prev.submit,
+        done: !prev.done,
+      }));
       setTempData(null);
     } catch (err) {
-      setIsDialogOpen((prev) => ({ ...prev, error: !prev.error }));
+      setIsDialogOpen((prev) => ({
+        ...prev,
+        submit: !prev.submit,
+        error: !prev.error,
+      }));
     }
   };
 

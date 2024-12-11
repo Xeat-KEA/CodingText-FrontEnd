@@ -11,6 +11,7 @@ import CodeEditor from "@/app/(coding-test)/_components/CodeEditor";
 import { SmLinkArrowIcon } from "@/app/_components/Icons";
 import { useRouter } from "next/navigation";
 import { CodeDetail } from "../_interfaces/interfaces";
+import { useBase64 } from "@/app/_hooks/useBase64";
 
 export default function RegisterCard({
   nickName,
@@ -58,7 +59,7 @@ export default function RegisterCard({
             <div
               className="prose sign-in-input"
               dangerouslySetInnerHTML={{
-                __html: DOMPurify.sanitize(code.content),
+                __html: DOMPurify.sanitize(useBase64("decode", code.content)),
               }}
             />
           </div>
