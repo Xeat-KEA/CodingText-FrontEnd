@@ -22,8 +22,8 @@ export interface Report {
   reportedDate: string;
   reportedCommentId?: number; // 신고된 댓글
   reportedCommentUserID?: number; // 신고된 댓글 작성자 ID
-  reportedCommentUserName?: string // 신고된 댓글 작성자 이름
-  reportedCommentContent: string // 신고된 댓글 내용
+  reportedCommentUserName?: string; // 신고된 댓글 작성자 이름
+  reportedCommentContent: string; // 신고된 댓글 내용
   reportReason: string; // 카테고리별 선택 신고 사유
   directReason?: string; // 직접 입력
 }
@@ -48,7 +48,6 @@ export interface AdminUserDetail {
 
 export interface UserListCardProps {
   userInfo: AdminUserInfo;
-  onClick: () => void;
 }
 
 export interface Testcase {

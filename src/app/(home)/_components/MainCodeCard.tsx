@@ -55,7 +55,7 @@ export default function MainCodeCard({ code }: { code: Code }) {
           <span className="code-card-value">
             정답률
             <span className="post-card-views-number">
-              {code.correctRate.toLocaleString()}%
+              {code.correctRate?.toLocaleString()}%
             </span>
           </span>
           {/* 참여자수 */}

@@ -3,7 +3,7 @@ import api from "../_api/config";
 export const useImageHandler = async (
   files: FileList,
   accessToken: string,
-  role: string
+  role?: string
 ) => {
   const file = files[0];
   const formData = new FormData();
@@ -27,7 +27,7 @@ export const useImageHandler = async (
         Authorization: accessToken,
       },
     });
-console.log(response)
+    console.log(response);
     const { uploadImageUrl } = response.data;
 
     return uploadImageUrl;

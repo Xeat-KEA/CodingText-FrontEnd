@@ -2,11 +2,10 @@ import { useGetYMD } from "@/app/_hooks/useGetYMD";
 import { UserListCardProps } from "../_interfaces/interfaces";
 import Link from "next/link";
 
-export default function UserListCard({ userInfo, onClick }: UserListCardProps) {
+export default function UserListCard({ userInfo }: UserListCardProps) {
   return (
     <Link
       href={`/admin/user/${userInfo.userId}`}
-      onClick={onClick}
       className="w-full h-[36px] px-2 flex gap-4 justify-between items-center cursor-pointer"
     >
       <div className="w-full flex gap-2 overflow-hidden">
