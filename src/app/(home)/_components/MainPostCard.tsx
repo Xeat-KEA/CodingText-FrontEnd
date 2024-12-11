@@ -11,7 +11,7 @@ import { useCalculateDate } from "@/app/_hooks/useCalculateDate";
 
 export default function MainPostCard({ post, ranking }: MainPostCardProps) {
   const router = useRouter();
-  const decodedContent = useBase64("decode", post.content);
+  const decodedContent = useBase64("decode", post.content || "");
 
   return (
     <motion.div
@@ -67,14 +67,12 @@ export default function MainPostCard({ post, ranking }: MainPostCardProps) {
               {post.title}
             </span>
             {/* 게시글 내용 */}
-            {post.content && (
-              <div
-                className="post-card-content"
-                dangerouslySetInnerHTML={{
-                  __html: DOMPurify.sanitize(decodedContent),
-                }}
-              />
-            )}
+            <div
+              className="post-card-content"
+              dangerouslySetInnerHTML={{
+                __html: DOMPurify.sanitize(decodedContent),
+              }}
+            />
           </div>
         </div>
         {/* 하단 컨테이너 */}

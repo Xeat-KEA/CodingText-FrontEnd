@@ -1,7 +1,6 @@
 import DOMPurify from "isomorphic-dompurify";
 import { SmShowMoreIcon } from "../Icons";
 import { useEffect, useState } from "react";
-import { PostProps } from "../../_interfaces/interfaces"; // 게시물 내용 받기
 import { useBase64 } from "@/app/_hooks/useBase64";
 import CodeEditor from "@/app/(coding-test)/_components/CodeEditor";
 import { useCodingTestStore, usePostStore } from "@/app/stores";

@@ -1,11 +1,7 @@
 // 게시물 헤더 컴포넌트
 
 import { useCalculateDate } from "@/app/_hooks/useCalculateDate";
-import { PostProps } from "../../_interfaces/interfaces";
 import { usePathname } from "next/navigation";
-import {
-  Code_Post_Dummy_Data,
-} from "@/app/(admin)/_constants/constants";
 import Image from "next/image";
 import { usePostStore } from "@/app/stores";
 

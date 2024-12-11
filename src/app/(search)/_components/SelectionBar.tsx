@@ -8,9 +8,9 @@ export default function SelectionBar({ menuList }: SelectionBarProps) {
   const setParams = useSetParams();
 
   return (
-    <div className="w-full h-[52px] flex justify-between items-center shrink-0 border-b border-border-2">
+    <div className="w-full flex max-sm:flex-col-reverse justify-between sm:items-center shrink-0 border-b border-border-2 max-sm:gap-4">
       {/* 탭 버튼 */}
-      <nav className="flex h-full">
+      <nav className="flex h-[52px]">
         {menuList.map((el, index) => (
           <div
             key={index}

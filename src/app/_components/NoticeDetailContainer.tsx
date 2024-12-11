@@ -28,15 +28,13 @@ export default function NoticeDetailContainer() {
     return response.data.content;
   };
   const { data: userNoticData } = useQuery({
-    queryKey: ["userNoticeData"],
+    queryKey: ["userNoticeData", isTokenSet],
     queryFn: fetchNoticeData,
   });
 
   // 기존 공지사항 내용 디코딩 결과 -> 현재 인코딩 안된 상태로 전달됨
-  // const contentDe =
-  //   currentNotice && useBase64("decode", currentNotice.content || "");
-
-  const contentDe = currentNotice?.content;
+  const contentDe =
+    currentNotice && useBase64("decode", currentNotice.content || "");
 
   const [noticeData, setNoticeData] = useState("");
   useEffect(() => {

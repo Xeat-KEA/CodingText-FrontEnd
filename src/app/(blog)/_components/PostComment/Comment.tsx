@@ -7,61 +7,49 @@ import IconBtn from "@/app/_components/IconBtn";
 import ProfileImgContainer from "@/app/_components/ProfileImgContainer";
 import { useTokenStore } from "@/app/stores";
 
-const Comment: React.FC<CommentProps> = ({
-  replyId,
-  blogId,
-  userName,
-  profileUrl,
-  mentionedUserName,
-  content,
-  createdDate,
-  isOwnComment,
-  onReplyClick,
-  onEdit,
-  isEditing,
-  onCancelEdit,
-  editedContent,
-  onUpdateComment,
-  confirmEdit,
-  onDelete,
-  onReport,
-}) => {
+export default function Comment({ comment }: { comment: CommentProps }) {
   const pathname = usePathname();
-  const isAdminPage = pathname.includes("/admin/report/");
+  const isAdminPage = pathname.includes("/admin/");
   const { accessToken, isTokenSet } = useTokenStore();
 
   return (
-    <div className={`${mentionedUserName ? "pl-12" : ""}`}>
+    <div className={`${comment.mentionedUserName ? "pl-12" : ""}`}>
       <div className="flex flex-col w-full gap-4 py-4 border-b border-border-2">
         <div className="flex w-full justify-between items-center">
           <div className="flex gap-2 items-center">
             {/* 프로필 이미지 */}
-            {profileUrl && (
+            {comment.profileUrl && (
               <div className="profile-image w-120 h-120 relative">
-                <ProfileImgContainer width={24} height={24} src={profileUrl} />
+                <ProfileImgContainer
+                  width={24}
+                  height={24}
+                  src={comment.profileUrl}
+                />
               </div>
             )}
-            <p className="text-xs text-body font-semibold">{userName}</p>
+            <p className="text-xs text-body font-semibold">
+              {comment.userName}
+            </p>
           </div>
           <p className="text-xs text-body font-body">
-            {useCalculateDate(createdDate)}
+            {useCalculateDate(comment.createdDate)}
           </p>
         </div>
 
         <div className="text-sm text-body font-regular">
-          {mentionedUserName && (
+          {comment.mentionedUserName && (
             <p className="text-sm text-primary-1 font-semibold">
-              @{mentionedUserName}
+              @{comment.mentionedUserName}
             </p>
           )}
-          {isEditing ? (
+          {comment.isEditing ? (
             <textarea
-              value={editedContent}
-              onChange={(e) => onUpdateComment(e.target.value)}
+              value={comment.editedContent}
+              onChange={(e) => comment.onUpdateComment(e.target.value)}
               className="w-full bg-bg-1 pl-4 p-2 rounded-lg text-sm text-body font-regular resize-none"
             />
           ) : (
-            content
+            comment.content
           )}
         </div>
 
@@ -70,19 +58,19 @@ const Comment: React.FC<CommentProps> = ({
             <IconBtn
               type="delete"
               content="삭제"
-              onClick={() => onDelete(replyId)}
+              onClick={() => comment.onDelete(comment.replyId)}
             />
           </div>
-        ) : isEditing ? (
+        ) : comment.isEditing ? (
           <div className="flex w-full h-5 justify-between items-center">
             <button
               className="text-xs text-body font-semibold"
-              onClick={onCancelEdit}>
+              onClick={comment.onCancelEdit}>
               취소
             </button>
             <button
               className="text-xs text-primary-1 font-semibold"
-              onClick={() => confirmEdit(editedContent)}>
+              onClick={() => comment.confirmEdit(comment.editedContent)}>
               수정 완료
             </button>
           </div>
@@ -91,30 +79,32 @@ const Comment: React.FC<CommentProps> = ({
             {accessToken && (
               <button
                 className="flex items-center gap-1"
-                onClick={() => onReplyClick(replyId, blogId)}>
+                onClick={() =>
+                  comment.onReplyClick(comment.replyId, comment.blogId)
+                }>
                 <ReplyIcon />
                 <p className="text-black text-xs font-semibold ">답글</p>
               </button>
             )}
             {accessToken ? (
-              isOwnComment ? (
+              comment.isOwnComment ? (
                 <div className="flex gap-4">
                   <IconBtn
                     type="edit"
                     content="수정"
-                    onClick={() => onEdit(replyId)}
+                    onClick={() => comment.onEdit(comment.replyId)}
                   />
                   <IconBtn
                     type="delete"
                     content="삭제"
-                    onClick={() => onDelete(replyId)}
+                    onClick={() => comment.onDelete(comment.replyId)}
                   />
                 </div>
               ) : (
                 <IconBtn
                   type="report"
                   content="신고"
-                  onClick={() => onReport(replyId)}
+                  onClick={() => comment.onReport(comment.replyId)}
                 />
               )
             ) : null}
@@ -123,6 +113,4 @@ const Comment: React.FC<CommentProps> = ({
       </div>
     </div>
   );
-};
-
-export default Comment;
+}

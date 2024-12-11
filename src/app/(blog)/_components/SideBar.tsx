@@ -20,9 +20,9 @@ import {
   useCategoryStore,
   useWindowSizeStore,
 } from "@/app/stores";
-import Board from "./Sidebar-Board/Board";
 import { useCheckToken } from "@/app/_hooks/useCheckToken";
 import { handleWindowResize } from "@/app/utils";
+import Board from "./Sidebar-Board/Board";
 
 export default function SideBar() {
   handleWindowResize();
@@ -134,7 +134,8 @@ export default function SideBar() {
   }) => (
     <Link
       href={href}
-      className="flex items-center h-6 py-6 text-black justify-between w-60 pl-6 pr-2">
+      className="flex items-center h-6 py-6 text-black justify-between w-60 pl-6 pr-2"
+    >
       <p className="text-xs">{label}</p>
       <Icon />
     </Link>
@@ -157,12 +158,14 @@ export default function SideBar() {
         if (!target.closest("button, a")) {
           setIsCollapsed(false);
         }
-      }}>
+      }}
+    >
       {/* 사이드바 상단 요소 */}
       <div
         className="flex items-center h-8 mt-5 mb-3 justify-between w-60 pl-6 pr-2"
         onMouseEnter={!isHovered ? handleMouseEnter : undefined}
-        onMouseLeave={!isHovered ? handleMouseLeave : undefined}>
+        onMouseLeave={!isHovered ? handleMouseLeave : undefined}
+      >
         <Link href="/">
           <LogoIcon />
         </Link>
@@ -175,7 +178,8 @@ export default function SideBar() {
             className={`focus:outline-none ${
               // !isCollapsed || (isCollapsed && isHovered) ? "rotate-180" : ""
               isCollapsed ? "" : "rotate-180"
-            }`}>
+            }`}
+          >
             <SbHiddenIcon />
           </button>
         ) : null}
@@ -189,7 +193,8 @@ export default function SideBar() {
       {/* 게시판 목록 */}
       <div
         className={`flex-1 overflow-y-auto`}
-        style={{ maxHeight: "calc(100vh - 252px)" }}>
+        style={{ maxHeight: "calc(100vh - 252px)" }}
+      >
         <div className="relative overflow-x-hidden">
           <Board />
         </div>
@@ -199,8 +204,13 @@ export default function SideBar() {
       <div
         className={`absolute bottom-2 w-full bg-white z-10 ${
           !isCollapsed || isHovered ? "rounded-br-3xl" : ""
-        }`}>
-        <SidebarLink href="/code/list" label="문제 풀러 가기" Icon={SbGotestIcon} />
+        }`}
+      >
+        <SidebarLink
+          href="/code/list"
+          label="문제 풀러 가기"
+          Icon={SbGotestIcon}
+        />
         {isOwnBlog ? (
           <SidebarLink
             href={`/new-post`}

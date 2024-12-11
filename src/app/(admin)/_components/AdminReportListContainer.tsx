@@ -1,30 +1,64 @@
 import TabBar from "@/app/_components/TapBar/TabBar";
-import { Report_Dummy_Data, REPORT_TAP_LIST } from "../_constants/constants";
+import { REPORT_TAP_LIST } from "../_constants/constants";
 import { usePaginationStore, useTabStore } from "@/app/stores";
 import ReportTopBar from "./ReportTopBar";
 import ReportCard from "./ReportCard";
 import { Report } from "../_interfaces/interfaces";
-import { useEffect, useState } from "react";
 import Pagination from "@/app/_components/Pagination";
+import api from "@/app/_api/config";
+import { useQuery } from "@tanstack/react-query";
+import { useCheckToken } from "@/app/_hooks/useCheckToken";
 
 export default function AdminReportListContainer() {
-  // 더미 데이터 생성
-  useEffect(() => {
-    setData(Report_Dummy_Data);
-  }, []);
+  const { accessToken, isTokenSet } = useCheckToken("/admin/sign-in");
 
   const { tab } = useTabStore();
 
-  const [data, setData] = useState<Report[]>([]);
+  // const [data, setData] = useState<Report[]>([]);
 
   // 페이지네이션
   const { page, setPage, setLastPage } = usePaginationStore();
-  
-  // 첫 페이지 초기화
-  useEffect(() => {
-    setPage(1);
-    setLastPage(Math.ceil(data.length / 10));
-  }, [data]);
+
+  // 신고 목록
+  const fetchReportList = async () => {
+    if (!accessToken) return null;
+
+    let endpoint = "";
+    if (tab === "게시글") {
+      endpoint = `/blog-service/admin/article/report/list`;
+    } else if (tab === "블로그") {
+      endpoint = `/blog-service/admin/blog/report/list`;
+    } else {
+      // 댓글
+      endpoint = `/blog-service/admin/reply/report/list`;
+    }
+
+    try {
+      const response = await api.get(endpoint, {
+        params: { page: page, size: 10 },
+        headers: { Authorization: accessToken },
+      });
+
+      console.log(response);
+      const { data } = response.data;
+
+      // 페이지 정보 초기화
+      const lastPage = response.data.data.pageInfo.totalPageNum;
+      if (page > lastPage) {
+        setPage(lastPage);
+      }
+      setLastPage(lastPage);
+      return data.reportList;
+    } catch (error) {
+      console.error(`${tab} 신고 내역 조회 오류:`, error);
+      return null;
+    }
+  };
+
+  const { data } = useQuery<Report[]>({
+    queryKey: ["reportList", tab, page, isTokenSet],
+    queryFn: fetchReportList,
+  });
 
   return (
     <div className="w-full flex flex-col">
@@ -36,27 +70,17 @@ export default function AdminReportListContainer() {
 
       {/* 신고 리스트 */}
       <div className="w-full flex flex-col mb-6 divide-y divide-border-2 border-b border-border-2">
-        {data
-          .filter((el) => {
-            return tab === "게시글"
-            ? el.reportedCommentId === undefined && el.reportedPostId !== undefined
-            : tab === "블로그"
-            ? el.reportedPostId === undefined
-            : el.reportedCommentId !== undefined;
-          })
-          .map((el) => (
-            <ReportCard
-              key={el.reportId}
-              reportId={el.reportId}
-              reportUserId={el.reportUserId}
-              reportedBlogId={el.reportedBlogId}
-              reportedPostId={el.reportedPostId}
-              reportedAt={el.reportedAt}
-              reportedCommentId={el.reportedCommentId}
-              reportReason={el.reportReason}
-              directReason={el.directReason}
-            />
-          ))}
+        {data?.length &&
+          data
+            .filter((el) => {
+              return tab === "게시글"
+                ? el.reportedCommentId === undefined &&
+                    el.reportedPostId !== undefined
+                : tab === "블로그"
+                ? el.reportedPostId === undefined
+                : el.reportedCommentId !== undefined;
+            })
+            .map((el) => <ReportCard key={el.reportId} report={el} />)}
       </div>
       {/* 페이지네이션 */}
       <Pagination />

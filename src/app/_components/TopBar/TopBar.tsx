@@ -7,7 +7,6 @@ import { useOutsideClick } from "@/app/_hooks/useOutsideClick";
 import { HamburgerIcon, LogoIcon, NoticeIcon } from "../Icons";
 import ProfilePopup from "../ProfilePopup";
 import NoticeCard from "./NoticeCard";
-import SmSearchBar from "../SmSearchBar";
 import ProfileImgContainer from "../ProfileImgContainer";
 import { motion } from "framer-motion";
 import TopBarMenu from "./TopBarMenu";
@@ -22,6 +21,8 @@ import { PushesResponse, UserInfo } from "@/app/_interfaces/interfaces";
 import { useInView } from "react-intersection-observer";
 import LoadingAnimation from "../LoadingAnimation";
 import { PROGRAMMING_LANGUAGES } from "@/app/_constants/constants";
+import TopBarSearchBar from "../TopBarSearchBar";
+import { handleWindowResize } from "@/app/utils";
 
 export default function TopBar() {
   const pathname = usePathname();
@@ -83,8 +84,6 @@ export default function TopBar() {
   const topBarRef = useOutsideClick(() => {
     if (isOpen.menu) onIconClick("menu", false);
   });
-
-  const { windowSize } = useWindowSizeStore();
 
   const { setLanguage } = useCodingTestStore();
   // 사용자 정보 API 호출
@@ -159,6 +158,18 @@ export default function TopBar() {
     }
   }, [inView]);
 
+  const { windowSize } = useWindowSizeStore();
+  handleWindowResize();
+  const maxWidth = pathname.startsWith("/coding-test")
+    ? 0
+    : pathname.startsWith("/recent-post") || pathname.startsWith("/code-post")
+    ? 1000
+    : 1200;
+  const popUpLocation = `calc(8px + ${Math.max(
+    (windowSize - maxWidth) / 2,
+    0
+  )}px)`;
+
   return (
     <div className="fixed w-full h-16 z-50">
       <motion.nav
@@ -200,7 +211,7 @@ export default function TopBar() {
             <div className="flex items-center gap-6">
               {/* 검색창 (화면 크기 lg 이상) */}
               <div className="w-[240px] max-lg:hidden">
-                <SmSearchBar baseURL="/search" />
+                <TopBarSearchBar baseURL="/search" />
               </div>
               {/* 로그인 : 알림, 프로필 / 비로그인 : 로그인 버튼 */}
               {accessToken ? (
@@ -241,7 +252,7 @@ export default function TopBar() {
         {/* 메뉴 (화면 크기 lg 이하) */}
         <div className="w-full flex flex-col bg-white lg:hidden">
           <div className="px-12 pt-4 pb-6 border-b border-border-1">
-            <SmSearchBar
+            <TopBarSearchBar
               baseURL="/search"
               placeholder="검색어를 입력해주세요"
             />
@@ -254,7 +265,7 @@ export default function TopBar() {
         <div
           ref={noticePopupRef}
           style={{
-            right: `calc(8px + ${Math.max((windowSize - 1200) / 2, 0)}px)`,
+            right: popUpLocation,
           }}
           className="absolute bg-white top-[calc(100%+8px)] w-[396px] h-[300px] flex flex-col items-center rounded-lg shadow-1 divide-y divide-border-1 overflow-y-auto"
         >
@@ -283,7 +294,7 @@ export default function TopBar() {
         <div
           ref={profilePopupRef}
           style={{
-            right: `calc(8px + ${Math.max((windowSize - 1200) / 2, 0)}px)`,
+            right: popUpLocation,
           }}
           className="absolute bg-white top-[calc(100%+8px)] w-[160px] flex flex-col rounded-lg shadow-1 divide-y divide-border-1"
         >

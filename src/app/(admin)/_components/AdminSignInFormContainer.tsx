@@ -10,19 +10,20 @@ import axios from "axios";
 
 export default function AdminSignInFormContainer() {
   const router = useRouter();
-  const { register, handleSubmit } = useForm<SignInForm>();
+  const {
+    register,
+    handleSubmit,
+    setError,
+    clearErrors,
+    formState: { errors },
+  } = useForm<SignInForm>({ mode: "onSubmit", reValidateMode: "onSubmit" });
 
-  // 로그인 실패 여부
-  const [isCorrect, setIsCorrect] = useState(true);
   // 관리자 승인 대기 여부
   const [isWaiting, setIsWaiting] = useState(false);
   const onValid = async (data: SignInForm) => {
-    console.log(data);
-    if (!data.email || !data.password) {
-      // 아이디 비밀번호 미입력 시
-      return;
-    }
     try {
+      clearErrors("root");
+
       const response = await api.post("/admin-service/auth/login", data);
       // 관리자 승인 대기 처리
       if (response.data.isWaiting) {
@@ -38,17 +39,14 @@ export default function AdminSignInFormContainer() {
       }
     } catch (err) {
       if (axios.isAxiosError(err)) {
-        // 등록되지 않은 계정
-        if (err.response?.status === 404) {
-          setIsCorrect(false);
-        }
         // 승인 대기 중인 계정
-        else if (err.response?.status === 403) {
-          setIsCorrect(true);
+        if (err.response?.status === 403) {
           setIsWaiting((prev) => !prev);
         } else {
-          console.error(err);
-          setIsCorrect(false);
+          setError("root", {
+            type: "custom",
+            message: "유효하지 않은 계정이에요",
+          });
         }
       }
     }
@@ -64,14 +62,14 @@ export default function AdminSignInFormContainer() {
           {/* 아이디 비밀번호 입력 */}
           <div className="flex flex-col gap-6">
             <input
-              {...register("email", { required: true })}
+              {...register("email", { required: "아이디를 입력해주세요" })}
               className="sign-in-input"
               placeholder="이메일"
               autoComplete="off"
               type="text"
             />
             <input
-              {...register("password", { required: true })}
+              {...register("password", { required: "비밀번호를 입력해주세요" })}
               className="sign-in-input"
               placeholder="비밀번호"
               autoComplete="off"
@@ -81,11 +79,12 @@ export default function AdminSignInFormContainer() {
           {/* 로그인 실패 시의 경고 메세지 */}
           {/* 로그인 / 회원가입 */}
           <div className="relative flex flex-col gap-3 items-center">
-            {!isCorrect && (
-              <span className="absolute -top-2 -translate-y-full text-xs font-bold text-red">
-                등록되지 않은 계정입니다
-              </span>
-            )}
+            {/* 에러 메세지 */}
+            <span className="absolute -top-2 -translate-y-full text-xs font-bold text-red">
+              {errors.email?.message ||
+                errors.password?.message ||
+                errors.root?.message}
+            </span>
             <button type="submit" className="btn-primary w-full">
               로그인
             </button>

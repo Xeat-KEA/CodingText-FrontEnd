@@ -1,17 +1,21 @@
+"use client";
+
 import api from "@/app/_api/config";
 import BackBtn from "@/app/_components/BackBtn";
 import Dialog from "@/app/_components/Dialog";
 import { DialogCheckIcon } from "@/app/_components/Icons";
 import PostEditor from "@/app/_components/PostEditor/PostEditor";
 import { useBase64 } from "@/app/_hooks/useBase64";
+import { useCheckToken } from "@/app/_hooks/useCheckToken";
 import { PostForm } from "@/app/_interfaces/interfaces";
-import { useBlogStore, useTokenStore } from "@/app/stores";
+import { useBlogStore } from "@/app/stores";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function NewPostContainer() {
-  const { accessToken, isTokenSet } = useTokenStore();
+  // 로그인 여부 확인
+  const { accessToken, isTokenSet } = useCheckToken();
 
   const router = useRouter();
   const searchParams = useSearchParams();

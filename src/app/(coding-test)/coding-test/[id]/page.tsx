@@ -12,7 +12,6 @@ import { useEffect } from "react";
 import ChattingPanel from "../../_components/ChattingPanel";
 import LoadingSpinner from "@/app/_components/LoadingSpinner";
 import { PROGRAMMING_LANGUAGES } from "@/app/_constants/constants";
-import { handleWindowResize } from "@/app/utils";
 import { useCheckToken } from "@/app/_hooks/useCheckToken";
 
 export default function CodingTestPage() {
@@ -39,7 +38,6 @@ export default function CodingTestPage() {
   }, []);
 
   const { windowSize } = useWindowSizeStore();
-  handleWindowResize();
 
   return (
     <>

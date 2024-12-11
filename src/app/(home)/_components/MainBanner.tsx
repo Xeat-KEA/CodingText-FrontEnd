@@ -4,7 +4,6 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useWindowSizeStore } from "@/app/stores";
-import { handleWindowResize } from "@/app/utils";
 import { BANNER_IMG_LIST } from "../_constants/constants";
 
 export default function MainBanner() {
@@ -51,7 +50,6 @@ export default function MainBanner() {
 
   // 화면 크기 변경 시 state 변경
   const { windowSize } = useWindowSizeStore();
-  handleWindowResize();
 
   // 배너 자동 전환 (다른 탭으로 이동 등 웹 페이지에서 벗어날 경우 애니메이션 비활성화)
   useEffect(() => {
@@ -82,7 +80,7 @@ export default function MainBanner() {
   }, [page]);
 
   return (
-    <div className="top-container h-[320px] relative">
+    <div className="top-container h-[320px] relative overflow-hidden">
       {/* 이전 / 다음 버튼 */}
       <motion.button
         initial={{ color: "rgb(200, 200, 200)" }}

@@ -1,17 +1,21 @@
-import { useCodingTestStore, useTabStore } from "@/app/stores";
+import { useCodingTestStore, useTabStore, useTokenStore } from "@/app/stores";
 import CodeEditor from "./CodeEditor";
 import { useState } from "react";
 import Dialog from "@/app/_components/Dialog";
 import { DialogCheckIcon } from "@/app/_components/Icons";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { usePageHandler } from "@/app/_hooks/usePageHandler";
 import TabBar from "@/app/_components/TapBar/TabBar";
 import PostEditor from "@/app/_components/PostEditor/PostEditor";
 import { useBase64 } from "@/app/_hooks/useBase64";
 import { POSTING_TAB_BAR_MENU } from "../_constants/constants";
+import { PostForm } from "@/app/_interfaces/interfaces";
+import api from "@/app/_api/config";
 
 export default function NewPostPanel() {
+  const { accessToken } = useTokenStore();
   const router = useRouter();
+  const params = useParams();
 
   // 전역 변수 선언
   const { tab } = useTabStore();
@@ -22,6 +26,39 @@ export default function NewPostPanel() {
 
   // 새로고침, 페이지 닫기, 뒤로가기 방지
   usePageHandler();
+
+  // value는 writtencode, params.id가 codeId,
+  const onClickBtn = async (data: PostForm) => {
+    const newContent = useBase64("encode", data.content);
+    // codeId 추후 수정
+    const newData = {
+      ...data,
+      content: newContent,
+      writtenCode: value,
+      codeId: Number(params.id),
+      childCategoryId: 0,
+      codeContent: "문제",
+    };
+    console.log(newData);
+    try {
+      // API 요청
+      const response = await api.post(
+        `/blog-service/blog/board/article`,
+        newData,
+        {
+          headers: { Authorization: accessToken },
+        }
+      );
+
+      if (response.status === 200) {
+        setIsDialogOpen(true);
+      } else {
+        console.error("코딩 게시글 작성 실패:", response);
+      }
+    } catch (error) {
+      console.error("코딩 게시글 작성 오류:", error);
+    }
+  };
 
   return (
     <>
@@ -34,8 +71,7 @@ export default function NewPostPanel() {
           <div
             className={`w-full h-full rounded-2xl overflow-hidden ${
               tab === "코드 뷰어" ? "flex" : "hidden"
-            }`}
-          >
+            }`}>
             <CodeEditor isViewer defaultValue={value} />
           </div>
           {/* 메모장 */}
@@ -55,10 +91,7 @@ export default function NewPostPanel() {
             onCancelClick={() => setIsPosting(false)}
             onBtnClick={(data) => {
               // data post 부분 작성 필요
-              const newContent = useBase64("encode", data.content);
-              const newData = { ...data, content: newContent };
-              console.log(newData);
-              setIsDialogOpen((prev) => !prev);
+              onClickBtn(data);
             }}
           />
         </div>

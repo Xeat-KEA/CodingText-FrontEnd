@@ -26,7 +26,27 @@ export default function BlogHomeContainer() {
     }
   }, [params.id, setCurrentBlogId]);
 
-  // 블로그 홈 정보 조회
+  // 비회원용 블로그 홈 정보 조회
+  const fetchNonUserBlogProfileData = async () => {
+    if (currentBlogId == -1) return null;
+    try {
+      const response = await api.get(
+        `/blog-service/blog/board/nonUser/home/${currentBlogId}`
+      );
+      setProfile(response.data.data);
+      return response.data.data;
+    } catch (error) {
+      console.error("블로그 프로필 조회 실패:", error);
+      return null;
+    }
+  };
+
+  const { data: nonUserBlogInfo } = useQuery({
+    queryKey: ["NonUserBlogInfo", currentBlogId],
+    queryFn: fetchNonUserBlogProfileData,
+  });
+
+  // 회원용 블로그 홈 정보 조회
   const fetchBlogProfileData = async () => {
     if (!accessToken) return null;
     try {
@@ -56,13 +76,13 @@ export default function BlogHomeContainer() {
         <div className="top-container">
           <div className="max-w-1000 min-h-screen">
             {/* 블로그 프로필 정보 */}
-            <BlogProfile profile={data} />
+            <BlogProfile profile={data || nonUserBlogInfo} />
 
             {/* 구분선 */}
             <hr className="division my-6" />
 
             {/* 블로그 소개 정보 */}
-            <BlogInfo profile={data} />
+            <BlogInfo profile={data || nonUserBlogInfo} />
           </div>
         </div>
       )}
