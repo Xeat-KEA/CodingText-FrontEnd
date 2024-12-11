@@ -1,8 +1,10 @@
 FROM node:22.12
 ENV TZ Asia/Seoul
-WORKDIR /usr/src/app
-COPY package*.json ./
+WORKDIR /frontend/
+COPY ./package*.json /frontend/
 RUN npm install
-COPY ./ ./
+COPY . /frontend/
 RUN npm run build
+RUN mkdir -p ./public/ssr/_next
+RUN cp -R ./.next/static ./public/ssr/_next/static
 CMD ["npm", "run", "start"]
