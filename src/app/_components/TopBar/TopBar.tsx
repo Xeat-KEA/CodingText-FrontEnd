@@ -7,7 +7,6 @@ import { useOutsideClick } from "@/app/_hooks/useOutsideClick";
 import { HamburgerIcon, LogoIcon, NoticeIcon } from "../Icons";
 import ProfilePopup from "../ProfilePopup";
 import NoticeCard from "./NoticeCard";
-import SmSearchBar from "../SmSearchBar";
 import ProfileImgContainer from "../ProfileImgContainer";
 import { motion } from "framer-motion";
 import TopBarMenu from "./TopBarMenu";
@@ -17,6 +16,7 @@ import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { PushesResponse, UserInfo } from "@/app/_interfaces/interfaces";
 import { useInView } from "react-intersection-observer";
 import LoadingAnimation from "../LoadingAnimation";
+import TopBarSearchBar from "../TopBarSearchBar";
 import { handleWindowResize } from "@/app/utils";
 
 export default function TopBar() {
@@ -198,7 +198,7 @@ export default function TopBar() {
             <div className="flex items-center gap-6">
               {/* 검색창 (화면 크기 lg 이상) */}
               <div className="w-[240px] max-lg:hidden">
-                <SmSearchBar baseURL="/search" />
+                <TopBarSearchBar baseURL="/search" />
               </div>
               {/* 로그인 : 알림, 프로필 / 비로그인 : 로그인 버튼 */}
               {accessToken ? (
@@ -238,7 +238,7 @@ export default function TopBar() {
         {/* 메뉴 (화면 크기 lg 이하) */}
         <div className="w-full flex flex-col bg-white lg:hidden">
           <div className="px-12 pt-4 pb-6 border-b border-border-1">
-            <SmSearchBar
+            <TopBarSearchBar
               baseURL="/search"
               placeholder="검색어를 입력해주세요"
             />
