@@ -160,15 +160,13 @@ export default function TopBar() {
 
   const { windowSize } = useWindowSizeStore();
   handleWindowResize();
-  const maxWidth = pathname.startsWith("/coding-test")
-    ? 0
-    : pathname.startsWith("/recent-post") || pathname.startsWith("/code-post")
-    ? 1000
-    : 1200;
-  const popUpLocation = `calc(8px + ${Math.max(
-    (windowSize - maxWidth) / 2,
-    0
-  )}px)`;
+  const maxWidth =
+    pathname.startsWith("/recent-post") || pathname.startsWith("/code-post")
+      ? 1000
+      : 1200;
+  const popUpLocation = pathname.startsWith("/coding-test")
+    ? "8px"
+    : `calc(8px + ${Math.max((windowSize - maxWidth) / 2, 0)}px)`;
 
   return (
     <div className="fixed w-full h-16 z-50">
