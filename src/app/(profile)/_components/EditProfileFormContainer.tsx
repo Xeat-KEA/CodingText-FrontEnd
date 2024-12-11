@@ -102,10 +102,11 @@ export default function EditProfileFormContainer() {
     }
 
     // 이미지 업로드 및 주소 반환
-    const IMG_URL = useImageHandler(files);
-
+    const IMG_URL = await useImageHandler(files, accessToken);
     // 반환받은 이미지 주소를 통해 editor에 이미지 삽입
-    setValue("profileUrl", IMG_URL);
+    if (IMG_URL) {
+      setValue("profileUrl", IMG_URL);
+    }
   };
 
   // 변경 사항 취소
@@ -226,8 +227,7 @@ export default function EditProfileFormContainer() {
           <button
             type="button"
             onClick={onEditCancel}
-            className="sm-btn-default"
-          >
+            className="sm-btn-default">
             취소
           </button>
         </div>

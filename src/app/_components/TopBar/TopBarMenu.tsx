@@ -2,7 +2,13 @@ import { TOP_BAR_MENU } from "@/app/_constants/constants";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
-export default function TopBarMenu({ token }: { token: string }) {
+export default function TopBarMenu({
+  token,
+  blogId,
+}: {
+  token: string;
+  blogId: number | null;
+}) {
   const buttonVariants = {
     initial: { backgroundColor: "rgb(255, 255, 255)" },
     hover: { backgroundColor: "rgb(247, 247, 247)" },
@@ -19,14 +25,12 @@ export default function TopBarMenu({ token }: { token: string }) {
               initial="initial"
               whileHover="hover"
               transition={{ duration: 0.2 }}
-              className="top-bar-menu-btn"
-            >
+              className="top-bar-menu-btn">
               <Link
                 key={index}
-                href={el.url === "/blog" ? `${el.url}/${token}` : el.url}
+                href={el.url === "/blog" ? `/blog/${blogId}` : el.url}
                 scroll={false}
-                className="flex items-center w-full h-full px-2 max-lg:px-12"
-              >
+                className="flex items-center w-full h-full px-2 max-lg:px-12">
                 {el.content}
               </Link>
             </motion.div>
@@ -40,14 +44,12 @@ export default function TopBarMenu({ token }: { token: string }) {
                 variants={buttonVariants}
                 initial="initial"
                 whileHover="hover"
-                className="top-bar-menu-btn"
-              >
+                className="top-bar-menu-btn">
                 <Link
                   key={index}
                   href={el.url}
                   scroll={false}
-                  className="flex items-center w-full h-full  px-2 max-lg:px-12"
-                >
+                  className="flex items-center w-full h-full  px-2 max-lg:px-12">
                   {el.content}
                 </Link>
               </motion.div>

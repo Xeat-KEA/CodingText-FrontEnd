@@ -1,36 +1,88 @@
 import api from "@/app/_api/config";
 import EditBtn from "@/app/_components/TipTapEditor/EditBtn";
 import TiptapEditor from "@/app/_components/TipTapEditor/TiptapEditor";
-import { useTiptapStore } from "@/app/stores";
-import { useQuery } from "@tanstack/react-query";
+import { useBase64 } from "@/app/_hooks/useBase64";
+import { useTiptapStore, useTokenStore } from "@/app/stores";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import DOMPurify from "isomorphic-dompurify";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function EditBlogInfo() {
+  // 로그인 여부 확인
+  const { accessToken, isTokenSet } = useTokenStore();
+  const { content, setContent } = useTiptapStore();
+
+  const queryClient = useQueryClient();
+
   // API 호출
   const fetchBlogData = async () => {
-    const response = await api.get("/blog");
-    return response.data;
+    if (accessToken) {
+      try {
+        const response = await api.get(`/blog-service/blog/home`, {
+          headers: { Authorization: accessToken },
+        });
+
+        return {
+          mainContent: useBase64("decode", response.data.data.mainContent),
+          originalImageList: response.data.data.originalImageList || [],
+        };
+      } catch (error) {
+        console.error("블로그 데이터 요청 실패: ", error);
+        return "";
+      }
+    }
+    return "";
   };
-  const { data } = useQuery({ queryKey: ["BlogData"], queryFn: fetchBlogData });
+  const { data, isLoading } = useQuery({
+    queryKey: ["mainContent", isTokenSet],
+    queryFn: fetchBlogData,
+    enabled: isTokenSet && !!accessToken,
+  });
+
+  useEffect(() => {
+    if (data) {
+      setBlogData(data);
+    }
+  }, [data]);
 
   // 변경 사항 취소를 위한 초기값
-  const [blogData, setBlogData] = useState("");
+  const [blogData, setBlogData] = useState({
+    mainContent: "",
+    originalImageList: [],
+  });
   const [isIntroEditing, setIsIntroEditing] = useState(false);
-  const { content, setContent } = useTiptapStore();
+
+  const updateBlogContent = async () => {
+    try {
+      const encodedContent = useBase64("encode", content);
+      const response = await api.put(
+        `/blog-service/blog/home`,
+        {
+          mainContent: encodedContent,
+          originalImageList: blogData.originalImageList,
+        },
+        {
+          headers: { Authorization: accessToken },
+        }
+      );
+      queryClient.invalidateQueries({ queryKey: ["mainContent"] });
+    } catch (error) {
+      console.error("블로그 소개글 수정 오류: ", error);
+    }
+  };
 
   return (
     <div className="flex flex-col gap-3">
       <span className="edit-title">블로그 소개글</span>
       <div
-        className={`w-full h-[400px] overflow-y-auto ${
+        className={`w-full min-h-[400px] overflow-y-auto ${
           !isIntroEditing && "border border-border-2 rounded-2xl px-6 py-4"
         }`}>
         {!isIntroEditing ? (
           <div
             className="prose"
             dangerouslySetInnerHTML={{
-              __html: DOMPurify.sanitize(blogData),
+              __html: DOMPurify.sanitize(blogData.mainContent),
             }}
           />
         ) : (
@@ -40,7 +92,7 @@ export default function EditBlogInfo() {
       <EditBtn
         isEditing={isIntroEditing}
         onEditClick={() => {
-          setContent(blogData);
+          setContent(blogData.mainContent);
           setIsIntroEditing((prev) => !prev);
         }}
         onCancelClick={() => {
@@ -48,7 +100,7 @@ export default function EditBlogInfo() {
         }}
         onSubmit={() => {
           if (content !== "<p></p>") {
-            setBlogData(content);
+            updateBlogContent();
             setIsIntroEditing((prev) => !prev);
           }
         }}

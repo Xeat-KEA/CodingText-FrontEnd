@@ -1,76 +1,121 @@
-import BlogLayout from "../blog/[id]/layout";
 import PostAction from "@/app/(blog)/_components/Post/PostAction";
 import PostContent from "@/app/(blog)/_components/Post/PostContent";
 import PostHeader from "@/app/(blog)/_components/Post/PostHeader";
 import CommentContainer from "./PostComment/CommentContainer";
 import BackBtn from "@/app/_components/BackBtn";
-import { useBlogStore } from "@/app/stores";
-import { useRouter } from "next/navigation";
+import {
+  useBlogStore,
+  useCategoryStore,
+  usePostStore,
+  useTokenStore,
+} from "@/app/stores";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { BlogPost, CompleteArticle } from "@/app/(blog)/_interfaces/interfaces";
+import { BlogPost } from "@/app/(blog)/_interfaces/interfaces";
 import api from "@/app/_api/config";
-import BlindPostContainer from "./BlindPostContainer";
-import { Post_Dummy_Data } from "@/app/(admin)/_constants/constants";
-import { usePathValue } from "@/app/_hooks/usePathValue";
+import { useQuery } from "@tanstack/react-query";
+import Dialog from "@/app/_components/Dialog";
 
 export default function PostContainer() {
+  const { accessToken, isTokenSet } = useTokenStore();
+
   //  전역변수
-  const { blogId, params, boardCategories, categoryId, subCategoryId } =
-    useBlogStore();
+  const { userBlogId, currentBlogId } = useBlogStore();
+  const { currentPost } = usePostStore();
+  const params = useParams();
   const router = useRouter();
-  const articleId = Number(params?.postId || 0);
-  const [blogUserId, setBlogUserId] = useState(1);
 
-  const [currentPost, setCurrentPost] = useState<BlogPost | null>(null);
+  const setCurrentBlogId = useBlogStore((state) => state.setCurrentBlogId);
+  const setCurrentPost = usePostStore((post) => post.setCurrentPost);
+  const setIsCodingPost = usePostStore((state) => state.setIsCodinPost);
 
-  // 현재 게시물의 상/하위 게시판 정보 -> 전역 저장
-  const currentCategory = boardCategories.find(
-    (category) => category.id === Number(currentPost?.categoryId)
+  const setCategoryId = useCategoryStore((state) => state.setCategoryId);
+  const setChildCategoryId = useCategoryStore(
+    (state) => state.setChildCategoryId
   );
-  const currentSubCategory = currentCategory?.subCategories?.find(
-    (sub) => sub.id === Number(currentPost?.subCategoryId)
-  );
-  const setCategoryId = useBlogStore((state) => state.setCategoryId);
-  const setSubCategoryId = useBlogStore((state) => state.setSubCategoryId);
 
   // 블라인드 게시물
   const [isBlind, setIsBlind] = useState(false);
-
   // 비밀글
   const [isSecret, setIsSecret] = useState(false);
-  const [password, setPassword] = useState<string>("");
-  // 비밀번호 입력 dialog 추가
 
-  useEffect(() => {
-    // 프로토타입 더미 데이터 GET
-    // api.get(`/article/${articleId}`).then((res) => {
-    //     const data = res.data.data
-    //     if (data) {
-    //         // api 분리 후 수정 필요
+  const [isLoaded, setIsLoaded] = useState(true);
 
-    //     } else {
-    //         setCurrentPost(null);
-    //     }
+  // 비회원용 게시글 내용 api 연결
+  const fetchNonUserPostData = async () => {
+    try {
+      const response = await api.get(
+        `/blog-service/blog/board/nonUser/${params.postId}`
+      );
+      const postData = response.data.data;
+      if (postData) {
+        setCurrentBlogId(postData.blogId);
+        setChildCategoryId(postData.childCategoryId);
+        setIsCodingPost(postData.codeId !== undefined);
+        setIsBlind(postData.isBlind);
+        setIsSecret(postData.isSecret);
+        setCurrentPost(postData);
+      }
+      setIsLoaded(false);
+      return postData;
+    } catch (error) {
+      console.error("비회원 게시글 반환오류:", error);
+      return null;
+    }
+  };
+  const { data: nonUserPostData } = useQuery({
+    queryKey: ["nonUserPostContent", isTokenSet, params.postId],
+    queryFn: fetchNonUserPostData,
+  });
 
-    // })
+  // 회원용 게시글 내용 api 연결
+  const fetchPostData = async () => {
+    if (accessToken) {
+      // 회원 -> 추후 비회원 로직 추가
+      try {
+        const response = await api.get(
+          `/blog-service/blog/board/${params.postId}`,
+          {
+            headers: { Authorization: accessToken },
+          }
+        );
+        const postData = response.data.data;
+        if (postData) {
+          setCurrentBlogId(postData.blogId);
+          setChildCategoryId(postData.childCategoryId);
+          setIsCodingPost(postData.codeId !== undefined);
+          setIsBlind(postData.isBlind);
+          setIsSecret(postData.isSecret);
+          setCurrentPost(postData);
+        }
+        setIsLoaded(false);
+        return postData;
+      } catch (error) {
+        console.error("게시글 내용 반환 오류: ", error);
+        return null;
+      }
+    }
+  };
 
-    // 더미
-    const findedPost = Post_Dummy_Data.find(
-      (post) =>
-        post.blogId === Number(params?.id) &&
-        post.postId === Number(params?.postId)
-    );
-    setCurrentPost(findedPost || null);
-    setIsBlind(findedPost?.isBlind ?? false);
-    setCategoryId(Number(findedPost?.categoryId));
-    setSubCategoryId(Number(findedPost?.subCategoryId));
-  }, [params]);
+  const {
+    data: postData,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["postContent", isTokenSet, params.postId],
+    queryFn: fetchPostData,
+    enabled: isTokenSet && !!accessToken,
+  });
 
   useEffect(() => {
     if (isBlind) {
-      router.push("/blind");
+      router.replace("/blind");
     }
-  }, [isBlind, router]);
+    if (isSecret) {
+    }
+  }, [isBlind, isSecret, router]);
+
+  if (isLoaded) return null;
 
   return (
     <>
@@ -81,40 +126,28 @@ export default function PostContainer() {
             <div className="w-full">
               <BackBtn
                 title="목록으로"
-                onClick={() =>
-                  router.push(
-                    `/blog/${params?.id}/${currentCategory?.id}/${currentSubCategory?.id}`,
-                    { scroll: false }
-                  )
+                onClick={
+                  () => router.back()
+                  // router.push(`/category/${currentPost.childCategoryId}`, {
+                  //   scroll: false,
+                  // })
                 }
               />
             </div>
 
             {/* 게시물 헤더 */}
             <div className="w-full">
-              {currentPost ? (
-                <PostHeader
-                  currentPost={currentPost}
-                  currentCategory={currentCategory}
-                  currentSubCategory={currentSubCategory}
-                />
-              ) : (
-                <p>게시물을 불러오는 중입니다.</p>
-              )}
+              <PostHeader />
             </div>
 
             {/* 구분선 */}
             <hr className="w-full border-t-1 border-border2" />
 
             {/* 게시물 내용 */}
-            <div className="w-full">
-              {currentPost && <PostContent currentPost={currentPost} />}
-            </div>
+            <div className="w-full">{currentPost && <PostContent />}</div>
 
             {/* 게시물 버튼 - PostAction */}
-            <div className="w-full h-5">
-              {currentPost && <PostAction currentPost={currentPost} />}
-            </div>
+            <div className="w-full h-5">{currentPost && <PostAction />}</div>
 
             {/* 구분선 */}
             <hr className="w-full border-t-1 border-border2" />
@@ -127,9 +160,9 @@ export default function PostContainer() {
               <BackBtn
                 title="목록으로"
                 onClick={() =>
-                  router.push(
-                    `/blog/${params?.id}/${params?.categoryId}/${params?.subCategoryId}`
-                  )
+                  router.push(`/category/${currentPost.childCategoryId}`, {
+                    scroll: false,
+                  })
                 }
               />
             </div>

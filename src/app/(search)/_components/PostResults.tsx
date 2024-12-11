@@ -3,16 +3,17 @@ import { useEffect, useState } from "react";
 import { PostResult } from "../_interfaces/interfaces";
 import api from "@/app/_api/config";
 import { usePaginationStore } from "@/app/stores";
+import { Post } from "@/app/_interfaces/interfaces";
 
 export default function PostResults() {
-  const [result, setResult] = useState<PostResult[]>([]);
+  const [result, setResult] = useState<Post[]>([]);
 
   // 프로토타입 더미 데이터 GET
   useEffect(() => {
     api.get("/article-list").then((res) => {
       // 날짜 내림차순
-      const sortedData = res.data.data.sort((a: PostResult, b: PostResult) =>
-        a.createAt > b.createAt ? -1 : 1
+      const sortedData = res.data.data.sort((a: Post, b: Post) =>
+        a.createdDate > b.createdDate ? -1 : 1
       );
       setResult(sortedData);
     });
@@ -32,20 +33,8 @@ export default function PostResults() {
         result.slice((page - 1) * 10, page * 10).map((el, index) => (
           <div
             key={index}
-            className={`${index >= 2 && "border-t border-border2"}`}
-          >
-            <PostCard
-              articleId={el.articleId}
-              profileImg={`/profileImg${(el.articleId % 6) + 1}.png`}
-              nickName={el.nickName}
-              createAt={el.createAt}
-              title={el.title}
-              content={el.content}
-              likes={el.likeCount}
-              comments={el.replyCount}
-              views={el.replyCount} // 조회수 추가 후 수정 필요
-              codeId={el.codeId}
-            />
+            className={`${index >= 2 && "border-t border-border2"}`}>
+            <PostCard key={el.articleId} post={el} />
           </div>
         ))
       ) : (

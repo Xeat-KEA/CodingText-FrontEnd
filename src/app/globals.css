@@ -222,6 +222,9 @@ textarea {
     @apply bg-transparent text-inherit text-[0.8rem] p-0 whitespace-pre-wrap break-words;
   }
 
+  .prose * {
+    @apply min-h-[1rem];
+  }
   /* 문제 목록 페이지 관련 */
   /* 목록 탑바 텍스트 */
   .list-topbar-text {
@@ -346,5 +349,10 @@ textarea {
   }
   .code-card-value {
     @apply text-xs text-body flex gap-1 max-sm:flex-col items-center;
+  }
+
+  /* Form 작성 오류 시 텍스트 */
+  .form-error-text {
+    @apply absolute top-[calc(100%+4px)] left-0 whitespace-nowrap text-xs font-bold text-red;
   }
 }

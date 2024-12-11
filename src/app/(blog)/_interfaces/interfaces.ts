@@ -1,9 +1,9 @@
-import { SubCategory, Category } from "@/app/_interfaces/interfaces";
+import { ChildCategory, Category } from "@/app/_interfaces/interfaces";
 
 export interface AddCategoryProps {
   handleAddCategory: (title: string, parentId?: number) => void;
   parentId?: number;
-  isSubCategory?: boolean;
+  isChildCategory?: boolean;
 }
 
 export interface CategoryItemProps {
@@ -12,68 +12,87 @@ export interface CategoryItemProps {
   handleDeleteCategory: (
     categoryId: number,
     title: string,
-    isSub?: boolean,
-    subCategoryId?: number
+    isChild?: boolean,
+    childCategoryId?: number
   ) => void;
 }
 
-export interface SubCategoryItemProps {
-  subCategory: SubCategory;
+export interface ChildCategoryItemProps {
+  childCategory: ChildCategory;
   category: Category;
   currentPath: string;
   handleDeleteCategory: (
     categoryId: number,
     title: string,
-    isSub?: boolean,
-    subCategoryId?: number
+    isChild?: boolean,
+    childCategoryId?: number
   ) => void;
 }
 export interface BlogPost {
-  postId: number;
+  articleId: number;
+  articleReplies: CommentProps[];
   blogId: number;
-  categoryId: number;
-  subCategoryId: number;
-  title: string;
+  checkRecommend: boolean;
+  childCategoryId: number;
+  childName: string;
+  codeContent?: string;
+  codeId?: number;
   content: string;
-  viewCount: number;
-  isSecret: boolean;
+  createdDate: string;
   isBlind: boolean;
-  password: string;
+  isSecret: boolean;
   likeCount: number;
-  reportCount: number;
-  commentCount: number;
-  createdAt: string;
-  modifiedAt: string;
+  profileUrl: string;
+  replyCount: number;
+  title: string;
+  userName: string;
+  viewCount: number;
+  writtenCode?: string;
 }
 
 export interface CommentForm {
-  replyId: number;
   postId: number;
-  userId: number;
-  mentionId: number | null;
-  parentReplyId: number | null;
+  mentionedUserBlogId?: number;
+  parentReplyId?: number;
   content: string;
-  createdAt: string;
-  modifiedAt: string;
 }
 
 export interface CommentProps {
   replyId: number;
-  userId: number;
-  mentionId: number | null;
+  blogId: number;
+  userName: string;
+  profileUrl: string;
+  parentReplyId?: number;
+  mentionedUserName?: string;
   content: string;
-  createdAt: string;
+  createdDate: string;
+  childReplies?: CommentProps[];
+
   isOwnComment: boolean;
   onReplyClick: (replyId: number, userId: number) => void;
+  onEdit: (replyId: number) => void;
+  isEditing: boolean;
+  onCancelEdit: () => void;
+  editedContent: string;
+  onUpdateComment: (content: string) => void;
+  confirmEdit: (content: string) => Promise<void>;
   onDelete: (replyId: number) => void;
   onReport: (replyId: number) => void;
 }
 
-export interface PostProps {
-  currentPost: BlogPost;
-  currentCategory?: Category;
-  currentSubCategory?: SubCategory;
+export interface CommentInputProps {
+  target: string;
+  mentionId?: number;
+  mentionedUserName?: string;
+  onSubmit: (data: { comment: string }) => void;
+  onCancel: () => void;
 }
+
+// export interface PostProps {
+//   currentPost: BlogPost;
+//   // currentCategory?: Category;
+//   // currentChildCategory?: ChildCategory;
+// }
 
 export interface BpFollowerIconProps {
   isFilled: Boolean;
@@ -81,32 +100,4 @@ export interface BpFollowerIconProps {
 
 export interface SmShowMoreIconProps {
   isHidden: Boolean;
-}
-
-export interface CommentInputProps {
-  target?: string;
-  mentionId: number | null;
-  onSubmit: (data: { comment: string }) => void;
-  onCancel?: () => void;
-}
-
-export interface CompleteArticle {
-  postId: number;
-  blogId: number;
-  categoryId: number;
-  subCategoryId: number;
-  language: string;
-  title: string;
-  content: string;
-  viewCount: number;
-  reportCount: number;
-  codeContent: string;
-  codeId: number;
-  createAt: string;
-  likeCount: number;
-  nickName: string;
-  commentCount: number;
-  writtenCode: string;
-  createdAt: string;
-  modifiedAt: string;
 }

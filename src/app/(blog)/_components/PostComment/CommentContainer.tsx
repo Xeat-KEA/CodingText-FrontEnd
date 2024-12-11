@@ -2,37 +2,37 @@ import { useEffect, useState } from "react";
 import {
   BlogPost,
   CommentForm,
-  CompleteArticle,
+  CommentProps,
 } from "@/app/(blog)/_interfaces/interfaces";
-import {
-  loggedInUserId,
-  REPORT_REASONS,
-} from "@/app/(blog)/_constants/constants";
+import { REPORT_REASONS } from "@/app/(blog)/_constants/constants";
 import CommentInput from "@/app/(blog)/_components/PostComment/CommentInput";
 import Comment from "@/app/(blog)/_components/PostComment/Comment";
 import Dialog from "@/app/_components/Dialog";
 import { DialogCheckIcon, DialogReportIcon } from "@/app/_components/Icons";
 import DropDown from "@/app/_components/DropDown";
 import { useParams, usePathname } from "next/navigation";
-import {
-  Comment_Dummy_Data,
-  Post_Dummy_Data,
-  Report_Dummy_Data,
-} from "@/app/(admin)/_constants/constants";
-
-// 추후에 게시글 정보 전달 (또는 추가)
+import { useBlogStore, usePostStore, useTokenStore } from "@/app/stores";
+import api from "@/app/_api/config";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function CommentContainer() {
+  const { accessToken, isTokenSet } = useTokenStore();
+  const queryClient = useQueryClient();
+
   const params = useParams();
+  const { currentPost } = usePostStore();
+  const { currentBlogId, userBlogId } = useBlogStore();
 
-  const [currentPost, setCurrentPost] = useState<BlogPost | null>(null);
-
-  const [comments, setComments] = useState<CommentForm[]>([]);
-  const [replyParentId, setReplyParentId] = useState<number | null>(null);
-  const [mentionId, setMentionId] = useState<number | null>(null);
+  const [comments, setComments] = useState<CommentProps[]>([]);
+  const [parentReplyId, setParentReplyId] = useState<number | undefined>();
+  const [mentionId, setMentionId] = useState<number | undefined>();
+  const [mentionedUserName, setMentionedUserName] = useState<string>();
 
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [commentToDelete, setCommentToDelete] = useState<number | null>(null);
+
+  const [commentToEdit, setCommentToEdit] = useState<number | null>(null);
+  const [editedContent, setEditedContent] = useState<string>("");
 
   const [commentToReport, setCommentToReport] = useState<number | null>(null);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
@@ -44,72 +44,109 @@ export default function CommentContainer() {
   const pathname = usePathname();
   const isAdminPage = pathname.includes("/admin/report/");
 
+  // 댓글 목록 초기화
   useEffect(() => {
-    const reportPost = Report_Dummy_Data.find(
-      (report) => report.reportId === Number(params.id)
-    );
-    const currentPostId = Post_Dummy_Data.find(
-      (post) =>
-        post.blogId === reportPost?.reportedBlogId &&
-        post.postId === reportPost.reportedPostId
-    )?.postId;
-    const commentsList = Comment_Dummy_Data.filter(
-      (comment) => comment.postId === currentPostId
-    );
-    setComments(commentsList);
-  }, [params.id]);
+    if (currentPost && currentPost.articleReplies) {
+      setComments(currentPost.articleReplies);
+    }
+  }, [currentPost]);
 
-  // 답글 버튼 클릭
-  const onClickReply = (commentId: number | null, userId: number | null) => {
-    setReplyParentId(commentId);
-    setMentionId(userId);
+  const onClickReply = (
+    commentId: number,
+    mentionId: number,
+    userName: string
+  ) => {
+    setParentReplyId(commentId);
+    setMentionId(mentionId);
+    setMentionedUserName(userName);
   };
 
-  // 답글 취소 버튼 클릭
-  const onClickCancel = () => {
-    setReplyParentId(null);
-    setMentionId(null);
+  const onClickReplyCancel = () => {
+    setParentReplyId(undefined);
+    setMentionedUserName("");
+    setMentionId(undefined);
   };
-  // 댓글 작성 제출
-  const submitComment = (data: { comment: string }) => {
-    const newComment: CommentForm = {
-      replyId: comments.length + 1,
-      postId: currentPost?.postId || 0,
-      userId: loggedInUserId,
-      mentionId: mentionId,
-      parentReplyId: replyParentId,
+
+  const submitComment = async (data: { comment: string }) => {
+    const requestBody = {
+      articleId: currentPost.articleId,
+      parentReplyId: parentReplyId,
+      mentionedUserBlogId: mentionId,
       content: data.comment,
-      createdAt: new Date().toISOString(),
-      modifiedAt: new Date().toISOString(),
     };
-    setComments((prevComments) => {
-      return [...(prevComments || []), newComment];
-    });
-    setReplyParentId(null);
-    setMentionId(null);
+    try {
+      if (accessToken) {
+        const response = await api.post(
+          "/blog-service/blog/board/article/reply",
+          requestBody,
+          {
+            headers: { Authorization: accessToken },
+          }
+        );
+      }
+      queryClient.invalidateQueries({ queryKey: ["postContent"] });
+    } catch (error) {
+      console.error("댓글 작성 오류: ", error);
+    }
+
+    setParentReplyId(undefined);
+    setMentionId(undefined);
+    setMentionedUserName("");
   };
 
-  // 답글 삭제
+  const onClickEdit = (replyId: number, commentContent: string) => {
+    setCommentToEdit(replyId);
+    setEditedContent(commentContent);
+  };
+  const onClickCancelEdit = () => {
+    setCommentToEdit(null);
+    setEditedContent("");
+  };
+  const updateComment = (content: string) => {
+    setEditedContent(content);
+  };
+
+  const confirmEditComment = async () => {
+    if (commentToEdit === null) return;
+    try {
+      const response = await api.put(
+        `/blog-service/blog/board/article/reply/${commentToEdit}`,
+        { content: editedContent },
+        {
+          headers: { Authorization: accessToken },
+        }
+      );
+      queryClient.invalidateQueries({ queryKey: ["postContent"] });
+    } catch (error) {
+      console.error("댓글 수정 실패:", error);
+    }
+    setCommentToEdit(null);
+    setEditedContent("");
+  };
+
   const onClickDelete = (replyId: number) => {
     setCommentToDelete(replyId);
     setIsDeleteDialogOpen(true);
   };
 
-  const confirmDeleteComment = () => {
+  const confirmDeleteComment = async () => {
     if (commentToDelete === null) return;
-    setComments((prevComments) =>
-      prevComments.filter(
-        (comment) =>
-          comment.replyId !== commentToDelete &&
-          comment.parentReplyId !== commentToDelete // 댓글과 연결된 답글도 함께 필터링
-      )
-    );
-
+    try {
+      const response = await api.delete(
+        `/blog-service/blog/board/article/reply/${commentToDelete}`,
+        {
+          data: { replyId: commentToDelete },
+          headers: { Authorization: accessToken },
+        }
+      );
+      queryClient.invalidateQueries({ queryKey: ["postContent"] });
+    } catch (error) {
+      console.error("댓글 삭제 실패:", error);
+    }
     setIsDeleteDialogOpen(false);
     setCommentToDelete(null);
   };
 
-  // 답글 신고
   const onClickReportComment = (id: number) => {
     setCommentToReport(id);
     setIsReportDialogOpen(true);
@@ -122,63 +159,88 @@ export default function CommentContainer() {
     setSelectedOption(null);
   };
 
-  const confirmReportComment = () => {
+  const confirmReportComment = async () => {
     if (commentToReport === null) return;
+    try {
+      const response = await api.post(
+        `/blog-service/blog/reply/report/${commentToReport}`,
+        {
+          reportCategory: selectedOption,
+          directCategory: customInput,
+        },
+        {
+          headers: { Authorization: accessToken },
+        }
+      );
+    } catch (error) {
+      console.error("댓글 신고 실패: ", error);
+    }
+
     setIsReportDialogOpen(false);
     setIsReportConfirmDialogOpen(true);
     setCommentToReport(null);
+    setCustomInput("");
     setSelectedOption(null);
   };
 
   return (
     <div className="flex flex-col w-full gap-4">
-      <p className="text-black text-lg">댓글 {comments.length}개</p>
+      <p className="text-black text-lg">댓글 {currentPost.replyCount}개</p>
 
       {/* 댓글 입력 */}
       {!isAdminPage && (
         <CommentInput
-          target={replyParentId ? "reply" : "comment"}
-          onSubmit={submitComment}
+          target={parentReplyId ? "reply" : "comment"}
           mentionId={mentionId}
-          onCancel={onClickCancel}
+          mentionedUserName={mentionedUserName}
+          onSubmit={submitComment}
+          onCancel={onClickReplyCancel}
         />
       )}
 
-      {comments
-        .filter((comment) => !comment.parentReplyId)
-        .map((comment) => (
-          <div key={comment.replyId}>
+      {comments.map((comment) => (
+        <div key={comment.replyId}>
+          <Comment
+            comment={{
+              ...comment, // 기존 comment 속성
+              isOwnComment: comment.blogId === userBlogId,
+              onEdit: () => onClickEdit(comment.replyId, comment.content),
+              isEditing: commentToEdit === comment.replyId,
+              onCancelEdit: onClickCancelEdit,
+              editedContent: editedContent,
+              onUpdateComment: updateComment,
+              confirmEdit: confirmEditComment,
+              onDelete: () => onClickDelete(comment.replyId),
+              onReport: () => onClickReportComment(comment.replyId),
+              onReplyClick: () =>
+                onClickReply(comment.replyId, comment.blogId, comment.userName),
+            }}
+          />
+          {comment.childReplies?.map((reply) => (
             <Comment
-              replyId={comment.replyId}
-              userId={comment.userId}
-              content={comment.content}
-              createdAt={comment.createdAt}
-              mentionId={comment.mentionId || null}
-              isOwnComment={comment.userId === loggedInUserId}
-              onDelete={() => onClickDelete(comment.replyId)}
-              onReport={() => onClickReportComment(comment.replyId)}
-              onReplyClick={() => onClickReply(comment.replyId, comment.userId)}
+              comment={{
+                ...reply, // 기존 reply 속성
+                isOwnComment: reply.blogId === userBlogId,
+                onEdit: () => onClickEdit(reply.replyId, reply.content),
+                isEditing: commentToEdit === reply.replyId,
+                onCancelEdit: onClickCancelEdit,
+                editedContent: editedContent,
+                onUpdateComment: updateComment,
+                confirmEdit: confirmEditComment,
+                onDelete: () => onClickDelete(reply.replyId),
+                onReport: () => onClickReportComment(reply.replyId),
+                onReplyClick: () =>
+                  onClickReply(
+                    reply.parentReplyId ?? 0,
+                    reply.blogId,
+                    reply.userName
+                  ),
+              }}
+              key={reply.replyId}
             />
-            {comments
-              .filter((reply) => reply.parentReplyId === comment.replyId)
-              .map((reply) => (
-                <Comment
-                  key={reply.replyId}
-                  replyId={reply.replyId}
-                  userId={reply.userId}
-                  content={reply.content}
-                  createdAt={reply.createdAt}
-                  mentionId={reply.mentionId || null}
-                  isOwnComment={reply.userId === loggedInUserId}
-                  onDelete={() => onClickDelete(reply.replyId)}
-                  onReport={() => onClickReportComment(reply.replyId)}
-                  onReplyClick={() =>
-                    onClickReply(reply.parentReplyId, reply.userId)
-                  }
-                />
-              ))}
-          </div>
-        ))}
+          ))}
+        </div>
+      ))}
 
       {/* 삭제 다이얼로그 컴포넌트 */}
       {isDeleteDialogOpen && (
