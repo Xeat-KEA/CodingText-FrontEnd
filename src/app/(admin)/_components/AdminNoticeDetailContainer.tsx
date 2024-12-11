@@ -105,7 +105,7 @@ export default function AdminNoticeDetailContainer() {
     if (noticeToDelete === null) return;
     setIsDeleteDialogOpen(false);
     setNoticeToDelete(null);
-    router.push(`/admin/notice`);
+    router.replace(`/admin/notice`);
 
     // 삭제 로직 아직 없음
     // try {
@@ -120,7 +120,7 @@ export default function AdminNoticeDetailContainer() {
     //   console.log(response);
     // setIsDeleteDialogOpen(false);
     // setNoticeToDelete(null);
-    // router.push(`/admin/notice`);
+    // router.replace(`/admin/notice`);
     // } catch (error) {
     //   console.error("공지사항 삭제 실패:", error);
     // }

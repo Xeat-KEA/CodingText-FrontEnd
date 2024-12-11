@@ -88,11 +88,11 @@ export interface CommentInputProps {
   onCancel: () => void;
 }
 
-export interface PostProps {
-  currentPost: BlogPost;
-  // currentCategory?: Category;
-  // currentChildCategory?: ChildCategory;
-}
+// export interface PostProps {
+//   currentPost: BlogPost;
+//   // currentCategory?: Category;
+//   // currentChildCategory?: ChildCategory;
+// }
 
 export interface BpFollowerIconProps {
   isFilled: Boolean;

@@ -1,26 +1,61 @@
 import PostHeader from "@/app/(blog)/_components/Post/PostHeader";
 import BackBtn from "@/app/_components/BackBtn";
 import { useParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { Report } from "../_interfaces/interfaces";
-import { Post_Dummy_Data, Report_Dummy_Data } from "../_constants/constants";
 import PostContent from "@/app/(blog)/_components/Post/PostContent";
 import ReportAction from "./ReportAction";
 import CommentContainer from "@/app/(blog)/_components/PostComment/CommentContainer";
-import { useBlogStore } from "@/app/stores";
+import api from "@/app/_api/config";
+import { useQuery } from "@tanstack/react-query";
+import { useCheckToken } from "@/app/_hooks/useCheckToken";
+import { usePostStore } from "@/app/stores";
+import { useState } from "react";
 
 export default function AdminReportContentContainer() {
+  const { accessToken, isTokenSet } = useCheckToken("/admin/sign-in");
+
   const router = useRouter();
   const params = useParams();
 
-  const reportPost = Report_Dummy_Data.find(
-    (report) => report.reportId === Number(params.id)
-  );
-  const currentPost = Post_Dummy_Data.find(
-    (post) =>
-      post.blogId === reportPost?.reportedBlogId &&
-      post.postId === reportPost.reportedPostId
-  );
+  const setCurrentPost = usePostStore((post) => post.setCurrentPost);
+
+  const [isLoaded, setIsLoaded] = useState(true);
+
+  const fetchReportData = async () => {
+    // params.id로 정보 조회해서 articleId와 commenId는 있으면 정보 받기
+    const response = await api.get(
+      `/blog-service/report/post/${params.id}`, // 수정
+      {
+        headers: { Authorization: accessToken },
+      }
+    );
+    console.log(response);
+    return response.data;
+  };
+
+  const { data: reportData } = useQuery({
+    queryKey: ["reportData", isTokenSet],
+    queryFn: fetchReportData,
+  });
+
+  // 신고된 게시글 내용 fetch - 비회원 게시글 조회 사용
+  const fetchPostData = async () => {
+    const response = await api.get(
+      `/blog-service/blog/board/nonUser/${reportData.articleId}`
+    );
+    const postData = response.data.data;
+    if (postData) {
+      setCurrentPost(postData);
+    }
+    setIsLoaded(false);
+    return postData;
+  };
+
+  const { data: reportPostData } = useQuery({
+    queryKey: ["reportPostContent", isTokenSet],
+    queryFn: fetchPostData,
+  });
+
+  if (isLoaded) return null;
 
   return (
     <div className="top-container">
@@ -34,21 +69,13 @@ export default function AdminReportContentContainer() {
         </div>
 
         {/* 게시물 헤더 */}
-        <div className="w-full">
-          {currentPost ? (
-            <PostHeader currentPost={currentPost} />
-          ) : (
-            <p>게시물을 불러오는 중입니다.</p>
-          )}
-        </div>
+        <div className="w-full">{reportPostData && <PostHeader />}</div>
 
         {/* 구분선 */}
-        <hr className="w-full border-t-1 border-border2" />
+        <hr className="division" />
 
         {/* 게시물 내용 */}
-        <div className="w-full">
-          {currentPost && <PostContent currentPost={currentPost} />}
-        </div>
+        <div className="w-full">{reportPostData && <PostContent />}</div>
 
         {/* 게시물 처리 버튼 */}
         <div className="w-full h-5">

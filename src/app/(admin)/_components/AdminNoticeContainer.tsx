@@ -18,22 +18,20 @@ export default function AdminNoticeContainer() {
   const { page, setPage, setLastPage } = usePaginationStore();
 
   const fetchNoticeList = async () => {
-    if (accessToken) {
-      const response = await api.get(`/admin-service/admins/announce`, {
-        params: { page: page, size: 9 },
-        headers: { Authorization: accessToken },
-      });
+    if (!accessToken) return null;
+    const response = await api.get(`/admin-service/admins/announce`, {
+      params: { page: page, size: 9 },
+      headers: { Authorization: accessToken },
+    });
 
-      // 페이지 정보 초기화
-      const lastPage = response.data.totalPages - 1;
-      if (page > lastPage) {
-        setPage(lastPage);
-      }
-      setLastPage(lastPage);
-
-      return response.data.content;
+    // 페이지 정보 초기화
+    const lastPage = response.data.totalPages - 1;
+    if (page > lastPage) {
+      setPage(lastPage);
     }
-    return null;
+    setLastPage(lastPage);
+
+    return response.data.content;
   };
 
   const { data } = useQuery<Notice[]>({

@@ -104,11 +104,11 @@ export default function CommentContainer() {
   };
   const updateComment = (content: string) => {
     setEditedContent(content);
-  }
+  };
 
   const confirmEditComment = async () => {
-    if(commentToEdit === null) return;
-    try{
+    if (commentToEdit === null) return;
+    try {
       const response = await api.put(
         `/blog-service/blog/board/article/reply/${commentToEdit}`,
         { content: editedContent },
@@ -117,13 +117,12 @@ export default function CommentContainer() {
         }
       );
       queryClient.invalidateQueries({ queryKey: ["postContent"] });
-    } catch(error){
+    } catch (error) {
       console.error("댓글 수정 실패:", error);
     }
     setCommentToEdit(null);
     setEditedContent("");
   };
-
 
   const onClickDelete = (replyId: number) => {
     setCommentToDelete(replyId);
@@ -202,40 +201,42 @@ export default function CommentContainer() {
       {comments.map((comment) => (
         <div key={comment.replyId}>
           <Comment
-          {...comment}
-            isOwnComment={comment.blogId === userBlogId}
-            onEdit={() => onClickEdit(comment.replyId, comment.content)}
-            isEditing={commentToEdit === comment.replyId}
-            onCancelEdit={onClickCancelEdit}
-            editedContent={editedContent}
-            onUpdateComment={updateComment}
-            confirmEdit={confirmEditComment}
-            onDelete={() => onClickDelete(comment.replyId)}
-            onReport={() => onClickReportComment(comment.replyId)}
-            onReplyClick={() =>
-              onClickReply(comment.replyId, comment.blogId, comment.userName)
-            }
+            comment={{
+              ...comment, // 기존 comment 속성
+              isOwnComment: comment.blogId === userBlogId,
+              onEdit: () => onClickEdit(comment.replyId, comment.content),
+              isEditing: commentToEdit === comment.replyId,
+              onCancelEdit: onClickCancelEdit,
+              editedContent: editedContent,
+              onUpdateComment: updateComment,
+              confirmEdit: confirmEditComment,
+              onDelete: () => onClickDelete(comment.replyId),
+              onReport: () => onClickReportComment(comment.replyId),
+              onReplyClick: () =>
+                onClickReply(comment.replyId, comment.blogId, comment.userName),
+            }}
           />
           {comment.childReplies?.map((reply) => (
             <Comment
-              {...reply}
+              comment={{
+                ...reply, // 기존 reply 속성
+                isOwnComment: reply.blogId === userBlogId,
+                onEdit: () => onClickEdit(reply.replyId, reply.content),
+                isEditing: commentToEdit === reply.replyId,
+                onCancelEdit: onClickCancelEdit,
+                editedContent: editedContent,
+                onUpdateComment: updateComment,
+                confirmEdit: confirmEditComment,
+                onDelete: () => onClickDelete(reply.replyId),
+                onReport: () => onClickReportComment(reply.replyId),
+                onReplyClick: () =>
+                  onClickReply(
+                    reply.parentReplyId ?? 0,
+                    reply.blogId,
+                    reply.userName
+                  ),
+              }}
               key={reply.replyId}
-              isOwnComment={reply.blogId === userBlogId}
-              onEdit={() => onClickEdit(reply.replyId, reply.content)}
-              isEditing={commentToEdit === reply.replyId}
-              onCancelEdit={onClickCancelEdit}
-              editedContent={editedContent}
-              onUpdateComment={updateComment}
-              confirmEdit={confirmEditComment}
-              onDelete={() => onClickDelete(reply.replyId)}
-              onReport={() => onClickReportComment(reply.replyId)}
-              onReplyClick={() =>
-                onClickReply(
-                  reply.parentReplyId ?? 0,
-                  reply.blogId,
-                  reply.userName
-                )
-              }
             />
           ))}
         </div>
