@@ -1,5 +1,4 @@
 import { useBlogStore, useCategoryStore, usePostStore } from "@/app/stores";
-import { PostProps } from "../../_interfaces/interfaces";
 import { BpFollowerIcon, ShareIcon } from "../Icons";
 import { useState } from "react";
 import Dialog from "@/app/_components/Dialog";

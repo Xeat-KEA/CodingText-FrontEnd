@@ -98,8 +98,6 @@ export default function BlogListContainer() {
 
     setResult(response.data.data.articleList);
     setCurrentBlogId(response.data.data.blogId || params.id);
-    
-    console.log(currentBlogId);
 
     // 페이지 정보 초기화
     const lastPage = response.data.data.pageInfo.totalPageNum;
@@ -113,7 +111,6 @@ export default function BlogListContainer() {
   const { data, isLoading, isError } = useQuery({
     queryKey: ["postList", page, currentBlogId],
     queryFn: fetchPostListData,
-    enabled: !!accessToken,
   });
 
   return (

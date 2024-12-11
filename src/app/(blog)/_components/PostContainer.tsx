@@ -36,7 +36,6 @@ export default function PostContainer() {
 
   // 블라인드 게시물
   const [isBlind, setIsBlind] = useState(false);
-
   // 비밀글
   const [isSecret, setIsSecret] = useState(false);
 

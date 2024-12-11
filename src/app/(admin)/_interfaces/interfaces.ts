@@ -13,12 +13,17 @@ export interface SignUpForm {
 
 export interface Report {
   reportId: number;
-  reportUserId: number;
-  reportedBlogId: number;
-  reportedPostId?: number;
-  reportedAt: string;
-  reportedCommentId?: number; // 댓글 신고
-  reportedCommentUserID?: number; // 댓글 작성자 ID
+  reportUserId: number; // 신고자 아이디
+  repoortUserName: string; // 신고자 이름
+  reportedBlogId: number; // 신고된 블로그 아이디
+  reportedBlogName: string; // 신고된 블로그 이름
+  reportedPostId?: number; // 신고된 게시글 아이디
+  reportedPostTitle?: string; // 신고된 게시글 제목
+  reportedDate: string;
+  reportedCommentId?: number; // 신고된 댓글
+  reportedCommentUserID?: number; // 신고된 댓글 작성자 ID
+  reportedCommentUserName?: string // 신고된 댓글 작성자 이름
+  reportedCommentContent: string // 신고된 댓글 내용
   reportReason: string; // 카테고리별 선택 신고 사유
   directReason?: string; // 직접 입력
 }
@@ -105,7 +110,7 @@ export interface PushFormContainerProps {
 export interface Notice {
   announceId: number;
   title: string;
-  content?: string;
+  content: string;
   createdDate: string;
 }
 export interface Admin {

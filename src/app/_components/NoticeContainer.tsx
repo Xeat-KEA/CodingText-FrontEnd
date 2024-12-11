@@ -18,11 +18,10 @@ export default function NoticeContainer() {
   // 페이지네이션
   const { page, setPage, setLastPage } = usePaginationStore();
 
-  // 추후 데이터 API
   const fetchUserNoticeList = async () => {
     if (accessToken) {
       const response = await api.get(`/user-service/users/announce`, {
-        params: { page: page, size: 10 },
+        params: { page: page, size: 9 },
         headers: { Authorization: accessToken },
       });
 

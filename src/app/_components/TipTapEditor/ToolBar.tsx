@@ -16,14 +16,18 @@ import {
 } from "./icons";
 import { useImageHandler } from "@/app/_hooks/useImageHandler";
 import { useTokenStore } from "@/app/stores";
+import { usePathname } from "next/navigation";
 
-export default function  ToolBar({ editor }: ToolBarProps) {
+export default function ToolBar({ editor }: ToolBarProps) {
   const { accessToken, isTokenSet } = useTokenStore();
+  const pathname = usePathname();
+
+  const role = pathname.startsWith("/admin") ? "ADMIN" : "";
 
   if (!editor) {
     return null;
   }
-  
+
   // Link 기능
   const handleLink = () => {
     // 이미 링크가 적용되었을 때
@@ -60,7 +64,7 @@ export default function  ToolBar({ editor }: ToolBarProps) {
     }
 
     // 이미지 업로드 및 주소 반환
-    const IMG_URL = await useImageHandler(files, accessToken);
+    const IMG_URL = await useImageHandler(files, accessToken, role);
 
     // 반환받은 이미지 주소를 통해 editor에 이미지 삽입
     editor.commands.setImage({
@@ -78,8 +82,7 @@ export default function  ToolBar({ editor }: ToolBarProps) {
               editor.chain().focus().toggleBold().run();
             }}
             disabled={!editor.can().chain().focus().toggleBold().run()}
-            className={`toolbar-btn ${editor.isActive("bold") && "is-active"}`}
-          >
+            className={`toolbar-btn ${editor.isActive("bold") && "is-active"}`}>
             <BoldIcon />
           </button>
           <button
@@ -90,8 +93,7 @@ export default function  ToolBar({ editor }: ToolBarProps) {
             disabled={!editor.can().chain().focus().toggleItalic().run()}
             className={`toolbar-btn ${
               editor.isActive("italic") && "is-active"
-            }`}
-          >
+            }`}>
             <ItalicIcon />
           </button>
           <button
@@ -102,8 +104,7 @@ export default function  ToolBar({ editor }: ToolBarProps) {
             disabled={!editor.can().chain().focus().toggleStrike().run()}
             className={`toolbar-btn ${
               editor.isActive("strike") && "is-active"
-            }`}
-          >
+            }`}>
             <StrikeIcon />
           </button>
         </div>
@@ -115,8 +116,7 @@ export default function  ToolBar({ editor }: ToolBarProps) {
               editor.chain().focus().toggleCode().run();
             }}
             disabled={!editor.can().chain().focus().toggleCode().run()}
-            className={`toolbar-btn ${editor.isActive("code") && "is-active"}`}
-          >
+            className={`toolbar-btn ${editor.isActive("code") && "is-active"}`}>
             <CodeIcon />
           </button>
           <button
@@ -126,8 +126,7 @@ export default function  ToolBar({ editor }: ToolBarProps) {
             }}
             className={`toolbar-btn ${
               editor.isActive("codeBlock") && "is-active"
-            }`}
-          >
+            }`}>
             <CodeBlockIcon />
           </button>
         </div>
@@ -140,8 +139,7 @@ export default function  ToolBar({ editor }: ToolBarProps) {
             }}
             className={`toolbar-btn ${
               editor.isActive("heading", { level: 1 }) && "is-active"
-            }`}
-          >
+            }`}>
             <H1Icon />
           </button>
           <button
@@ -151,8 +149,7 @@ export default function  ToolBar({ editor }: ToolBarProps) {
             }}
             className={`toolbar-btn ${
               editor.isActive("heading", { level: 2 }) && "is-active"
-            }`}
-          >
+            }`}>
             <H2Icon />
           </button>
           <button
@@ -162,8 +159,7 @@ export default function  ToolBar({ editor }: ToolBarProps) {
             }}
             className={`toolbar-btn ${
               editor.isActive("heading", { level: 3 }) && "is-active"
-            }`}
-          >
+            }`}>
             <H3Icon />
           </button>
         </div>
@@ -174,8 +170,7 @@ export default function  ToolBar({ editor }: ToolBarProps) {
             onClick={(e) => {
               e.preventDefault();
               handleLink();
-            }}
-          >
+            }}>
             <LinkIcon />
           </button>
           <input
@@ -201,8 +196,7 @@ export default function  ToolBar({ editor }: ToolBarProps) {
             }}
             className={`toolbar-btn ${
               editor.isActive("bulletList") && "is-active"
-            }`}
-          >
+            }`}>
             <BulletListIcon />
           </button>
           <button
@@ -212,8 +206,7 @@ export default function  ToolBar({ editor }: ToolBarProps) {
             }}
             className={`toolbar-btn ${
               editor.isActive("orderedList") && "is-active"
-            }`}
-          >
+            }`}>
             <OrderedListIcon />
           </button>
           <button
@@ -221,8 +214,7 @@ export default function  ToolBar({ editor }: ToolBarProps) {
               e.preventDefault();
               editor.chain().focus().setHorizontalRule().run();
             }}
-            className="toolbar-btn"
-          >
+            className="toolbar-btn">
             <HorizontalRuleIcon />
           </button>
         </div>
