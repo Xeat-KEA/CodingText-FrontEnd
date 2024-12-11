@@ -1,4 +1,4 @@
-FROM node:22.12.0-alpine
+FROM node:22.12
 ENV TZ Asia/Seoul
 WORKDIR /usr/src/app
 COPY package*.json ./
