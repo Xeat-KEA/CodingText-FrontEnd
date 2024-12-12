@@ -35,6 +35,7 @@ export interface BlogPost {
   checkRecommend: boolean;
   childCategoryId: number;
   childName: string;
+  codeTitle?: string;
   codeContent?: string;
   codeId?: number;
   content: string;

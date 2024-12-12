@@ -18,17 +18,13 @@ export default function NoticeDetailContainer() {
 
   // API 호출
   const fetchNoticeData = async () => {
-    if (!accessToken) return null;
-    const response = await api.get(
-      `/user-service/users/announce/${params.id}`,
-      { headers: { Authorization: accessToken } }
-    );
+    const response = await api.get(`/user-service/users/announce/${params.id}`);
     console.log(response);
     setCurrentNotice(response.data);
     return response.data.content;
   };
   const { data: userNoticData } = useQuery({
-    queryKey: ["userNoticeData", isTokenSet],
+    queryKey: ["userNoticeData"],
     queryFn: fetchNoticeData,
   });
 
@@ -66,10 +62,10 @@ export default function NoticeDetailContainer() {
         </div>
 
         {/* 구분선 */}
-        <hr className="w-full border-t-1 border-border2" />
+        <hr className="w-full border-t-1 border-border-2" />
 
         {/* 공지사항 내용 */}
-        <div className="w-full text-black border border-border2 rounded-xl p-4">
+        <div className="w-full text-black border border-border-2 rounded-xl p-4">
           <div
             className="prose"
             dangerouslySetInnerHTML={{
