@@ -8,11 +8,7 @@ export default function CodeCard({
   codeId,
   title,
   difficulty,
-  algorithm,
-  content,
   correctRate,
-  createdAt,
-  registerStatus,
 }: Code) {
   const router = useRouter();
 

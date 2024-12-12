@@ -4,9 +4,12 @@ import { useRouter } from "next/navigation";
 import { useGetYMD } from "@/app/_hooks/useGetYMD";
 import Dialog from "@/app/_components/Dialog";
 import { DialogCheckIcon } from "@/app/_components/Icons";
+import api from "@/app/_api/config";
+import { useTokenStore } from "@/app/stores";
 
 export default function HistoryCard({ history }: { history: History }) {
   const router = useRouter();
+  const { accessToken } = useTokenStore();
 
   const [isMounted, setisMounted] = useState(false);
   useEffect(() => {
@@ -15,6 +18,22 @@ export default function HistoryCard({ history }: { history: History }) {
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isRegistered, setIsRegistered] = useState(false);
+
+  const onRegister = async () => {
+    try {
+      const response = await api.post(
+        `/code-bank-service/code/history/register/${history.codeId}`,
+        {},
+        { headers: { Authorization: accessToken } }
+      );
+      if (response.status === 200) {
+        setIsRegistered((prev) => !prev);
+      }
+    } catch (err) {
+      // 실패의 경우 필터링 필요
+      console.log(err);
+    }
+  };
 
   return (
     isMounted && (
@@ -87,11 +106,7 @@ export default function HistoryCard({ history }: { history: History }) {
               backBtn="취소"
               onBackBtnClick={() => setIsDialogOpen((prev) => !prev)}
               primaryBtn="정식 등록 건의"
-              onBtnClick={() => {
-                // 문제 등록 신청 POST 로직 필요
-
-                setIsRegistered((prev) => !prev);
-              }}
+              onBtnClick={onRegister}
             />
           ) : (
             <Dialog

@@ -4,14 +4,15 @@ import ChattingPanel from "./ChattingPanel";
 import ChatInput from "./ChatInput";
 import CodeEditPanel from "./CodeEditPanel";
 import NewPostPanel from "./NewPostPanel";
-import { useCodingTestStore } from "@/app/stores";
+import { useCodingTestStore, useTokenStore } from "@/app/stores";
 import { ContainerProps } from "../_interface/interfaces";
 import { useEffect, useState } from "react";
 
 export default function SplittedContainer({ content, chats }: ContainerProps) {
   const { isPosting } = useCodingTestStore();
+  const { accessToken } = useTokenStore();
 
-  const [panelSize, setPanelSize] = useState([99, 1]);
+  const [panelSize, setPanelSize] = useState([50, 50]);
   const [isRunning, setIsRunning] = useState(false);
   const onSubmit = () => {
     setIsRunning(true);
@@ -29,27 +30,33 @@ export default function SplittedContainer({ content, chats }: ContainerProps) {
     <Splitter gutterSize={10} className="w-full h-screen pt-16 flex">
       {/* 채팅창 공간 */}
       <SplitterPanel>
-        <div className="flex flex-col w-full h-full">
-          <div className="h-full grow">
-            <Splitter
-              key={stateKey + ""}
-              layout="vertical"
-              gutterSize={10}
-              className="flex flex-col w-full h-full"
-            >
-              <SplitterPanel className="flex" size={panelSize[0]}>
-                <CodeChatPanel content={content} />
-              </SplitterPanel>
-              <SplitterPanel
-                className="flex overflow-hidden"
-                size={panelSize[1]}
+        {accessToken ? (
+          <div className="flex flex-col w-full h-full">
+            <div className="h-full grow">
+              <Splitter
+                key={stateKey + ""}
+                layout="vertical"
+                gutterSize={10}
+                className="flex flex-col w-full h-full"
               >
-                <ChattingPanel chats={chats} />
-              </SplitterPanel>
-            </Splitter>
+                <SplitterPanel className="flex" size={panelSize[0]}>
+                  <CodeChatPanel content={content} />
+                </SplitterPanel>
+                <SplitterPanel
+                  className="flex overflow-hidden"
+                  size={panelSize[1]}
+                >
+                  <ChattingPanel chats={chats} />
+                </SplitterPanel>
+              </Splitter>
+            </div>
+            <ChatInput onSubmit={onSubmit} />
           </div>
-          <ChatInput onSubmit={onSubmit} />
-        </div>
+        ) : (
+          <div className="h-full">
+            <CodeChatPanel content={content} />
+          </div>
+        )}
       </SplitterPanel>
       {/* 작성 관련 공간 */}
       <SplitterPanel className="flex">

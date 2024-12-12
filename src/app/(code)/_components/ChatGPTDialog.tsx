@@ -45,7 +45,8 @@ export default function ChatGPTDialog({
         headers: { Authorization: accessToken },
       }
     );
-    console.log(response);
+    const generatedCodeId = response.data.data.codeId;
+    router.push(`/coding-test/${generatedCodeId}`);
   };
 
   return (
