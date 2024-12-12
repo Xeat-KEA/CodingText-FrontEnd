@@ -30,7 +30,7 @@ export default function BlogResults() {
         result.slice((page - 1) * 20, page * 20).map((el, index) => (
           <div
             key={index}
-            className={`${index >= 2 && "border-t border-border2"}`}
+            className={`${index >= 2 && "border-t border-border-2"}`}
           >
             <BlogCard
               userId={el.userId}

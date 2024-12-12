@@ -1,13 +1,16 @@
 // 게시물 헤더 컴포넌트
 
 import { useCalculateDate } from "@/app/_hooks/useCalculateDate";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
-import { usePostStore } from "@/app/stores";
+import { useBlogStore, usePostStore } from "@/app/stores";
+import ProfileImgContainer from "@/app/_components/ProfileImgContainer";
 
 export default function PostHeader() {
+  const { currentBlogId } = useBlogStore();
   const { currentPost, isCodingPost } = usePostStore();
   const pathname = usePathname();
+  const router = useRouter();
   const isAdminPage = pathname.includes("/admin/report/");
 
   return (
@@ -16,23 +19,19 @@ export default function PostHeader() {
       <div className="flex justify-between items-center w-full">
         <div className="flex items-center gap-2">
           {isAdminPage && currentPost?.profileUrl && (
-            <div className="profile-image w-120 h-120 relative">
-              <Image
-                src={currentPost.profileUrl}
-                alt={`${currentPost.userName}의 프로필 이미지`}
+            // userId로 넘기는 걸로 수정
+            <div
+              className="profile-image w-120 h-120 relative"
+              onClick={() => router.push(`/admin/user/${currentBlogId}`)}>
+              <ProfileImgContainer
                 width={24}
                 height={24}
-                className="rounded-full"
-                priority
+                src={currentPost.profileUrl}
               />
             </div>
           )}
           <p className="text-sm text-body font-regular">
-            {isAdminPage ? (
-              currentPost.userName
-            ) : (
-              <>{currentPost.childName}</>
-            )}
+            {isAdminPage ? currentPost.userName : <>{currentPost.childName}</>}
           </p>
         </div>
         <div className="flex items-center gap-2 h-4">

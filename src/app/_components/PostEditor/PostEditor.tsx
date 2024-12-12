@@ -43,9 +43,17 @@ export default function PostEditor({
   });
 
   const { content, setContent } = useTiptapStore();
+
   const onValid = (data: PostForm) => {
-    const { parentCategoryId, ...rest } = data;
-    const newPostForm: PostForm = { ...rest, content };
+    const { ...rest } = data;
+
+    const newPostForm: PostForm = {
+      ...rest,
+      content,
+      ...(initialData?.parentCategoryId === 1 && {
+        childCategoryId: initialData?.childCategoryId,
+      }),
+    };
     onBtnClick(newPostForm);
   };
 
@@ -162,24 +170,43 @@ export default function PostEditor({
           {/* 게시판 선택 드롭다운 */}
           {!isCodingTest && (
             <div className="flex gap-4">
-              <CategoryDropDown
-                list={categoryList}
-                selection={category}
-                onSelectionClick={(selected) => {
-                  setCategory(selected);
-                  setFirstRendering(false);
-                }}
-                placeholder="상위 게시판 선택"
-              />
-              <CategoryDropDown
-                list={childCategoryList}
-                selection={childCategory}
-                onSelectionClick={(selected) => {
-                  setChildCategory(selected);
-                  setFirstRendering(false);
-                }}
-                placeholder="하위 게시판 선택"
-              />
+              {initialData?.parentCategoryId === 1 ? (
+                <>
+                  <div className="relative flex items-center w-full px-4 py-2 border border-border-2 rounded-lg bg-white">
+                    <span
+                      className={`grow flex justify-center text-xs text-black whitespace-nowrap `}>
+                      코딩 테스트 풀이
+                    </span>
+                  </div>
+                  <div className="flex items-center w-full px-4 py-2 border border-border-2 rounded-lg bg-white">
+                    <span
+                      className={`grow flex justify-center text-xs text-black whitespace-nowrap `}>
+                      {initialData.childName}
+                    </span>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <CategoryDropDown
+                    list={categoryList}
+                    selection={category}
+                    onSelectionClick={(selected) => {
+                      setCategory(selected);
+                      setFirstRendering(false);
+                    }}
+                    placeholder="상위 게시판 선택"
+                  />
+                  <CategoryDropDown
+                    list={childCategoryList}
+                    selection={childCategory}
+                    onSelectionClick={(selected) => {
+                      setChildCategory(selected);
+                      setFirstRendering(false);
+                    }}
+                    placeholder="하위 게시판 선택"
+                  />
+                </>
+              )}
             </div>
           )}
           {/* 텍스트 에디터 */}

@@ -14,6 +14,7 @@ import {
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useBase64 } from "@/app/_hooks/useBase64";
 import BackBtn from "@/app/_components/BackBtn";
+import LoadingAnimation from "@/app/_components/LoadingAnimation";
 
 export default function EditPostContainer() {
   const { accessToken, isTokenSet } = useTokenStore();
@@ -47,7 +48,6 @@ export default function EditPostContainer() {
         );
         return response.data.data;
       } catch (error) {
-        console.error("수정 게시글 내용 반환 오류: ", error);
         return null;
       }
     }
@@ -64,6 +64,7 @@ export default function EditPostContainer() {
       ...data,
       content: contentDe,
     };
+    console.log(updatedData);
     try {
       const response = await api.put(
         `/blog-service/blog/board/article/${params.postId}`,
@@ -76,12 +77,17 @@ export default function EditPostContainer() {
         // post 후 새 게시글 id 반환
         setIsPostedDialogOpen((prev) => !prev);
       } else {
-        console.error("게시글 수정 실패:", response);
       }
-    } catch (error) {
-      console.error("게시글 수정 오류:", error);
-    }
+    } catch (error) {}
   };
+
+  if (isLoading) {
+    return (
+      <div className="w-full h-80 flex-center">
+        <LoadingAnimation />
+      </div>
+    );
+  }
 
   return (
     <>

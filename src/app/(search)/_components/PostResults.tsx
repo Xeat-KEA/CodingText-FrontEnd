@@ -33,7 +33,7 @@ export default function PostResults() {
         result.slice((page - 1) * 10, page * 10).map((el, index) => (
           <div
             key={index}
-            className={`${index >= 2 && "border-t border-border2"}`}>
+            className={`${index >= 2 && "border-t border-border-2"}`}>
             <PostCard key={el.articleId} post={el} />
           </div>
         ))

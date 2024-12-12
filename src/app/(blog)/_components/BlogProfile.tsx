@@ -40,9 +40,7 @@ export default function BlogProfile({ profile }: profileProps) {
 
       // 프로필 데이터 다시 가져오기
       queryClient.invalidateQueries({ queryKey: ["blogInfo"] });
-    } catch (error) {
-      console.error("팔로우 요청 오류", error);
-    }
+    } catch (error) {}
   };
 
   const onClickReportBlog = (id: number) => {
@@ -58,7 +56,7 @@ export default function BlogProfile({ profile }: profileProps) {
   };
 
   const confirmReportBlog = async () => {
-    if (blogToReport === null) return;
+    if (blogToReport === null || !selectedOption) return;
 
     try {
       const response = await api.post(
@@ -74,9 +72,7 @@ export default function BlogProfile({ profile }: profileProps) {
 
       setIsReportDialogOpen(false);
       setIsReportConfirmDialogOpen(true);
-    } catch (error) {
-      console.error("블로그 신고 실패: ", error);
-    }
+    } catch (error) {}
 
     setBlogToReport(null);
     setCustomInput("");
@@ -173,7 +169,7 @@ export default function BlogProfile({ profile }: profileProps) {
                 value={customInput}
                 onChange={(event) => setCustomInput(event.target.value)}
                 placeholder="신고 사유를 적어주세요"
-                className="w-full h-28 border pl-4 p-2 rounded-md text-base font-regular"
+                className="w-full h-28 resize-none border border-border-2 pl-4 p-2 rounded-md text-base font-regular"
               />
             </div>
           )}

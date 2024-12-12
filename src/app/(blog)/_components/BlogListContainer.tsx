@@ -100,7 +100,7 @@ export default function BlogListContainer() {
     setCurrentBlogId(response.data.data.blogId || params.id);
 
     // 페이지 정보 초기화
-    const lastPage = response.data.data.pageInfo.totalPageNum;
+    const lastPage = response.data.data.pageInfo.totalPageNum -1;
     if (page > lastPage) {
       setPage(lastPage);
     }
@@ -139,7 +139,7 @@ export default function BlogListContainer() {
             result.map((el, index) => (
               <div
                 key={index}
-                className={`${index >= 2 && "border-t border-border2"}`}>
+                className={`${index >= 2 && "border-t border-border-2"}`}>
                 <PostCard post={el} />
               </div>
             ))

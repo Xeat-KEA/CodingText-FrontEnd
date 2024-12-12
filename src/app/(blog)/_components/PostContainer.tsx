@@ -11,10 +11,9 @@ import {
 } from "@/app/stores";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { BlogPost } from "@/app/(blog)/_interfaces/interfaces";
 import api from "@/app/_api/config";
 import { useQuery } from "@tanstack/react-query";
-import Dialog from "@/app/_components/Dialog";
+import LoadingAnimation from "@/app/_components/LoadingAnimation";
 
 export default function PostContainer() {
   const { accessToken, isTokenSet } = useTokenStore();
@@ -59,7 +58,7 @@ export default function PostContainer() {
       setIsLoaded(false);
       return postData;
     } catch (error) {
-      console.error("비회원 게시글 반환오류:", error);
+      router.back();
       return null;
     }
   };
@@ -88,10 +87,11 @@ export default function PostContainer() {
           setIsSecret(postData.isSecret);
           setCurrentPost(postData);
         }
+        console.log(postData);
         setIsLoaded(false);
         return postData;
       } catch (error) {
-        console.error("게시글 내용 반환 오류: ", error);
+        router.back();
         return null;
       }
     }
@@ -115,8 +115,13 @@ export default function PostContainer() {
     }
   }, [isBlind, isSecret, router]);
 
-  if (isLoaded) return null;
-
+  if (isLoaded || isLoading) {
+    return (
+      <div className="w-full h-80 flex-center">
+        <LoadingAnimation />
+      </div>
+    );
+  }
   return (
     <>
       {!isBlind && (
@@ -125,7 +130,7 @@ export default function PostContainer() {
             {/* 목록으로 버튼*/}
             <div className="w-full">
               <BackBtn
-                title="목록으로"
+                title="이전으로"
                 onClick={
                   () => router.back()
                   // router.push(`/category/${currentPost.childCategoryId}`, {
@@ -141,7 +146,7 @@ export default function PostContainer() {
             </div>
 
             {/* 구분선 */}
-            <hr className="w-full border-t-1 border-border2" />
+            <hr className="w-full border-t-1 border-border-2" />
 
             {/* 게시물 내용 */}
             <div className="w-full">{currentPost && <PostContent />}</div>
@@ -150,7 +155,7 @@ export default function PostContainer() {
             <div className="w-full h-5">{currentPost && <PostAction />}</div>
 
             {/* 구분선 */}
-            <hr className="w-full border-t-1 border-border2" />
+            <hr className="w-full border-t-1 border-border-2" />
 
             {/* 댓글  - Comment */}
             <CommentContainer />
@@ -158,11 +163,12 @@ export default function PostContainer() {
             {/* 목록으로 버튼*/}
             <div className="w-full">
               <BackBtn
-                title="목록으로"
-                onClick={() =>
-                  router.push(`/category/${currentPost.childCategoryId}`, {
-                    scroll: false,
-                  })
+                title="이전으로"
+                onClick={
+                  () => router.back()
+                  // router.push(`/category/${currentPost.childCategoryId}`, {
+                  //   scroll: false,
+                  // })
                 }
               />
             </div>

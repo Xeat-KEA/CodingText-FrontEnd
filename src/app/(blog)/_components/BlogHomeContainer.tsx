@@ -36,7 +36,6 @@ export default function BlogHomeContainer() {
       setProfile(response.data.data);
       return response.data.data;
     } catch (error) {
-      console.error("블로그 프로필 조회 실패:", error);
       return null;
     }
   };
@@ -59,7 +58,6 @@ export default function BlogHomeContainer() {
       setProfile(response.data.data);
       return response.data.data;
     } catch (error) {
-      console.error("블로그 프로필 조회 실패:", error);
       return null;
     }
   };
