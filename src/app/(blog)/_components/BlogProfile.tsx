@@ -12,6 +12,7 @@ import api from "@/app/_api/config";
 import { useQueryClient } from "@tanstack/react-query";
 import { profileProps } from "@/app/_interfaces/interfaces";
 import ProfileImgContainer from "@/app/_components/ProfileImgContainer";
+import { motion } from "framer-motion";
 
 export default function BlogProfile({ profile }: profileProps) {
   // 로그인 여부 확인
@@ -26,6 +27,11 @@ export default function BlogProfile({ profile }: profileProps) {
   const [isReportDialogOpen, setIsReportDialogOpen] = useState(false);
   const [isReportConfirmDialogOpen, setIsReportConfirmDialogOpen] =
     useState(false);
+
+    const buttonVariants = {
+      rest: { scale: 1 },
+      clicked: { scale: 0.95, transition: { type: "spring", stiffness: 300 } },
+    };
 
   const onClickFollow = async () => {
     try {
@@ -114,12 +120,15 @@ export default function BlogProfile({ profile }: profileProps) {
                   </>
                 ) : (
                   <>
-                    <button
+                    <motion.button
                       className="flex items-center gap-1"
-                      onClick={onClickFollow}>
+                      onClick={onClickFollow}
+                      variants={buttonVariants}
+                      initial="rest"
+                      whileTap="clicked">
                       <BpFollowerIcon isFilled={profile.followCheck} />
                       <p className="text-primary-1 text-xs font-semibold">{`팔로워 ${profile.followCount}`}</p>
-                    </button>
+                    </motion.button>
 
                     <IconBtn
                       type="report"

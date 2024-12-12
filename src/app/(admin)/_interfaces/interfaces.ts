@@ -12,20 +12,22 @@ export interface SignUpForm {
 }
 
 export interface Report {
-  reportId: number;
+  userReportId: number; // 신고 아이디
+  articleId: number; // 게시글 아이디
+  createdDate: string; // 신고된 날짜
+  reportCategory: string; // 카테고리별 선택 신고 사유
+  directCategory?: string; // 직접 입력
+  reporterName: string; // 신고자 이름
+  reportedUserName: string; // 신고된 블로그 이름
+  title: string; // 신고된 게시글 제목
+  content: string; // 신고된 댓글 내용
+  replyId?: number; // 신고된 댓글
+  userId?: string; // 신고된 블로그 userId 
+
   reportUserId: number; // 신고자 아이디
-  repoortUserName: string; // 신고자 이름
   reportedBlogId: number; // 신고된 블로그 아이디
-  reportedBlogName: string; // 신고된 블로그 이름
-  reportedPostId?: number; // 신고된 게시글 아이디
-  reportedPostTitle?: string; // 신고된 게시글 제목
-  reportedDate: string;
-  reportedCommentId?: number; // 신고된 댓글
   reportedCommentUserID?: number; // 신고된 댓글 작성자 ID
-  reportedCommentUserName?: string // 신고된 댓글 작성자 이름
-  reportedCommentContent: string // 신고된 댓글 내용
-  reportReason: string; // 카테고리별 선택 신고 사유
-  directReason?: string; // 직접 입력
+  reportedCommentUserName?: string; // 신고된 댓글 작성자 이름
 }
 
 export interface AdminUserInfo {

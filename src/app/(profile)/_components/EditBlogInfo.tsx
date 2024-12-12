@@ -27,7 +27,6 @@ export default function EditBlogInfo() {
           originalImageList: response.data.data.originalImageList || [],
         };
       } catch (error) {
-        console.error("블로그 데이터 요청 실패: ", error);
         return "";
       }
     }
@@ -67,7 +66,6 @@ export default function EditBlogInfo() {
       );
       queryClient.invalidateQueries({ queryKey: ["mainContent"] });
     } catch (error) {
-      console.error("블로그 소개글 수정 오류: ", error);
     }
   };
 

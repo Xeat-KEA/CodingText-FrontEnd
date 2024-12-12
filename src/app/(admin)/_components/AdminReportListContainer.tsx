@@ -39,18 +39,17 @@ export default function AdminReportListContainer() {
         headers: { Authorization: accessToken },
       });
 
-      console.log(response);
+      console.log(response.data.data);
       const { data } = response.data;
 
       // 페이지 정보 초기화
-      const lastPage = response.data.data.pageInfo.totalPageNum;
+      const lastPage = response.data.data.pageInfo.totalPageNum -1;
       if (page > lastPage) {
         setPage(lastPage);
       }
       setLastPage(lastPage);
       return data.reportList;
     } catch (error) {
-      console.error(`${tab} 신고 내역 조회 오류:`, error);
       return null;
     }
   };
@@ -70,17 +69,16 @@ export default function AdminReportListContainer() {
 
       {/* 신고 리스트 */}
       <div className="w-full flex flex-col mb-6 divide-y divide-border-2 border-b border-border-2">
-        {data?.length &&
+        {data &&
           data
             .filter((el) => {
               return tab === "게시글"
-                ? el.reportedCommentId === undefined &&
-                    el.reportedPostId !== undefined
+                ? el.replyId === undefined && el.articleId !== undefined
                 : tab === "블로그"
-                ? el.reportedPostId === undefined
-                : el.reportedCommentId !== undefined;
+                ? el.articleId === undefined
+                : el.replyId !== undefined;
             })
-            .map((el) => <ReportCard key={el.reportId} report={el} />)}
+            .map((el) => <ReportCard key={el.userReportId} report={el} />)}
       </div>
       {/* 페이지네이션 */}
       <Pagination />

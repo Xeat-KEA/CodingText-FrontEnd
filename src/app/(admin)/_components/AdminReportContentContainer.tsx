@@ -17,24 +17,33 @@ export default function AdminReportContentContainer() {
   const params = useParams();
 
   const setCurrentPost = usePostStore((post) => post.setCurrentPost);
+  const setReportPostId = usePostStore((reportId) => reportId.setReportPostId);
+  const setReportReplyId = usePostStore(
+    (reportId) => reportId.setReportReplyId
+  );
 
   const [isLoaded, setIsLoaded] = useState(true);
 
   const fetchReportData = async () => {
-    // params.id로 정보 조회해서 articleId와 commenId는 있으면 정보 받기
     const response = await api.get(
-      `/blog-service/report/post/${params.id}`, // 수정
+      `/blog-service/admin/userReport/info/${params.id}`,
       {
         headers: { Authorization: accessToken },
       }
     );
-    console.log(response);
-    return response.data;
+    console.log(response.data.data);
+
+    setReportPostId(response.data.data.articleId);
+    if (response.data.data.replyId) {
+      setReportReplyId(response.data.data.replyId);
+    }
+    return response.data.data;
   };
 
   const { data: reportData } = useQuery({
     queryKey: ["reportData", isTokenSet],
     queryFn: fetchReportData,
+    enabled: !!accessToken,
   });
 
   // 신고된 게시글 내용 fetch - 비회원 게시글 조회 사용
@@ -45,8 +54,8 @@ export default function AdminReportContentContainer() {
     const postData = response.data.data;
     if (postData) {
       setCurrentPost(postData);
+      setIsLoaded(false);
     }
-    setIsLoaded(false);
     return postData;
   };
 
@@ -83,7 +92,7 @@ export default function AdminReportContentContainer() {
         </div>
 
         {/* 구분선 */}
-        <hr className="w-full border-t-1 border-border2" />
+        <hr className="w-full border-t-1 border-border-2" />
 
         {/* 댓글  - Comment */}
         <CommentContainer />

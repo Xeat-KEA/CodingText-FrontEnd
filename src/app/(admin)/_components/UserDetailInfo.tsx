@@ -7,6 +7,7 @@ import AdminResponseDialogs from "./AdminResponseDialogs";
 import Dialog from "@/app/_components/Dialog";
 import api from "@/app/_api/config";
 import { useTokenStore } from "@/app/stores";
+import { useBase64 } from "@/app/_hooks/useBase64";
 
 export default function UserDetailInfo({
   userDetail,
@@ -56,12 +57,12 @@ export default function UserDetailInfo({
           }
         );
       } else if ((type = "blogIntro")) {
-        const response = await api.post(
-          "/user-service/users/init",
+        const response = await api.put(
+          `/blog-service/admin/blog/init/${userDetail.blogId}`,
           {},
           {
             headers: { Authorization: accessToken },
-            params: { UserId: userDetail.userId },
+            // params: { UserId: userDetail.userId },
           }
         );
       }
@@ -95,8 +96,7 @@ export default function UserDetailInfo({
         <span className="text-xl-content">{userDetail.nickName}</span>
         <button
           onClick={() => setSelected("nickName")}
-          className="edit-btn-primary"
-        >
+          className="edit-btn-primary">
           초기화
         </button>
       </div>
@@ -110,8 +110,7 @@ export default function UserDetailInfo({
         />
         <button
           onClick={() => setSelected("profileUrl")}
-          className="edit-btn-primary"
-        >
+          className="edit-btn-primary">
           초기화
         </button>
       </div>
@@ -121,8 +120,7 @@ export default function UserDetailInfo({
         <span className="edit-sm-content">{userDetail.profileMessage}</span>
         <button
           onClick={() => setSelected("profileMessage")}
-          className="edit-btn-primary"
-        >
+          className="edit-btn-primary">
           초기화
         </button>
       </div>
@@ -133,14 +131,17 @@ export default function UserDetailInfo({
           <div
             className="prose"
             dangerouslySetInnerHTML={{
-              __html: DOMPurify.sanitize(userDetail.blogIntro),
+              __html: DOMPurify.sanitize(
+                userDetail.blogIntro
+                  ? useBase64("decode", userDetail.blogIntro)
+                  : ""
+              ),
             }}
           />
         </div>
         <button
           onClick={() => setSelected("blogIntro")}
-          className="edit-btn-primary"
-        >
+          className="edit-btn-primary">
           초기화
         </button>
       </div>
