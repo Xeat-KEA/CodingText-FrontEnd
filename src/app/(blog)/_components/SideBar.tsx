@@ -23,6 +23,7 @@ import {
 import { useCheckToken } from "@/app/_hooks/useCheckToken";
 import { handleWindowResize } from "@/app/utils";
 import Board from "./Sidebar-Board/Board";
+import { BUTTON_VARIANTS } from "@/app/_constants/constants";
 
 export default function SideBar() {
   handleWindowResize();
@@ -132,13 +133,15 @@ export default function SideBar() {
     label: string;
     Icon: React.FC;
   }) => (
-    <Link
-      href={href}
-      className="flex items-center h-6 py-6 text-black justify-between w-60 pl-6 pr-2"
-    >
-      <p className="text-xs">{label}</p>
-      <Icon />
-    </Link>
+    <motion.div variants={BUTTON_VARIANTS} initial="initial" whileHover="hover">
+      <Link
+        href={href}
+        className="flex items-center h-6 py-6 text-black justify-between w-60 pl-6 pr-2"
+      >
+        <p className="text-xs">{label}</p>
+        <Icon />
+      </Link>
+    </motion.div>
   );
 
   return (
@@ -148,7 +151,7 @@ export default function SideBar() {
         x: !isCollapsed || isHovered ? "0px" : "-200px",
       }}
       transition={{ type: "tween" }}
-      className={`fixed top-0 left-0 h-screen bg-white border-r shadow-xl z-20 ${
+      className={`fixed top-0 left-0 h-screen bg-white border-r shadow-xl z-20 w-60 ${
         isHovered && isCollapsed ? "rounded-r-3xl" : ""
       }`}
       onMouseEnter={isHovered ? handleMouseEnter : undefined}
@@ -162,7 +165,7 @@ export default function SideBar() {
     >
       {/* 사이드바 상단 요소 */}
       <div
-        className="flex items-center h-8 mt-5 mb-3 justify-between w-60 pl-6 pr-2"
+        className="flex items-center h-8 mt-5 mb-3 justify-between pl-6 pr-2"
         onMouseEnter={!isHovered ? handleMouseEnter : undefined}
         onMouseLeave={!isHovered ? handleMouseLeave : undefined}
       >

@@ -74,3 +74,8 @@ export const ALGORITHM_LIST: Selection[] = [
   { content: "힙", selection: "HEAP" },
   { content: "스택", selection: "STACK" },
 ];
+
+export const BUTTON_VARIANTS = {
+  initial: { backgroundColor: "rgb(255, 255, 255)" },
+  hover: { backgroundColor: "rgb(247, 247, 247)" },
+};

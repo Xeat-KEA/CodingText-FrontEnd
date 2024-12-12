@@ -7,30 +7,45 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { CreateCodeForm } from "../_interfaces/interfaces";
 import { useBase64 } from "@/app/_hooks/useBase64";
+import api from "@/app/_api/config";
+import { useTokenStore } from "@/app/stores";
 
 export default function ChatGPTDialog({
   onBackBtnClick,
 }: {
   onBackBtnClick: () => void;
 }) {
+  const { accessToken } = useTokenStore();
   const router = useRouter();
   const ref = useOutsideClick(onBackBtnClick);
 
-  const { register, handleSubmit, setValue, watch } = useForm<CreateCodeForm>();
-  const [difficulty, setDifficulty] = useState("1단계");
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    setError,
+    clearErrors,
+    formState: { errors },
+  } = useForm<CreateCodeForm>();
+  const [difficulty, setDifficulty] = useState("");
   const [algorithm, setAlgorithm] = useState("");
-  const onValid = (data: CreateCodeForm) => {
+  const onValid = async (data: CreateCodeForm) => {
     if (!data.difficulty) {
-      // 난이도 설정 필요
-      console.log("error");
-    } else {
-      const chatMessage = `난이도:${data.difficulty}
-      ${data.algorithm ? `,알고리즘:${data.algorithm}` : ""}
-      ${data.requirement ? `,요구사항:${data.requirement}` : ""}
-      다음과 같은 내용으로 코딩 테스트 문제를 만들어줘`;
-      const encodedMessage = useBase64("encode", chatMessage);
-      router.push(`/coding-test/ai?chatMessage=${encodedMessage}`);
+      setError("difficulty", { type: "custom" });
+      return;
     }
+    if (!data.algorithm) {
+      setError("algorithm", { type: "custom" });
+      return;
+    }
+    const response = await api.post(
+      "/code-llm-service/llm/code-generating",
+      data,
+      {
+        headers: { Authorization: accessToken },
+      }
+    );
+    console.log(response);
   };
 
   return (
@@ -57,19 +72,23 @@ export default function ChatGPTDialog({
               onSelectionClick={(selected) => {
                 setValue("difficulty", selected.selection);
                 setDifficulty(selected.content);
+                clearErrors("difficulty");
               }}
+              isError={errors.difficulty !== undefined}
             />
             <DropDown
-              placeholder="(선택) 알고리즘"
+              placeholder="알고리즘"
               list={ALGORITHM_LIST}
               selection={algorithm}
               onSelectionClick={(selected) => {
                 setValue("algorithm", selected.selection);
                 setAlgorithm(selected.content);
+                clearErrors("algorithm");
               }}
+              isError={errors.algorithm !== undefined}
             />
             <textarea
-              {...register("requirement")}
+              {...register("etc")}
               className="w-full h-[120px] px-4 py-2 text-black border border-border-2 rounded-2xl resize-none"
               placeholder="(선택) 추가 요청사항을 적어주세요"
             />

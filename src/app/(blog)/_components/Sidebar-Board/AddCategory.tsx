@@ -20,16 +20,22 @@ const AddCategory: React.FC<AddCategoryProps> = ({
   };
 
   return (
-    <div className="flex items-center h-10">
+    <div
+      className={`flex items-center h-8 ${
+        !isChildCategory ? "pl-6" : "pl-10"
+      } py-2`}
+    >
       <input
         type="text"
         value={newCategoryTitle}
         onChange={(e) => setNewCategoryTitle(e.target.value)}
-        className={
-          isChildCategory
-            ? "bg-bg-1 text-xs font-regular pl-1 py-1 w-32"
-            : "bg-bg-1 text-body text-sm font-regular p-1 h-7 w-32"
-        }
+        className={`bg-bg-1 text-body font-regular
+          ${
+            isChildCategory
+              ? "text-xs pl-1 py-1 w-32"
+              : "text-sm font-regular p-1 h-7 w-32"
+          }
+        `}
         onKeyPress={handleKeyPress}
         placeholder={
           isChildCategory ? "새 하위 게시판 제목" : "새 상위 게시판 제목"
@@ -41,7 +47,8 @@ const AddCategory: React.FC<AddCategoryProps> = ({
           onClick={() => {
             handleAddCategory(newCategoryTitle, parentId);
             setNewCategoryTitle("");
-          }}>
+          }}
+        >
           추가
         </button>
         <button
@@ -50,7 +57,8 @@ const AddCategory: React.FC<AddCategoryProps> = ({
             isChildCategory
               ? setIsAddingChildCategory(Number(parentId), false)
               : setIsAddingCategory(false)
-          }>
+          }
+        >
           취소
         </button>
       </div>

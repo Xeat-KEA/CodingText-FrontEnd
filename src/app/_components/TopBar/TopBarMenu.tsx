@@ -1,4 +1,4 @@
-import { TOP_BAR_MENU } from "@/app/_constants/constants";
+import { BUTTON_VARIANTS, TOP_BAR_MENU } from "@/app/_constants/constants";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
@@ -9,10 +9,6 @@ export default function TopBarMenu({
   token: string;
   blogId: number | null;
 }) {
-  const buttonVariants = {
-    initial: { backgroundColor: "rgb(255, 255, 255)" },
-    hover: { backgroundColor: "rgb(247, 247, 247)" },
-  };
   return (
     <>
       {TOP_BAR_MENU.map((el, index) => {
@@ -21,16 +17,18 @@ export default function TopBarMenu({
           return (
             <motion.div
               key={index}
-              variants={buttonVariants}
+              variants={BUTTON_VARIANTS}
               initial="initial"
               whileHover="hover"
               transition={{ duration: 0.2 }}
-              className="top-bar-menu-btn">
+              className="top-bar-menu-btn"
+            >
               <Link
                 key={index}
                 href={el.url === "/blog" ? `/blog/${blogId}` : el.url}
                 scroll={false}
-                className="flex items-center w-full h-full px-2 max-lg:px-12">
+                className="flex items-center w-full h-full px-2 max-lg:px-12"
+              >
                 {el.content}
               </Link>
             </motion.div>
@@ -41,15 +39,17 @@ export default function TopBarMenu({
             return (
               <motion.div
                 key={index}
-                variants={buttonVariants}
+                variants={BUTTON_VARIANTS}
                 initial="initial"
                 whileHover="hover"
-                className="top-bar-menu-btn">
+                className="top-bar-menu-btn"
+              >
                 <Link
                   key={index}
                   href={el.url}
                   scroll={false}
-                  className="flex items-center w-full h-full  px-2 max-lg:px-12">
+                  className="flex items-center w-full h-full  px-2 max-lg:px-12"
+                >
                   {el.content}
                 </Link>
               </motion.div>
