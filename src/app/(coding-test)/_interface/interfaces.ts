@@ -25,3 +25,8 @@ export interface CompileResult {
   output?: string;
   result: string;
 }
+
+export interface ContainerProps {
+  content: string;
+  chats?: Chat[];
+}

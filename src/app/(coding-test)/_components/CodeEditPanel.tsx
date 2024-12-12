@@ -97,8 +97,9 @@ export default function CodeEditPanel() {
           }
         );
         if (response.status === 200) {
-          setIsCorrect((prev) => !prev);
-          setIsDialogOpen((prev) => !prev);
+          console.log(response.data);
+          /* setIsCorrect((prev) => !prev);
+          setIsDialogOpen((prev) => !prev); */
         }
         setIsRunning(false);
       } catch (err: any) {

@@ -29,7 +29,7 @@ export default function SplittedCodePart() {
     >
       <SplitterPanel size={panelSize[0]}>
         {/* 코드 에디터 */}
-        <div className="relative w-full h-full pb-4 bg-[#292A2F]">
+        <div className="relative w-full h-full bg-[#292A2F] border-b border-border-2">
           <div className="absolute flex w-full h-full">
             <CodeEditor />
           </div>
@@ -38,7 +38,7 @@ export default function SplittedCodePart() {
       {/* 컴파일러 / 메모장 */}
       <SplitterPanel
         size={panelSize[1]}
-        className="w-full flex flex-col shrink-0 overflow-hidden px-6 border-b border-border-2"
+        className="w-full flex flex-col shrink-0 overflow-hidden px-6"
       >
         {/* 탭바 */}
         <TabBar menuList={CODING_TAB_BAR_MENU} />

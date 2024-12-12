@@ -8,7 +8,7 @@ export default function CodePart() {
   const { memo, setMemo } = useCodingTestStore();
   const { tab } = useTabStore();
   return (
-    <div className="w-full h-full flex flex-col gap-4">
+    <div className="w-full h-full flex flex-col gap-2">
       <div className="h-full flex flex-col gap-4">
         {/* 코드 에디터 */}
         <div className="flex h-full">
@@ -16,7 +16,7 @@ export default function CodePart() {
         </div>
       </div>
       {/* 컴파일러 / 메모장 */}
-      <div className="w-full h-[280px] flex flex-col shrink-0 px-6 pb-4 border-b border-border-2">
+      <div className="w-full h-[280px] flex flex-col shrink-0 px-6 pb-4">
         {/* 탭바 */}
         <TabBar menuList={CODING_TAB_BAR_MENU} />
         {/* 컴파일러 */}
