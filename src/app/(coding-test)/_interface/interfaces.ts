@@ -30,3 +30,8 @@ export interface ContainerProps {
   content: string;
   chats?: Chat[];
 }
+
+export interface SubmitResult {
+  runtime: number;
+  result: boolean;
+}

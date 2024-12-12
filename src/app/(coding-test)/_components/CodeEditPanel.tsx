@@ -14,6 +14,7 @@ import CodePart from "./CodePart";
 import SplittedCodePart from "./SplittedCodePart";
 import CodePartBtns from "./CodePartBtns";
 import { isAxiosError } from "axios";
+import { SubmitResult } from "../_interface/interfaces";
 
 export default function CodeEditPanel() {
   const router = useRouter();
@@ -30,6 +31,7 @@ export default function CodeEditPanel() {
     setIsRunning,
     setCompiledResult,
     setCompileError,
+    setSubmitResult,
   } = useCodingTestStore();
 
   const [isCorrect, setIsCorrect] = useState(false);
@@ -48,6 +50,7 @@ export default function CodeEditPanel() {
     if (!isRunning) {
       try {
         setIsRunning(true);
+        setSubmitResult([]);
         setCompileError("");
         const response = await api.post(
           "/code-compile-service/code/compile",
@@ -87,7 +90,24 @@ export default function CodeEditPanel() {
       try {
         setIsRunning(true);
         setCompileError("");
-        const response = await api.post(
+        setSubmitResult([
+          { result: true, runtime: 32 },
+          { result: true, runtime: 35 },
+          { result: true, runtime: 37 },
+          { result: true, runtime: 38 },
+          { result: true, runtime: 125 },
+          { result: true, runtime: 32 },
+          { result: true, runtime: 35 },
+          { result: true, runtime: 37 },
+          { result: true, runtime: 38 },
+          { result: true, runtime: 125 },
+          { result: true, runtime: 32 },
+          { result: true, runtime: 35 },
+          { result: true, runtime: 37 },
+          { result: true, runtime: 38 },
+          { result: true, runtime: 125 },
+        ]);
+        /* const response = await api.post(
           "/code-compile-service/code/submit",
           data,
           {
@@ -97,13 +117,18 @@ export default function CodeEditPanel() {
           }
         );
         if (response.status === 200) {
-          console.log(response.data);
-          /* setIsCorrect((prev) => !prev);
-          setIsDialogOpen((prev) => !prev); */
-        }
+          const result: SubmitResult[] = response.data.data.result;
+          if (result.filter((el) => el.result === false).length === 0) {
+            setIsCorrect(true);
+            setIsDialogOpen((prev) => !prev);
+          } else {
+            setIsDialogOpen((prev) => !prev);
+          }
+        } */
         setIsRunning(false);
       } catch (err: any) {
         if (isAxiosError(err)) {
+          setCompileError(err.response?.data.message);
           setIsDialogOpen((prev) => !prev);
         }
         setIsRunning(false);

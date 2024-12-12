@@ -52,6 +52,9 @@ export const useCodingTestStore = create<CodingTestStore>((set) => ({
   // 컴파일 에러 여부
   compileError: "",
   setCompileError: (error) => set({ compileError: error }),
+  // 제출 결과
+  submitResult: [],
+  setSubmitResult: (result) => set({ submitResult: result }),
 }));
 
 // 탭바 메뉴 관련 전역변수

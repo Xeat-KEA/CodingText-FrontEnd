@@ -1,10 +1,10 @@
 import { useCodingTestStore, useTokenStore } from "@/app/stores";
-import CodeChatPanel from "./CodeChatPanel";
 import ChattingPanel from "./ChattingPanel";
 import ChatInput from "./ChatInput";
 import CodeEditPanel from "./CodeEditPanel";
 import NewPostPanel from "./NewPostPanel";
 import { ContainerProps } from "../_interface/interfaces";
+import CodeContentPanel from "./CodeContentPanel";
 
 export default function UnsplittedContainer({
   content,
@@ -14,9 +14,13 @@ export default function UnsplittedContainer({
   const { accessToken } = useTokenStore();
   return (
     <div className="w-full pt-16 flex flex-col">
-      <CodeChatPanel content={content} />
-      {accessToken && <ChattingPanel chats={chats} />}
-      <ChatInput onSubmit={() => {}} />
+      <CodeContentPanel content={content} />
+      {accessToken && (
+        <>
+          <ChattingPanel chats={chats} />
+          <ChatInput onSubmit={() => {}} />
+        </>
+      )}
       {!isPosting ? <CodeEditPanel /> : <NewPostPanel />}
     </div>
   );

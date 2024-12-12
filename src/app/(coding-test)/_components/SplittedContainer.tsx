@@ -1,5 +1,4 @@
 import { Splitter, SplitterPanel } from "primereact/splitter";
-import CodeChatPanel from "./CodeChatPanel";
 import ChattingPanel from "./ChattingPanel";
 import ChatInput from "./ChatInput";
 import CodeEditPanel from "./CodeEditPanel";
@@ -7,6 +6,7 @@ import NewPostPanel from "./NewPostPanel";
 import { useCodingTestStore, useTokenStore } from "@/app/stores";
 import { ContainerProps } from "../_interface/interfaces";
 import { useEffect, useState } from "react";
+import CodeContentPanel from "./CodeContentPanel";
 
 export default function SplittedContainer({ content, chats }: ContainerProps) {
   const { isPosting } = useCodingTestStore();
@@ -40,7 +40,7 @@ export default function SplittedContainer({ content, chats }: ContainerProps) {
                 className="flex flex-col w-full h-full"
               >
                 <SplitterPanel className="flex" size={panelSize[0]}>
-                  <CodeChatPanel content={content} />
+                  <CodeContentPanel content={content} />
                 </SplitterPanel>
                 <SplitterPanel
                   className="flex overflow-hidden"
@@ -54,7 +54,7 @@ export default function SplittedContainer({ content, chats }: ContainerProps) {
           </div>
         ) : (
           <div className="h-full">
-            <CodeChatPanel content={content} />
+            <CodeContentPanel content={content} />
           </div>
         )}
       </SplitterPanel>

@@ -1,4 +1,4 @@
-export default function CodeChatPanel({ content }: { content: string }) {
+export default function CodeContentPanel({ content }: { content: string }) {
   return (
     <div className="max-md:h-[400px] w-full h-full flex flex-col gap-6 overflow-y-auto bg-white border-b border-border-2 relative">
       <div
