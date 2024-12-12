@@ -109,6 +109,7 @@ export default function TopBar() {
         headers: { Authorization: accessToken },
         params: { page: pageParam, size: 5 },
       });
+      console.log(response);
       return response.data.data;
     } else {
       return null;
@@ -178,8 +179,7 @@ export default function TopBar() {
                 pathname.startsWith("/code-post")
               ? "max-w-1000"
               : "max-w-1200"
-          }`}
-        >
+          }`}>
           {/* 탑바 좌측 요소 */}
           <div className="flex items-center gap-14">
             <Link href="/" scroll={false}>
@@ -188,7 +188,10 @@ export default function TopBar() {
             {/* 메뉴 (화면 크기 lg 이상) */}
             {isTokenSet && (
               <ul className="flex h-full items-center gap-2 max-lg:hidden">
-                <TopBarMenu token={accessToken} blogId={userInfo?.blogId ?? null}/>
+                <TopBarMenu
+                  token={accessToken}
+                  blogId={userInfo?.blogId ?? null}
+                />
               </ul>
             )}
           </div>
@@ -206,8 +209,7 @@ export default function TopBar() {
                   <button
                     ref={noticeRef}
                     className="relative"
-                    onClick={() => onIconClick("notice")}
-                  >
+                    onClick={() => onIconClick("notice")}>
                     {!checkedNotice && (
                       <div className="absolute w-1 h-1 rounded-full bg-red right-[2px] top-[2px]"></div>
                     )}
@@ -243,7 +245,7 @@ export default function TopBar() {
               placeholder="검색어를 입력해주세요"
             />
           </div>
-          <TopBarMenu token={accessToken} blogId={userInfo?.blogId ?? null}/>
+          <TopBarMenu token={accessToken} blogId={userInfo?.blogId ?? null} />
         </div>
       </motion.nav>
       {/* 알림 팝업 */}
@@ -253,8 +255,7 @@ export default function TopBar() {
           style={{
             right: popUpLocation,
           }}
-          className="absolute bg-white top-[calc(100%+8px)] w-[396px] h-[300px] flex flex-col items-center rounded-lg shadow-1 divide-y divide-border-1 overflow-y-auto"
-        >
+          className="absolute bg-white top-[calc(100%+8px)] w-[396px] h-[300px] flex flex-col items-center rounded-lg shadow-1 divide-y divide-border-1 overflow-y-auto">
           {pushes !== undefined && pushes.length !== 0 ? (
             pushes?.map((el) => <NoticeCard key={el?.noticeId} push={el!} />)
           ) : (
@@ -268,8 +269,7 @@ export default function TopBar() {
               ref={ref}
               className={`w-full flex-center shrink-0 ${
                 isLoading ? "h-full" : "h-10"
-              }`}
-            >
+              }`}>
               <LoadingAnimation />
             </div>
           )}
