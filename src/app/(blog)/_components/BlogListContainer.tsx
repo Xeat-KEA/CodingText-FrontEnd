@@ -77,9 +77,14 @@ export default function BlogListContainer() {
     );
 
     let endpoint = "";
+    const keyword = searchParams.get("keyword");
+
     let queryParams: Record<string, any> = { page: page, size: 5 };
 
-    if (boardType === "ALL") {
+    if (keyword) {
+      endpoint = `/blog-service/blog/board/search/${currentBlogId}`;
+      queryParams.searchWord = keyword;
+    } else if (boardType === "ALL") {
       endpoint = `/blog-service/blog/board/article/${currentBlogId}`;
     } else if (boardType === "PARENT") {
       const categoryId =
@@ -96,11 +101,12 @@ export default function BlogListContainer() {
 
     const response = await api.get(endpoint, { params: queryParams });
 
+    console.log(response);
     setResult(response.data.data.articleList);
     setCurrentBlogId(response.data.data.blogId || params.id);
 
     // 페이지 정보 초기화
-    const lastPage = response.data.data.pageInfo.totalPageNum -1;
+    const lastPage = response.data.data.pageInfo.totalPageNum - 1;
     if (page > lastPage) {
       setPage(lastPage);
     }
@@ -109,7 +115,7 @@ export default function BlogListContainer() {
     return response.data.data.articleList;
   };
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["postList", page, currentBlogId],
+    queryKey: ["postList", page, currentBlogId, searchParams.get("keyword")],
     queryFn: fetchPostListData,
   });
 

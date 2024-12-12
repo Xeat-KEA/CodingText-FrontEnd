@@ -35,7 +35,6 @@ export default function PostCard({ post }: { post: Post }) {
   const [passwordDialog, setPasswordDialog] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
 
-  console.log(post);
   const onClickPost = () => {
     if (!post.isSecret) {
       router.push(`/post/${post.articleId}`);
