@@ -51,6 +51,10 @@ export default function NoticeCard({ push }: { push: Push }) {
             해제 하였습니다.
           </>
         );
+      case "코딩테스트 문제 등록 승인 알림":
+        return <>신청하신 문제 등록이 승인되었습니다</>;
+      case "코딩테스트 문제 등록 거절 알림":
+        return <>신청하신 문제 등록이 거절되었습니다</>;
       default:
         return "알림 내용이 없습니다.";
     }
