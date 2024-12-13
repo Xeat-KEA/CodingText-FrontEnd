@@ -50,7 +50,6 @@ export interface AdminUserDetail {
 
 export interface UserListCardProps {
   userInfo: AdminUserInfo;
-  onClick: () => void;
 }
 
 export interface Testcase {

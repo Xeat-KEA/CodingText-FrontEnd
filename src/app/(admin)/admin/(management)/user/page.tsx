@@ -8,19 +8,14 @@ import Pagination from "@/app/_components/Pagination";
 import { useCheckToken } from "@/app/_hooks/useCheckToken";
 import { usePaginationStore } from "@/app/stores";
 import { useQuery } from "@tanstack/react-query";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 export default function UserManagementPage() {
-  const router = useRouter();
   const { accessToken, isTokenSet } = useCheckToken("/admin/sign-in");
   const { page, setPage, setLastPage } = usePaginationStore();
 
   const searchParams = useSearchParams();
   const keyword = searchParams.get("keyword") || "";
-
-  const onClickUser = (id: number) => {
-    router.push(`/admin/user/${id}`);
-  };
 
   const fetchUserList = async () => {
     if (accessToken) {
@@ -52,7 +47,7 @@ export default function UserManagementPage() {
           <div className="flex flex-col">
             <UserListTopBar />
             {data?.map((el) => (
-              <UserListCard key={el.userId} userInfo={el} onClick={() => {}} />
+              <UserListCard key={el.userId} userInfo={el} />
             ))}
           </div>
           <Pagination />
