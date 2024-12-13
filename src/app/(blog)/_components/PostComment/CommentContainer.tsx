@@ -260,13 +260,17 @@ export default function CommentContainer() {
           }}
           redBtn="삭제"
           onBtnClick={confirmDeleteComment}>
-          <DropDown
-            isSmall={false}
-            selection={selectedOption || ""}
-            list={REPORT_REASONS}
-            onSelectionClick={(selected) => setSelectedOption(selected.content)}
-            placeholder="분류"
-          />
+          {isAdminPage && (
+            <DropDown
+              isSmall={false}
+              selection={selectedOption || ""}
+              list={REPORT_REASONS}
+              onSelectionClick={(selected) =>
+                setSelectedOption(selected.content)
+              }
+              placeholder="분류"
+            />
+          )}
           {selectedOption === "직접 입력" && (
             <div className="mt-6">
               <textarea

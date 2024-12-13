@@ -132,6 +132,7 @@ export interface Post {
   category?: string;
 
   childName?: string;
+  nickname?: string;
 }
 
 export interface ProfileImgSelectionProps {
@@ -420,7 +421,7 @@ export interface PostStore {
   currentPost: BlogPost;
   setCurrentPost: (post: BlogPost) => void;
   isCodingPost: boolean;
-  setIsCodinPost: (isCodingPost: boolean) => void;
+  setIsCodingPost: (isCodingPost: boolean) => void;
   reportPostId: number;
   setReportPostId: (reportId: number) => void;
   reportReplyId: number;

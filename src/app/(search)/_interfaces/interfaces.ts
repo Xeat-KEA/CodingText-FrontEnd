@@ -22,7 +22,8 @@ export interface PostResult {
 }
 
 export interface BlogResult {
-  userId: number;
-  nickName: string;
+  id: number;
+  nickname: string;
   profileMessage: string;
+  profileUrl: string;
 }

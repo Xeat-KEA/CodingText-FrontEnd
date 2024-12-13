@@ -20,7 +20,7 @@ export default function NoticeCard({ push }: { push: Push }) {
         return <>{userMessage} 님이 새로운 댓글을 남겼어요</>;
       case "답글 알림":
         return <>{userMessage} 님이 새로운 답글을 남겼어요</>;
-      case "언급 알림":
+      case "언급된 사용자 알림":
         return <>{userMessage} 님이 사용자님을 언급했어요</>;
       case "팔로우 알림":
         return <>{userMessage} 님이 팔로우했어요</>;

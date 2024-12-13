@@ -39,7 +39,6 @@ export default function AdminReportListContainer() {
         headers: { Authorization: accessToken },
       });
 
-      console.log(response.data.data);
       const { data } = response.data;
 
       // 페이지 정보 초기화

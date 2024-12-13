@@ -142,7 +142,7 @@ export default function PostAction() {
       setIsDeleteDialogOpen(false);
       setPostToDelete(null);
 
-      router.push(`/category/${currentPost.childCategoryId}`);
+      router.back();
     } catch (error) {}
   };
 
@@ -154,7 +154,6 @@ export default function PostAction() {
         variants={buttonVariants}
         initial="rest"
         whileTap="clicked">
-        {" "}
         <BpFollowerIcon isFilled={currentPost.checkRecommend} />
         <p className="text-primary-1 text-xs font-semibold">{`좋아요 ${currentPost?.likeCount}`}</p>
       </motion.button>
@@ -168,7 +167,7 @@ export default function PostAction() {
           <ShareIcon />
           <p className="text-black text-xs font-semibold">{`공유`}</p>
         </motion.button>
-        {!isOwnBlog ? (
+        {isOwnBlog ? (
           <>
             <IconBtn
               type="edit"

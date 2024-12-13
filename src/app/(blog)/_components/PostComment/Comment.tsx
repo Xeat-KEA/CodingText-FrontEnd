@@ -28,7 +28,7 @@ export default function Comment({ comment }: { comment: CommentProps }) {
             className="flex gap-2 items-center cursor-pointer"
             onClick={() => {
               if (isAdminPage) {
-                router.push(`/admin/user/${comment.blogId}`); // 추후 수정 필요시 userId로
+                router.push(`/admin/user/${comment.userId}`);
               } else {
                 router.push(`/blog/${comment.blogId}`);
               }
@@ -43,7 +43,7 @@ export default function Comment({ comment }: { comment: CommentProps }) {
                 />
               </div>
             )}
-            <p className="text-xs text-body font-semibold">
+            <p className="text-xs text-body font-semibold hover:underline">
               {comment.userName}
             </p>
           </div>

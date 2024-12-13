@@ -15,21 +15,19 @@ export default function SelectionBar({ menuList }: SelectionBarProps) {
           <div
             key={index}
             className={`pr-4 cursor-pointer ${index !== 0 && "pl-4"}`}
-            onClick={() => setParams("tab", el.selection)}
-          >
+            onClick={() => setParams("tab", el.selection)}>
             <span
               className={`flex items-center text-sm text-black  h-full ${
                 searchParams.get("tab") === el.selection &&
                 "font-bold border-b-[3px] border-primary-1 pt-[3px]"
-              }`}
-            >
+              }`}>
               {el.content}
             </span>
           </div>
         ))}
       </nav>
       {/* 필터링 */}
-      {<TabBarFilter />}
+      {searchParams.get("tab") !== "BLOG" && <TabBarFilter />}
     </div>
   );
 }

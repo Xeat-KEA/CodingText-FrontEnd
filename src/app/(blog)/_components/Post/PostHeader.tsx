@@ -2,7 +2,6 @@
 
 import { useCalculateDate } from "@/app/_hooks/useCalculateDate";
 import { usePathname, useRouter } from "next/navigation";
-import Image from "next/image";
 import { useBlogStore, usePostStore } from "@/app/stores";
 import ProfileImgContainer from "@/app/_components/ProfileImgContainer";
 
@@ -17,12 +16,13 @@ export default function PostHeader() {
     <div className="flex flex-col w-full h-[90px] justify-center gap-2">
       {/* 하위 게시판(admin은 사용자 프로필), 조회수, 날짜 */}
       <div className="flex justify-between items-center w-full">
-        <div className="flex items-center gap-2">
+        <div
+          className="flex items-center gap-2 cursor-pointer"
+          onClick={() =>
+            router.push(isAdminPage ? `/admin/user/${currentPost.userId}` : `#`)
+          }>
           {isAdminPage && currentPost?.profileUrl && (
-            // userId로 넘기는 걸로 수정
-            <div
-              className="profile-image w-120 h-120 relative"
-              onClick={() => router.push(`/admin/user/${currentBlogId}`)}>
+            <div className="profile-image w-120 h-120 relative ">
               <ProfileImgContainer
                 width={24}
                 height={24}
@@ -47,11 +47,22 @@ export default function PostHeader() {
       </div>
 
       {/* 제목 */}
-      <div className="flex w-full text-xl font-semibold">
+      <div className="flex w-full text-xl font-semibold gap">
         <p className="text-black line-clamp-2">
           {isCodingPost && (
-            <span className="text-primary-1">#{currentPost?.codeId} </span>
-          )}
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                router.push(
+                  `/search?keyword=${currentPost.codeId}&tab=POST&category=CODE&order=ACCURACY`,
+                  { scroll: false }
+                );
+              }}
+              className="text-primary-1 hover:underline">
+              #{currentPost?.codeId}
+            </button>
+          )}{" "}
           {currentPost?.title}
         </p>
       </div>

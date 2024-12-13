@@ -7,7 +7,7 @@ import {
   SecretPostIcon,
 } from "./Icons";
 import { useCalculateDate } from "../_hooks/useCalculateDate";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useBase64 } from "../_hooks/useBase64";
 import DOMPurify from "isomorphic-dompurify";
 import { useBlogStore, useTokenStore } from "../stores";
@@ -20,7 +20,9 @@ import api from "../_api/config";
 export default function PostCard({ post }: { post: Post }) {
   const { accessToken, isTokenSet } = useTokenStore();
 
+  const pathname = usePathname();
   const router = useRouter();
+  const isSearchPage = pathname.includes("/search");
 
   const date = useCalculateDate(post.createdDate);
 
@@ -28,6 +30,8 @@ export default function PostCard({ post }: { post: Post }) {
     ? "블라인드 처리된 게시글입니다."
     : post.isSecret
     ? "비밀번호를 입력하여 게시글을 확인하세요."
+    : isSearchPage
+    ? post.content
     : useBase64("decode", post.content);
 
   const [isSecret, setIsSecret] = useState(false);

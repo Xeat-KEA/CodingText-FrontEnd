@@ -26,7 +26,7 @@ export default function PostContainer() {
 
   const setCurrentBlogId = useBlogStore((state) => state.setCurrentBlogId);
   const setCurrentPost = usePostStore((post) => post.setCurrentPost);
-  const setIsCodingPost = usePostStore((state) => state.setIsCodinPost);
+  const setIsCodingPost = usePostStore((state) => state.setIsCodingPost);
 
   const setCategoryId = useCategoryStore((state) => state.setCategoryId);
   const setChildCategoryId = useCategoryStore(
@@ -39,6 +39,16 @@ export default function PostContainer() {
   const [isSecret, setIsSecret] = useState(false);
 
   const [isLoaded, setIsLoaded] = useState(true);
+
+  // 조회수
+  useEffect(() => {
+    const increaseViewCount = async () => {
+      await api.put(
+        `/blog-service/blog/board/article/viewCount/${params.postId}`
+      );
+    };
+    increaseViewCount();
+  }, [params]);
 
   // 비회원용 게시글 내용 api 연결
   const fetchNonUserPostData = async () => {
@@ -58,47 +68,42 @@ export default function PostContainer() {
       setIsLoaded(false);
       return postData;
     } catch (error) {
-      router.back();
       return null;
     }
   };
-  const { data: nonUserPostData } = useQuery({
-    queryKey: ["nonUserPostContent", isTokenSet, params.postId],
+  const { data: nonUserPostContent } = useQuery({
+    queryKey: ["nonUserPostContent", params.postId],
     queryFn: fetchNonUserPostData,
   });
 
   // 회원용 게시글 내용 api 연결
   const fetchPostData = async () => {
-    if (accessToken) {
-      // 회원 -> 추후 비회원 로직 추가
-      try {
-        const response = await api.get(
-          `/blog-service/blog/board/${params.postId}`,
-          {
-            headers: { Authorization: accessToken },
-          }
-        );
-        const postData = response.data.data;
-        if (postData) {
-          setCurrentBlogId(postData.blogId);
-          setChildCategoryId(postData.childCategoryId);
-          setIsCodingPost(postData.codeId !== undefined);
-          setIsBlind(postData.isBlind);
-          setIsSecret(postData.isSecret);
-          setCurrentPost(postData);
-        }
-        console.log(postData);
-        setIsLoaded(false);
-        return postData;
-      } catch (error) {
-        router.back();
-        return null;
+    if (!accessToken) return null;
+    const response = await api.get(
+      `/blog-service/blog/board/${params.postId}`,
+      {
+        headers: { Authorization: accessToken },
       }
+    );
+    console.log(response);
+
+    const postData = response.data.data;
+    if (postData) {
+      setCurrentBlogId(postData.blogId);
+      setChildCategoryId(postData.childCategoryId);
+      setIsCodingPost(postData.codeId !== undefined);
+      setIsBlind(postData.isBlind);
+      setIsSecret(postData.isSecret);
+      setCurrentPost(postData);
     }
+
+    setIsLoaded(false);
+
+    return postData;
   };
 
   const {
-    data: postData,
+    data: postContent,
     isLoading,
     isError,
   } = useQuery({
@@ -115,13 +120,14 @@ export default function PostContainer() {
     }
   }, [isBlind, isSecret, router]);
 
-  if (isLoaded || isLoading) {
+  if (isLoaded) {
     return (
       <div className="w-full h-80 flex-center">
         <LoadingAnimation />
       </div>
     );
   }
+
   return (
     <>
       {!isBlind && (
