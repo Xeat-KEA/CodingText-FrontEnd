@@ -1,4 +1,10 @@
 export interface Chat {
+  answer: string;
+  chatHistoryId: number;
+  question: string;
+}
+
+export interface NewChat {
   role: string;
   content: string;
 }
@@ -8,8 +14,6 @@ export interface ChatInputProps {
 }
 
 export interface ChatInputForm {
-  correctOrNot: boolean;
-  sendWithCode: boolean;
   content: string;
 }
 
@@ -28,10 +32,20 @@ export interface CompileResult {
 
 export interface ContainerProps {
   content: string;
-  chats?: Chat[];
+  historyId?: number;
 }
 
 export interface SubmitResult {
   runtime: number;
   result: boolean;
+}
+
+export interface ChatsResponse {
+  chatResponseList: Chat[];
+  firstPage: boolean;
+  lastPage: boolean;
+  listSize: number;
+  totalElements: number;
+  totalPage: number;
+  currentPage: number;
 }

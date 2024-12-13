@@ -14,6 +14,7 @@ import {
   WindowSizeStore,
 } from "./_interfaces/interfaces";
 import { RegisterStore } from "./(admin)/_interfaces/interfaces";
+import { NewChat } from "./(coding-test)/_interface/interfaces";
 
 // 토큰 저장 전역변수
 export const useTokenStore = create<TokenStore>((set) => ({
@@ -190,4 +191,10 @@ export const useWindowSizeStore = create<WindowSizeStore>((set) => ({
 export const useChatStore = create<ChatStore>((set) => ({
   isLoading: false,
   setIsLoading: (state) => set({ isLoading: state }),
+  isIncludingAnswer: false,
+  setIsIncludingAnswer: (state) => set({ isIncludingAnswer: state }),
+  sendWithCode: false,
+  setSendWithCode: (state) => set({ sendWithCode: state }),
+  newChats: [],
+  setNewChats: (newList: NewChat[]) => set({ newChats: newList }),
 }));

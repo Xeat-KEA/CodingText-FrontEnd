@@ -3,28 +3,28 @@ import ChattingPanel from "./ChattingPanel";
 import ChatInput from "./ChatInput";
 import CodeEditPanel from "./CodeEditPanel";
 import NewPostPanel from "./NewPostPanel";
-import { useCodingTestStore, useTokenStore } from "@/app/stores";
+import { useChatStore, useCodingTestStore, useTokenStore } from "@/app/stores";
 import { ContainerProps } from "../_interface/interfaces";
 import { useEffect, useState } from "react";
 import CodeContentPanel from "./CodeContentPanel";
 
-export default function SplittedContainer({ content, chats }: ContainerProps) {
+export default function SplittedContainer({
+  content,
+  historyId,
+}: ContainerProps) {
   const { isPosting } = useCodingTestStore();
   const { accessToken } = useTokenStore();
 
   const [panelSize, setPanelSize] = useState([50, 50]);
-  const [isRunning, setIsRunning] = useState(false);
-  const onSubmit = () => {
-    setIsRunning(true);
-    // api 호출
-  };
+  const { isLoading, newChats } = useChatStore();
+
   const [stateKey, setStateKey] = useState(0);
   useEffect(() => {
-    if (isRunning) {
+    if (isLoading) {
       setStateKey((prev) => prev + 1);
       setPanelSize([50, 50]);
     }
-  }, [isRunning]);
+  }, [isLoading]);
 
   return (
     <Splitter gutterSize={10} className="w-full h-screen pt-16 flex">
@@ -32,7 +32,7 @@ export default function SplittedContainer({ content, chats }: ContainerProps) {
       <SplitterPanel>
         {accessToken ? (
           <div className="flex flex-col w-full h-full">
-            <div className="h-full grow">
+            <div className="h-[calc(100%-96px)]">
               <Splitter
                 key={stateKey + ""}
                 layout="vertical"
@@ -46,11 +46,11 @@ export default function SplittedContainer({ content, chats }: ContainerProps) {
                   className="flex overflow-hidden"
                   size={panelSize[1]}
                 >
-                  <ChattingPanel chats={chats} />
+                  <ChattingPanel historyId={historyId} newChats={newChats} />
                 </SplitterPanel>
               </Splitter>
             </div>
-            <ChatInput onSubmit={onSubmit} />
+            <ChatInput historyId={historyId} />
           </div>
         ) : (
           <div className="h-full">

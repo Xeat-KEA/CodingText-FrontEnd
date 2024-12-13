@@ -11,11 +11,10 @@ import { PROGRAMMING_LANGUAGES } from "@/app/_constants/constants";
 import { useCheckToken } from "@/app/_hooks/useCheckToken";
 import SplittedContainer from "../../_components/SplittedContainer";
 import UnsplittedContainer from "../../_components/UnsplittedContainer";
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import api from "@/app/_api/config";
 import { useParams } from "next/navigation";
 import { useBase64 } from "@/app/_hooks/useBase64";
-import { useInView } from "react-intersection-observer";
 
 export default function CodingTestPage() {
   const { accessToken, isTokenSet } = useCheckToken();
@@ -78,58 +77,13 @@ export default function CodingTestPage() {
     queryFn: fetchCodeInfo,
   });
 
-  // 채팅 정보
-  const fetchChats = async ({ pageParam }: { pageParam?: number }) => {
-    if (historyId) {
-      const { data } = await api.get(
-        `/code-llm-service/llm/history/${historyId}`,
-        {
-          params: { page: pageParam, size: 5 },
-          headers: { Authorization: accessToken },
-        }
-      );
-      return data.data;
-    } else {
-      return null;
-    }
-  };
-  // 무한스크롤 데이터 가져오기
-  const {
-    data: chats,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-    isLoading,
-  } = useInfiniteQuery({
-    queryKey: ["chats", historyId],
-    queryFn: fetchChats,
-    initialPageParam: 0,
-    getNextPageParam: (lastPage, allPages) => {
-      return undefined;
-    },
-  });
-
-  // 무한스크롤 트리거
-  const { ref, inView } = useInView();
-  useEffect(() => {
-    if (inView) {
-      fetchNextPage();
-    }
-  }, [inView]);
-
   return (
     <>
       {codeInfo && windowSize ? (
         windowSize >= 768 ? (
-          <SplittedContainer
-            content={codeContent}
-            // chats={chats}
-          />
+          <SplittedContainer content={codeContent} historyId={historyId} />
         ) : (
-          <UnsplittedContainer
-            content={codeContent}
-            // chats={chats}
-          />
+          <UnsplittedContainer content={codeContent} historyId={historyId} />
         )
       ) : (
         <div className="w-screen h-screen">

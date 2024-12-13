@@ -1,7 +1,7 @@
 import DOMPurify from "isomorphic-dompurify";
-import { Chat } from "../_interface/interfaces";
+import { Chat, NewChat } from "../_interface/interfaces";
 
-export default function ChatBubble({ role, content }: Chat) {
+export default function ChatBubble({ role, content }: NewChat) {
   return (
     <div
       className={`bubble ${

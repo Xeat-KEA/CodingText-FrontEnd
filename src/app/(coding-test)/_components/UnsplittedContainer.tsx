@@ -8,24 +8,19 @@ import CodeContentPanel from "./CodeContentPanel";
 
 export default function UnsplittedContainer({
   content,
-  chats,
+  historyId,
 }: ContainerProps) {
   const { isPosting } = useCodingTestStore();
   const { accessToken } = useTokenStore();
 
-  const { setIsLoading } = useChatStore();
-  const onSubmit = () => {
-    setIsLoading(true);
-    // api 호출
-    setIsLoading(false);
-  };
+  const { newChats } = useChatStore();
   return (
     <div className="w-full pt-16 flex flex-col">
       <CodeContentPanel content={content} />
       {accessToken && (
         <>
-          <ChattingPanel chats={chats} />
-          <ChatInput onSubmit={(data) => {}} />
+          <ChattingPanel newChats={newChats} historyId={historyId} />
+          <ChatInput historyId={historyId} />
         </>
       )}
       {!isPosting ? <CodeEditPanel /> : <NewPostPanel />}

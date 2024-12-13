@@ -2,6 +2,7 @@ import { Editor } from "@tiptap/react";
 import { BlogPost } from "../(blog)/_interfaces/interfaces";
 import {
   CompileResult,
+  NewChat,
   SubmitResult,
 } from "../(coding-test)/_interface/interfaces";
 
@@ -439,4 +440,10 @@ export interface NoticeForm {
 export interface ChatStore {
   isLoading: boolean;
   setIsLoading: (state: boolean) => void;
+  isIncludingAnswer: boolean;
+  setIsIncludingAnswer: (state: boolean) => void;
+  sendWithCode: boolean;
+  setSendWithCode: (state: boolean) => void;
+  newChats: NewChat[];
+  setNewChats: (newList: NewChat[]) => void;
 }

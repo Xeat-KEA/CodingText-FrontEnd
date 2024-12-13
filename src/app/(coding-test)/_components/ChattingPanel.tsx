@@ -1,71 +1,113 @@
-import { useQuery } from "@tanstack/react-query";
-import ChatInput from "./ChatInput";
-import { useEffect, useRef, useState } from "react";
-import { Chat, ChatInputForm } from "../_interface/interfaces";
+import { ChatsResponse, NewChat } from "../_interface/interfaces";
 import ChatBubble from "./ChatBubble";
-import { useTokenStore } from "@/app/stores";
+import { useChatStore, useTokenStore } from "@/app/stores";
 import LoadingAnimation from "@/app/_components/LoadingAnimation";
+import { useInView } from "react-intersection-observer";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import api from "@/app/_api/config";
 
-export default function ChattingPanel({ chats }: { chats?: Chat[] }) {
-  const { accessToken, isTokenSet } = useTokenStore();
-
-  // 문제 정보 GET (자체 제공 문제)
-  const fetchChats = async () => {
-    if (isTokenSet) {
-      if (accessToken) {
-        // api 호출부 추가 필요
-        return null;
-      } else {
-        // 비로그인 시 문제만 GET
+export default function ChattingPanel({
+  newChats,
+  historyId,
+}: {
+  newChats?: NewChat[];
+  historyId?: number;
+}) {
+  const { isTokenSet, accessToken } = useTokenStore();
+  const { isLoading } = useChatStore();
+  // 채팅 정보
+  const fetchChats = async ({
+    pageParam,
+  }: {
+    pageParam?: number;
+  }): Promise<ChatsResponse> => {
+    const response = await api.get(
+      `/code-llm-service/llm/history/${historyId}`,
+      {
+        params: { page: pageParam },
+        headers: { Authorization: accessToken },
       }
-    }
+    );
+    return response.data.data;
   };
-  const { data /* , isLoading */ } = useQuery({
-    queryKey: ["chats", isTokenSet],
+  // 무한스크롤 데이터 가져오기
+  const {
+    data: chats,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isPending,
+  } = useInfiniteQuery({
+    queryKey: ["chats", isTokenSet, historyId],
     queryFn: fetchChats,
+    initialPageParam: -1,
+    getNextPageParam: (lastPage, allPages) => {
+      if (lastPage.firstPage) {
+        return undefined;
+      }
+      console.log(lastPage);
+      return lastPage.currentPage - 1;
+    },
+    enabled: !!accessToken && !!historyId,
+    // 데이터 평탄화
+    select: (data) =>
+      data.pages
+        .slice()
+        .reverse()
+        .flatMap((page) => page.chatResponseList),
   });
 
-  const [isLoading, setIsLoading] = useState(false);
-  // 채팅 입력 시 채팅 POST
-  /* const onSubmit = async (newChat: ChatInputForm) => {
-    // 정답 여부만 확인 체크 시
-    if (newChat.correctOrNot) {
-    }
-    // 코드와 함께 질문 체크 시
-    if (newChat.sendWithCode) {
-    }
-    setDummyData((prev) => [
-      ...prev,
-      { content: newChat.content, role: "user" },
-    ]);
-    setIsLoading(true);
-    // 실제 api 호출 시 데이터 형식 수정 필요
-    setTimeout(() => {
-      const response =
-        "Python에서 출력을 위해 가장 기본적으로 사용하는 함수는 **print()**입니다.";
-      setDummyData((prev) => [...prev, { content: response, role: "gpt" }]);
-      setIsLoading(false);
-    }, 2000);
-  }; */
-
-  /* // 채팅 입력 시 채팅창 아래로 이동
-  const chatContainerRef = useRef<HTMLDivElement>(null);
+  // 무한스크롤 트리거
+  const { ref, inView } = useInView();
+  const [prevScrollHeight, setPrevScrollHeight] = useState(0);
   useEffect(() => {
-    // 처음 문제가 생성될 때는 위에서부터 볼 수 있게 설정
-    if (dummyData?.length !== 1) {
-      const current = chatContainerRef.current;
-      if (current) {
-        current.scrollTop = current.scrollHeight;
+    if (inView) {
+      setPrevScrollHeight(panelRef.current?.scrollHeight || 0);
+      fetchNextPage();
+    }
+  }, [inView]);
+
+  const panelRef = useRef<HTMLDivElement>(null);
+  // chats 데이터가 업데이트될 때 자동으로 가장 아래로 스크롤
+  useEffect(() => {
+    if (!isPending) {
+      setPrevScrollHeight(panelRef.current?.scrollHeight || 0);
+      if (panelRef.current) {
+        panelRef.current.scrollTo({
+          top: panelRef.current.scrollHeight,
+        });
       }
     }
-  }, [data, dummyData]);
- */
+  }, [isPending, newChats]);
+
+  // 채팅 데이터 추가 시 스크롤 복원
+  useLayoutEffect(() => {
+    if (panelRef.current) {
+      const currentScrollHeight = panelRef.current.scrollHeight;
+      const scrollOffset = currentScrollHeight - prevScrollHeight;
+      panelRef.current.scrollTop += scrollOffset;
+    }
+  }, [isFetchingNextPage, chats]);
+
   return (
     <div
-      // ref={chatContainerRef}
+      ref={panelRef}
       className="max-md:h-[400px] w-full h-full flex flex-col px-6 py-8 gap-6 overflow-y-auto bg-primary-2 relative"
     >
-      {chats?.map((chat, index) => (
+      {!isPending && hasNextPage && (
+        // 노출 시 다음 데이터 fetch
+        <div ref={ref} className="w-full h-10 flex-center">
+          <LoadingAnimation />
+        </div>
+      )}
+      {chats?.map((chat) => (
+        <>
+          <ChatBubble role="user" content={chat.question} />
+          <ChatBubble role="gpt" content={chat.answer} />
+        </>
+      ))}
+      {newChats?.map((chat, index) => (
         <ChatBubble key={index} role={chat.role} content={chat.content} />
       ))}
       {/* ChatGPT가 채팅 반환 시 일시적 표시되는 스켈레톤 말풍선 */}
