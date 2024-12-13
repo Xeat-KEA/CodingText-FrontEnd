@@ -120,7 +120,6 @@ export default function BlogListContainer() {
     setResult(response.data.data.articleList);
     setCurrentBlogId(response.data.data.blogId || params.id);
     setTotalArticleNum(response.data.data.totalArticle);
-    console.log(response);
 
     // 페이지 정보 초기화
     const lastPage = response.data.data.pageInfo.totalPageNum;

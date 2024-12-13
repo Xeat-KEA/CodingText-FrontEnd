@@ -27,7 +27,6 @@ export const useImageHandler = async (
         Authorization: accessToken,
       },
     });
-    console.log(response);
     const { uploadImageUrl } = response.data;
 
     return uploadImageUrl;

@@ -39,7 +39,6 @@ export default function PostResults() {
         },
       });
 
-      console.log(res);
       // 날짜 내림차순
       const resultData = res.data.data.content;
       setResult(resultData);

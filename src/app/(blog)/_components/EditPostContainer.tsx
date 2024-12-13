@@ -64,7 +64,6 @@ export default function EditPostContainer() {
       ...data,
       content: contentDe,
     };
-    console.log(updatedData);
     try {
       const response = await api.put(
         `/blog-service/blog/board/article/${params.postId}`,

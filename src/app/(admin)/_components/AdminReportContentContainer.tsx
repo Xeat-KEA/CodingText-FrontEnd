@@ -31,7 +31,6 @@ export default function AdminReportContentContainer() {
         headers: { Authorization: accessToken },
       }
     );
-    console.log(response.data.data);
 
     setReportPostId(response.data.data.articleId);
     if (response.data.data.replyId) {

@@ -19,7 +19,6 @@ export default function NoticeDetailContainer() {
   // API 호출
   const fetchNoticeData = async () => {
     const response = await api.get(`/user-service/users/announce/${params.id}`);
-    console.log(response);
     setCurrentNotice(response.data);
     return response.data.content;
   };

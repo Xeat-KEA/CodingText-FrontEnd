@@ -145,7 +145,6 @@ export default function CommentContainer() {
         data: requestBody,
         headers: { Authorization: accessToken },
       });
-      console.log(response);
       queryClient.invalidateQueries({ queryKey: ["postContent"] });
     } catch (error) {}
     setIsDeleteDialogOpen(false);

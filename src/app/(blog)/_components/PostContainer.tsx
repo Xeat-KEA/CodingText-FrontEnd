@@ -85,7 +85,6 @@ export default function PostContainer() {
         headers: { Authorization: accessToken },
       }
     );
-    console.log(response);
 
     const postData = response.data.data;
     if (postData) {

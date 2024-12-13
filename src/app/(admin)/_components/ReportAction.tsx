@@ -48,7 +48,6 @@ export default function ReportAction() {
         }
       );
 
-      console.log(response);
       if (response.data.statusCode === 200) {
         setIsBlind(!isBlind);
         setIsDialogOpen(false);
@@ -78,7 +77,6 @@ export default function ReportAction() {
         headers: { Authorization: accessToken },
       });
 
-      console.log(response);
     } catch (error) {}
     setIsDialogOpen(false);
     setPostToDelete(null);
