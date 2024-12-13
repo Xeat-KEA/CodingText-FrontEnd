@@ -24,34 +24,36 @@ export default function NewPostPanel() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isPageChanging, setIsPageChanging] = useState(false);
 
+  const [newArticleId, setNewArticleId] = useState<Number>();
+
   // 새로고침, 페이지 닫기, 뒤로가기 방지
   usePageHandler();
 
-  // value는 writtencode, params.id가 codeId,
   const onClickBtn = async (data: PostForm) => {
-    const newContent = useBase64("encode", data.content);
+    const contentDe = useBase64("encode", data.content);
+    const writtenCodeEn = useBase64("encode", value);
     // codeId 추후 수정
     const newData = {
       ...data,
-      content: newContent,
-      writtenCode: value,
+      content: contentDe,
+      writtenCode: writtenCodeEn,
       codeId: Number(params.id),
-      childCategoryId: 0,
-      codeContent: "문제",
+      childCategoryId: 4, // 수정
     };
     console.log(newData);
     try {
       // API 요청
       const response = await api.post(
-        `/blog-service/blog/board/article`,
+        `/blog-service/blog/board/code`,
         newData,
         {
           headers: { Authorization: accessToken },
         }
       );
-
+      console.log(response);
       if (response.status === 200) {
         setIsDialogOpen(true);
+        setNewArticleId(response.data.data.articleId);
       } else {
         console.error("코딩 게시글 작성 실패:", response);
       }
@@ -104,7 +106,7 @@ export default function NewPostPanel() {
           backBtn="문제 목록 페이지로"
           onBackBtnClick={() => router.push("/code/list", { scroll: false })}
           primaryBtn="게시글 페이지로"
-          onBtnClick={() => router.push("/blog/1/post/1")} // 링크 수정 필요
+          onBtnClick={() => router.push(`/post/${newArticleId}`)} // 링크 수정 필요
         />
       )}
       {isPageChanging && (

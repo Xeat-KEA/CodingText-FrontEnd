@@ -16,6 +16,8 @@ export default function AdminNoticeWriteContainer() {
   const router = useRouter();
   const { content, setContent } = useTiptapStore();
   const [isLoaded, setIsLoaded] = useState(false);
+  const [newNoticeId, setNewNoticeId] = useState<Number>();
+
   const { register, handleSubmit, setValue } = useForm<NoticeForm>({
     defaultValues: {
       title: "",
@@ -31,7 +33,6 @@ export default function AdminNoticeWriteContainer() {
     const requestBody = {
       title: newNotice.title,
       content: newNotice.content,
-      adminId: 1, // 수정 필요
     };
     try {
       const response = await api.post(
@@ -44,8 +45,7 @@ export default function AdminNoticeWriteContainer() {
 
       if (response.status === 200) {
         setIsSubmitDialogOpen(true);
-        router.replace(`/admin/notice/${response.data.announceId}`);
-        console.log(response);
+        setNewNoticeId(response.data.announceId);
       }
     } catch (error) {
       console.error("공지사항 등록 실패:", error);
@@ -129,7 +129,7 @@ export default function AdminNoticeWriteContainer() {
                 router.push(`/admin/notice`, { scroll: false })
               }
               primaryBtn="공지사항 페이지로"
-              onBtnClick={() => router.push(`/admin/notice/${1}`)}
+              onBtnClick={() => router.replace(`/admin/notice/${newNoticeId}`)}
               blockOutsideClick
             />
           )}

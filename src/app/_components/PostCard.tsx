@@ -1,12 +1,13 @@
 import { Post } from "../_interfaces/interfaces";
 import {
+  BlindIcon,
   CommentCountIcon,
   LikeCountIcon,
   ReportIcon,
   SecretPostIcon,
 } from "./Icons";
 import { useCalculateDate } from "../_hooks/useCalculateDate";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useBase64 } from "../_hooks/useBase64";
 import DOMPurify from "isomorphic-dompurify";
 import { useBlogStore, useTokenStore } from "../stores";
@@ -19,12 +20,18 @@ import api from "../_api/config";
 export default function PostCard({ post }: { post: Post }) {
   const { accessToken, isTokenSet } = useTokenStore();
 
+  const pathname = usePathname();
   const router = useRouter();
+  const isSearchPage = pathname.includes("/search");
 
   const date = useCalculateDate(post.createdDate);
 
-  const decodedContent = post.isSecret
+  const decodedContent = post.isBlind
+    ? "블라인드 처리된 게시글입니다."
+    : post.isSecret
     ? "비밀번호를 입력하여 게시글을 확인하세요."
+    : isSearchPage
+    ? post.content
     : useBase64("decode", post.content);
 
   const [isSecret, setIsSecret] = useState(false);
@@ -59,7 +66,6 @@ export default function PostCard({ post }: { post: Post }) {
         setErrorMessage("비밀번호가 일치하지 않습니다.");
       }
     } catch (error) {
-      console.error("비밀번호 확인 오류: ", error);
       setErrorMessage("오류가 발생했습니다. 다시 시도해주세요.");
     }
   };
@@ -105,7 +111,8 @@ export default function PostCard({ post }: { post: Post }) {
           {/* 게시글 내용 */}
           <div className="post-card-content-container">
             <span className="flex items-center gap-2 post-card-title">
-              {post.isSecret && <SecretPostIcon />}
+              {!post.isBlind && post.isSecret && <SecretPostIcon />}
+              {post.isBlind && <BlindIcon />}
 
               {post.codeId && (
                 <button

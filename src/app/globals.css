@@ -234,6 +234,7 @@ textarea {
   .list-topbar-tab {
     @apply list-topbar-text flex justify-center shrink-0;
   }
+  f
   /* 목록 텍스트 */
   .list-text {
     @apply text-xs flex justify-center shrink-0;
@@ -313,6 +314,9 @@ textarea {
   /* 게시글 내용 */
   .post-card-content {
     @apply text-sm text-body min-h-[60px] overflow-hidden text-ellipsis line-clamp-3;
+  }
+  .post-card-content b {
+    @apply text-primary-1;
   }
   /* 하단 상위 컨테이너 */
   .post-card-bottom-container {

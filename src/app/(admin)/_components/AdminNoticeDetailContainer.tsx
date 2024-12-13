@@ -13,7 +13,7 @@ import Dialog from "@/app/_components/Dialog";
 import { Notice } from "../_interfaces/interfaces";
 import { NoticeForm } from "@/app/_interfaces/interfaces";
 import { useCheckToken } from "@/app/_hooks/useCheckToken";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 
 export default function AdminNoticeDetailContainer() {
@@ -21,6 +21,7 @@ export default function AdminNoticeDetailContainer() {
 
   const router = useRouter();
   const params = useParams();
+  const queryClient = useQueryClient();
 
   const [currentNotice, setCurrentNotice] = useState<Notice | null>(null);
   const [noticeData, setNoticeData] = useState("");
@@ -71,10 +72,8 @@ export default function AdminNoticeDetailContainer() {
       announceId: Number(params.id),
       title: formData.title,
       content: encodedContent,
-      adminId: 1, // 관리자 ID 수정 필요
     };
 
-    console.log(updatedNotice);
     try {
       const response = await api.put(
         `/admin-service/admins/announce`,
@@ -87,43 +86,38 @@ export default function AdminNoticeDetailContainer() {
       if (response.status === 200) {
         setIsEditing(false);
         setNoticeData(content);
-        setNoticeTitle(formData.title);
+        setNoticeTitle(noticeTitle);
         router.replace(`/admin/notice/${response.data.announceId}`);
       }
-      console.log(response);
+
+      queryClient.invalidateQueries({
+        queryKey: ["noticeData"],
+      });
     } catch (error) {
-      console.error("공지사항 수정 실패:", error);
     }
   };
 
-  // 로직 추가 예정
   const onClickDeleteNotice = (id: number) => {
     setNoticeToDelete(id);
     setIsDeleteDialogOpen(true);
   };
-  const confirmDeleteNotice = () => {
+  const confirmDeleteNotice = async () => {
     if (noticeToDelete === null) return;
-    setIsDeleteDialogOpen(false);
-    setNoticeToDelete(null);
-    router.replace(`/admin/notice`);
+    try {
+      const response = await api.delete(
+        `admin-service/admins/announce/${noticeToDelete}`,
+        {
+          headers: {
+            Authorization: accessToken,
+          },
+        }
+      );
 
-    // 삭제 로직 아직 없음
-    // try {
-    //   const response = await api.delete(
-    //     `admin-service/admins/announce/${noticeToDelete}`,
-    //     {
-    //       headers: {
-    //         Authorization: accessToken, // 필요한 경우 토큰 추가
-    //       },
-    //     }
-    //   );
-    //   console.log(response);
-    // setIsDeleteDialogOpen(false);
-    // setNoticeToDelete(null);
-    // router.replace(`/admin/notice`);
-    // } catch (error) {
-    //   console.error("공지사항 삭제 실패:", error);
-    // }
+      setIsDeleteDialogOpen(false);
+      setNoticeToDelete(null);
+      router.replace(`/admin/notice`);
+    } catch (error) {
+    }
   };
 
   return (
@@ -160,7 +154,7 @@ export default function AdminNoticeDetailContainer() {
 
             {/* 공지사항 내용 */}
             {!isEditing ? (
-              <div className="w-full text-black border border-border2 rounded-xl p-4">
+              <div className="w-full text-black border border-border-2 rounded-xl p-4">
                 <div
                   className="prose"
                   dangerouslySetInnerHTML={{

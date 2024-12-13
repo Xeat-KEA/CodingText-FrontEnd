@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 import { CommentInputProps } from "../../_interfaces/interfaces";
 import { useBlogStore, useTokenStore } from "@/app/stores";
+import { useRouter } from "next/navigation";
 
 export default function CommentInput({
   target,
@@ -11,6 +12,7 @@ export default function CommentInput({
 }: CommentInputProps) {
   const { accessToken, isTokenSet } = useTokenStore();
 
+  const router = useRouter();
   const { register, handleSubmit, reset } = useForm();
 
   // 댓글
@@ -49,11 +51,18 @@ export default function CommentInput({
           </div>
         )}
         <div className="flex absolute right-0 items-center">
-          {accessToken && (
+          {accessToken ? (
             <button
               type="submit"
               className="px-4 py-2 bg-primary-1 text-white text-xs text-bold rounded-md">
               작성하기
+            </button>
+          ) : (
+            <button
+            type="button"
+            onClick={() => router.push("/sign-in")}
+            className="px-4 py-2 bg-primary-1 text-white text-xs text-bold rounded-md">
+              로그인
             </button>
           )}
         </div>

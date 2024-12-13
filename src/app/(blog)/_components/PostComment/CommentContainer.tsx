@@ -18,8 +18,8 @@ import { useQueryClient } from "@tanstack/react-query";
 export default function CommentContainer() {
   const { accessToken, isTokenSet } = useTokenStore();
   const queryClient = useQueryClient();
-
   const params = useParams();
+
   const { currentPost } = usePostStore();
   const { currentBlogId, userBlogId } = useBlogStore();
 
@@ -85,9 +85,7 @@ export default function CommentContainer() {
         );
       }
       queryClient.invalidateQueries({ queryKey: ["postContent"] });
-    } catch (error) {
-      console.error("댓글 작성 오류: ", error);
-    }
+    } catch (error) {}
 
     setParentReplyId(undefined);
     setMentionId(undefined);
@@ -117,9 +115,7 @@ export default function CommentContainer() {
         }
       );
       queryClient.invalidateQueries({ queryKey: ["postContent"] });
-    } catch (error) {
-      console.error("댓글 수정 실패:", error);
-    }
+    } catch (error) {}
     setCommentToEdit(null);
     setEditedContent("");
   };
@@ -131,18 +127,27 @@ export default function CommentContainer() {
 
   const confirmDeleteComment = async () => {
     if (commentToDelete === null) return;
-    try {
-      const response = await api.delete(
-        `/blog-service/blog/board/article/reply/${commentToDelete}`,
-        {
-          data: { replyId: commentToDelete },
-          headers: { Authorization: accessToken },
+
+    const endpoint = isAdminPage
+      ? `/blog-service/admin/reply`
+      : `/blog-service/blog/board/article/reply/${commentToDelete}`;
+
+    const requestBody = isAdminPage
+      ? {
+          replyId: commentToDelete,
+          reasonCategory: selectedOption,
+          directCategory: customInput,
         }
-      );
+      : null;
+
+    try {
+      const response = await api.delete(endpoint, {
+        data: requestBody,
+        headers: { Authorization: accessToken },
+      });
+      console.log(response);
       queryClient.invalidateQueries({ queryKey: ["postContent"] });
-    } catch (error) {
-      console.error("댓글 삭제 실패:", error);
-    }
+    } catch (error) {}
     setIsDeleteDialogOpen(false);
     setCommentToDelete(null);
   };
@@ -160,7 +165,7 @@ export default function CommentContainer() {
   };
 
   const confirmReportComment = async () => {
-    if (commentToReport === null) return;
+    if (commentToReport === null || !selectedOption) return;
     try {
       const response = await api.post(
         `/blog-service/blog/reply/report/${commentToReport}`,
@@ -172,9 +177,7 @@ export default function CommentContainer() {
           headers: { Authorization: accessToken },
         }
       );
-    } catch (error) {
-      console.error("댓글 신고 실패: ", error);
-    }
+    } catch (error) {}
 
     setIsReportDialogOpen(false);
     setIsReportConfirmDialogOpen(true);
@@ -245,17 +248,40 @@ export default function CommentContainer() {
       {/* 삭제 다이얼로그 컴포넌트 */}
       {isDeleteDialogOpen && (
         <Dialog
-          title="댓글을 삭제할까요?"
-          content="삭제 후 복구할 수 없어요!"
-          isWarning={isDeleteDialogOpen}
+          title={
+            isAdminPage ? "삭제 사유를 선택해 주세요" : "댓글을 삭제할까요?"
+          }
+          content={!isAdminPage ? "삭제 후 복구할 수 없어요!" : ""}
+          isWarning={!isAdminPage ? isDeleteDialogOpen : false}
           backBtn="취소"
           onBackBtnClick={() => {
             setIsDeleteDialogOpen(false);
             setCommentToDelete(null);
           }}
           redBtn="삭제"
-          onBtnClick={confirmDeleteComment}
-        />
+          onBtnClick={confirmDeleteComment}>
+          {isAdminPage && (
+            <DropDown
+              isSmall={false}
+              selection={selectedOption || ""}
+              list={REPORT_REASONS}
+              onSelectionClick={(selected) =>
+                setSelectedOption(selected.content)
+              }
+              placeholder="분류"
+            />
+          )}
+          {selectedOption === "직접 입력" && (
+            <div className="mt-6">
+              <textarea
+                value={customInput}
+                onChange={(event) => setCustomInput(event.target.value)}
+                placeholder={"삭제 사유를 적어주세요"}
+                className="w-full h-28 resize-none border border-border-2 pl-4 p-2 rounded-md text-base font-regular"
+              />
+            </div>
+          )}
+        </Dialog>
       )}
       {/* 신고 다이얼로그 컴포넌트 */}
       {isReportDialogOpen && (
@@ -279,7 +305,7 @@ export default function CommentContainer() {
                 value={customInput}
                 onChange={(event) => setCustomInput(event.target.value)}
                 placeholder="신고 사유를 적어주세요"
-                className="w-full h-28 border pl-4 p-2 rounded-md text-base font-regular"
+                className="w-full h-28 resize-none border border-border-2 pl-4 p-2 rounded-md text-base font-regular"
               />
             </div>
           )}

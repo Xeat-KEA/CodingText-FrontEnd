@@ -166,8 +166,14 @@ export const usePostStore = create<PostStore>((set) => ({
     writtenCode: "",
   },
   setCurrentPost: (currentPost) => set({ currentPost }),
+
   isCodingPost: false,
-  setIsCodinPost: (state) => set({ isCodingPost: state }),
+  setIsCodingPost: (state) => set({ isCodingPost: state }),
+  
+  reportPostId: -1,
+  setReportPostId: (reportId) => set({ reportPostId: reportId }),
+  reportReplyId: -1,
+  setReportReplyId: (reportId) => set({ reportReplyId: reportId }),
 }));
 
 // 문제 등록 여부 저장 전역변수

@@ -19,27 +19,22 @@ export default function NoticeContainer() {
   const { page, setPage, setLastPage } = usePaginationStore();
 
   const fetchUserNoticeList = async () => {
-    if (accessToken) {
-      const response = await api.get(`/user-service/users/announce`, {
-        params: { page: page, size: 9 },
-        headers: { Authorization: accessToken },
-      });
+    const response = await api.get(`/user-service/users/announce`, {
+      params: { page: page, size: 9 },
+    });
 
-      // 페이지 정보 초기화
-      const lastPage = response.data.totalPages - 1;
-      if (page > lastPage) {
-        setPage(lastPage);
-      }
-      setLastPage(lastPage);
-
-      return response.data.content;
-    } else {
-      return null;
+    // 페이지 정보 초기화
+    const lastPage = response.data.totalPages - 1;
+    if (page > lastPage) {
+      setPage(lastPage);
     }
+    setLastPage(lastPage);
+
+    return response.data.content;
   };
 
   const { data } = useQuery<Notice[]>({
-    queryKey: ["userNoticeList", page, isTokenSet],
+    queryKey: ["userNoticeList", page],
     queryFn: fetchUserNoticeList,
   });
 

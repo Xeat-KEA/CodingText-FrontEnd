@@ -32,7 +32,6 @@ export const useImageHandler = async (
 
     return uploadImageUrl;
   } catch (error) {
-    console.error("이미지 업로드 실패:", error);
     return null;
   }
 };

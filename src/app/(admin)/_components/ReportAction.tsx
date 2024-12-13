@@ -18,7 +18,7 @@ export default function ReportAction() {
   const { currentPost } = usePostStore();
 
   // 블라인드 및 삭제 상태 관리
-  const [isBlind, setIsBlind] = useState(false);
+  const [isBlind, setIsBlind] = useState(currentPost.isBlind);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [actionType, setActionType] = useState<"blind" | "delete" | null>(null); // 블라인드 또는 삭제 선택
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
@@ -26,7 +26,6 @@ export default function ReportAction() {
   const [postToBlind, setPostToBlind] = useState<number | null>(null);
   const [postToDelete, setPostToDelete] = useState<number | null>(null);
 
-  // 블라인드 및 삭제 처리
   const onClickBlindAction = (id: number) => {
     setPostToBlind(id);
     setActionType("blind");
@@ -34,31 +33,30 @@ export default function ReportAction() {
   };
 
   const confirmBlindPost = async () => {
-    if (postToBlind === null) return;
+    if (postToBlind === null || !selectedOption) return;
     const requestBody = {
-      articleId: postToDelete,
+      articleId: postToBlind,
       reasonCategory: selectedOption,
+      directCategory: customInput,
     };
     try {
-      const response = await api.delete("/blog/board/article/blind", {
-        data: requestBody,
-        headers: { Authorization: accessToken },
-      });
+      const response = await api.put(
+        "/blog-service/admin/article/blind",
+        requestBody,
+        {
+          headers: { Authorization: accessToken },
+        }
+      );
 
       console.log(response);
-    } catch (error) {
-      console.error("관리자 게시글 블라인드 오류:", error);
-    }
-    setIsBlind(true);
-    setIsDialogOpen(false);
+      if (response.data.statusCode === 200) {
+        setIsBlind(!isBlind);
+        setIsDialogOpen(false);
+      }
+    } catch (error) {}
     setPostToBlind(null);
     setSelectedOption(null);
     setCustomInput("");
-  };
-
-  const onClickUnBlind = () => {
-    setIsBlind(false);
-    setIsDialogOpen(false);
   };
 
   const onClickDeletePost = (id: number) => {
@@ -68,21 +66,20 @@ export default function ReportAction() {
   };
 
   const confirmDeletePost = async () => {
-    if (postToDelete === null) return;
+    if (postToDelete === null || !selectedOption) return;
     const requestBody = {
       articleId: postToDelete,
       reasonCategory: selectedOption,
+      directCategory: customInput,
     };
     try {
-      const response = await api.delete("/admin/article", {
+      const response = await api.delete("/blog-service/admin/article", {
         data: requestBody,
         headers: { Authorization: accessToken },
       });
 
       console.log(response);
-    } catch (error) {
-      console.error("관리자 게시글 삭제 오류:", error);
-    }
+    } catch (error) {}
     setIsDialogOpen(false);
     setPostToDelete(null);
     setSelectedOption(null);
@@ -118,7 +115,10 @@ export default function ReportAction() {
           {...(actionType === "blind"
             ? {
                 ...(isBlind
-                  ? { primaryBtn: "블라인드 해제", onBtnClick: onClickUnBlind }
+                  ? {
+                      primaryBtn: "블라인드 해제",
+                      onBtnClick: confirmBlindPost,
+                    }
                   : { redBtn: "블라인드", onBtnClick: confirmBlindPost }),
               }
             : {
@@ -142,7 +142,7 @@ export default function ReportAction() {
                     ? "블라인드 사유를 적어주세요"
                     : "삭제 사유를 적어주세요"
                 }
-                className="w-full h-28 border pl-4 p-2 rounded-md text-base font-regular"
+                className="w-full h-28 resize-none border border-border-2 pl-4 p-2 rounded-md text-base font-regular"
               />
             </div>
           )}

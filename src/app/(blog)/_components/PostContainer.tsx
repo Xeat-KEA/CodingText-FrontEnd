@@ -11,10 +11,9 @@ import {
 } from "@/app/stores";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { BlogPost } from "@/app/(blog)/_interfaces/interfaces";
 import api from "@/app/_api/config";
 import { useQuery } from "@tanstack/react-query";
-import Dialog from "@/app/_components/Dialog";
+import LoadingAnimation from "@/app/_components/LoadingAnimation";
 
 export default function PostContainer() {
   const { accessToken, isTokenSet } = useTokenStore();
@@ -27,7 +26,7 @@ export default function PostContainer() {
 
   const setCurrentBlogId = useBlogStore((state) => state.setCurrentBlogId);
   const setCurrentPost = usePostStore((post) => post.setCurrentPost);
-  const setIsCodingPost = usePostStore((state) => state.setIsCodinPost);
+  const setIsCodingPost = usePostStore((state) => state.setIsCodingPost);
 
   const setCategoryId = useCategoryStore((state) => state.setCategoryId);
   const setChildCategoryId = useCategoryStore(
@@ -40,6 +39,16 @@ export default function PostContainer() {
   const [isSecret, setIsSecret] = useState(false);
 
   const [isLoaded, setIsLoaded] = useState(true);
+
+  // 조회수
+  useEffect(() => {
+    const increaseViewCount = async () => {
+      await api.put(
+        `/blog-service/blog/board/article/viewCount/${params.postId}`
+      );
+    };
+    increaseViewCount();
+  }, [params]);
 
   // 비회원용 게시글 내용 api 연결
   const fetchNonUserPostData = async () => {
@@ -59,46 +68,42 @@ export default function PostContainer() {
       setIsLoaded(false);
       return postData;
     } catch (error) {
-      console.error("비회원 게시글 반환오류:", error);
       return null;
     }
   };
-  const { data: nonUserPostData } = useQuery({
-    queryKey: ["nonUserPostContent", isTokenSet, params.postId],
+  const { data: nonUserPostContent } = useQuery({
+    queryKey: ["nonUserPostContent", params.postId],
     queryFn: fetchNonUserPostData,
   });
 
   // 회원용 게시글 내용 api 연결
   const fetchPostData = async () => {
-    if (accessToken) {
-      // 회원 -> 추후 비회원 로직 추가
-      try {
-        const response = await api.get(
-          `/blog-service/blog/board/${params.postId}`,
-          {
-            headers: { Authorization: accessToken },
-          }
-        );
-        const postData = response.data.data;
-        if (postData) {
-          setCurrentBlogId(postData.blogId);
-          setChildCategoryId(postData.childCategoryId);
-          setIsCodingPost(postData.codeId !== undefined);
-          setIsBlind(postData.isBlind);
-          setIsSecret(postData.isSecret);
-          setCurrentPost(postData);
-        }
-        setIsLoaded(false);
-        return postData;
-      } catch (error) {
-        console.error("게시글 내용 반환 오류: ", error);
-        return null;
+    if (!accessToken) return null;
+    const response = await api.get(
+      `/blog-service/blog/board/${params.postId}`,
+      {
+        headers: { Authorization: accessToken },
       }
+    );
+    console.log(response);
+
+    const postData = response.data.data;
+    if (postData) {
+      setCurrentBlogId(postData.blogId);
+      setChildCategoryId(postData.childCategoryId);
+      setIsCodingPost(postData.codeId !== undefined);
+      setIsBlind(postData.isBlind);
+      setIsSecret(postData.isSecret);
+      setCurrentPost(postData);
     }
+
+    setIsLoaded(false);
+
+    return postData;
   };
 
   const {
-    data: postData,
+    data: postContent,
     isLoading,
     isError,
   } = useQuery({
@@ -115,7 +120,13 @@ export default function PostContainer() {
     }
   }, [isBlind, isSecret, router]);
 
-  if (isLoaded) return null;
+  if (isLoaded) {
+    return (
+      <div className="w-full h-80 flex-center">
+        <LoadingAnimation />
+      </div>
+    );
+  }
 
   return (
     <>
@@ -125,7 +136,7 @@ export default function PostContainer() {
             {/* 목록으로 버튼*/}
             <div className="w-full">
               <BackBtn
-                title="목록으로"
+                title="이전으로"
                 onClick={
                   () => router.back()
                   // router.push(`/category/${currentPost.childCategoryId}`, {
@@ -141,7 +152,7 @@ export default function PostContainer() {
             </div>
 
             {/* 구분선 */}
-            <hr className="w-full border-t-1 border-border2" />
+            <hr className="w-full border-t-1 border-border-2" />
 
             {/* 게시물 내용 */}
             <div className="w-full">{currentPost && <PostContent />}</div>
@@ -150,7 +161,7 @@ export default function PostContainer() {
             <div className="w-full h-5">{currentPost && <PostAction />}</div>
 
             {/* 구분선 */}
-            <hr className="w-full border-t-1 border-border2" />
+            <hr className="w-full border-t-1 border-border-2" />
 
             {/* 댓글  - Comment */}
             <CommentContainer />
@@ -158,11 +169,12 @@ export default function PostContainer() {
             {/* 목록으로 버튼*/}
             <div className="w-full">
               <BackBtn
-                title="목록으로"
-                onClick={() =>
-                  router.push(`/category/${currentPost.childCategoryId}`, {
-                    scroll: false,
-                  })
+                title="이전으로"
+                onClick={
+                  () => router.back()
+                  // router.push(`/category/${currentPost.childCategoryId}`, {
+                  //   scroll: false,
+                  // })
                 }
               />
             </div>

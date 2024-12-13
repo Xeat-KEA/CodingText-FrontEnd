@@ -12,6 +12,7 @@ import api from "@/app/_api/config";
 import { useQueryClient } from "@tanstack/react-query";
 import { profileProps } from "@/app/_interfaces/interfaces";
 import ProfileImgContainer from "@/app/_components/ProfileImgContainer";
+import { motion } from "framer-motion";
 
 export default function BlogProfile({ profile }: profileProps) {
   // 로그인 여부 확인
@@ -27,6 +28,11 @@ export default function BlogProfile({ profile }: profileProps) {
   const [isReportConfirmDialogOpen, setIsReportConfirmDialogOpen] =
     useState(false);
 
+    const buttonVariants = {
+      rest: { scale: 1 },
+      clicked: { scale: 0.95, transition: { type: "spring", stiffness: 300 } },
+    };
+
   const onClickFollow = async () => {
     try {
       // 팔로우/언팔로우 API 요청 보내기
@@ -40,9 +46,7 @@ export default function BlogProfile({ profile }: profileProps) {
 
       // 프로필 데이터 다시 가져오기
       queryClient.invalidateQueries({ queryKey: ["blogInfo"] });
-    } catch (error) {
-      console.error("팔로우 요청 오류", error);
-    }
+    } catch (error) {}
   };
 
   const onClickReportBlog = (id: number) => {
@@ -58,7 +62,7 @@ export default function BlogProfile({ profile }: profileProps) {
   };
 
   const confirmReportBlog = async () => {
-    if (blogToReport === null) return;
+    if (blogToReport === null || !selectedOption) return;
 
     try {
       const response = await api.post(
@@ -74,9 +78,7 @@ export default function BlogProfile({ profile }: profileProps) {
 
       setIsReportDialogOpen(false);
       setIsReportConfirmDialogOpen(true);
-    } catch (error) {
-      console.error("블로그 신고 실패: ", error);
-    }
+    } catch (error) {}
 
     setBlogToReport(null);
     setCustomInput("");
@@ -118,12 +120,15 @@ export default function BlogProfile({ profile }: profileProps) {
                   </>
                 ) : (
                   <>
-                    <button
+                    <motion.button
                       className="flex items-center gap-1"
-                      onClick={onClickFollow}>
+                      onClick={onClickFollow}
+                      variants={buttonVariants}
+                      initial="rest"
+                      whileTap="clicked">
                       <BpFollowerIcon isFilled={profile.followCheck} />
                       <p className="text-primary-1 text-xs font-semibold">{`팔로워 ${profile.followCount}`}</p>
-                    </button>
+                    </motion.button>
 
                     <IconBtn
                       type="report"
@@ -173,7 +178,7 @@ export default function BlogProfile({ profile }: profileProps) {
                 value={customInput}
                 onChange={(event) => setCustomInput(event.target.value)}
                 placeholder="신고 사유를 적어주세요"
-                className="w-full h-28 border pl-4 p-2 rounded-md text-base font-regular"
+                className="w-full h-28 resize-none border border-border-2 pl-4 p-2 rounded-md text-base font-regular"
               />
             </div>
           )}

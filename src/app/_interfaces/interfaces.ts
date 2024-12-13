@@ -122,6 +122,7 @@ export interface Post {
   title: string;
   content: string;
   isSecret: boolean;
+  isBlind: boolean;
   likeCount: number;
   replyCount: number;
   viewCount: number;
@@ -131,6 +132,7 @@ export interface Post {
   category?: string;
 
   childName?: string;
+  nickname?: string;
 }
 
 export interface ProfileImgSelectionProps {
@@ -177,6 +179,9 @@ export interface Push {
   noticeCategory: string;
   content: string;
   createdDate: string;
+  repliedArticleId: number;
+  reasonCategory: string;
+  directCategory: string;
 }
 
 export interface ProfileTab {
@@ -416,7 +421,11 @@ export interface PostStore {
   currentPost: BlogPost;
   setCurrentPost: (post: BlogPost) => void;
   isCodingPost: boolean;
-  setIsCodinPost: (isCodingPost: boolean) => void;
+  setIsCodingPost: (isCodingPost: boolean) => void;
+  reportPostId: number;
+  setReportPostId: (reportId: number) => void;
+  reportReplyId: number;
+  setReportReplyId: (reportId: number) => void;
 }
 
 export interface Notice {

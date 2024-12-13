@@ -10,6 +10,7 @@ import IconBtn from "@/app/_components/IconBtn";
 import api from "@/app/_api/config";
 import { useQueryClient } from "@tanstack/react-query";
 import { useCheckToken } from "@/app/_hooks/useCheckToken";
+import { motion } from "framer-motion";
 
 export default function PostAction() {
   const { accessToken, isTokenSet } = useCheckToken();
@@ -18,23 +19,35 @@ export default function PostAction() {
 
   const { currentPost, isCodingPost } = usePostStore();
   const { currentBlogId, isOwnBlog } = useBlogStore();
-  const { categoryId, childCategoryId } = useCategoryStore();
-
   const router = useRouter();
+
   const [isLiking, setIsLiking] = useState<boolean>(false);
   const [isShareDialogOpen, setIsShareDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [isReportDialogOpen, setIsReportDialogOpen] = useState(false);
+  const [isReportConfirmDialogOpen, setIsReportConfirmDialogOpen] =
+    useState(false);
+  const [isLoginRequiredDialogOpen, setIsLoginRequiredDialogOpen] =
+    useState(false);
+
   const [postToDelete, setPostToDelete] = useState<number | null>(null);
   const [postToReport, setPostToReport] = useState<number | null>(null);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [customInput, setCustomInput] = useState("");
-  const [isReportDialogOpen, setIsReportDialogOpen] = useState(false);
-  const [isReportConfirmDialogOpen, setIsReportConfirmDialogOpen] =
-    useState(false);
+
+  const buttonVariants = {
+    rest: { scale: 1 },
+    clicked: { scale: 0.95, transition: { type: "spring", stiffness: 300 } },
+  };
 
   // 좋아요 API 연결
   const onClickLike = async () => {
     if (!currentPost) return;
+
+    if (!accessToken) {
+      setIsLoginRequiredDialogOpen(true);
+      return;
+    }
 
     try {
       await api.put(
@@ -45,17 +58,33 @@ export default function PostAction() {
         }
       );
       queryClient.invalidateQueries({ queryKey: ["postContent"] });
-    } catch (error) {
-      console.error("게시글 좋아요 요청 오류", error);
-    }
+    } catch (error) {}
   };
 
   // 공유 -> URL 복사
+  // const onClickCopyLink = () => {
+  //   const currentUrl = window.location.href;
+  //   navigator.clipboard.writeText(currentUrl).then(() => {
+  //     setIsShareDialogOpen(true);
+  //   });
+  // };
+
+  // http에서는 navigator.clipboard.writeText 지원 안함 -> 추후 가능하면 수정
   const onClickCopyLink = () => {
     const currentUrl = window.location.href;
-    navigator.clipboard.writeText(currentUrl).then(() => {
+
+    const textarea = document.createElement("textarea");
+    textarea.value = currentUrl;
+    document.body.appendChild(textarea);
+
+    textarea.select();
+    try {
+      document.execCommand("copy"); // 복사 실행
       setIsShareDialogOpen(true);
-    });
+    } catch (error) {
+      alert("복사에 실패했습니다. 직접 복사해주세요.");
+    }
+    document.body.removeChild(textarea);
   };
 
   // 신고 클릭
@@ -73,7 +102,7 @@ export default function PostAction() {
   };
 
   const confirmReportPost = async () => {
-    if (postToReport === null) return;
+    if (postToReport === null || !selectedOption) return;
     try {
       const response = await api.post(
         `/blog-service/blog/article/report/${postToReport}`,
@@ -85,9 +114,7 @@ export default function PostAction() {
           headers: { Authorization: accessToken },
         }
       );
-    } catch (error) {
-      console.error("게시글 신고 실패: ", error);
-    }
+    } catch (error) {}
     setIsReportDialogOpen(false);
     setIsReportConfirmDialogOpen(true);
     setPostToReport(null);
@@ -115,30 +142,31 @@ export default function PostAction() {
       setIsDeleteDialogOpen(false);
       setPostToDelete(null);
 
-      router.push(`/category/${currentPost.childCategoryId}`);
-    } catch (error) {
-      console.error("게시글 삭제 실패:", error);
-    }
+      router.back();
+    } catch (error) {}
   };
 
   return (
     <div className="flex w-full h-5 justify-between">
-      {accessToken ? (
-        <button className="flex items-center gap-1" onClick={onClickLike}>
-          <BpFollowerIcon isFilled={currentPost.checkRecommend} />
-          <p className="text-primary-1 text-xs font-semibold">{`좋아요 ${currentPost?.likeCount}`}</p>
-        </button>
-      ) : (
-        <button className="flex items-center gap-1">
-          <BpFollowerIcon isFilled={true} />
-          <p className="text-primary-1 text-xs font-semibold">{`좋아요 ${currentPost?.likeCount}`}</p>
-        </button>
-      )}
+      <motion.button
+        className="flex items-center gap-1"
+        onClick={onClickLike}
+        variants={buttonVariants}
+        initial="rest"
+        whileTap="clicked">
+        <BpFollowerIcon isFilled={currentPost.checkRecommend} />
+        <p className="text-primary-1 text-xs font-semibold">{`좋아요 ${currentPost?.likeCount}`}</p>
+      </motion.button>
       <div className="flex gap-4">
-        <button className="flex items-center gap-1" onClick={onClickCopyLink}>
+        <motion.button
+          className="flex items-center gap-1"
+          onClick={onClickCopyLink}
+          variants={buttonVariants}
+          initial="rest"
+          whileTap="clicked">
           <ShareIcon />
           <p className="text-black text-xs font-semibold">{`공유`}</p>
-        </button>
+        </motion.button>
         {isOwnBlog ? (
           <>
             <IconBtn
@@ -174,6 +202,21 @@ export default function PostAction() {
           content="URL이 클립보드에 복사되었습니다!"
           backBtn="확인"
           onBackBtnClick={() => setIsShareDialogOpen(false)}
+        />
+      )}
+
+      {/* 로그인 필요 다이얼로그 */}
+      {isLoginRequiredDialogOpen && (
+        <Dialog
+          title="로그인이 필요합니다"
+          content={`이 기능을 사용하려면 로그인이 필요합니다.\n로그인하시겠습니까?`}
+          backBtn="취소"
+          onBackBtnClick={() => setIsLoginRequiredDialogOpen(false)}
+          primaryBtn="로그인"
+          onBtnClick={() => {
+            setIsLoginRequiredDialogOpen(false);
+            router.push("/sign-in");
+          }}
         />
       )}
 
@@ -215,7 +258,7 @@ export default function PostAction() {
                 value={customInput}
                 onChange={(event) => setCustomInput(event.target.value)}
                 placeholder="신고 사유를 적어주세요"
-                className="w-full h-28 border pl-4 p-2 rounded-md text-base font-regular"
+                className="w-full h-28 resize-none border border-border-2 pl-4 p-2 rounded-md text-base font-regular"
               />
             </div>
           )}

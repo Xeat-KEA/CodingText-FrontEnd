@@ -32,9 +32,11 @@ export interface BlogPost {
   articleId: number;
   articleReplies: CommentProps[];
   blogId: number;
+  userId?: number;
   checkRecommend: boolean;
   childCategoryId: number;
   childName: string;
+  codeTitle?: string;
   codeContent?: string;
   codeId?: number;
   content: string;
@@ -60,6 +62,7 @@ export interface CommentForm {
 export interface CommentProps {
   replyId: number;
   blogId: number;
+  userId?: number;
   userName: string;
   profileUrl: string;
   parentReplyId?: number;

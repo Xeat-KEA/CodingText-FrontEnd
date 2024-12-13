@@ -2,21 +2,37 @@ import Image from "next/image";
 import { CommentProps } from "../../_interfaces/interfaces";
 import { useCalculateDate } from "@/app/_hooks/useCalculateDate";
 import { ReplyIcon } from "../Icons";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import IconBtn from "@/app/_components/IconBtn";
 import ProfileImgContainer from "@/app/_components/ProfileImgContainer";
-import { useTokenStore } from "@/app/stores";
+import { usePostStore, useTokenStore } from "@/app/stores";
+import { motion } from "framer-motion";
 
 export default function Comment({ comment }: { comment: CommentProps }) {
   const pathname = usePathname();
+  const router = useRouter();
   const isAdminPage = pathname.includes("/admin/");
   const { accessToken, isTokenSet } = useTokenStore();
+  const { reportPostId, reportReplyId, currentPost } = usePostStore();
+
+  const buttonVariants = {
+    rest: { scale: 1 },
+    clicked: { scale: 0.95, transition: { type: "spring", stiffness: 300 } },
+  };
 
   return (
     <div className={`${comment.mentionedUserName ? "pl-12" : ""}`}>
-      <div className="flex flex-col w-full gap-4 py-4 border-b border-border-2">
+      <div className="flex flex-col w-full gap-4 py-4 border-b border-border-2 ">
         <div className="flex w-full justify-between items-center">
-          <div className="flex gap-2 items-center">
+          <div
+            className="flex gap-2 items-center cursor-pointer"
+            onClick={() => {
+              if (isAdminPage) {
+                router.push(`/admin/user/${comment.userId}`);
+              } else {
+                router.push(`/blog/${comment.blogId}`);
+              }
+            }}>
             {/* 프로필 이미지 */}
             {comment.profileUrl && (
               <div className="profile-image w-120 h-120 relative">
@@ -27,7 +43,7 @@ export default function Comment({ comment }: { comment: CommentProps }) {
                 />
               </div>
             )}
-            <p className="text-xs text-body font-semibold">
+            <p className="text-xs text-body font-semibold hover:underline">
               {comment.userName}
             </p>
           </div>
@@ -36,7 +52,16 @@ export default function Comment({ comment }: { comment: CommentProps }) {
           </p>
         </div>
 
-        <div className="text-sm text-body font-regular">
+        <div
+          className={`text-sm font-regular ${
+            isAdminPage &&
+            reportReplyId !== -1 &&
+            reportPostId === currentPost.articleId &&
+            reportReplyId === comment.replyId
+              ? "text-red"
+              : "text-body"
+          }
+          `}>
           {comment.mentionedUserName && (
             <p className="text-sm text-primary-1 font-semibold">
               @{comment.mentionedUserName}
@@ -77,14 +102,17 @@ export default function Comment({ comment }: { comment: CommentProps }) {
         ) : (
           <div className="flex w-full h-5 justify-between items-center">
             {accessToken && (
-              <button
+              <motion.button
                 className="flex items-center gap-1"
                 onClick={() =>
                   comment.onReplyClick(comment.replyId, comment.blogId)
-                }>
+                }
+                variants={buttonVariants}
+                initial="rest"
+                whileTap="clicked">
                 <ReplyIcon />
                 <p className="text-black text-xs font-semibold ">답글</p>
-              </button>
+              </motion.button>
             )}
             {accessToken ? (
               comment.isOwnComment ? (
