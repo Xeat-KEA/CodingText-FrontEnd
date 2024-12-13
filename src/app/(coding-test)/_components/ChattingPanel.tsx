@@ -46,7 +46,6 @@ export default function ChattingPanel({
       if (lastPage.firstPage) {
         return undefined;
       }
-      console.log(lastPage);
       return lastPage.currentPage - 1;
     },
     enabled: !!accessToken && !!historyId,
@@ -102,10 +101,10 @@ export default function ChattingPanel({
         </div>
       )}
       {chats?.map((chat) => (
-        <>
+        <div className="flex flex-col gap-6" key={chat.chatHistoryId}>
           <ChatBubble role="user" content={chat.question} />
           <ChatBubble role="gpt" content={chat.answer} />
-        </>
+        </div>
       ))}
       {newChats?.map((chat, index) => (
         <ChatBubble key={index} role={chat.role} content={chat.content} />

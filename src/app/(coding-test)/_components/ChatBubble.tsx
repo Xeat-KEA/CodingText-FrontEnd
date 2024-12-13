@@ -1,17 +1,26 @@
 import DOMPurify from "isomorphic-dompurify";
-import { Chat, NewChat } from "../_interface/interfaces";
+import { NewChat } from "../_interface/interfaces";
+import { WarningIcon } from "./Icons";
 
 export default function ChatBubble({ role, content }: NewChat) {
   return (
     <div
-      className={`bubble ${
-        role === "gpt"
-          ? "bg-white"
-          : "bg-primary-1 font-bold self-end !text-white whitespace-pre-wrap"
+      className={`${
+        role === "warning"
+          ? "warning-bubble"
+          : `bubble ${
+              role === "gpt"
+                ? "bg-white"
+                : "bg-primary-1 font-bold self-end !text-white whitespace-pre-wrap"
+            }`
       }`}
-      dangerouslySetInnerHTML={{
-        __html: DOMPurify.sanitize(content),
-      }}
-    />
+    >
+      {role === "warning" && <WarningIcon />}
+      <div
+        dangerouslySetInnerHTML={{
+          __html: DOMPurify.sanitize(content),
+        }}
+      />
+    </div>
   );
 }

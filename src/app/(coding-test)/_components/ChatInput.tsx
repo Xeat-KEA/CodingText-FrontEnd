@@ -31,10 +31,16 @@ export default function ChatInput({ historyId }: { historyId?: number }) {
           headers: { Authorization: accessToken },
         }
       );
-      setNewChats([
+      console.log(response);
+      const generatedChats = [
         ...tempChats,
         { role: "gpt", content: response.data.data.answer },
-      ]);
+      ];
+      const warning = response.data.data.warning;
+      if (warning) {
+        generatedChats.push({ role: "warning", content: warning });
+      }
+      setNewChats(generatedChats);
       setIsLoading(false);
     } catch {
       setIsLoading(false);
@@ -69,7 +75,7 @@ export default function ChatInput({ historyId }: { historyId?: number }) {
   }, [content]);
 
   return (
-    <div className="px-6 pb-8 bg-primary-2 w-full shrink-0 h-[96px] flex flex-col-reverse">
+    <div className="relative px-6 pb-8 bg-primary-2 w-full shrink-0 h-[96px] flex flex-col-reverse">
       <form
         onSubmit={handleSubmit(onValid)}
         className="relative last:w-full flex px-4 py-2 gap-3 bg-white border border-border-2 rounded-[27px]"
@@ -114,6 +120,10 @@ export default function ChatInput({ historyId }: { historyId?: number }) {
           </div>
         )}
       </form>
+      <span className="text-xs text-body absolute bottom-2 left-1/2 -translate-x-1/2 whitespace-nowrap">
+        최고의 답변을 제공하기 위해 노력하지만, 가끔 부정확하거나 실수할 수도
+        있어요
+      </span>
     </div>
   );
 }
