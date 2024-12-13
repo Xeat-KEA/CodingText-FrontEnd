@@ -9,7 +9,6 @@ import { useEffect, useState } from "react";
 import LoadingSpinner from "@/app/_components/LoadingSpinner";
 import { PROGRAMMING_LANGUAGES } from "@/app/_constants/constants";
 import { useCheckToken } from "@/app/_hooks/useCheckToken";
-import { Chat } from "../../_interface/interfaces";
 import SplittedContainer from "../../_components/SplittedContainer";
 import UnsplittedContainer from "../../_components/UnsplittedContainer";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
@@ -29,6 +28,9 @@ export default function CodingTestPage() {
     setLanguage,
     setCompiledResult,
     setCompileError,
+    setSubmitResult,
+    setIsRunning,
+    setHasSolved,
   } = useCodingTestStore();
   const { setContent } = useTiptapStore();
   // 페이지 진입 시 전역변수 초기화
@@ -38,6 +40,8 @@ export default function CodingTestPage() {
     setContent("");
     setCompileError("");
     setCompiledResult([]);
+    setIsRunning(false);
+    setSubmitResult([]);
     setLanguage(PROGRAMMING_LANGUAGES[0]);
   }, []);
 
@@ -49,22 +53,23 @@ export default function CodingTestPage() {
   const fetchCodeInfo = async () => {
     if (isTokenSet === true) {
       if (accessToken) {
-        const response = await api.get(
+        const { data } = await api.get(
           `/code-bank-service/code/history/user/${id}`,
           {
             headers: { Authorization: accessToken },
           }
         );
-        setHistoryId(response.data.historyId);
-        setCodeContent(useBase64("decode", response.data.code_Content));
-        setValue(useBase64("decode", response.data.codeHistory_writtenCode));
-        return response.data;
+        setHistoryId(data.historyId);
+        setCodeContent(useBase64("decode", data.code_Content));
+        setHasSolved(data.correct);
+        setValue(useBase64("decode", data.codeHistory_writtenCode));
+        return data;
       } else {
-        const response = await api.get(
+        const { data } = await api.get(
           `/code-bank-service/code/non/lists/${id}`
         );
-        setCodeContent(useBase64("decode", response.data.content));
-        return response.data;
+        setCodeContent(useBase64("decode", data.content));
+        return data;
       }
     }
   };
@@ -72,19 +77,18 @@ export default function CodingTestPage() {
     queryKey: ["codeInfo", isTokenSet],
     queryFn: fetchCodeInfo,
   });
-  console.log(codeInfo);
 
   // 채팅 정보
   const fetchChats = async ({ pageParam }: { pageParam?: number }) => {
     if (historyId) {
-      const response = await api.get(
+      const { data } = await api.get(
         `/code-llm-service/llm/history/${historyId}`,
         {
           params: { page: pageParam, size: 5 },
           headers: { Authorization: accessToken },
         }
       );
-      return response.data.data;
+      return data.data;
     } else {
       return null;
     }

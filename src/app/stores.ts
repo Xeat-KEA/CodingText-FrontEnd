@@ -2,6 +2,7 @@ import { create } from "zustand";
 import {
   BlogStore,
   CategoryStore,
+  ChatStore,
   CodingTestStore,
   PaginationStore,
   PostStore,
@@ -183,4 +184,10 @@ export const useRegisterStore = create<RegisterStore>((set) => ({
 export const useWindowSizeStore = create<WindowSizeStore>((set) => ({
   windowSize: 0,
   setWindowSize: (number) => set({ windowSize: number }),
+}));
+
+// 채팅 관련 전역변수
+export const useChatStore = create<ChatStore>((set) => ({
+  isLoading: false,
+  setIsLoading: (state) => set({ isLoading: state }),
 }));

@@ -32,6 +32,7 @@ export default function CodeEditPanel() {
     setCompiledResult,
     setCompileError,
     setSubmitResult,
+    setHasSolved,
   } = useCodingTestStore();
 
   const [isCorrect, setIsCorrect] = useState(false);
@@ -90,24 +91,7 @@ export default function CodeEditPanel() {
       try {
         setIsRunning(true);
         setCompileError("");
-        setSubmitResult([
-          { result: true, runtime: 32 },
-          { result: true, runtime: 35 },
-          { result: true, runtime: 37 },
-          { result: true, runtime: 38 },
-          { result: true, runtime: 125 },
-          { result: true, runtime: 32 },
-          { result: true, runtime: 35 },
-          { result: true, runtime: 37 },
-          { result: true, runtime: 38 },
-          { result: true, runtime: 125 },
-          { result: true, runtime: 32 },
-          { result: true, runtime: 35 },
-          { result: true, runtime: 37 },
-          { result: true, runtime: 38 },
-          { result: true, runtime: 125 },
-        ]);
-        /* const response = await api.post(
+        const response = await api.post(
           "/code-compile-service/code/submit",
           data,
           {
@@ -118,13 +102,18 @@ export default function CodeEditPanel() {
         );
         if (response.status === 200) {
           const result: SubmitResult[] = response.data.data.result;
-          if (result.filter((el) => el.result === false).length === 0) {
+          setSubmitResult(result);
+          const isAnswer =
+            result.filter((el) => el.result === false).length === 0;
+          if (isAnswer) {
             setIsCorrect(true);
             setIsDialogOpen((prev) => !prev);
+            setHasSolved(true);
           } else {
+            setIsCorrect(false);
             setIsDialogOpen((prev) => !prev);
           }
-        } */
+        }
         setIsRunning(false);
       } catch (err: any) {
         if (isAxiosError(err)) {

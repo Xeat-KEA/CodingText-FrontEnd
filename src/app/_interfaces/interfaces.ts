@@ -435,3 +435,8 @@ export interface NoticeForm {
   title: string;
   content: string;
 }
+
+export interface ChatStore {
+  isLoading: boolean;
+  setIsLoading: (state: boolean) => void;
+}
