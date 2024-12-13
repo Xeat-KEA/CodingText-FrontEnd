@@ -1,6 +1,10 @@
 import { Editor } from "@tiptap/react";
 import { BlogPost } from "../(blog)/_interfaces/interfaces";
-import { CompileResult } from "../(coding-test)/_interface/interfaces";
+import {
+  CompileResult,
+  NewChat,
+  SubmitResult,
+} from "../(coding-test)/_interface/interfaces";
 
 export interface SearchBarProps {
   baseURL: string;
@@ -280,6 +284,8 @@ export interface CodingTestStore {
   setCompiledResult: (result: CompileResult[]) => void;
   compileError: string;
   setCompileError: (error: string) => void;
+  submitResult: SubmitResult[];
+  setSubmitResult: (result: SubmitResult[]) => void;
 }
 
 // 텍스트 에디터 내용 Interface
@@ -438,4 +444,15 @@ export interface Notice {
 export interface NoticeForm {
   title: string;
   content: string;
+}
+
+export interface ChatStore {
+  isLoading: boolean;
+  setIsLoading: (state: boolean) => void;
+  isIncludingAnswer: boolean;
+  setIsIncludingAnswer: (state: boolean) => void;
+  sendWithCode: boolean;
+  setSendWithCode: (state: boolean) => void;
+  newChats: NewChat[];
+  setNewChats: (newList: NewChat[]) => void;
 }

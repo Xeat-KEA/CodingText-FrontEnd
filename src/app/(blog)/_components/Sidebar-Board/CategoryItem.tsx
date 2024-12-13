@@ -7,6 +7,7 @@ import AddCategory from "./AddCategory";
 import api from "@/app/_api/config";
 import { useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion"; // Framer Motion 임포트
+import { BUTTON_VARIANTS } from "@/app/_constants/constants";
 
 // 제목의 최대 길이 설정 (임시로 10자로 제한)
 const MAX_TITLE_LENGTH = 10;
@@ -78,13 +79,17 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
 
   return (
     <div className="board" key={category.id}>
-      <div
-        className="flex items-center relative text-black bg-white text-sm font-regular h-10 pl-6 py-2 cursor-pointer"
+      <motion.div
+        variants={BUTTON_VARIANTS}
+        initial="initial"
+        whileHover="hover"
+        className="flex items-center relative text-black bg-white text-sm font-regular h-10 cursor-pointer"
         onMouseEnter={() => setHoveredCategoryId(true)}
-        onMouseLeave={() => setHoveredCategoryId(false)}>
+        onMouseLeave={() => setHoveredCategoryId(false)}
+      >
         {editCategoryId === category.id ? (
           isOwnBlog && (
-            <>
+            <div className="w-full h-full flex items-center pl-6 bg-white">
               <input
                 type="text"
                 value={editCategoryTitle}
@@ -92,10 +97,11 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
                 onKeyPress={handleKeyPress}
                 className="bg-bg-1 text-body text-sm font-regular p-1 w-32"
               />
-              <div className="absolute right-3 flex text-2xs space-x-2">
+              <div className="absolute right-3 top-1/2 -translate-y-1/2 flex text-2xs space-x-2">
                 <button
                   className="text-primary-1"
-                  onClick={() => saveEditCategory(category.id)}>
+                  onClick={() => saveEditCategory(category.id)}
+                >
                   저장
                 </button>
                 <button
@@ -103,23 +109,25 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
                   onClick={() => {
                     setEditCategoryId(null);
                     setEditCategoryTitle("");
-                  }}>
+                  }}
+                >
                   취소
                 </button>
               </div>
-            </>
+            </div>
           )
         ) : (
           <>
             <p
-              className={`cursor-pointer ${
+              className={`cursor-pointer w-full h-full flex items-center pl-6 bg-white ${
                 category.id === Number(params.categoryId) ||
                 (category.id === 1 &&
                   pathname.includes(`/blog/${currentBlogId}/code`))
                   ? "font-bold"
                   : ""
               }`}
-              onClick={() => handleCategoryClick(category.id)}>
+              onClick={() => handleCategoryClick(category.id)}
+            >
               {category.title}
             </p>
             {isOwnBlog && category.id !== 1 && hoveredCategoryId === true && (
@@ -129,33 +137,39 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
                   onClick={() => {
                     setEditCategoryId(category.id);
                     setEditCategoryTitle(category.title);
-                  }}>
+                  }}
+                >
                   수정
                 </button>
                 <button
                   className="text-red"
                   onClick={() =>
                     handleDeleteCategory(category.id, category.title, false)
-                  }>
+                  }
+                >
                   삭제
                 </button>
               </div>
             )}
           </>
         )}
-      </div>
+      </motion.div>
 
       <AnimatePresence>
         {activeCategories.includes(category.id) && category.childCategories && (
           <motion.div
-            className="pl-10 bg-white "
+            className="bg-white overflow-hidden"
             initial={{ height: 0 }}
             animate={{ height: "auto" }}
             exit={{ height: 0 }}
-            transition={{ duration: 0.2 }}>
+            transition={{ duration: 0.2 }}
+          >
             {/* 하위 게시판 전체 */}
-            <p
-              className={`flex items-center relative bg-white text-xs font-regular h-8 py-2  cursor-pointer ${
+            <motion.p
+              variants={BUTTON_VARIANTS}
+              initial="initial"
+              whileHover="hover"
+              className={`flex items-center relative bg-white text-xs font-regular h-8 pl-10 py-2 cursor-pointer ${
                 pathname ===
                 (category.id === 1
                   ? `/blog/${currentBlogId}/code`
@@ -169,9 +183,10 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
                     ? `/blog/${currentBlogId}/code`
                     : `/category/${category.id}`
                 )
-              }>
+              }
+            >
               전체
-            </p>
+            </motion.p>
 
             {/* 하위 게시판 목록 */}
             {category.childCategories.map((childCategory) => (
@@ -186,7 +201,11 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
 
             {/* 하위 게시판 추가 */}
             {isOwnBlog && category.id !== 1 && (
-              <>
+              <motion.div
+                variants={BUTTON_VARIANTS}
+                initial="initial"
+                whileHover="hover"
+              >
                 {isAddingChildCategory[category.id] ? (
                   <AddCategory
                     handleAddCategory={handleAddCategory}
@@ -196,11 +215,12 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
                 ) : (
                   <button
                     onClick={() => setIsAddingChildCategory(category.id, true)}
-                    className="bg-white text-2xs text-disabled h-8 py-2">
+                    className="text-2xs text-disabled h-8 w-full flex pl-10 py-2"
+                  >
                     새 하위 게시판 추가
                   </button>
                 )}
-              </>
+              </motion.div>
             )}
           </motion.div>
         )}

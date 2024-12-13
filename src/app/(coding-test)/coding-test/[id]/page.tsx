@@ -1,56 +1,89 @@
 "use client";
 
-import { Splitter, SplitterPanel } from "primereact/splitter";
-import CodeEditPanel from "../../_components/CodeEditPanel";
 import {
   useCodingTestStore,
   useTiptapStore,
   useWindowSizeStore,
 } from "@/app/stores";
-import NewPostPanel from "../../_components/NewPostPanel";
-import { useEffect } from "react";
-import ChattingPanel from "../../_components/ChattingPanel";
+import { useEffect, useState } from "react";
 import LoadingSpinner from "@/app/_components/LoadingSpinner";
 import { PROGRAMMING_LANGUAGES } from "@/app/_constants/constants";
 import { useCheckToken } from "@/app/_hooks/useCheckToken";
+import SplittedContainer from "../../_components/SplittedContainer";
+import UnsplittedContainer from "../../_components/UnsplittedContainer";
+import { useQuery } from "@tanstack/react-query";
+import api from "@/app/_api/config";
+import { useParams } from "next/navigation";
+import { useBase64 } from "@/app/_hooks/useBase64";
 
 export default function CodingTestPage() {
-  const {} = useCheckToken();
+  const { accessToken, isTokenSet } = useCheckToken();
+  const { id } = useParams();
 
   // 필요한 전역변수 선언
-  const { isPosting, setIsPosting, setValue, setLanguage } =
-    useCodingTestStore();
+  const {
+    setIsPosting,
+    setValue,
+    setLanguage,
+    setCompiledResult,
+    setCompileError,
+    setSubmitResult,
+    setIsRunning,
+    setHasSolved,
+  } = useCodingTestStore();
   const { setContent } = useTiptapStore();
   // 페이지 진입 시 전역변수 초기화
   useEffect(() => {
     setIsPosting(false);
     setValue("");
     setContent("");
+    setCompileError("");
+    setCompiledResult([]);
+    setIsRunning(false);
+    setSubmitResult([]);
     setLanguage(PROGRAMMING_LANGUAGES[0]);
   }, []);
 
   const { windowSize } = useWindowSizeStore();
 
+  // 문제 정보
+  const [historyId, setHistoryId] = useState();
+  const [codeContent, setCodeContent] = useState("");
+  const fetchCodeInfo = async () => {
+    if (isTokenSet === true) {
+      if (accessToken) {
+        const { data } = await api.get(
+          `/code-bank-service/code/history/user/${id}`,
+          {
+            headers: { Authorization: accessToken },
+          }
+        );
+        setHistoryId(data.historyId);
+        setCodeContent(useBase64("decode", data.code_Content));
+        setHasSolved(data.correct);
+        setValue(useBase64("decode", data.codeHistory_writtenCode));
+        return data;
+      } else {
+        const { data } = await api.get(
+          `/code-bank-service/code/non/lists/${id}`
+        );
+        setCodeContent(useBase64("decode", data.content));
+        return data;
+      }
+    }
+  };
+  const { data: codeInfo } = useQuery({
+    queryKey: ["codeInfo", isTokenSet],
+    queryFn: fetchCodeInfo,
+  });
+
   return (
     <>
-      {windowSize ? (
+      {codeInfo && windowSize ? (
         windowSize >= 768 ? (
-          <Splitter gutterSize={10} className="w-full h-screen pt-16 flex">
-            {/* 채팅창 공간 */}
-            <SplitterPanel className="flex flex-col">
-              {/* 메세지 표시 공간 */}
-              <ChattingPanel />
-            </SplitterPanel>
-            {/* 작성 관련 공간 */}
-            <SplitterPanel className="flex">
-              {!isPosting ? <CodeEditPanel /> : <NewPostPanel />}
-            </SplitterPanel>
-          </Splitter>
+          <SplittedContainer content={codeContent} historyId={historyId} />
         ) : (
-          <div className="w-full pt-16 flex flex-col">
-            <ChattingPanel />
-            {!isPosting ? <CodeEditPanel /> : <NewPostPanel />}
-          </div>
+          <UnsplittedContainer content={codeContent} historyId={historyId} />
         )
       ) : (
         <div className="w-screen h-screen">

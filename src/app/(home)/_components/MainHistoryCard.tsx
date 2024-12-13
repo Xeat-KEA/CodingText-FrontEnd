@@ -1,12 +1,41 @@
 import Link from "next/link";
 import { useState } from "react";
 import Dialog from "@/app/_components/Dialog";
-import { DialogCheckIcon } from "@/app/_components/Icons";
+import { DialogCheckIcon, DialogXIcon } from "@/app/_components/Icons";
 import { History } from "@/app/(code)/_interfaces/interfaces";
+import api from "@/app/_api/config";
+import { useTokenStore } from "@/app/stores";
+import { isAxiosError } from "axios";
 
 export default function MainHistoryCard({ history }: { history: History }) {
+  const { accessToken } = useTokenStore();
+
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isRegistered, setIsRegistered] = useState(false);
+  const [isAlreadyRegistered, setIsAlreadyRegistered] = useState(false);
+
+  const onRegister = async () => {
+    try {
+      const response = await api.post(
+        `/code-bank-service/code/history/register/${history.codeId}`,
+        {},
+        { headers: { Authorization: accessToken } }
+      );
+      if (response.status === 200) {
+        setIsRegistered((prev) => !prev);
+        console.log(response);
+      }
+    } catch (err) {
+      if (isAxiosError(err)) {
+        if (err.response?.status === 400) {
+          setIsDialogOpen(false);
+          setIsAlreadyRegistered((prev) => !prev);
+        }
+      }
+
+      console.log(err);
+    }
+  };
 
   return (
     <>
@@ -63,11 +92,7 @@ export default function MainHistoryCard({ history }: { history: History }) {
             backBtn="취소"
             onBackBtnClick={() => setIsDialogOpen((prev) => !prev)}
             primaryBtn="정식 등록 건의"
-            onBtnClick={() => {
-              // 문제 등록 신청 POST 로직 필요
-
-              setIsRegistered((prev) => !prev);
-            }}
+            onBtnClick={onRegister}
           />
         ) : (
           <Dialog
@@ -81,6 +106,14 @@ export default function MainHistoryCard({ history }: { history: History }) {
             }}
           />
         ))}
+      {isAlreadyRegistered && (
+        <Dialog
+          icon={<DialogXIcon />}
+          title={"이미 등록 신청된\n문제예요"}
+          backBtn="확인"
+          onBackBtnClick={() => setIsAlreadyRegistered((prev) => !prev)}
+        />
+      )}
     </>
   );
 }

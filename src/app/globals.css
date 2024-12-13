@@ -181,6 +181,9 @@ textarea {
   .bubble {
     @apply prose p-3 rounded-3xl shadow-1 w-fit;
   }
+  .warning-bubble {
+    @apply w-fit px-4 py-2 bg-bg-3 text-xs font-semibold rounded-full self-center flex items-center gap-2;
+  }
   /* 게시물 작성 정보 인풋 (제목, 비밀번호 등) */
   .post-input {
     @apply px-4 py-2 text-sm text-black border-b border-border-2;

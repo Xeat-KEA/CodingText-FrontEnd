@@ -27,6 +27,6 @@ export interface History {
 
 export interface CreateCodeForm {
   difficulty: string;
-  algorithm?: string;
-  requirement?: string;
+  algorithm: string;
+  etc: string;
 }

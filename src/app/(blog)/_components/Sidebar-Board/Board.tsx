@@ -8,6 +8,8 @@ import { useBlogStore, useCategoryStore, useTokenStore } from "@/app/stores";
 import api from "@/app/_api/config";
 import { usePathname, useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
+import { motion } from "framer-motion";
+import { BUTTON_VARIANTS } from "@/app/_constants/constants";
 // 제목의 최대 길이 설정 (임시로 10자로 제한)
 const MAX_TITLE_LENGTH = 10;
 
@@ -39,42 +41,44 @@ export default function Board() {
 
   // 상/하위 게시판 추가 함수
   const handleAddCategory = async (title: string, parentId?: number) => {
-    if(accessToken){
+    if (accessToken) {
       const trimmedTitle = title.trim().slice(0, MAX_TITLE_LENGTH);
-    if (!trimmedTitle) return;
+      if (!trimmedTitle) return;
 
-    //   게시판 5개 이상 추가 제한 (코딩테스트 기본 값)
-    if (!parentId && boardCategories.length >= 6) {
-      setIsAddCategoryDisabled(true);
-      setIsAddingCategory(false);
-      setIsDialogOpen(true);
-      return;
-    }
+      //   게시판 5개 이상 추가 제한 (코딩테스트 기본 값)
+      if (!parentId && boardCategories.length >= 6) {
+        setIsAddCategoryDisabled(true);
+        setIsAddingCategory(false);
+        setIsDialogOpen(true);
+        return;
+      }
 
-    if (parentId) {
-      setIsAddingChildCategory(parentId, false);
-      await api.post(
-        "/blog-service/blog/board/child",
-        {
-          parentCategoryId: parentId,
-          childName: trimmedTitle,
-        },
-        {
-          headers: { Authorization: accessToken },
-        }
-      );
-    } else {
-      setIsAddingCategory(false);
-      await api.post(
-        "/blog-service/blog/board/parent",
-        { parentName: trimmedTitle },
-        {
-          headers: { Authorization: accessToken },
-        }
-      );
-    }
-    // 추가 후 데이터 갱신
-    queryClient.invalidateQueries({ queryKey: ["boardCategories", isTokenSet, currentBlogId] });
+      if (parentId) {
+        setIsAddingChildCategory(parentId, false);
+        await api.post(
+          "/blog-service/blog/board/child",
+          {
+            parentCategoryId: parentId,
+            childName: trimmedTitle,
+          },
+          {
+            headers: { Authorization: accessToken },
+          }
+        );
+      } else {
+        setIsAddingCategory(false);
+        await api.post(
+          "/blog-service/blog/board/parent",
+          { parentName: trimmedTitle },
+          {
+            headers: { Authorization: accessToken },
+          }
+        );
+      }
+      // 추가 후 데이터 갱신
+      queryClient.invalidateQueries({
+        queryKey: ["boardCategories", isTokenSet, currentBlogId],
+      });
     }
   };
 
@@ -124,7 +128,7 @@ export default function Board() {
       }
       // 삭제 후 데이터 갱신
       queryClient.invalidateQueries({ queryKey: ["boardCategories"] });
-      
+
       setIsDialogOpen(false);
       setCategoryToDelete(null);
     } catch (error) {
@@ -134,17 +138,20 @@ export default function Board() {
 
   return (
     <div className="w-60 mt-6">
-      <p className="text-disabled text-xs font-regular h-10 pl-6 py-2">
+      <p className="text-disabled text-xs font-regular pl-6 py-2 h-10 flex items-center">
         게시판 목록
       </p>
       {/* 상위 게시판 전체 */}
-      <p
-        className={`flex items-center relative text-black text-sm font-regular h-10 pl-6 py-2 cursor-pointer 
-          ${pathname === `/blog/${currentBlogId}/category` ? "font-bold" : ""
-        }`}
-        onClick={() => router.push(`/blog/${currentBlogId}/category`)}>
+      <motion.p
+        variants={BUTTON_VARIANTS}
+        initial="initial"
+        whileHover="hover"
+        className={`flex items-center relative bg-white text-black text-sm font-regular h-10 pl-6 py-2 cursor-pointer 
+          ${pathname === `/blog/${currentBlogId}/category` ? "font-bold" : ""}`}
+        onClick={() => router.push(`/blog/${currentBlogId}/category`)}
+      >
         전체
-      </p>
+      </motion.p>
 
       {/* 상위 게시판 목록 */}
       {boardCategories.map((category) => (
@@ -158,7 +165,12 @@ export default function Board() {
 
       {/* 새 상위 게시판 추가 */}
       {isOwnBlog && (
-        <div className="flex items-center h-10 pl-6 py-3 ">
+        <motion.div
+          variants={BUTTON_VARIANTS}
+          initial="initial"
+          whileHover="hover"
+          className="flex items-center h-10 bg-white"
+        >
           {isAddingCategory ? (
             <div className="flex items-center h-10">
               <AddCategory handleAddCategory={handleAddCategory} />
@@ -166,11 +178,12 @@ export default function Board() {
           ) : (
             <button
               onClick={() => setIsAddingCategory(true)}
-              className="text-xs text-disabled font-semibold">
+              className="w-full h-full flex items-center pl-6 text-xs text-disabled font-semibold"
+            >
               새 상위 게시판 추가
             </button>
           )}
-        </div>
+        </motion.div>
       )}
 
       {/* 다이얼로그 컴포넌트 */}
@@ -186,8 +199,8 @@ export default function Board() {
             isAddCategoryDisabled
               ? "상위 게시판은 최대 5개까지 \n 생성할 수 있어요"
               : categoryToDelete?.isChild
-                ? "삭제 후 복구할 수 없어요!" // 하위
-                : "하위 게시판도 함께 사라지며 \n 삭제 후 복구할 수 없어요!" // 상위
+              ? "삭제 후 복구할 수 없어요!" // 하위
+              : "하위 게시판도 함께 사라지며 \n 삭제 후 복구할 수 없어요!" // 상위
           }
           isWarning={!isAddCategoryDisabled}
           backBtn={isAddCategoryDisabled ? "확인" : "취소"}

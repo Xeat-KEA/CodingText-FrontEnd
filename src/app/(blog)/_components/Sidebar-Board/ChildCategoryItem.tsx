@@ -5,6 +5,8 @@ import { useBlogStore, useCategoryStore, useTokenStore } from "@/app/stores";
 import { useParams } from "next/navigation";
 import api from "@/app/_api/config";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { motion } from "framer-motion";
+import { BUTTON_VARIANTS } from "@/app/_constants/constants";
 
 const MAX_TITLE_LENGTH = 10;
 
@@ -83,14 +85,18 @@ const ChildCategoryItem: React.FC<ChildCategoryItemProps> = ({
   };
 
   return (
-    <div
-      className="flex items-center relative text-xs font-regular h-8 py-2 cursor-pointer"
+    <motion.div
+      className="flex items-center relative text-xs font-regular h-8 cursor-pointer bg-white"
       key={childCategory.id}
+      variants={BUTTON_VARIANTS}
+      initial="initial"
+      whileHover="hover"
       onMouseEnter={() => setHoveredId(true)}
-      onMouseLeave={() => setHoveredId(false)}>
+      onMouseLeave={() => setHoveredId(false)}
+    >
       {editid[category.id] === childCategory.id ? (
         isOwnBlog && (
-          <>
+          <div className="w-full h-full flex items-center pl-10">
             <input
               type="text"
               value={editChildCategoryTitle}
@@ -100,32 +106,36 @@ const ChildCategoryItem: React.FC<ChildCategoryItemProps> = ({
                   saveEditChildCategory(category.id, childCategory.id)
                 )
               }
-              className="bg-bg-1 text-xs font-regular pl-1 w-32 h-6"
+              className="bg-bg-1 text-body text-xs font-regular pl-1 w-32 h-6"
             />
-            <div className="absolute right-3 flex text-2xs space-x-2">
+            <div className="absolute right-3 top-1/2 -translate-y-1/2 flex text-2xs space-x-2">
               <button
                 className="text-primary-1"
                 onClick={() =>
                   saveEditChildCategory(category.id, childCategory.id)
-                }>
+                }
+              >
                 저장
               </button>
               <button
                 className="text-disabled"
-                onClick={() => cancelEditChildCategory(category.id)}>
+                onClick={() => cancelEditChildCategory(category.id)}
+              >
                 취소
               </button>
             </div>
-          </>
+          </div>
         )
       ) : (
         <>
           <Link
+            className="w-full h-full flex items-center pl-10"
             href={
               category.id === 1
                 ? `/blog/${currentBlogId}/code/${childCategory.id}`
                 : `/category/${category.id}/${childCategory.id}`
-            }>
+            }
+          >
             <p
               className={
                 category.id === 1
@@ -137,7 +147,8 @@ const ChildCategoryItem: React.FC<ChildCategoryItemProps> = ({
                       Number(childCategoryId) === childCategory.id)
                   ? "font-bold"
                   : ""
-              }>
+              }
+            >
               {childCategory.title}
             </p>
           </Link>
@@ -152,7 +163,8 @@ const ChildCategoryItem: React.FC<ChildCategoryItemProps> = ({
                     childCategory.id,
                     childCategory.title
                   )
-                }>
+                }
+              >
                 수정
               </button>
               <button
@@ -164,14 +176,15 @@ const ChildCategoryItem: React.FC<ChildCategoryItemProps> = ({
                     true,
                     childCategory.id
                   )
-                }>
+                }
+              >
                 삭제
               </button>
             </div>
           )}
         </>
       )}
-    </div>
+    </motion.div>
   );
 };
 

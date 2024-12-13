@@ -2,6 +2,7 @@ import { create } from "zustand";
 import {
   BlogStore,
   CategoryStore,
+  ChatStore,
   CodingTestStore,
   PaginationStore,
   PostStore,
@@ -13,6 +14,7 @@ import {
   WindowSizeStore,
 } from "./_interfaces/interfaces";
 import { RegisterStore } from "./(admin)/_interfaces/interfaces";
+import { NewChat } from "./(coding-test)/_interface/interfaces";
 
 // 토큰 저장 전역변수
 export const useTokenStore = create<TokenStore>((set) => ({
@@ -52,6 +54,9 @@ export const useCodingTestStore = create<CodingTestStore>((set) => ({
   // 컴파일 에러 여부
   compileError: "",
   setCompileError: (error) => set({ compileError: error }),
+  // 제출 결과
+  submitResult: [],
+  setSubmitResult: (result) => set({ submitResult: result }),
 }));
 
 // 탭바 메뉴 관련 전역변수
@@ -186,4 +191,16 @@ export const useRegisterStore = create<RegisterStore>((set) => ({
 export const useWindowSizeStore = create<WindowSizeStore>((set) => ({
   windowSize: 0,
   setWindowSize: (number) => set({ windowSize: number }),
+}));
+
+// 채팅 관련 전역변수
+export const useChatStore = create<ChatStore>((set) => ({
+  isLoading: false,
+  setIsLoading: (state) => set({ isLoading: state }),
+  isIncludingAnswer: false,
+  setIsIncludingAnswer: (state) => set({ isIncludingAnswer: state }),
+  sendWithCode: false,
+  setSendWithCode: (state) => set({ sendWithCode: state }),
+  newChats: [],
+  setNewChats: (newList: NewChat[]) => set({ newChats: newList }),
 }));
