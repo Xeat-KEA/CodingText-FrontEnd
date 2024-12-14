@@ -8,7 +8,7 @@ import { MainMenuBtnProps } from "../_interfaces/interfaces";
 
 export const MAIN_MENU_LIST: MainMenuBtnProps[] = [
   { icon: <MainCodeIcon />, title: "코딩 테스트", url: "/code/list" },
-  { icon: <MainAIIcon />, title: "AI 문제 생성", url: "/ai" },
+  { icon: <MainAIIcon />, title: "AI 문제 생성", url: "" },
   { icon: <MainCommunityIcon />, title: "최신 게시글", url: "/recent-post" },
   { icon: <MainNoticeIcon />, title: "공지사항", url: "/notice" },
 ];
