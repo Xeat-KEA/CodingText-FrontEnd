@@ -14,7 +14,7 @@ import {
 export default function ProfileCard({
   statistics,
 }: {
-  statistics: Statistics;
+  statistics?: Statistics;
 }) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const pathname = usePathname();

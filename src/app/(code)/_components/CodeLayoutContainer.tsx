@@ -54,11 +54,9 @@ export default function CodeLayoutContainer({
             </div>
           </div>
           {/* 회원 정보 부분 */}
-          {statistics !== undefined && (
-            <div className="shrink-0 lg:pl-6 max-lg:pb-6 relative">
-              <ProfileCard statistics={statistics} />
-            </div>
-          )}
+          <div className="shrink-0 lg:pl-6 max-lg:pb-6 relative">
+            <ProfileCard statistics={statistics} />
+          </div>
         </div>
       </div>
     </>
