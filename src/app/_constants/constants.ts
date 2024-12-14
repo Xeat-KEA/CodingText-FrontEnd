@@ -75,7 +75,12 @@ export const ALGORITHM_LIST: Selection[] = [
   { content: "스택", selection: "STACK" },
 ];
 
-export const BUTTON_VARIANTS = {
+export const DEFAULT_BUTTON_VARIANTS = {
   initial: { backgroundColor: "rgb(255, 255, 255)" },
   hover: { backgroundColor: "rgb(247, 247, 247)" },
+};
+
+export const PRIMARY_BUTTON_VARIANTS = {
+  initial: { backgroundColor: "rgb(107, 108, 237)" },
+  hover: { backgroundColor: "rgb(85, 86, 225)" },
 };

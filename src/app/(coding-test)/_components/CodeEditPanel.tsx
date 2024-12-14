@@ -65,7 +65,6 @@ export default function CodeEditPanel() {
         if (response.status === 200) {
           const result = response.data.data.result;
           setCompiledResult(result);
-          console.log(result);
         }
         setIsRunning(false);
       } catch (err: any) {

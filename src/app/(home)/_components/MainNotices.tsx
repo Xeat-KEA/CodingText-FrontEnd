@@ -12,7 +12,10 @@ export default function MainNotices({
     <div className="main-container overflow-hidden">
       {/* 공지 목록 제목 */}
       <div className="main-text-container">
-        <Link href={url} className="main-title-container cursor-pointer">
+        <Link
+          href={url}
+          className="main-title-container cursor-pointer hover:underline"
+        >
           <span className="main-title">{title}</span>
           <MoreContentArrowIcon />
         </Link>

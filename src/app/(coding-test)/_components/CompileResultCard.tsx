@@ -7,7 +7,7 @@ export default function CompileResultCard({
   index: number;
   compileResult: CompileResult;
 }) {
-  const isCorrect = compileResult.output == compileResult.result;
+  const isCorrect = compileResult.output?.trim() == compileResult.result.trim();
   return (
     <div className="flex flex-col gap-4 py-6">
       <div className="flex gap-4 items-center">

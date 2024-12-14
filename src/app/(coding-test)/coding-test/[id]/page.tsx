@@ -17,6 +17,7 @@ import { useParams } from "next/navigation";
 import { useBase64 } from "@/app/_hooks/useBase64";
 import { CodeInfo } from "../../_interface/interfaces";
 import { getDifficultyNumber } from "@/app/utils";
+import { isAxiosError } from "axios";
 
 export default function CodingTestPage() {
   const { accessToken, isTokenSet } = useCheckToken();
@@ -52,23 +53,44 @@ export default function CodingTestPage() {
   const [codeContent, setCodeContent] = useState("");
   const fetchCodeInfo = async () => {
     if (isTokenSet === true) {
-      if (accessToken) {
-        const { data } = await api.get(
-          `/code-bank-service/code/history/user/${id}`,
-          {
-            headers: { Authorization: accessToken },
+      try {
+        if (accessToken) {
+          const response = await api.get(
+            `/code-bank-service/code/history/user/${id}`,
+            {
+              headers: { Authorization: accessToken },
+            }
+          );
+          // 문제를 풀었던 기록이 있는 경우
+          setCodeContent(useBase64("decode", response.data.code_Content));
+          setHasSolved(response.data.correct);
+          setValue(useBase64("decode", response.data.codeHistory_writtenCode));
+          return response.data;
+        } else {
+          const { data } = await api.get(
+            `/code-bank-service/code/non/lists/${id}`
+          );
+          setCodeContent(useBase64("decode", data.content));
+          return data;
+        }
+      } catch (err) {
+        if (isAxiosError(err)) {
+          if (err.response?.status === 500) {
+            // 문제를 처음 푸는 경우
+            const response = await api.get(
+              `/code-bank-service/code/lists/${id}`,
+              {
+                headers: { Authorization: accessToken },
+              }
+            );
+            setCodeContent(useBase64("decode", response.data.code_Content));
+            setHasSolved(response.data.correct);
+            setValue(
+              useBase64("decode", response.data.codeHistory_writtenCode)
+            );
+            return response.data;
           }
-        );
-        setCodeContent(useBase64("decode", data.code_Content));
-        setHasSolved(data.correct);
-        setValue(useBase64("decode", data.codeHistory_writtenCode));
-        return data;
-      } else {
-        const { data } = await api.get(
-          `/code-bank-service/code/non/lists/${id}`
-        );
-        setCodeContent(useBase64("decode", data.content));
-        return data;
+        }
       }
     }
   };

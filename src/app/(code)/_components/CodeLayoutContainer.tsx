@@ -21,18 +21,15 @@ export default function CodeLayoutContainer({
 
   // 사용자 분석 정보 API 호출
   const fetchStatistics = async () => {
-    if (accessToken) {
-      const response = await api.get("/user-service/users/statistics", {
-        headers: { Authorization: accessToken },
-      });
-      return response.data;
-    } else {
-      return null;
-    }
+    const response = await api.get("/user-service/users/statistics", {
+      headers: { Authorization: accessToken },
+    });
+    return response.data;
   };
   const { data: statistics } = useQuery<Statistics>({
     queryKey: ["statistics", isTokenSet],
     queryFn: fetchStatistics,
+    enabled: !!accessToken,
   });
 
   return (

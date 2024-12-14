@@ -16,21 +16,18 @@ export default function EditBlogInfo() {
 
   // API 호출
   const fetchBlogData = async () => {
-    if (accessToken) {
-      try {
-        const response = await api.get(`/blog-service/blog/home`, {
-          headers: { Authorization: accessToken },
-        });
+    try {
+      const response = await api.get(`/blog-service/blog/home`, {
+        headers: { Authorization: accessToken },
+      });
 
-        return {
-          mainContent: useBase64("decode", response.data.data.mainContent),
-          originalImageList: response.data.data.originalImageList || [],
-        };
-      } catch (error) {
-        return "";
-      }
+      return {
+        mainContent: useBase64("decode", response.data.data.mainContent),
+        originalImageList: response.data.data.originalImageList || [],
+      };
+    } catch (error) {
+      return "";
     }
-    return "";
   };
   const { data, isLoading } = useQuery({
     queryKey: ["mainContent", isTokenSet],
@@ -65,8 +62,7 @@ export default function EditBlogInfo() {
         }
       );
       queryClient.invalidateQueries({ queryKey: ["mainContent"] });
-    } catch (error) {
-    }
+    } catch (error) {}
   };
 
   return (
@@ -75,7 +71,8 @@ export default function EditBlogInfo() {
       <div
         className={`w-full min-h-[400px] overflow-y-auto ${
           !isIntroEditing && "border border-border-2 rounded-2xl px-6 py-4"
-        }`}>
+        }`}
+      >
         {!isIntroEditing ? (
           <div
             className="prose"

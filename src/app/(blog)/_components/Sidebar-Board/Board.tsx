@@ -9,7 +9,7 @@ import api from "@/app/_api/config";
 import { usePathname, useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 import { motion } from "framer-motion";
-import { BUTTON_VARIANTS } from "@/app/_constants/constants";
+import { DEFAULT_BUTTON_VARIANTS } from "@/app/_constants/constants";
 // 제목의 최대 길이 설정 (임시로 10자로 제한)
 const MAX_TITLE_LENGTH = 10;
 
@@ -143,7 +143,7 @@ export default function Board() {
       </p>
       {/* 상위 게시판 전체 */}
       <motion.p
-        variants={BUTTON_VARIANTS}
+        variants={DEFAULT_BUTTON_VARIANTS}
         initial="initial"
         whileHover="hover"
         className={`flex items-center relative bg-white text-black text-sm font-regular h-10 pl-6 py-2 cursor-pointer 
@@ -166,7 +166,7 @@ export default function Board() {
       {/* 새 상위 게시판 추가 */}
       {isOwnBlog && (
         <motion.div
-          variants={BUTTON_VARIANTS}
+          variants={DEFAULT_BUTTON_VARIANTS}
           initial="initial"
           whileHover="hover"
           className="flex items-center h-10 bg-white"

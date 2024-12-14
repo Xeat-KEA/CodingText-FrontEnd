@@ -47,7 +47,6 @@ export default function BlogHomeContainer() {
 
   // 회원용 블로그 홈 정보 조회
   const fetchBlogProfileData = async () => {
-    if (!accessToken) return null;
     try {
       const response = await api.get(
         `/blog-service/blog/home/${currentBlogId}`,

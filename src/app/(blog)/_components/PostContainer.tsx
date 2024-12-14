@@ -78,7 +78,6 @@ export default function PostContainer() {
 
   // 회원용 게시글 내용 api 연결
   const fetchPostData = async () => {
-    if (!accessToken) return null;
     const response = await api.get(
       `/blog-service/blog/board/${params.postId}`,
       {

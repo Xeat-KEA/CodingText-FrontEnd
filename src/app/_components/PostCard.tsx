@@ -3,19 +3,19 @@ import {
   BlindIcon,
   CommentCountIcon,
   LikeCountIcon,
-  ReportIcon,
   SecretPostIcon,
 } from "./Icons";
 import { useCalculateDate } from "../_hooks/useCalculateDate";
 import { usePathname, useRouter } from "next/navigation";
 import { useBase64 } from "../_hooks/useBase64";
 import DOMPurify from "isomorphic-dompurify";
-import { useBlogStore, useTokenStore } from "../stores";
+import { useTokenStore } from "../stores";
 import ProfileImgContainer from "./ProfileImgContainer";
 import Image from "next/image";
 import Dialog from "./Dialog";
 import { useState } from "react";
 import api from "../_api/config";
+import { motion } from "framer-motion";
 
 export default function PostCard({ post }: { post: Post }) {
   const { accessToken, isTokenSet } = useTokenStore();
@@ -70,11 +70,16 @@ export default function PostCard({ post }: { post: Post }) {
     }
   };
 
+  const [isHovered, setIsHovered] = useState(false);
+
   return (
     <>
       <div
         onClick={onClickPost}
-        className="w-full flex flex-col gap-2 py-6 cursor-pointer">
+        className="w-full flex flex-col gap-2 py-6 cursor-pointer"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
         <div className="post-card-top-container">
           {post.nickName && post.profileUrl && (
             <>
@@ -85,7 +90,8 @@ export default function PostCard({ post }: { post: Post }) {
                   e.stopPropagation();
                   // 사용자 클릭 시 해당 사용자 블로그로 이동
                 }}
-                className="post-card-profile-container">
+                className="post-card-profile-container"
+              >
                 <ProfileImgContainer
                   width={24}
                   height={24}
@@ -124,14 +130,15 @@ export default function PostCard({ post }: { post: Post }) {
                       { scroll: false }
                     );
                   }}
-                  className="post-card-code-number">
+                  className="post-card-code-number"
+                >
                   #{post.codeId}&nbsp;
                 </button>
               )}
               {post.title}
             </span>
             <div
-              className="post-card-content"
+              className={`post-card-content ${isHovered && "underline"}`}
               dangerouslySetInnerHTML={{
                 __html: DOMPurify.sanitize(decodedContent),
               }}
@@ -139,14 +146,21 @@ export default function PostCard({ post }: { post: Post }) {
           </div>
           {/* 썸네일 */}
           {!post.isSecret && post.thumbnailImageUrl && (
-            <div className="rounded-lg shrink-0">
-              <Image
-                src={post.thumbnailImageUrl}
-                width={160}
-                height={120}
-                alt={`thumbnail/${post.blogId}`}
-                style={{ width: 160, height: 120 }}
-              />
+            <div className="rounded-lg shrink-0 border border-border-1 overflow-hidden">
+              <motion.div
+                initial={{ scale: 1 }}
+                animate={{ scale: isHovered ? 1.1 : 1 }}
+                transition={{ type: "tween", duration: 0.2 }}
+              >
+                <Image
+                  src={post.thumbnailImageUrl}
+                  width={160}
+                  height={120}
+                  alt={`thumbnail/${post.blogId}`}
+                  style={{ width: 160, height: 120 }}
+                  className="object-cover"
+                />
+              </motion.div>
             </div>
           )}
         </div>
@@ -174,7 +188,8 @@ export default function PostCard({ post }: { post: Post }) {
           backBtn="취소"
           onBackBtnClick={() => setPasswordDialog(false)}
           redBtn="확인"
-          onBtnClick={() => checkPassword()}>
+          onBtnClick={() => checkPassword()}
+        >
           <input
             type="password"
             value={password}

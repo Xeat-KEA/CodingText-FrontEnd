@@ -2,6 +2,11 @@ import ProfileInfo from "@/app/(code)/_components/ProfileInfo";
 import ProfileImgContainer from "@/app/_components/ProfileImgContainer";
 import { Statistics } from "@/app/_interfaces/interfaces";
 import Link from "next/link";
+import { motion } from "framer-motion";
+import {
+  DEFAULT_BUTTON_VARIANTS,
+  PRIMARY_BUTTON_VARIANTS,
+} from "@/app/_constants/constants";
 
 export default function MainProfileCard({
   statistics,
@@ -35,14 +40,25 @@ export default function MainProfileCard({
         </div>
       </div>
       <div className="flex gap-4">
-        <Link href="/edit/profile" className="btn-default w-full">
-          내 정보 수정
+        <Link href="/edit/profile" className="w-full">
+          <motion.span
+            variants={DEFAULT_BUTTON_VARIANTS}
+            initial="initial"
+            whileHover="hover"
+            className="btn-default"
+          >
+            내 정보 수정
+          </motion.span>
         </Link>
-        <Link
-          href={`/blog/${statistics.blogId}`}
-          className="btn-primary w-full"
-        >
-          내 블로그로
+        <Link href={`/blog/${statistics.blogId}`} className="w-full">
+          <motion.span
+            variants={PRIMARY_BUTTON_VARIANTS}
+            initial="initial"
+            whileHover="hover"
+            className="btn-primary h-full"
+          >
+            내 블로그로
+          </motion.span>
         </Link>
       </div>
     </div>

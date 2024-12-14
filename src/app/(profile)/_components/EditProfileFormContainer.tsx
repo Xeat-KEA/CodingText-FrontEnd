@@ -3,7 +3,11 @@ import { useImageHandler } from "@/app/_hooks/useImageHandler";
 import { handleEnter } from "@/app/utils";
 import { ChangeEvent, useEffect, useState } from "react";
 import EditProfileImg from "./EditProfileImg";
-import { PROGRAMMING_LANGUAGES } from "@/app/_constants/constants";
+import {
+  DEFAULT_BUTTON_VARIANTS,
+  PRIMARY_BUTTON_VARIANTS,
+  PROGRAMMING_LANGUAGES,
+} from "@/app/_constants/constants";
 import DropDown from "@/app/_components/DropDown";
 import EditProfileImgDialog from "./EditProfileImgDialog";
 import { useForm } from "react-hook-form";
@@ -13,6 +17,7 @@ import { UserInfoForm } from "../_interfaces/interfaces";
 import { useTokenStore } from "@/app/stores";
 import Dialog from "@/app/_components/Dialog";
 import { DialogCheckIcon } from "@/app/_components/Icons";
+import { motion } from "framer-motion";
 
 export default function EditProfileFormContainer() {
   const { accessToken, isTokenSet } = useTokenStore();
@@ -21,18 +26,15 @@ export default function EditProfileFormContainer() {
 
   // API 호출
   const fetchUserData = async () => {
-    if (accessToken) {
-      const response = await api.get("/user-service/users/userInfo", {
-        headers: { Authorization: accessToken },
-      });
-      return response.data;
-    } else {
-      return null;
-    }
+    const response = await api.get("/user-service/users/userInfo", {
+      headers: { Authorization: accessToken },
+    });
+    return response.data;
   };
   const { data, isLoading } = useQuery<UserInfoForm>({
     queryKey: ["UserData", isTokenSet],
     queryFn: fetchUserData,
+    enabled: !!accessToken,
   });
 
   // 변경사항 전체 취소를 위한 초기값 저장
@@ -220,15 +222,25 @@ export default function EditProfileFormContainer() {
         </div>
         {/* 변경 사항 저장 및 취소 */}
         <div className="flex gap-4">
-          <button type="submit" className="sm-btn-primary">
+          <motion.button
+            variants={PRIMARY_BUTTON_VARIANTS}
+            initial="initial"
+            whileHover="hover"
+            type="submit"
+            className="sm-btn-primary"
+          >
             변경 사항 저장
-          </button>
-          <button
+          </motion.button>
+          <motion.button
+            variants={DEFAULT_BUTTON_VARIANTS}
+            initial="initial"
+            whileHover="hover"
             type="button"
             onClick={onEditCancel}
-            className="sm-btn-default">
+            className="sm-btn-default"
+          >
             취소
-          </button>
+          </motion.button>
         </div>
       </form>
       {/* 프로필 사진 변경 Dialog (기존 프로필에서 선택) */}

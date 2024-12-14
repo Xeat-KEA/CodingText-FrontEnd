@@ -18,7 +18,6 @@ export default function AdminNoticeContainer() {
   const { page, setPage, setLastPage } = usePaginationStore();
 
   const fetchNoticeList = async () => {
-    if (!accessToken) return null;
     const response = await api.get(`/admin-service/admins/announce`, {
       params: { page: page, size: 7 },
       headers: { Authorization: accessToken },
@@ -37,6 +36,7 @@ export default function AdminNoticeContainer() {
   const { data } = useQuery<Notice[]>({
     queryKey: ["noticeList", page, isTokenSet],
     queryFn: fetchNoticeList,
+    enabled: !!accessToken,
   });
 
   return (
@@ -66,7 +66,8 @@ export default function AdminNoticeContainer() {
         <div className="flex w-full justify-end items-center">
           <Link
             href={"/admin/notice/write"}
-            className="px-4 py-2 bg-primary-1 text-white text-xs text-bold rounded-md">
+            className="px-4 py-2 bg-primary-1 text-white text-xs text-bold rounded-md"
+          >
             새 공지사항 작성
           </Link>
         </div>

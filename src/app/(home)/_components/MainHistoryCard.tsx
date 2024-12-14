@@ -58,7 +58,7 @@ export default function MainHistoryCard({ history }: { history: History }) {
             {history.isCreatedByAI && (
               <button
                 onClick={() => setIsDialogOpen((prev) => !prev)}
-                className="text-xs font-semibold text-disabled whitespace-nowrap"
+                className="text-xs font-semibold text-disabled whitespace-nowrap hover:underline"
               >
                 정식 등록 건의
               </button>
@@ -66,7 +66,7 @@ export default function MainHistoryCard({ history }: { history: History }) {
             {/* 문제 다시 풀어보기 */}
             <Link
               href={`/coding-test/${history.codeId}`}
-              className="text-xs font-semibold text-black whitespace-nowrap"
+              className="text-xs font-semibold text-black whitespace-nowrap hover:underline"
             >
               다시 풀어보기
             </Link>

@@ -14,8 +14,11 @@ export default function MainCodes({
   return (
     <div className="main-container">
       {/* 코드 목록 제목 / 설명 */}
-      <div className="main-text-container cursor-pointer">
-        <div onClick={() => router.push(url)} className="main-title-container">
+      <div className="main-text-container">
+        <div
+          onClick={() => router.push(url)}
+          className="main-title-container cursor-pointer hover:underline"
+        >
           <span className="main-title">{title}</span>
           <MoreContentArrowIcon />
         </div>

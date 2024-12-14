@@ -14,10 +14,12 @@ export default function MainPostList({
   return (
     <div className="main-container">
       {/* 게시글 목록 제목 / 설명 */}
-      <div className={`main-text-container ${url && "cursor-pointer"}`}>
+      <div className={`main-text-container`}>
         <div
           onClick={() => url && router.push(url)}
-          className="main-title-container"
+          className={`main-title-container ${
+            url && "cursor-pointer hover:underline"
+          }`}
         >
           <span className="main-title">{title}</span>
           {url && <MoreContentArrowIcon />}

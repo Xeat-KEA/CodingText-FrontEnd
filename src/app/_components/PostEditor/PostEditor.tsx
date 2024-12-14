@@ -14,6 +14,11 @@ import { useForm } from "react-hook-form";
 import { LgCheckBoxIcon } from "../Icons";
 import TiptapEditor from "../TipTapEditor/TiptapEditor";
 import CategoryDropDown from "./CategoryDropDown";
+import { motion } from "framer-motion";
+import {
+  DEFAULT_BUTTON_VARIANTS,
+  PRIMARY_BUTTON_VARIANTS,
+} from "@/app/_constants/constants";
 
 export default function PostEditor({
   initialData,
@@ -256,16 +261,25 @@ export default function PostEditor({
           <div className="division" />
           {/* 하단 버튼 */}
           <div className="flex gap-4 self-end">
-            <button
+            <motion.button
+              variants={DEFAULT_BUTTON_VARIANTS}
+              initial="initial"
+              whileHover="hover"
               type="button"
               onClick={onCancelClick}
               className="btn-default"
             >
               취소
-            </button>
-            <button type="submit" className="btn-primary">
-              {!isEditing ? "새 게시글 등록" : "수정"}
-            </button>
+            </motion.button>
+            <motion.button
+              variants={PRIMARY_BUTTON_VARIANTS}
+              initial="initial"
+              whileHover="hover"
+              type="submit"
+              className="btn-primary"
+            >
+              {isEditing && initialData ? "수정" : "새 게시글 등록"}
+            </motion.button>
           </div>
         </form>
       )}

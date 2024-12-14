@@ -6,6 +6,8 @@ import Dialog from "@/app/_components/Dialog";
 import { DialogCheckIcon } from "@/app/_components/Icons";
 import api from "@/app/_api/config";
 import { useTokenStore } from "@/app/stores";
+import { motion } from "framer-motion";
+import { DEFAULT_BUTTON_VARIANTS } from "@/app/_constants/constants";
 
 export default function HistoryCard({ history }: { history: History }) {
   const router = useRouter();
@@ -38,7 +40,12 @@ export default function HistoryCard({ history }: { history: History }) {
   return (
     isMounted && (
       <>
-        <div className="w-full px-2 py-4 flex justify-between items-center gap-4">
+        <motion.div
+          variants={DEFAULT_BUTTON_VARIANTS}
+          initial="initial"
+          whileHover="hover"
+          className="w-full px-2 py-4 flex justify-between items-center gap-4"
+        >
           <div className="w-full flex gap-2 items-center overflow-hidden">
             <span className="w-20 text-xs text-body list-text">
               {useGetYMD(history.compiledAt)}
@@ -69,7 +76,7 @@ export default function HistoryCard({ history }: { history: History }) {
                     e.preventDefault();
                     setIsDialogOpen((prev) => !prev);
                   }}
-                  className="text-xs text-disabled font-semibold whitespace-nowrap"
+                  className="text-xs text-disabled font-semibold whitespace-nowrap hover:underline"
                 >
                   정식 등록 건의
                 </button>
@@ -82,20 +89,20 @@ export default function HistoryCard({ history }: { history: History }) {
                     scroll: false,
                   });
                 }}
-                className="text-xs text-black font-semibold whitespace-nowrap"
+                className="text-xs text-black font-semibold whitespace-nowrap hover:underline"
               >
                 다시 풀어보기
               </button>
             </div>
             <div
-              className={`w-12 text-xs font-bold list-text ${
+              className={`w-12 font-bold list-text ${
                 history.isCorrect ? "text-green" : "text-red"
               }`}
             >
               {history.isCorrect ? "정답" : "오답"}
             </div>
           </div>
-        </div>
+        </motion.div>
         {isDialogOpen &&
           (!isRegistered ? (
             <Dialog

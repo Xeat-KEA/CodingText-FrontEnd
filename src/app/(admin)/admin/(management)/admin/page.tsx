@@ -16,14 +16,10 @@ export default function AdminManagementPage() {
   const { accessToken, isTokenSet } = useCheckToken("/admin/sign-in");
 
   const fetchAdminList = async () => {
-    if (accessToken) {
-      const response = await api.get("/admin-service/admins/list", {
-        headers: { Authorization: accessToken },
-      });
-      return response.data;
-    } else {
-      return null;
-    }
+    const response = await api.get("/admin-service/admins/list", {
+      headers: { Authorization: accessToken },
+    });
+    return response.data;
   };
   const { data } = useQuery<Admin[]>({
     queryKey: ["adminList", isTokenSet, tab],
@@ -35,6 +31,7 @@ export default function AdminManagementPage() {
         return data.filter((el) => el.adminRole === "NONE");
       }
     },
+    enabled: !!accessToken,
   });
 
   return (

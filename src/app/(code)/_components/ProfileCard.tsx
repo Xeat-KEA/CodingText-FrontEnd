@@ -5,6 +5,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import ProfileImgContainer from "@/app/_components/ProfileImgContainer";
 import { Statistics } from "@/app/_interfaces/interfaces";
+import { motion } from "framer-motion";
+import {
+  DEFAULT_BUTTON_VARIANTS,
+  PRIMARY_BUTTON_VARIANTS,
+} from "@/app/_constants/constants";
 
 export default function ProfileCard({
   statistics,
@@ -63,21 +68,31 @@ export default function ProfileCard({
                 </div>
               </div>
               <div className="flex gap-4 max-sm:flex-col">
-                <button
+                <motion.button
+                  variants={PRIMARY_BUTTON_VARIANTS}
+                  initial="initial"
+                  whileHover="hover"
                   onClick={() => setIsDialogOpen((prev) => !prev)}
                   className="btn-primary w-full"
                 >
                   ChatGPT로 나만의 문제 만들기
-                </button>
+                </motion.button>
                 <Link
                   href={
                     pathname === "/code/list" ? "/code/history" : "/code/list"
                   }
-                  className="btn-default w-full"
+                  className="w-full"
                 >
-                  {pathname === "/code/list"
-                    ? "문제 풀이 기록 보러 가기"
-                    : "다른 문제 풀러 가기"}
+                  <motion.span
+                    variants={DEFAULT_BUTTON_VARIANTS}
+                    initial="initial"
+                    whileHover="hover"
+                    className="btn-default h-full"
+                  >
+                    {pathname === "/code/list"
+                      ? "문제 풀이 기록 보러 가기"
+                      : "다른 문제 풀러 가기"}
+                  </motion.span>
                 </Link>
               </div>
             </div>

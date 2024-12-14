@@ -64,7 +64,7 @@ export default function NoticeDetailContainer() {
         <hr className="w-full border-t-1 border-border-2" />
 
         {/* 공지사항 내용 */}
-        <div className="w-full text-black border border-border-2 rounded-xl p-4">
+        <div className="w-full text-black border border-border-2 rounded-xl p-4 min-h-[400px]">
           <div
             className="prose"
             dangerouslySetInnerHTML={{
