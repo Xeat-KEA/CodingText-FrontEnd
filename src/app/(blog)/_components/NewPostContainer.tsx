@@ -19,10 +19,12 @@ export default function NewPostContainer() {
 
   // 게시글 정보 초기화
   const { setTitle, setIsSecret, setPassword } = useCodingTestStore();
+  const [isInitiated, setIsInitiated] = useState(false);
   useEffect(() => {
     setTitle("");
     setIsSecret(false);
     setPassword("");
+    setIsInitiated(true);
   }, []);
 
   const router = useRouter();
@@ -105,11 +107,13 @@ export default function NewPostContainer() {
               />
             </div>
             <div className="grow overflow-y-auto">
-              <PostEditor
-                onBtnClick={(data) => onClickBtn(data)}
-                onCancelClick={() => setIsCancelDialogOpen((prev) => !prev)}
-                isEditing={isEditing}
-              />
+              {isInitiated && (
+                <PostEditor
+                  onBtnClick={(data) => onClickBtn(data)}
+                  onCancelClick={() => setIsCancelDialogOpen((prev) => !prev)}
+                  isEditing={isEditing}
+                />
+              )}
             </div>
           </div>
         </div>
