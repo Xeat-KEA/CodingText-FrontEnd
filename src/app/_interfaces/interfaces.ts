@@ -266,8 +266,6 @@ export interface TabStore {
 // 코딩테스트 관련 Interface
 export interface CodingTestStore {
   // 코딩 관련 state
-  title: string;
-  setTitle: (newTitle: string) => void;
   language: Selection;
   setLanguage: (newLanguage: Selection) => void;
   hasSolved: boolean;
@@ -286,6 +284,12 @@ export interface CodingTestStore {
   setCompileError: (error: string) => void;
   submitResult: SubmitResult[];
   setSubmitResult: (result: SubmitResult[]) => void;
+  title: string;
+  setTitle: (newTitle: string) => void;
+  isSecret: boolean;
+  setIsSecret: (state: boolean) => void;
+  password: string;
+  setPassword: (string: string) => void;
 }
 
 // 텍스트 에디터 내용 Interface

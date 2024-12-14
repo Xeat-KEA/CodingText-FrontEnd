@@ -27,9 +27,6 @@ export const useTokenStore = create<TokenStore>((set) => ({
 // 코딩테스트 관련 전역변수
 export const useCodingTestStore = create<CodingTestStore>((set) => ({
   // 코딩 관련 전역변수
-  // 문제 제목
-  title: "",
-  setTitle: (newTitle) => set({ title: newTitle }),
   // 언어 설정
   language: { content: "", selection: "" },
   setLanguage: (newLanguage) => set({ language: newLanguage }),
@@ -57,6 +54,13 @@ export const useCodingTestStore = create<CodingTestStore>((set) => ({
   // 제출 결과
   submitResult: [],
   setSubmitResult: (result) => set({ submitResult: result }),
+  // 게시글 제목
+  title: "",
+  setTitle: (newTitle) => set({ title: newTitle }),
+  isSecret: false,
+  setIsSecret: (state) => set({ isSecret: state }),
+  password: "",
+  setPassword: (newPassword) => set({ password: newPassword }),
 }));
 
 // 탭바 메뉴 관련 전역변수
@@ -174,7 +178,7 @@ export const usePostStore = create<PostStore>((set) => ({
 
   isCodingPost: false,
   setIsCodingPost: (state) => set({ isCodingPost: state }),
-  
+
   reportPostId: -1,
   setReportPostId: (reportId) => set({ reportPostId: reportId }),
   reportReplyId: -1,
