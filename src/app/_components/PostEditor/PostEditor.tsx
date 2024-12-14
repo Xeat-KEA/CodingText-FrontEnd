@@ -1,13 +1,15 @@
 import { useBase64 } from "@/app/_hooks/useBase64";
 import {
   Category,
-  ChildCategory,
-  Post,
   PostEditorProps,
   PostForm,
 } from "@/app/_interfaces/interfaces";
-import { useBlogStore, useCategoryStore, useTiptapStore } from "@/app/stores";
-import { useEffect, useRef, useState } from "react";
+import {
+  useCategoryStore,
+  useCodingTestStore,
+  useTiptapStore,
+} from "@/app/stores";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { LgCheckBoxIcon } from "../Icons";
 import TiptapEditor from "../TipTapEditor/TiptapEditor";
@@ -22,13 +24,21 @@ export default function PostEditor({
 }: PostEditorProps) {
   // 전역 변수
   const { boardCategories } = useCategoryStore();
+  const {
+    title,
+    setTitle,
+    isSecret: isCodingTestSecret,
+    setIsSecret: setIsCodingTestSecret,
+    password,
+    setPassword,
+  } = useCodingTestStore();
 
   const [isLoaded, setIsLoaded] = useState(false);
   const [initialContent, setInitialContent] = useState("");
   const [firstRendering, setFirstRendering] = useState(true);
 
   // Form 데이터 관리
-  const { register, handleSubmit, setValue } = useForm<PostForm>({
+  const { register, handleSubmit, setValue, watch } = useForm<PostForm>({
     defaultValues:
       initialData && isEditing
         ? {
@@ -63,7 +73,9 @@ export default function PostEditor({
   // 비밀글 여부 변경 감지
   useEffect(() => {
     setValue("password", "");
+    setPassword("");
     setValue("isSecret", isSecret);
+    setIsCodingTestSecret(false);
   }, [isSecret]);
 
   // 비밀글 여부에 따라 password validation 처리
@@ -91,22 +103,24 @@ export default function PostEditor({
   const [childCategoryList, setChildCategoryList] = useState<Category[]>();
 
   useEffect(() => {
-    if (isEditing && initialData && categoryList) {
-      setIsSecret(Boolean(initialData.isSecret));
+    if (isEditing) {
+      if (initialData && categoryList) {
+        setIsSecret(Boolean(initialData.isSecret));
 
-      const selectedCategory = categoryList.find(
-        (cat) => cat.id === initialData.parentCategoryId
-      );
-      setCategory(selectedCategory); // 상위 게시판 설정
+        const selectedCategory = categoryList.find(
+          (cat) => cat.id === initialData.parentCategoryId
+        );
+        setCategory(selectedCategory); // 상위 게시판 설정
 
-      const selectedchildCategory = selectedCategory?.childCategories?.find(
-        (subCat) => subCat.id === initialData.childCategoryId
-      );
-      setChildCategory(selectedchildCategory); // 하위 게시판 설정
+        const selectedchildCategory = selectedCategory?.childCategories?.find(
+          (subCat) => subCat.id === initialData.childCategoryId
+        );
+        setChildCategory(selectedchildCategory); // 하위 게시판 설정
 
-      const decodedContent = useBase64("decode", initialData.content);
-      setInitialContent(decodedContent); // 초기값 설정
-      setContent(decodedContent); // Tiptap 에디터의 내용 설정
+        const decodedContent = useBase64("decode", initialData.content);
+        setInitialContent(decodedContent); // 초기값 설정
+        setContent(decodedContent); // Tiptap 에디터의 내용 설정
+      }
     } else {
       // 새 게시글 작성 시 content 초기화
       setContent(""); // Tiptap 에디터의 내용 초기화
@@ -133,12 +147,36 @@ export default function PostEditor({
     setValue("childCategoryId", childCategory?.id);
   }, [childCategory]);
 
+  useEffect(() => {
+    setTitle(watch("title"));
+  }, [watch("title")]);
+  useEffect(() => {
+    setIsCodingTestSecret(watch("isSecret") || false);
+  }, [watch("isSecret")]);
+  useEffect(() => {
+    setPassword(watch("password") || "");
+  }, [watch("password")]);
+
+  // 초기값 설정
+  useEffect(() => {
+    if (title) {
+      setValue("title", title);
+    }
+    if (isCodingTestSecret) {
+      setValue("isSecret", isCodingTestSecret);
+    }
+    if (password) {
+      setValue("password", password);
+    }
+  }, []);
+
   return (
     <>
       {isLoaded && (
         <form
           onSubmit={handleSubmit(onValid)}
-          className="w-full h-full flex flex-col gap-4">
+          className="w-full h-full flex flex-col gap-4"
+        >
           <div className="flex gap-4">
             {/* 제목 입력 */}
             <input
@@ -150,9 +188,10 @@ export default function PostEditor({
             {/* 비밀글 여부 설정 */}
             <div className="flex w-[256px] items-center gap-4">
               <div
-                onClick={() => setIsSecret((prev) => !prev)}
-                className="flex gap-2 items-center cursor-pointer">
-                <LgCheckBoxIcon isActive={isSecret} />
+                onClick={() => setValue("isSecret", !watch("isSecret"))}
+                className="flex gap-2 items-center cursor-pointer"
+              >
+                <LgCheckBoxIcon isActive={watch("isSecret")} />
                 <span className="text-sm text-black whitespace-nowrap">
                   비밀글
                 </span>
@@ -162,7 +201,7 @@ export default function PostEditor({
                 type="password"
                 className="grow w-full post-input"
                 placeholder="비밀번호를 입력해주세요"
-                disabled={!isSecret}
+                disabled={!watch("isSecret")}
                 autoComplete="off"
               />
             </div>
@@ -174,13 +213,15 @@ export default function PostEditor({
                 <>
                   <div className="relative flex items-center w-full px-4 py-2 border border-border-2 rounded-lg bg-white">
                     <span
-                      className={`grow flex justify-center text-xs text-black whitespace-nowrap `}>
+                      className={`grow flex justify-center text-xs text-black whitespace-nowrap `}
+                    >
                       코딩 테스트 풀이
                     </span>
                   </div>
                   <div className="flex items-center w-full px-4 py-2 border border-border-2 rounded-lg bg-white">
                     <span
-                      className={`grow flex justify-center text-xs text-black whitespace-nowrap `}>
+                      className={`grow flex justify-center text-xs text-black whitespace-nowrap `}
+                    >
                       {initialData.childName}
                     </span>
                   </div>
@@ -218,7 +259,8 @@ export default function PostEditor({
             <button
               type="button"
               onClick={onCancelClick}
-              className="btn-default">
+              className="btn-default"
+            >
               취소
             </button>
             <button type="submit" className="btn-primary">

@@ -33,3 +33,8 @@ export const checkToken = () => {
     }
   }, []);
 };
+
+export const getDifficultyNumber = (difficulty: string) => {
+  const number = difficulty.match(/\d+/);
+  return Number(number);
+};

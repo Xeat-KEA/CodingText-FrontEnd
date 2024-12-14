@@ -43,12 +43,16 @@ export default function ChattingPanel({
     queryFn: fetchChats,
     initialPageParam: -1,
     getNextPageParam: (lastPage, allPages) => {
-      if (lastPage.firstPage) {
+      if (!lastPage) {
         return undefined;
       }
-      return lastPage.currentPage - 1;
+      if (lastPage?.firstPage) {
+        return undefined;
+      }
+      return lastPage?.currentPage - 1;
     },
     enabled: !!accessToken && !!historyId,
+
     // 데이터 평탄화
     select: (data) =>
       data.pages

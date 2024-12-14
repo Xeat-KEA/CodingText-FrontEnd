@@ -33,6 +33,7 @@ export interface CompileResult {
 export interface ContainerProps {
   content: string;
   historyId?: number;
+  difficulty?: number;
 }
 
 export interface SubmitResult {
@@ -48,4 +49,12 @@ export interface ChatsResponse {
   totalElements: number;
   totalPage: number;
   currentPage: number;
+}
+
+export interface CodeInfo {
+  codeHistory_writtenCode: string;
+  code_Content: string;
+  correct: boolean;
+  difficulty: string;
+  historyId: number;
 }

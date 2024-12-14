@@ -9,6 +9,7 @@ import CodeContentPanel from "./CodeContentPanel";
 export default function UnsplittedContainer({
   content,
   historyId,
+  difficulty,
 }: ContainerProps) {
   const { isPosting } = useCodingTestStore();
   const { accessToken } = useTokenStore();
@@ -23,7 +24,11 @@ export default function UnsplittedContainer({
           <ChatInput historyId={historyId} />
         </>
       )}
-      {!isPosting ? <CodeEditPanel /> : <NewPostPanel />}
+      {!isPosting ? (
+        <CodeEditPanel />
+      ) : (
+        <NewPostPanel difficulty={difficulty} />
+      )}
     </div>
   );
 }

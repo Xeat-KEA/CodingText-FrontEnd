@@ -15,6 +15,8 @@ import { useQuery } from "@tanstack/react-query";
 import api from "@/app/_api/config";
 import { useParams } from "next/navigation";
 import { useBase64 } from "@/app/_hooks/useBase64";
+import { CodeInfo } from "../../_interface/interfaces";
+import { getDifficultyNumber } from "@/app/utils";
 
 export default function CodingTestPage() {
   const { accessToken, isTokenSet } = useCheckToken();
@@ -47,7 +49,6 @@ export default function CodingTestPage() {
   const { windowSize } = useWindowSizeStore();
 
   // 문제 정보
-  const [historyId, setHistoryId] = useState();
   const [codeContent, setCodeContent] = useState("");
   const fetchCodeInfo = async () => {
     if (isTokenSet === true) {
@@ -58,7 +59,6 @@ export default function CodingTestPage() {
             headers: { Authorization: accessToken },
           }
         );
-        setHistoryId(data.historyId);
         setCodeContent(useBase64("decode", data.code_Content));
         setHasSolved(data.correct);
         setValue(useBase64("decode", data.codeHistory_writtenCode));
@@ -72,7 +72,7 @@ export default function CodingTestPage() {
       }
     }
   };
-  const { data: codeInfo } = useQuery({
+  const { data: codeInfo } = useQuery<CodeInfo>({
     queryKey: ["codeInfo", isTokenSet],
     queryFn: fetchCodeInfo,
   });
@@ -81,9 +81,17 @@ export default function CodingTestPage() {
     <>
       {codeInfo && windowSize ? (
         windowSize >= 768 ? (
-          <SplittedContainer content={codeContent} historyId={historyId} />
+          <SplittedContainer
+            content={codeContent}
+            historyId={codeInfo.historyId}
+            difficulty={getDifficultyNumber(codeInfo.difficulty)}
+          />
         ) : (
-          <UnsplittedContainer content={codeContent} historyId={historyId} />
+          <UnsplittedContainer
+            content={codeContent}
+            historyId={codeInfo.historyId}
+            difficulty={getDifficultyNumber(codeInfo.difficulty)}
+          />
         )
       ) : (
         <div className="w-screen h-screen">

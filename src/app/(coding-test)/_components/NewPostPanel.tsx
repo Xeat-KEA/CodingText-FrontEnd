@@ -1,6 +1,6 @@
 import { useCodingTestStore, useTabStore, useTokenStore } from "@/app/stores";
 import CodeEditor from "./CodeEditor";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Dialog from "@/app/_components/Dialog";
 import { DialogCheckIcon } from "@/app/_components/Icons";
 import { useParams, useRouter } from "next/navigation";
@@ -12,14 +12,22 @@ import { POSTING_TAB_BAR_MENU } from "../_constants/constants";
 import { PostForm } from "@/app/_interfaces/interfaces";
 import api from "@/app/_api/config";
 
-export default function NewPostPanel() {
+export default function NewPostPanel({ difficulty }: { difficulty?: number }) {
   const { accessToken } = useTokenStore();
   const router = useRouter();
   const params = useParams();
 
   // 전역 변수 선언
   const { tab } = useTabStore();
-  const { value, setIsPosting, memo, setMemo } = useCodingTestStore();
+  const {
+    value,
+    setIsPosting,
+    memo,
+    setMemo,
+    setTitle,
+    setIsSecret,
+    setPassword,
+  } = useCodingTestStore();
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isPageChanging, setIsPageChanging] = useState(false);
@@ -73,7 +81,8 @@ export default function NewPostPanel() {
           <div
             className={`w-full h-full rounded-2xl overflow-hidden ${
               tab === "코드 뷰어" ? "flex" : "hidden"
-            }`}>
+            }`}
+          >
             <CodeEditor isViewer defaultValue={value} />
           </div>
           {/* 메모장 */}
@@ -90,6 +99,7 @@ export default function NewPostPanel() {
         <div className="w-full h-full overflow-hidden">
           <PostEditor
             isCodingTest
+            isEditing
             onCancelClick={() => setIsPosting(false)}
             onBtnClick={(data) => {
               // data post 부분 작성 필요

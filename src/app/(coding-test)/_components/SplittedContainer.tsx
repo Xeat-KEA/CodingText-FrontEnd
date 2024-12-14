@@ -11,6 +11,7 @@ import CodeContentPanel from "./CodeContentPanel";
 export default function SplittedContainer({
   content,
   historyId,
+  difficulty,
 }: ContainerProps) {
   const { isPosting } = useCodingTestStore();
   const { accessToken } = useTokenStore();
@@ -60,7 +61,11 @@ export default function SplittedContainer({
       </SplitterPanel>
       {/* 작성 관련 공간 */}
       <SplitterPanel className="flex">
-        {!isPosting ? <CodeEditPanel /> : <NewPostPanel />}
+        {!isPosting ? (
+          <CodeEditPanel />
+        ) : (
+          <NewPostPanel difficulty={difficulty} />
+        )}
       </SplitterPanel>
     </Splitter>
   );
