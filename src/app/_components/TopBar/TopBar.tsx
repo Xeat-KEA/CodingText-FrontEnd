@@ -22,6 +22,7 @@ import { useInView } from "react-intersection-observer";
 import LoadingAnimation from "../LoadingAnimation";
 import {
   DEFAULT_BUTTON_VARIANTS,
+  PRIMARY_BUTTON_VARIANTS,
   PROGRAMMING_LANGUAGES,
 } from "@/app/_constants/constants";
 import TopBarSearchBar from "../TopBarSearchBar";
@@ -239,8 +240,15 @@ export default function TopBar() {
                   </button>
                 </>
               ) : (
-                <Link href="/sign-in" className="sm-btn-primary rounded-full">
-                  로그인
+                <Link href="/sign-in" className="flex">
+                  <motion.span
+                    variants={PRIMARY_BUTTON_VARIANTS}
+                    initial="initial"
+                    whileHover="hover"
+                    className="sm-btn-primary !rounded-full"
+                  >
+                    로그인
+                  </motion.span>
                 </Link>
               )}
               {/* 메뉴 더보기 버튼 (화면 크기 lg 이하) */}
