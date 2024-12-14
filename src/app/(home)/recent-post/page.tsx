@@ -23,7 +23,6 @@ export default function RecentPostPage() {
   }): Promise<PostsResponse> => {
     const response = await api.get("/blog-service/blog/board/article/recent", {
       params: { page: pageParam, size: 5 },
-      headers: { Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}` },
     });
 
     return response.data.data;

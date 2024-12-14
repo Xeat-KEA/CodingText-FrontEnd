@@ -24,7 +24,6 @@ export default function CodePostPage() {
   }): Promise<PostsResponse> => {
     const response = await api.get("/blog-service/blog/board/code/recent", {
       params: { page: pageParam, size: 5 },
-      headers: { Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}` },
     });
 
     return response.data.data;

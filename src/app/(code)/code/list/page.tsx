@@ -43,7 +43,6 @@ export default function CodeListPage() {
   const { page, setPage, setLastPage } = usePaginationStore();
   const fetchCodeList = async () => {
     const response = await api.get("/code-bank-service/code/lists", {
-      headers: { Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}` },
       params: {
         algorithms,
         difficulties,
