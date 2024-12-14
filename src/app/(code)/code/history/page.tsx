@@ -70,7 +70,7 @@ export default function CodeHistoryPage() {
             ))}
           </>
         ) : (
-          <div className="w-full flex flex-col items-center gap-2 bg-bg-1 py-12 rounded-lg mt-6">
+          <div className="w-full h-[480px] flex flex-col items-center justify-center gap-2 bg-bg-1 rounded-b-lg">
             <p className="text-body">아직 시도한 문제가 없어요</p>
             <Link
               href="/code/list"
