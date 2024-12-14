@@ -115,14 +115,14 @@ export default function Board() {
         await api.delete(`/blog-service/blog/board/child/${childCategoryId}`, {
           data: { childCategoryId: childCategoryId },
           headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}`,
+            Authorization: accessToken,
           },
         });
       } else {
         await api.delete(`/blog-service/blog/board/parent/${categoryId}`, {
           data: { parentCategoryId: categoryId },
           headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_TOKEN}`,
+            Authorization: accessToken,
           },
         });
       }

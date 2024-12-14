@@ -8,7 +8,7 @@ import PostEditor from "@/app/_components/PostEditor/PostEditor";
 import { useBase64 } from "@/app/_hooks/useBase64";
 import { useCheckToken } from "@/app/_hooks/useCheckToken";
 import { PostForm } from "@/app/_interfaces/interfaces";
-import { useBlogStore } from "@/app/stores";
+import { useBlogStore, useCodingTestStore } from "@/app/stores";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -16,6 +16,14 @@ import { useEffect, useState } from "react";
 export default function NewPostContainer() {
   // 로그인 여부 확인
   const { accessToken, isTokenSet } = useCheckToken();
+
+  // 게시글 정보 초기화
+  const { setTitle, setIsSecret, setPassword } = useCodingTestStore();
+  useEffect(() => {
+    setTitle("");
+    setIsSecret(false);
+    setPassword("");
+  }, []);
 
   const router = useRouter();
   const searchParams = useSearchParams();
