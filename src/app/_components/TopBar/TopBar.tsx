@@ -20,7 +20,10 @@ import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { PushesResponse, UserInfo } from "@/app/_interfaces/interfaces";
 import { useInView } from "react-intersection-observer";
 import LoadingAnimation from "../LoadingAnimation";
-import { PROGRAMMING_LANGUAGES } from "@/app/_constants/constants";
+import {
+  DEFAULT_BUTTON_VARIANTS,
+  PROGRAMMING_LANGUAGES,
+} from "@/app/_constants/constants";
 import TopBarSearchBar from "../TopBarSearchBar";
 import { handleWindowResize } from "@/app/utils";
 
@@ -88,22 +91,19 @@ export default function TopBar() {
   const { setLanguage } = useCodingTestStore();
   // 사용자 정보 API 호출
   const fetchUserInfo = async () => {
-    if (accessToken) {
-      const response = await api.get("/user-service/users/userInfo", {
-        headers: { Authorization: accessToken },
-      });
-      const userLanguage = PROGRAMMING_LANGUAGES.find(
-        (el) => el.selection === response.data.codeLanguage
-      );
-      setLanguage(userLanguage || { content: "Java", selection: "java" });
-      return response.data;
-    } else {
-      return null;
-    }
+    const response = await api.get("/user-service/users/userInfo", {
+      headers: { Authorization: accessToken },
+    });
+    const userLanguage = PROGRAMMING_LANGUAGES.find(
+      (el) => el.selection === response.data.codeLanguage
+    );
+    setLanguage(userLanguage || { content: "Java", selection: "java" });
+    return response.data;
   };
   const { data: userInfo } = useQuery<UserInfo>({
     queryKey: ["userInfo", isTokenSet],
     queryFn: fetchUserInfo,
+    enabled: !!accessToken,
   });
 
   // 알림 목록 API 호출
@@ -118,7 +118,6 @@ export default function TopBar() {
         headers: { Authorization: accessToken },
         params: { page: pageParam, size: 5 },
       });
-      console.log(response);
       return response.data.data;
     } else {
       return null;
@@ -187,7 +186,8 @@ export default function TopBar() {
                 pathname.startsWith("/code-post")
               ? "max-w-1000"
               : "max-w-1200"
-          }`}>
+          }`}
+        >
           {/* 탑바 좌측 요소 */}
           <div className="flex items-center gap-14">
             <Link href="/" scroll={false}>
@@ -206,7 +206,7 @@ export default function TopBar() {
 
           {/* 탑바 우측 요소 */}
           {isTokenSet && (
-            <div className="flex items-center gap-6">
+            <div className="flex items-center gap-4">
               {/* 검색창 (화면 크기 lg 이상) */}
               <div className="w-[240px] max-lg:hidden">
                 <TopBarSearchBar baseURL="/search" />
@@ -214,15 +214,19 @@ export default function TopBar() {
               {/* 로그인 : 알림, 프로필 / 비로그인 : 로그인 버튼 */}
               {accessToken ? (
                 <>
-                  <button
+                  <motion.button
+                    variants={DEFAULT_BUTTON_VARIANTS}
+                    initial="initial"
+                    whileHover="hover"
                     ref={noticeRef}
-                    className="relative"
-                    onClick={() => onIconClick("notice")}>
+                    className="relative p-2 rounded-full"
+                    onClick={() => onIconClick("notice")}
+                  >
                     {!checkedNotice && (
                       <div className="absolute w-1 h-1 rounded-full bg-red right-[2px] top-[2px]"></div>
                     )}
                     <NoticeIcon />
-                  </button>
+                  </motion.button>
                   <button
                     ref={profileRef}
                     onClick={() => onIconClick("profile")}
@@ -240,9 +244,15 @@ export default function TopBar() {
                 </Link>
               )}
               {/* 메뉴 더보기 버튼 (화면 크기 lg 이하) */}
-              <button onClick={() => onIconClick("menu")} className="lg:hidden">
+              <motion.button
+                variants={DEFAULT_BUTTON_VARIANTS}
+                initial="initial"
+                whileHover="hover"
+                onClick={() => onIconClick("menu")}
+                className="lg:hidden p-2 rounded-full"
+              >
                 <HamburgerIcon />
-              </button>
+              </motion.button>
             </div>
           )}
         </div>
@@ -264,7 +274,8 @@ export default function TopBar() {
           style={{
             right: popUpLocation,
           }}
-          className="absolute bg-white top-[calc(100%+8px)] w-[396px] h-[300px] flex flex-col items-center rounded-lg shadow-1 divide-y divide-border-1 overflow-y-auto">
+          className="absolute bg-white top-[calc(100%+8px)] w-[396px] h-[300px] flex flex-col items-center rounded-lg shadow-1 divide-y divide-border-1 overflow-y-auto"
+        >
           {pushes !== undefined && pushes.length !== 0 ? (
             pushes?.map((el) => <NoticeCard key={el?.noticeId} push={el!} />)
           ) : (
@@ -278,7 +289,8 @@ export default function TopBar() {
               ref={ref}
               className={`w-full flex-center shrink-0 ${
                 isLoading ? "h-full" : "h-10"
-              }`}>
+              }`}
+            >
               <LoadingAnimation />
             </div>
           )}
@@ -291,7 +303,7 @@ export default function TopBar() {
           style={{
             right: popUpLocation,
           }}
-          className="absolute bg-white top-[calc(100%+8px)] w-[160px] flex flex-col rounded-lg shadow-1 divide-y divide-border-1"
+          className="absolute bg-white top-[calc(100%+8px)] w-[160px] flex flex-col rounded-lg overflow-hidden shadow-1 divide-y divide-border-1"
         >
           {/* 사용자 정보 */}
           <div className="flex flex-col gap-[2px] px-6 py-4">

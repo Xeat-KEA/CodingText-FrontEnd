@@ -47,29 +47,25 @@ export default function CodePageContainer() {
   // 코드 리스트 불러오기
   const { page, setPage, setLastPage } = usePaginationStore();
   const fetchCodeList = async () => {
-    if (accessToken) {
-      const response = await api.get("/code-bank-service/admin/codeLists", {
-        headers: { Authorization: accessToken },
-        params: {
-          algorithms,
-          difficulties,
-          searchBy: searchBy,
-          searchText: searchBy === "title" ? keyword : Number(keyword),
-          sortBy: order,
-          page,
-          size: 10,
-        },
-      });
-      // 페이지 정보 초기화
-      const lastPage = response.data.totalPages - 1;
-      if (page > lastPage) {
-        setPage(lastPage);
-      }
-      setLastPage(lastPage);
-      return response.data.content;
-    } else {
-      return null;
+    const response = await api.get("/code-bank-service/admin/codeLists", {
+      headers: { Authorization: accessToken },
+      params: {
+        algorithms,
+        difficulties,
+        searchBy: searchBy,
+        searchText: searchBy === "title" ? keyword : Number(keyword),
+        sortBy: order,
+        page,
+        size: 10,
+      },
+    });
+    // 페이지 정보 초기화
+    const lastPage = response.data.totalPages - 1;
+    if (page > lastPage) {
+      setPage(lastPage);
     }
+    setLastPage(lastPage);
+    return response.data.content;
   };
   const { data } = useQuery<Code[]>({
     queryKey: [
@@ -82,6 +78,7 @@ export default function CodePageContainer() {
       isTokenSet,
     ],
     queryFn: fetchCodeList,
+    enabled: !!accessToken,
   });
 
   return (

@@ -41,15 +41,13 @@ export default function EditPostContainer() {
 
   // 게시글 수정 내용 반환
   const fetchEditPostData = async () => {
-    if (accessToken) {
-      try {
-        const response = await api.get(
-          `/blog-service/blog/board/article/edit/${params.postId}`
-        );
-        return response.data.data;
-      } catch (error) {
-        return null;
-      }
+    try {
+      const response = await api.get(
+        `/blog-service/blog/board/article/edit/${params.postId}`
+      );
+      return response.data.data;
+    } catch (error) {
+      return null;
     }
   };
   const { data, isLoading, isError } = useQuery({

@@ -14,25 +14,22 @@ export default function RegisterPage() {
   const { page, setPage, setLastPage } = usePaginationStore();
 
   const fetchPendingList = async () => {
-    if (accessToken) {
-      const response = await api.get(
-        "/code-bank-service/admin/register/pendinglists",
-        { headers: { Authorization: accessToken } }
-      );
-      // 페이지 정보 초기화
-      const lastPage = response.data.totalPages - 1;
-      if (page > lastPage) {
-        setPage(lastPage);
-      }
-      setLastPage(lastPage);
-      return response.data.content;
-    } else {
-      return null;
+    const response = await api.get(
+      "/code-bank-service/admin/register/pendinglists",
+      { headers: { Authorization: accessToken } }
+    );
+    // 페이지 정보 초기화
+    const lastPage = response.data.totalPages - 1;
+    if (page > lastPage) {
+      setPage(lastPage);
     }
+    setLastPage(lastPage);
+    return response.data.content;
   };
   const { data } = useQuery<CodeDetail[]>({
     queryKey: ["pendingList", isTokenSet],
     queryFn: fetchPendingList,
+    enabled: !!accessToken,
   });
 
   return (

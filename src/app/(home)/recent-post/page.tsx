@@ -34,7 +34,7 @@ export default function RecentPostPage() {
     useInfiniteQuery({
       queryKey: ["recents"],
       queryFn: fetchRecents,
-      initialPageParam: -1,
+      initialPageParam: 0,
       getNextPageParam: (lastPage, allPages) => {
         if (
           lastPage.pageInfo.totalPageNum + 1 ===

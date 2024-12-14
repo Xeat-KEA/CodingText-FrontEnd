@@ -20,15 +20,11 @@ export default function EditCodePage() {
   const router = useRouter();
 
   const fetchCodeDetail = async () => {
-    if (accessToken) {
-      const response = await api.get(
-        `/code-bank-service/admin/codeLists/${codeId}`,
-        { headers: { Authorization: accessToken } }
-      );
-      return response.data;
-    } else {
-      return null;
-    }
+    const response = await api.get(
+      `/code-bank-service/admin/codeLists/${codeId}`,
+      { headers: { Authorization: accessToken } }
+    );
+    return response.data;
   };
   const { data } = useQuery<ManageCodeProps>({
     queryKey: ["codeDetail", isTokenSet],
@@ -39,6 +35,7 @@ export default function EditCodePage() {
       }
       return data;
     },
+    enabled: !!accessToken,
   });
 
   const [isDialogOpen, setIsDialogOpen] = useState({

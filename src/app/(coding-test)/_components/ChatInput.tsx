@@ -2,9 +2,14 @@ import { MouseEvent, useEffect, useRef, useState } from "react";
 import { SendMessageIcon, SettingIcon } from "./Icons";
 import ToggleBtn from "@/app/_components/ToggleBtn";
 import { useForm } from "react-hook-form";
-import { ChatInputForm, ChatInputProps } from "../_interface/interfaces";
+import { ChatInputForm } from "../_interface/interfaces";
 import { useChatStore, useCodingTestStore, useTokenStore } from "@/app/stores";
 import api from "@/app/_api/config";
+import { motion } from "framer-motion";
+import {
+  DEFAULT_BUTTON_VARIANTS,
+  PRIMARY_BUTTON_VARIANTS,
+} from "@/app/_constants/constants";
 
 export default function ChatInput({ historyId }: { historyId?: number }) {
   const { register, handleSubmit, setValue, watch } = useForm<ChatInputForm>();
@@ -31,7 +36,6 @@ export default function ChatInput({ historyId }: { historyId?: number }) {
           headers: { Authorization: accessToken },
         }
       );
-      console.log(response);
       const generatedChats = [
         ...tempChats,
         { role: "gpt", content: response.data.data.answer },
@@ -61,9 +65,9 @@ export default function ChatInput({ historyId }: { historyId?: number }) {
     setSendWithCode,
   } = useChatStore();
 
-  // textarea 높이 자동 조절
-  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const content = watch("content");
+  /* // textarea 높이 자동 조절
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   useEffect(() => {
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto";
@@ -72,22 +76,25 @@ export default function ChatInput({ historyId }: { historyId?: number }) {
         72
       )}px`;
     }
-  }, [content]);
+  }, [content]); */
 
   return (
     <div className="relative px-6 pb-8 bg-primary-2 w-full shrink-0 h-[96px] flex flex-col-reverse">
       <form
         onSubmit={handleSubmit(onValid)}
-        className="relative last:w-full flex px-4 py-2 gap-3 bg-white border border-border-2 rounded-[27px]"
+        className="relative last:w-full flex px-3 py-2 gap-3 bg-white border border-border-2 rounded-[27px]"
       >
-        <button
-          className="self-end mb-1"
+        <motion.button
+          variants={DEFAULT_BUTTON_VARIANTS}
+          initial="initial"
+          whileHover="hover"
+          className="self-end p-1 rounded-full"
           type="button"
           onClick={onSettingClick}
         >
           <SettingIcon />
-        </button>
-        <textarea
+        </motion.button>
+        {/* <textarea
           {...register("content", { required: true })}
           ref={(e) => {
             // register와 ref의 충돌 방지
@@ -98,13 +105,22 @@ export default function ChatInput({ historyId }: { historyId?: number }) {
           rows={1}
           placeholder="AI에게 질문"
           autoComplete="off"
+        /> */}
+        <input
+          {...register("content", { required: true })}
+          className="self-center grow text-black"
+          placeholder="AI에게 질문"
+          autoComplete="off"
         />
-        <button
+        <motion.button
+          variants={PRIMARY_BUTTON_VARIANTS}
+          initial="initial"
+          whileHover="hover"
           type="submit"
           className="self-end flex-center w-8 h-8 rounded-full bg-primary-1"
         >
           <SendMessageIcon />
-        </button>
+        </motion.button>
         {isSettingOpen && (
           <div className="flex flex-col gap-3 px-5 py-4 rounded-lg shadow-1 bg-white absolute left-0 bottom-[calc(100%+8px)]">
             <ToggleBtn

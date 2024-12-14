@@ -1,4 +1,7 @@
-import { BUTTON_VARIANTS, TOP_BAR_MENU } from "@/app/_constants/constants";
+import {
+  DEFAULT_BUTTON_VARIANTS,
+  TOP_BAR_MENU,
+} from "@/app/_constants/constants";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
@@ -17,7 +20,7 @@ export default function TopBarMenu({
           return (
             <motion.div
               key={index}
-              variants={BUTTON_VARIANTS}
+              variants={DEFAULT_BUTTON_VARIANTS}
               initial="initial"
               whileHover="hover"
               transition={{ duration: 0.2 }}
@@ -39,7 +42,7 @@ export default function TopBarMenu({
             return (
               <motion.div
                 key={index}
-                variants={BUTTON_VARIANTS}
+                variants={DEFAULT_BUTTON_VARIANTS}
                 initial="initial"
                 whileHover="hover"
                 className="top-bar-menu-btn"

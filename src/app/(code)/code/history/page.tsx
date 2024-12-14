@@ -23,29 +23,24 @@ export default function CodeHistoryPage() {
   const searchBy = searchParams.get("filter") || "title";
 
   const fetchHistoryList = async () => {
-    if (accessToken) {
-      const response = await api.get("/code-bank-service/code/history/user", {
-        headers: { Authorization: accessToken },
-        params: {
-          algorithms,
-          difficulties,
-          searchBy: searchBy,
-          searchText: searchBy === "title" ? keyword : Number(keyword),
-          page,
-          size: 15,
-        },
-      });
-      // 페이지 정보 초기화
-      const lastPage = response.data.totalPages - 1;
-      if (page > lastPage) {
-        setPage(lastPage);
-      }
-      setLastPage(lastPage);
-      console.log(response);
-      return response.data;
-    } else {
-      return null;
+    const response = await api.get("/code-bank-service/code/history/user", {
+      headers: { Authorization: accessToken },
+      params: {
+        algorithms,
+        difficulties,
+        searchBy: searchBy,
+        searchText: searchBy === "title" ? keyword : Number(keyword),
+        page,
+        size: 15,
+      },
+    });
+    // 페이지 정보 초기화
+    const lastPage = response.data.totalPages - 1;
+    if (page > lastPage) {
+      setPage(lastPage);
     }
+    setLastPage(lastPage);
+    return response.data;
   };
   const { data } = useQuery({
     queryKey: [
@@ -58,6 +53,7 @@ export default function CodeHistoryPage() {
     ],
     queryFn: fetchHistoryList,
     select: (data) => data.content,
+    enabled: !!accessToken,
   });
 
   return (

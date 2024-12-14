@@ -46,7 +46,7 @@ export default function NewPostPanel({ difficulty }: { difficulty?: number }) {
       content: contentDe,
       writtenCode: writtenCodeEn,
       codeId: Number(params.id),
-      childCategoryId: 4, // 수정
+      childCategoryId: difficulty, // 수정
     };
     console.log(newData);
     try {

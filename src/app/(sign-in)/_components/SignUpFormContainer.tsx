@@ -18,6 +18,7 @@ export default function SignUpFormContainer() {
     formState: { errors },
     setError,
     clearErrors,
+    watch,
   } = useForm<SignUpForm>({
     defaultValues: { useSocialProfile: false },
     mode: "onBlur",
@@ -129,19 +130,19 @@ export default function SignUpFormContainer() {
       <div className="flex flex-col gap-2 relative">
         <span className="text-sm text-black">프로필 사진 선택</span>
         <ProfileImgSelection
-          seletedImg={getValues("basicProfileUrl")}
+          seletedImg={watch("basicProfileUrl")}
           onSelectionClick={(selected) => {
             setValue("basicProfileUrl", selected);
             if (errors.basicProfileUrl) {
               clearErrors("basicProfileUrl");
             }
           }}
-          isDisabled={getValues("useSocialProfile")}
+          isDisabled={watch("useSocialProfile")}
           isError={errors.basicProfileUrl !== undefined}
         />
         <div>
           <SmCheckBoxBtn
-            isActive={getValues("useSocialProfile")}
+            isActive={watch("useSocialProfile")}
             content="소셜 아이디 프로필 사진 사용"
             onClick={() => {
               const currentValue = getValues("useSocialProfile");

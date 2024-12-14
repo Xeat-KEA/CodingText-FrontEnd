@@ -142,7 +142,7 @@ export default function PostAction() {
       setIsDeleteDialogOpen(false);
       setPostToDelete(null);
 
-      router.back();
+      router.replace(`/blog/${currentBlogId}`);
     } catch (error) {}
   };
 
@@ -153,7 +153,8 @@ export default function PostAction() {
         onClick={onClickLike}
         variants={buttonVariants}
         initial="rest"
-        whileTap="clicked">
+        whileTap="clicked"
+      >
         <BpFollowerIcon isFilled={currentPost.checkRecommend} />
         <p className="text-primary-1 text-xs font-semibold">{`좋아요 ${currentPost?.likeCount}`}</p>
       </motion.button>
@@ -163,7 +164,8 @@ export default function PostAction() {
           onClick={onClickCopyLink}
           variants={buttonVariants}
           initial="rest"
-          whileTap="clicked">
+          whileTap="clicked"
+        >
           <ShareIcon />
           <p className="text-black text-xs font-semibold">{`공유`}</p>
         </motion.button>
@@ -244,7 +246,8 @@ export default function PostAction() {
           backBtn="취소"
           onBackBtnClick={cancelReportPost}
           redBtn="신고"
-          onBtnClick={confirmReportPost}>
+          onBtnClick={confirmReportPost}
+        >
           <DropDown
             isSmall={false}
             selection={selectedOption || ""}
@@ -272,7 +275,8 @@ export default function PostAction() {
           title="감사합니다"
           content="신고가 정상적으로 접수되었어요"
           backBtn="확인"
-          onBackBtnClick={() => setIsReportConfirmDialogOpen(false)}></Dialog>
+          onBackBtnClick={() => setIsReportConfirmDialogOpen(false)}
+        ></Dialog>
       )}
     </div>
   );

@@ -7,7 +7,7 @@ import AddCategory from "./AddCategory";
 import api from "@/app/_api/config";
 import { useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion"; // Framer Motion 임포트
-import { BUTTON_VARIANTS } from "@/app/_constants/constants";
+import { DEFAULT_BUTTON_VARIANTS } from "@/app/_constants/constants";
 
 // 제목의 최대 길이 설정 (임시로 10자로 제한)
 const MAX_TITLE_LENGTH = 10;
@@ -80,7 +80,7 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
   return (
     <div className="board" key={category.id}>
       <motion.div
-        variants={BUTTON_VARIANTS}
+        variants={DEFAULT_BUTTON_VARIANTS}
         initial="initial"
         whileHover="hover"
         className="flex items-center relative text-black bg-white text-sm font-regular h-10 cursor-pointer"
@@ -118,7 +118,10 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
           )
         ) : (
           <>
-            <p
+            <motion.p
+              variants={DEFAULT_BUTTON_VARIANTS}
+              initial="initial"
+              whileHover="hover"
               className={`cursor-pointer w-full h-full flex items-center pl-6 bg-white ${
                 category.id === Number(params.categoryId) ||
                 (category.id === 1 &&
@@ -129,7 +132,7 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
               onClick={() => handleCategoryClick(category.id)}
             >
               {category.title}
-            </p>
+            </motion.p>
             {isOwnBlog && category.id !== 1 && hoveredCategoryId === true && (
               <div className="absolute right-3 flex text-2xs space-x-2">
                 <button
@@ -166,7 +169,7 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
           >
             {/* 하위 게시판 전체 */}
             <motion.p
-              variants={BUTTON_VARIANTS}
+              variants={DEFAULT_BUTTON_VARIANTS}
               initial="initial"
               whileHover="hover"
               className={`flex items-center relative bg-white text-xs font-regular h-8 pl-10 py-2 cursor-pointer ${
@@ -202,7 +205,7 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
             {/* 하위 게시판 추가 */}
             {isOwnBlog && category.id !== 1 && (
               <motion.div
-                variants={BUTTON_VARIANTS}
+                variants={DEFAULT_BUTTON_VARIANTS}
                 initial="initial"
                 whileHover="hover"
               >

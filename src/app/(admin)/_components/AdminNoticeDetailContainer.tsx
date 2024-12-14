@@ -41,7 +41,6 @@ export default function AdminNoticeDetailContainer() {
 
   // API 호출
   const fetchNoticeData = async () => {
-    if (!accessToken) return null;
     const response = await api.get(
       `/admin-service/admins/announce/${params.id}`,
       { headers: { Authorization: accessToken } }
@@ -52,6 +51,7 @@ export default function AdminNoticeDetailContainer() {
   const { data, isLoading } = useQuery({
     queryKey: ["noticeData", isTokenSet],
     queryFn: fetchNoticeData,
+    enabled: !!accessToken,
   });
 
   const contentDe = data?.content ? useBase64("decode", data.content) : "";
@@ -93,8 +93,7 @@ export default function AdminNoticeDetailContainer() {
       queryClient.invalidateQueries({
         queryKey: ["noticeData"],
       });
-    } catch (error) {
-    }
+    } catch (error) {}
   };
 
   const onClickDeleteNotice = (id: number) => {
@@ -116,8 +115,7 @@ export default function AdminNoticeDetailContainer() {
       setIsDeleteDialogOpen(false);
       setNoticeToDelete(null);
       router.replace(`/admin/notice`);
-    } catch (error) {
-    }
+    } catch (error) {}
   };
 
   return (

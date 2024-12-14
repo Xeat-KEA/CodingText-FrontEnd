@@ -8,6 +8,7 @@ import { motion } from "framer-motion";
 import DOMPurify from "isomorphic-dompurify";
 import { useBase64 } from "@/app/_hooks/useBase64";
 import { useCalculateDate } from "@/app/_hooks/useCalculateDate";
+import Image from "next/image";
 
 export default function MainPostCard({ post, ranking }: MainPostCardProps) {
   const router = useRouter();
@@ -74,6 +75,19 @@ export default function MainPostCard({ post, ranking }: MainPostCardProps) {
               }}
             />
           </div>
+          {/* 썸네일 */}
+          {!post.isSecret && post.thumbnailImageUrl && (
+            <div className="rounded-lg shrink-0 border border-border-1 overflow-hidden">
+              <Image
+                src={post.thumbnailImageUrl}
+                width={160}
+                height={120}
+                alt={`thumbnail/${post.blogId}`}
+                style={{ width: 160, height: 120 }}
+                className="object-cover"
+              />
+            </div>
+          )}
         </div>
         {/* 하단 컨테이너 */}
         <div className="post-card-bottom-container">

@@ -23,7 +23,7 @@ import {
 import { useCheckToken } from "@/app/_hooks/useCheckToken";
 import { handleWindowResize } from "@/app/utils";
 import Board from "./Sidebar-Board/Board";
-import { BUTTON_VARIANTS } from "@/app/_constants/constants";
+import { DEFAULT_BUTTON_VARIANTS } from "@/app/_constants/constants";
 
 export default function SideBar() {
   handleWindowResize();
@@ -133,7 +133,11 @@ export default function SideBar() {
     label: string;
     Icon: React.FC;
   }) => (
-    <motion.div variants={BUTTON_VARIANTS} initial="initial" whileHover="hover">
+    <motion.div
+      variants={DEFAULT_BUTTON_VARIANTS}
+      initial="initial"
+      whileHover="hover"
+    >
       <Link
         href={href}
         className="flex items-center h-6 py-6 text-black justify-between w-60 pl-6 pr-2"
@@ -194,14 +198,16 @@ export default function SideBar() {
         Icon={SbHomeIcon}
       />
       {/* 게시판 목록 */}
-      <div
-        className={`flex-1 overflow-y-auto`}
-        style={{ maxHeight: "calc(100vh - 252px)" }}
-      >
-        <div className="relative overflow-x-hidden">
-          <Board />
+      {(!isCollapsed || isHovered) && (
+        <div
+          className={`flex-1 overflow-y-auto`}
+          style={{ maxHeight: "calc(100vh - 252px)" }}
+        >
+          <div className="relative overflow-x-hidden">
+            <Board />
+          </div>
         </div>
-      </div>
+      )}
 
       {/* 하단 요소 */}
       <div

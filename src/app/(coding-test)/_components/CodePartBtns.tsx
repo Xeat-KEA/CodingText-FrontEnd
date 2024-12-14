@@ -1,5 +1,9 @@
 import DropDown from "@/app/_components/DropDown";
-import { PROGRAMMING_LANGUAGES } from "@/app/_constants/constants";
+import {
+  DEFAULT_BUTTON_VARIANTS,
+  PRIMARY_BUTTON_VARIANTS,
+  PROGRAMMING_LANGUAGES,
+} from "@/app/_constants/constants";
 import {
   useCodingTestStore,
   useTokenStore,
@@ -9,8 +13,8 @@ import { useParams, useRouter } from "next/navigation";
 import { CodePartBtnsProps } from "../_interface/interfaces";
 import { useEffect, useRef, useState } from "react";
 import { CODING_BUTTONS } from "../_constants/constants";
-import { useCheckToken } from "@/app/_hooks/useCheckToken";
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 export default function CodePartBtns({
   onCompile,
@@ -68,7 +72,10 @@ export default function CodePartBtns({
         // 로그인 시의 버튼
         <div className="flex gap-4">
           {/* 글 쓰기 버튼 (정답 시에만 활성화) */}
-          <button
+          <motion.button
+            variants={DEFAULT_BUTTON_VARIANTS}
+            initial={hasSolved && "initial"}
+            whileHover={hasSolved ? "hover" : ""}
             onClick={() => setIsPosting(true)}
             className={`${!hasSolved ? "btn-disabled" : "btn-default"} h-10 ${
               isSmall && "!p-0 w-12"
@@ -76,9 +83,12 @@ export default function CodePartBtns({
             disabled={!hasSolved}
           >
             {!isSmall ? CODING_BUTTONS[0].content : CODING_BUTTONS[0].icon}
-          </button>
+          </motion.button>
           {/* 다른 사람 풀이 보기 버튼 */}
-          <button
+          <motion.button
+            variants={DEFAULT_BUTTON_VARIANTS}
+            initial="initial"
+            whileHover="hover"
             onClick={() =>
               router.push(`${CODING_BUTTONS[1].url}&keyword=${id}`, {
                 scroll: false,
@@ -87,21 +97,27 @@ export default function CodePartBtns({
             className={`btn-default h-10 ${isSmall && "!p-0 w-12"}`}
           >
             {!isSmall ? CODING_BUTTONS[1].content : CODING_BUTTONS[1].icon}
-          </button>
+          </motion.button>
           {/* 코드 컴파일 후 실행 */}
-          <button
+          <motion.button
+            variants={DEFAULT_BUTTON_VARIANTS}
+            initial="initial"
+            whileHover="hover"
             onClick={onCompile}
             className={`btn-default h-10 ${isSmall && "!p-0 w-12"}`}
           >
             {!isSmall ? CODING_BUTTONS[2].content : CODING_BUTTONS[2].icon}
-          </button>
+          </motion.button>
           {/* 코드 제출 */}
-          <button
+          <motion.button
+            variants={PRIMARY_BUTTON_VARIANTS}
+            initial="initial"
+            whileHover="hover"
             onClick={onSubmit}
             className={`btn-primary h-10 ${isSmall && "!p-0 w-12"}`}
           >
             {!isSmall ? CODING_BUTTONS[3].content : CODING_BUTTONS[3].icon}
-          </button>
+          </motion.button>
         </div>
       ) : (
         // 비로그인 시의 버튼

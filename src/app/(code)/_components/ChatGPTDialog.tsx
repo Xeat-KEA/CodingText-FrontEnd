@@ -1,15 +1,20 @@
 import { useOutsideClick } from "@/app/_hooks/useOutsideClick";
 import { ChatGPTIcon } from "./Icons";
 import DropDown from "@/app/_components/DropDown";
-import { ALGORITHM_LIST, DIFFICULTY_LIST } from "@/app/_constants/constants";
+import {
+  ALGORITHM_LIST,
+  DEFAULT_BUTTON_VARIANTS,
+  DIFFICULTY_LIST,
+  PRIMARY_BUTTON_VARIANTS,
+} from "@/app/_constants/constants";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { CreateCodeForm } from "../_interfaces/interfaces";
-import { useBase64 } from "@/app/_hooks/useBase64";
 import api from "@/app/_api/config";
 import { useTokenStore } from "@/app/stores";
 import LoadingSpinner from "@/app/_components/LoadingSpinner";
+import { motion } from "framer-motion";
 
 export default function ChatGPTDialog({
   onBackBtnClick,
@@ -56,7 +61,7 @@ export default function ChatGPTDialog({
   return (
     <div className="overlay">
       <div
-        ref={ref}
+        ref={(!isRunning && ref) || null}
         className="absolute flex left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] bg-white p-6 rounded-2xl shadow-1"
       >
         {!isRunning ? (
@@ -101,17 +106,26 @@ export default function ChatGPTDialog({
             </div>
             <div className="flex gap-4">
               {/* 뒤로가기 버튼 */}
-              <button
+              <motion.button
+                variants={DEFAULT_BUTTON_VARIANTS}
+                initial="initial"
+                whileHover="hover"
                 type="button"
                 onClick={onBackBtnClick}
                 className="btn-default w-full"
               >
                 취소
-              </button>
+              </motion.button>
               {/* Primary 색상 버튼 */}
-              <button type="submit" className="btn-primary w-full">
+              <motion.button
+                variants={PRIMARY_BUTTON_VARIANTS}
+                initial="initial"
+                whileHover="hover"
+                type="submit"
+                className="btn-primary w-full"
+              >
                 새 문제 만들기
-              </button>
+              </motion.button>
             </div>
           </form>
         ) : (

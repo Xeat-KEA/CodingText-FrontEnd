@@ -18,18 +18,15 @@ export default function UserManagementDetailPage() {
   };
 
   const fetchUserInfo = async () => {
-    if (accessToken) {
-      const response = await api.get(`/user-service/users/init/${userId}`, {
-        headers: { Authorization: accessToken },
-      });
-      return response.data;
-    } else {
-      return null;
-    }
+    const response = await api.get(`/user-service/users/init/${userId}`, {
+      headers: { Authorization: accessToken },
+    });
+    return response.data;
   };
   const { data } = useQuery<AdminUserDetail>({
     queryKey: ["userDetail", isTokenSet],
     queryFn: fetchUserInfo,
+    enabled: !!accessToken,
   });
 
   return (

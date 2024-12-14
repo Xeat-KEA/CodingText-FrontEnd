@@ -18,25 +18,22 @@ export default function UserManagementPage() {
   const keyword = searchParams.get("keyword") || "";
 
   const fetchUserList = async () => {
-    if (accessToken) {
-      const response = await api.get("/user-service/users/list", {
-        params: { page: page, size: 10, input: keyword },
-        headers: { Authorization: accessToken },
-      });
-      // 페이지 정보 초기화
-      const lastPage = response.data.totalPages - 1;
-      if (page > lastPage) {
-        setPage(lastPage);
-      }
-      setLastPage(lastPage);
-      return response.data.content;
-    } else {
-      return null;
+    const response = await api.get("/user-service/users/list", {
+      params: { page: page, size: 10, input: keyword },
+      headers: { Authorization: accessToken },
+    });
+    // 페이지 정보 초기화
+    const lastPage = response.data.totalPages - 1;
+    if (page > lastPage) {
+      setPage(lastPage);
     }
+    setLastPage(lastPage);
+    return response.data.content;
   };
   const { data } = useQuery<AdminUserInfo[]>({
     queryKey: ["userList", isTokenSet, page, keyword],
     queryFn: fetchUserList,
+    enabled: !!accessToken,
   });
 
   return (

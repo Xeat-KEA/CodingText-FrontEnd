@@ -6,7 +6,7 @@ import { useParams } from "next/navigation";
 import api from "@/app/_api/config";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { motion } from "framer-motion";
-import { BUTTON_VARIANTS } from "@/app/_constants/constants";
+import { DEFAULT_BUTTON_VARIANTS } from "@/app/_constants/constants";
 
 const MAX_TITLE_LENGTH = 10;
 
@@ -88,7 +88,7 @@ const ChildCategoryItem: React.FC<ChildCategoryItemProps> = ({
     <motion.div
       className="flex items-center relative text-xs font-regular h-8 cursor-pointer bg-white"
       key={childCategory.id}
-      variants={BUTTON_VARIANTS}
+      variants={DEFAULT_BUTTON_VARIANTS}
       initial="initial"
       whileHover="hover"
       onMouseEnter={() => setHoveredId(true)}

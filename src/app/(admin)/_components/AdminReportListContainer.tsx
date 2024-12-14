@@ -21,8 +21,6 @@ export default function AdminReportListContainer() {
 
   // 신고 목록
   const fetchReportList = async () => {
-    if (!accessToken) return null;
-
     let endpoint = "";
     if (tab === "게시글") {
       endpoint = `/blog-service/admin/article/report/list`;
@@ -42,7 +40,7 @@ export default function AdminReportListContainer() {
       const { data } = response.data;
 
       // 페이지 정보 초기화
-      const lastPage = response.data.data.pageInfo.totalPageNum -1;
+      const lastPage = response.data.data.pageInfo.totalPageNum - 1;
       if (page > lastPage) {
         setPage(lastPage);
       }
@@ -56,6 +54,7 @@ export default function AdminReportListContainer() {
   const { data } = useQuery<Report[]>({
     queryKey: ["reportList", tab, page, isTokenSet],
     queryFn: fetchReportList,
+    enabled: !!accessToken,
   });
 
   return (
