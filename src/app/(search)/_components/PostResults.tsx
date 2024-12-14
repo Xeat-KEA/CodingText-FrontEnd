@@ -65,18 +65,21 @@ export default function PostResults() {
   return (
     <div>
       {result && result.length !== 0 ? (
-        <div className="relative grid grid-cols-2 gap-x-[96px]">
+        <div className="relative grid grid-cols-2 max-md:grid-cols-1 gap-x-[96px]">
           {result && result.length !== 0
             ? result.map((el, index) => (
                 <div
                   key={index}
-                  className={`${index >= 2 && "border-t border-border-2"}`}>
+                  className={`${index >= 2 && "border-t border-border-2"} ${
+                    index >= 1 && "max-md:border-t border-border-2"
+                  }`}
+                >
                   <PostCard key={el.articleId} post={el} />
                 </div>
               ))
             : null}
           {/* 가운데 구분선 */}
-          <div className="w-[1px] h-[calc(100%-48px)] bg-border-2 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+          <div className="max-md:hidden w-[1px] h-[calc(100%-48px)] bg-border-2 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
         </div>
       ) : null}
       {result && result.length === 0 && (

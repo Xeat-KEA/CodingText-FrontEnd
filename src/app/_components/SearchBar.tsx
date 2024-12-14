@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { SearchBarProps, SearchForm } from "../_interfaces/interfaces";
-import { LgSearchIcon, SmSearchIcon } from "./Icons";
+import { LgSearchIcon } from "./Icons";
 import { useForm } from "react-hook-form";
 import { useRouter, useSearchParams } from "next/navigation";
 import DropDown from "./DropDown";
 import { CODE_SEARCH_FILTER_LIST } from "../(code)/_constants/constants";
+import { usePaginationStore } from "../stores";
 
 export default function SearchBar({
   baseURL,
@@ -15,11 +16,13 @@ export default function SearchBar({
   const searchParams = useSearchParams();
   const [filter, setFilter] = useState("");
 
+  const { setPage } = usePaginationStore();
   const { register, handleSubmit, setValue } = useForm<SearchForm>();
   const onValid = (data: SearchForm) => {
     const newParams = new URLSearchParams(searchParams.toString());
     newParams.set("keyword", data.keyword);
     newParams.set("filter", data.filter || "title");
+    setPage(0);
     router.push(`${baseURL}?${newParams}`, {
       scroll: false,
     });

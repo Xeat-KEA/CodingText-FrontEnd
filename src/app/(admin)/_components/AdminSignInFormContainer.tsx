@@ -30,8 +30,6 @@ export default function AdminSignInFormContainer() {
         setIsWaiting(true);
       } else {
         const accessToken = response.data.jwtToken.accessToken;
-        console.log(response.data);
-
         if (accessToken) {
           localStorage.setItem("accessToken", accessToken);
           router.push("/admin/user");

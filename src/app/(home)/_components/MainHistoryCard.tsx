@@ -23,7 +23,6 @@ export default function MainHistoryCard({ history }: { history: History }) {
       );
       if (response.status === 200) {
         setIsRegistered((prev) => !prev);
-        console.log(response);
       }
     } catch (err) {
       if (isAxiosError(err)) {

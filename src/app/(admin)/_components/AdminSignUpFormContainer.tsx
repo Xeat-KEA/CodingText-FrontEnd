@@ -23,7 +23,6 @@ export default function AdminSignUpFormContainer() {
     api
       .post("/admin-service/auth/signup", submitForm)
       .then((res) => {
-        console.log(res);
         setIsDone((prev) => !prev);
       })
       .catch((err) => console.error(err));

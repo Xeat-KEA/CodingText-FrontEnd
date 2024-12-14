@@ -2,6 +2,7 @@ import {
   TAB_BAR_ORDER_FILTER,
   TAB_BAR_POST_FILTER,
 } from "@/app/_constants/constants";
+import { usePaginationStore } from "@/app/stores";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 export default function TabBarFilter() {
@@ -9,9 +10,11 @@ export default function TabBarFilter() {
   const searchParams = useSearchParams();
   const pathname = usePathname();
 
+  const { setPage } = usePaginationStore();
   const setFilter = (type: string, newTab: string) => {
     const newParams = new URLSearchParams(searchParams.toString());
     newParams.set(type, newTab);
+    setPage(0);
     router.push(`${pathname}?${newParams}`, { scroll: false });
   };
 

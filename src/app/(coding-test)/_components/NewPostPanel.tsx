@@ -48,7 +48,6 @@ export default function NewPostPanel({ difficulty }: { difficulty?: number }) {
       codeId: Number(params.id),
       childCategoryId: difficulty, // 수정
     };
-    console.log(newData);
     try {
       // API 요청
       const response = await api.post(
@@ -58,7 +57,6 @@ export default function NewPostPanel({ difficulty }: { difficulty?: number }) {
           headers: { Authorization: accessToken },
         }
       );
-      console.log(response);
       if (response.status === 200) {
         setIsDialogOpen(true);
         setNewArticleId(response.data.data.articleId);

@@ -2,12 +2,7 @@ import { SmShowMoreIcon } from "@/app/(blog)/_components/Icons";
 import { useGetYMD } from "@/app/_hooks/useGetYMD";
 import { useEffect, useState } from "react";
 import DOMPurify from "isomorphic-dompurify";
-import {
-  useCodingTestStore,
-  useRegisterStore,
-  useTiptapStore,
-  useTokenStore,
-} from "@/app/stores";
+import { useCodingTestStore, useTokenStore } from "@/app/stores";
 import CodeEditor from "@/app/(coding-test)/_components/CodeEditor";
 import { SmLinkArrowIcon } from "@/app/_components/Icons";
 import { useRouter } from "next/navigation";
@@ -44,8 +39,6 @@ export default function RegisterCard({
           headers: { Authorization: accessToken },
         }
       );
-
-      console.log(response);
       if (response.status === 200) {
         alert("등록이 거부되었습니다."); // 성공 메시지
         // TODO: 필요한 추가 UI 업데이트
@@ -75,7 +68,8 @@ export default function RegisterCard({
       {/* 문제 열기 / 닫기 버튼 */}
       <button
         onClick={() => setIsOpened((prev) => !prev)}
-        className="flex gap-1 items-center w-fit">
+        className="flex gap-1 items-center w-fit"
+      >
         <div className={isOpened ? "rotate-90" : ""}>
           <SmShowMoreIcon isHidden={true} />
         </div>
@@ -105,7 +99,8 @@ export default function RegisterCard({
             {/* 문제 생성 버튼 */}
             <button
               onClick={onClickDeny}
-              className="flex gap-2 items-center w-fit">
+              className="flex gap-2 items-center w-fit"
+            >
               <span className="edit-btn-red">
                 {isProcessing ? "처리 중..." : "등록 거부"}
               </span>{" "}
@@ -113,7 +108,8 @@ export default function RegisterCard({
             {/* 문제 생성 버튼 */}
             <button
               onClick={() => router.push(`/admin/code/register/${code.codeId}`)}
-              className="flex gap-2 items-center w-fit">
+              className="flex gap-2 items-center w-fit"
+            >
               <span className="edit-btn-primary">새 문제 생성으로 이동</span>
               <SmLinkArrowIcon />
             </button>
