@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect } from "react";
-import Pagination from "@/app/_components/Pagination";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import SearchBar from "@/app/_components/SearchBar";
 import { SEARCH_TAB_MENU_LIST } from "../_constants/constants";
@@ -56,7 +55,6 @@ export default function SearchPage() {
             ) : (
               searchParams.get("tab") === "BLOG" && <BlogResults />
             )}
-            <Pagination />
           </div>
         </div>
       </div>

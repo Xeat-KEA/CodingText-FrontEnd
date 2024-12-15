@@ -5,6 +5,7 @@ import { BlogResult } from "../_interfaces/interfaces";
 import { usePaginationStore } from "@/app/stores";
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
+import Pagination from "@/app/_components/Pagination";
 
 export default function BlogResults() {
   const [result, setResult] = useState<BlogResult[]>([]);
@@ -55,13 +56,14 @@ export default function BlogResults() {
   });
 
   return (
-    <div>
+    <div className="flex flex-col gap-6">
       {result && result.length !== 0 ? (
         <div className="relative grid grid-cols-2 gap-x-[96px]">
           {result.map((el, index) => (
             <div
               key={index}
-              className={`${index >= 2 && "border-t border-border-2"}`}>
+              className={`${index >= 2 && "border-t border-border-2"}`}
+            >
               <BlogCard
                 userId={el.id}
                 nickname={el.nickname}
@@ -81,6 +83,8 @@ export default function BlogResults() {
           <p className="text-base text-disabled">검색 결과가 없어요</p>
         </div>
       )}
+
+      <Pagination />
     </div>
   );
 }

@@ -6,6 +6,7 @@ import { usePaginationStore } from "@/app/stores";
 import { Post } from "@/app/_interfaces/interfaces";
 import { useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
+import Pagination from "@/app/_components/Pagination";
 
 export default function PostResults() {
   const [result, setResult] = useState<Post[]>([]);
@@ -63,7 +64,7 @@ export default function PostResults() {
   });
 
   return (
-    <div>
+    <div className="flex flex-col gap-6">
       {result && result.length !== 0 ? (
         <div className="relative grid grid-cols-2 max-md:grid-cols-1 gap-x-[96px]">
           {result && result.length !== 0
@@ -87,6 +88,7 @@ export default function PostResults() {
           <p className="text-base text-disabled">검색 결과가 없어요</p>
         </div>
       )}
+      {result && result.length !== 0 && <Pagination />}
     </div>
   );
 }
