@@ -100,6 +100,7 @@ export default function CodingTestPage() {
   const { data: codeInfo } = useQuery<CodeInfo>({
     queryKey: ["codeInfo", isTokenSet],
     queryFn: fetchCodeInfo,
+    refetchOnWindowFocus: false,
   });
 
   return (
