@@ -17,7 +17,13 @@ export default function ChatInput({ historyId }: { historyId?: number }) {
   const { value, language } = useCodingTestStore();
   const { accessToken } = useTokenStore();
   const onValid = async (data: ChatInputForm) => {
-    const tempChats = [...newChats, { role: "user", content: data.content }];
+    const tempChats = [
+      ...newChats,
+      {
+        role: "user",
+        content: `${sendWithCode ? `${value}\n` : ""}${data.content}`,
+      },
+    ];
     setNewChats(tempChats);
     setIsLoading(true);
     setValue("content", "");
