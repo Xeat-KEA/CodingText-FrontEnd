@@ -30,7 +30,13 @@ export default function MainPostCard({ post, ranking }: MainPostCardProps) {
       >
         {/* 상단 컨테이너 */}
         <div className="post-card-top-container">
-          <div className="post-card-profile-container">
+          <div
+            onClick={(e) => {
+              e.preventDefault();
+              router.push(`/blog/${post.blogId}`);
+            }}
+            className="post-card-profile-container hover:underline"
+          >
             <ProfileImgContainer width={24} height={24} src={post.profileUrl} />
             <span className="post-card-nickname">{post.nickName}</span>
           </div>
