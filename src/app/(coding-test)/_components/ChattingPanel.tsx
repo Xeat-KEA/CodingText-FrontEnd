@@ -52,7 +52,7 @@ export default function ChattingPanel({
       return lastPage?.currentPage - 1;
     },
     enabled: !!accessToken && !!historyId,
-
+    refetchOnWindowFocus: false,
     // 데이터 평탄화
     select: (data) =>
       data.pages
