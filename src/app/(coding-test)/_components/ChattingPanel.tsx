@@ -104,12 +104,14 @@ export default function ChattingPanel({
           <LoadingAnimation />
         </div>
       )}
-      {chats?.map((chat) => (
-        <div className="flex flex-col gap-6" key={chat.chatHistoryId}>
-          <ChatBubble role="user" content={chat.question} />
-          <ChatBubble role="gpt" content={chat.answer} />
-        </div>
-      ))}
+      {!isPending &&
+        chats?.length !== 0 &&
+        chats?.map((chat) => (
+          <div className="flex flex-col gap-6" key={chat.chatHistoryId}>
+            <ChatBubble role="user" content={chat.question} />
+            <ChatBubble role="gpt" content={chat.answer} />
+          </div>
+        ))}
       {newChats?.map((chat, index) => (
         <ChatBubble key={index} role={chat.role} content={chat.content} />
       ))}

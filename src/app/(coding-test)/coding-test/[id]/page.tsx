@@ -107,12 +107,14 @@ export default function CodingTestPage() {
       {codeInfo && windowSize ? (
         windowSize >= 768 ? (
           <SplittedContainer
+            key={codeInfo.historyId}
             content={codeContent}
             historyId={codeInfo.historyId}
             difficulty={getDifficultyNumber(codeInfo.difficulty)}
           />
         ) : (
           <UnsplittedContainer
+            key={codeInfo.historyId}
             content={codeContent}
             historyId={codeInfo.historyId}
             difficulty={getDifficultyNumber(codeInfo.difficulty)}
