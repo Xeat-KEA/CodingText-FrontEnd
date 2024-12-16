@@ -224,7 +224,7 @@ export default function TopBar() {
                     onClick={() => onIconClick("notice")}
                   >
                     {!checkedNotice && (
-                      <div className="absolute w-1 h-1 rounded-full bg-red right-[2px] top-[2px]"></div>
+                      <div className="absolute w-1 h-1 rounded-full bg-red right-2 top-2"></div>
                     )}
                     <NoticeIcon />
                   </motion.button>
