@@ -31,11 +31,11 @@ textarea {
   }
   /* max-width 400px인 컨테이너 (로그인, 회원가입 등) */
   .max-w-400 {
-    @apply w-full max-w-[400px] px-12 max-sm:px-6;
+    @apply w-full max-w-[400px] px-12;
   }
   /* max-width 800px인 컨테이너 (블로그 본문 등) */
   .max-w-800 {
-    @apply w-full max-w-[800px] px-12 max-sm:px-6;
+    @apply w-full max-w-[800px] px-12;
   }
   /* max-width 1000px인 컨테이너 (블로그 홈, 게시글 목록 등) */
   .max-w-1000 {
