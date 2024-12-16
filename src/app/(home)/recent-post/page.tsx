@@ -58,7 +58,7 @@ export default function RecentPostPage() {
 
   return (
     <div className="top-container">
-      <div className="max-w-1000 pt-16">
+      <div className="max-w-1000 max-sm:px-6 pt-16">
         <div className="flex flex-col py-8 gap-4">
           <SmBackBtn content="메인 페이지로" onClick={() => router.push("/")} />
           {/* 게시글 목록 제목 / 설명 */}

@@ -185,7 +185,7 @@ export default function TopBar() {
               ? "px-6"
               : pathname.startsWith("/recent-post") ||
                 pathname.startsWith("/code-post")
-              ? "max-w-1000"
+              ? "max-w-1000 max-sm:px-6"
               : "max-w-1200"
           }`}
         >

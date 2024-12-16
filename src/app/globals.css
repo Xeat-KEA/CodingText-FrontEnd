@@ -39,7 +39,7 @@ textarea {
   }
   /* max-width 1000px인 컨테이너 (블로그 홈, 게시글 목록 등) */
   .max-w-1000 {
-    @apply w-full max-w-[1000px] px-12 max-sm:px-6;
+    @apply w-full max-w-[1000px] px-12;
   }
   /* max-width 1200px인 컨테이너 (메인 페이지, 검색 결과 등) */
   .max-w-1200 {
