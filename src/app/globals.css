@@ -31,15 +31,15 @@ textarea {
   }
   /* max-width 400px인 컨테이너 (로그인, 회원가입 등) */
   .max-w-400 {
-    @apply w-full max-w-[400px] px-12;
+    @apply w-full max-w-[400px] px-12 max-sm:px-6;
   }
   /* max-width 800px인 컨테이너 (블로그 본문 등) */
   .max-w-800 {
-    @apply w-full max-w-[800px] px-12;
+    @apply w-full max-w-[800px] px-12 max-sm:px-6;
   }
   /* max-width 1000px인 컨테이너 (블로그 홈, 게시글 목록 등) */
   .max-w-1000 {
-    @apply w-full max-w-[1000px] px-12;
+    @apply w-full max-w-[1000px] px-12 max-sm:px-6;
   }
   /* max-width 1200px인 컨테이너 (메인 페이지, 검색 결과 등) */
   .max-w-1200 {
