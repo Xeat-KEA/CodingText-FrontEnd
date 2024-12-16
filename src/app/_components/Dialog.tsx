@@ -25,7 +25,12 @@ export default function Dialog({
   const ref = !blockOutsideClick ? useOutsideClick(onBackBtnClick) : null;
   return (
     <div className="overlay">
-      <div className="absolute w-full h-full px-12 flex-center">
+      <motion.div
+        initial={{ y: 100 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.2, type: "spring", damping: 15 }}
+        className="absolute w-full h-full px-12 flex-center"
+      >
         <div
           ref={ref}
           className="w-full max-w-[400px] flex flex-col gap-6 bg-white p-6 rounded-2xl shadow-1"
@@ -95,7 +100,7 @@ export default function Dialog({
             )}
           </div>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }
