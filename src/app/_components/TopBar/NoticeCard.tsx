@@ -17,44 +17,43 @@ export default function NoticeCard({ push }: { push: Push }) {
 
     switch (noticeCategory) {
       case "댓글 알림":
-        return <>{userMessage} 님이 새로운 댓글을 남겼어요</>;
+        return <>{userMessage} 님이 새로운 댓글을 남겼어요.</>;
       case "답글 알림":
-        return <>{userMessage} 님이 새로운 답글을 남겼어요</>;
+        return <>{userMessage} 님이 새로운 답글을 남겼어요.</>;
       case "언급된 사용자 알림":
-        return <>{userMessage} 님이 사용자님을 언급했어요</>;
+        return <>{userMessage} 님이 사용자님을 언급했어요.</>;
       case "팔로우 알림":
-        return <>{userMessage} 님이 팔로우했어요</>;
+        return <>{userMessage} 님이 팔로우했어요.</>;
       case "댓글 삭제 처리 알림":
         return (
           <>
-            {userMessage} 님이 "{reasonMessage}"의 사유로 댓글을 삭제하였습니다.
+            {userMessage} 님이 '{reasonMessage}' 사유로 댓글을 삭제했어요.
           </>
         );
       case "삭제 처리 알림":
         return (
           <>
-            {userMessage} 님이 "{reasonMessage}"의 사유로 게시글을
-            삭제하였습니다.
+            {userMessage} 님이 '{reasonMessage}' 사유로 게시글을 삭제했어요.
           </>
         );
       case "블라인드 처리 알림":
         return (
           <>
-            {userMessage} 님이 "{reasonMessage}"의 사유로 해당 게시글을 블라인드
-            처리 하였습니다.
+            {userMessage} 님이 '{reasonMessage}' 사유로 해당 게시글을 블라인드
+            처리했어요.
           </>
         );
       case "블라인드 해제 알림":
         return (
           <>
-            {userMessage} 님이 "{reasonMessage}"의 사유로 해당 게시글을 블라인드
-            해제 하였습니다.
+            {userMessage} 님이 '{reasonMessage}'의 사유로 해당 게시글을 블라인드
+            해제했어요.
           </>
         );
       case "코딩테스트 문제 등록 승인 알림":
-        return <>신청하신 문제 등록이 승인되었습니다</>;
+        return <>신청하신 코딩테스트 문제가 등록 승인되었어요.</>;
       case "코딩테스트 문제 등록 거절 알림":
-        return <>신청하신 문제 등록이 거절되었습니다</>;
+        return <>신청하신 코딩테스트 문제가 등록 거부되었어요.</>;
       default:
         return "알림 내용이 없습니다.";
     }
