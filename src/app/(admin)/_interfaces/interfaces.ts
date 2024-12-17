@@ -61,7 +61,7 @@ export interface CodeDetail {
   nickName?: string;
   code: Code;
   testcases: Testcase[];
-  onDeny: () => void;
+  onDeny?: () => void;
 }
 
 export interface EditCodeDetail {
