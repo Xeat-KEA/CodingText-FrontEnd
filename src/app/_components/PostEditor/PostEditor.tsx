@@ -167,7 +167,7 @@ export default function PostEditor({
 
   // 초기값 설정
   useEffect(() => {
-    if (title) {
+    if (title && !initialData) {
       setValue("title", title);
     }
     if (isCodingTestSecret) {
