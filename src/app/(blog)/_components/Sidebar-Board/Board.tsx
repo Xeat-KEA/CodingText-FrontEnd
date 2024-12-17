@@ -42,8 +42,7 @@ export default function Board() {
   // 상/하위 게시판 추가 함수
   const handleAddCategory = async (title: string, parentId?: number) => {
     if (accessToken) {
-      const trimmedTitle = title.trim().slice(0, MAX_TITLE_LENGTH);
-      if (!trimmedTitle) return;
+      if (!title) return;
 
       //   게시판 5개 이상 추가 제한 (코딩테스트 기본 값)
       if (!parentId && boardCategories.length >= 6) {
@@ -59,7 +58,7 @@ export default function Board() {
           "/blog-service/blog/board/child",
           {
             parentCategoryId: parentId,
-            childName: trimmedTitle,
+            childName: title,
           },
           {
             headers: { Authorization: accessToken },
@@ -69,7 +68,7 @@ export default function Board() {
         setIsAddingCategory(false);
         await api.post(
           "/blog-service/blog/board/parent",
-          { parentName: trimmedTitle },
+          { parentName: title },
           {
             headers: { Authorization: accessToken },
           }
@@ -148,8 +147,7 @@ export default function Board() {
         whileHover="hover"
         className={`flex items-center relative bg-white text-black text-sm font-regular h-10 pl-6 py-2 cursor-pointer 
           ${pathname === `/blog/${currentBlogId}/category` ? "font-bold" : ""}`}
-        onClick={() => router.push(`/blog/${currentBlogId}/category`)}
-      >
+        onClick={() => router.push(`/blog/${currentBlogId}/category`)}>
         전체
       </motion.p>
 
@@ -169,8 +167,7 @@ export default function Board() {
           variants={DEFAULT_BUTTON_VARIANTS}
           initial="initial"
           whileHover="hover"
-          className="flex items-center h-10 bg-white"
-        >
+          className="flex items-center h-10 bg-white">
           {isAddingCategory ? (
             <div className="flex items-center h-10">
               <AddCategory handleAddCategory={handleAddCategory} />
@@ -178,8 +175,7 @@ export default function Board() {
           ) : (
             <button
               onClick={() => setIsAddingCategory(true)}
-              className="w-full h-full flex items-center pl-6 text-xs text-disabled font-semibold"
-            >
+              className="w-full h-full flex items-center pl-6 text-xs text-disabled font-semibold">
               새 상위 게시판 추가
             </button>
           )}
