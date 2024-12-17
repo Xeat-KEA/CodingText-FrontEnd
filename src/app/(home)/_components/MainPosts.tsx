@@ -31,7 +31,7 @@ export default function MainPostList({
         {sliderList &&
           sliderList.map((el, index) => (
             <MainPostCard
-              key={el.articleId}
+              key={title + el.articleId}
               post={el}
               ranking={hasRanking ? ((index + 1) as 1 | 2 | 3) : undefined}
             />

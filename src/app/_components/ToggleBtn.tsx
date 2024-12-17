@@ -12,8 +12,8 @@ export default function ToggleBtn({ content, state, onClick }: ToggleBtnProps) {
         }`}
       >
         <motion.div
-          initial={{ justifySelf: state ? "end" : "start" }}
-          transition={{ duration: 0.5 }}
+          animate={{ x: state ? 20 : 0 }}
+          transition={{ duration: 0.1, type: "tween" }}
           className="w-[14px] h-[14px] rounded-full bg-white"
         />
       </div>

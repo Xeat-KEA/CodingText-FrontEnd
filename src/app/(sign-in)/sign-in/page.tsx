@@ -10,7 +10,7 @@ export default function SignInPage() {
     <div className="sign-in-container">
       <SignInTitle title="로그인" />
       {/* 소셜 로그인 버튼 */}
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col items-center gap-4">
         {SOCIAL_LOGIN_BUTTON_LIST.map((el, index) => (
           <Link key={el.service} href={el.redirectionURL}>
             <Image

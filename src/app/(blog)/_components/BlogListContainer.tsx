@@ -154,7 +154,8 @@ export default function BlogListContainer() {
             result.map((el, index) => (
               <div
                 key={index}
-                className={`${index >= 2 && "border-t border-border-2"}`}>
+                className={`${index >= 2 && "border-t border-border-2"}`}
+              >
                 <PostCard post={el} />
               </div>
             ))
@@ -164,7 +165,7 @@ export default function BlogListContainer() {
             </div>
           )}
         </div>
-        <Pagination />
+        {result && result.length !== 0 && <Pagination />}
       </div>
     </div>
   );

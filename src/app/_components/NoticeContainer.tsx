@@ -58,14 +58,15 @@ export default function NoticeContainer() {
           ))}
         </div>
 
-        <Pagination />
+        {data && data.length !== 0 && <Pagination />}
 
         {/* // "새 게시글 작성" 버튼 */}
         {isAdmin && (
           <div className="flex w-full justify-end items-center">
             <Link
               href={"/admin/notice/write"}
-              className="px-4 py-2 bg-primary text-white text-xs text-bold rounded-md">
+              className="px-4 py-2 bg-primary text-white text-xs text-bold rounded-md"
+            >
               새 공지사항 작성
             </Link>
           </div>

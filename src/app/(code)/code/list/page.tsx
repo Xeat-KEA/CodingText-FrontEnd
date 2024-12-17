@@ -9,6 +9,7 @@ import { Code } from "../../_interfaces/interfaces";
 import { useQuery } from "@tanstack/react-query";
 import CodeCard from "../../_components/CodeCard";
 import { useCheckToken } from "@/app/_hooks/useCheckToken";
+import Pagination from "@/app/_components/Pagination";
 
 export default function CodeListPage() {
   const {} = useCheckToken();
@@ -71,20 +72,23 @@ export default function CodeListPage() {
       {/* 문제 리스트 상단바 */}
       <CodeListTopBar />
       {/* 문제 */}
-      <div className="w-full flex flex-col divide-y divide-border-1">
-        {data?.content.map((el, index) => (
-          <CodeCard
-            key={index}
-            codeId={el.codeId}
-            title={el.title}
-            difficulty={el.difficulty}
-            algorithm={el.algorithm}
-            content={el.content}
-            correctRate={el.correctRate}
-            registerStatus={el.registerStatus}
-            createdAt={el.createdAt}
-          />
-        ))}
+      <div className="flex flex-col gap-6">
+        <div className="w-full flex flex-col divide-y divide-border-1">
+          {data?.content.map((el, index) => (
+            <CodeCard
+              key={index}
+              codeId={el.codeId}
+              title={el.title}
+              difficulty={el.difficulty}
+              algorithm={el.algorithm}
+              content={el.content}
+              correctRate={el.correctRate}
+              registerStatus={el.registerStatus}
+              createdAt={el.createdAt}
+            />
+          ))}
+        </div>
+        {data && data.content.length !== 0 && <Pagination />}
       </div>
     </div>
   );

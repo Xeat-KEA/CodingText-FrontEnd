@@ -1,7 +1,6 @@
 "use client";
 
 import SearchBar from "@/app/_components/SearchBar";
-import Pagination from "@/app/_components/Pagination";
 import ProfileCard from "./ProfileCard";
 import CodeFilter from "./CodeFilter";
 import { usePathname } from "next/navigation";
@@ -50,7 +49,6 @@ export default function CodeLayoutContainer({
               </div>
               {/* 문제 리스트 */}
               {children}
-              <Pagination />
             </div>
           </div>
           {/* 회원 정보 부분 */}

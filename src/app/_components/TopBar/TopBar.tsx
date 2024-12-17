@@ -185,7 +185,7 @@ export default function TopBar() {
               ? "px-6"
               : pathname.startsWith("/recent-post") ||
                 pathname.startsWith("/code-post")
-              ? "max-w-1000"
+              ? "max-w-1000 max-sm:px-6"
               : "max-w-1200"
           }`}
         >
@@ -224,7 +224,7 @@ export default function TopBar() {
                     onClick={() => onIconClick("notice")}
                   >
                     {!checkedNotice && (
-                      <div className="absolute w-1 h-1 rounded-full bg-red right-[2px] top-[2px]"></div>
+                      <div className="absolute w-1 h-1 rounded-full bg-red right-2 top-2"></div>
                     )}
                     <NoticeIcon />
                   </motion.button>

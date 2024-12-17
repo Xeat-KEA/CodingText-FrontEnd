@@ -59,6 +59,7 @@ export default function MainBanner() {
       if (document.visibilityState === "visible") {
         interval = setInterval(() => {
           setIsBack(false);
+          setIsMoving(true);
           setPage((prev) =>
             prev + 1 <= BANNER_IMG_LIST.length - 1 ? prev + 1 : 0
           );

@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  useChatStore,
   useCodingTestStore,
   useTiptapStore,
   useWindowSizeStore,
@@ -35,6 +36,7 @@ export default function CodingTestPage() {
     setHasSolved,
   } = useCodingTestStore();
   const { setContent } = useTiptapStore();
+  const { setNewChats } = useChatStore();
   // 페이지 진입 시 전역변수 초기화
   useEffect(() => {
     setIsPosting(false);
@@ -44,6 +46,7 @@ export default function CodingTestPage() {
     setCompiledResult([]);
     setIsRunning(false);
     setSubmitResult([]);
+    setNewChats([]);
     setLanguage(PROGRAMMING_LANGUAGES[0]);
   }, []);
 
@@ -97,6 +100,7 @@ export default function CodingTestPage() {
   const { data: codeInfo } = useQuery<CodeInfo>({
     queryKey: ["codeInfo", isTokenSet],
     queryFn: fetchCodeInfo,
+    refetchOnWindowFocus: false,
   });
 
   return (
@@ -104,12 +108,14 @@ export default function CodingTestPage() {
       {codeInfo && windowSize ? (
         windowSize >= 768 ? (
           <SplittedContainer
+            key={codeInfo.historyId}
             content={codeContent}
             historyId={codeInfo.historyId}
             difficulty={getDifficultyNumber(codeInfo.difficulty)}
           />
         ) : (
           <UnsplittedContainer
+            key={codeInfo.historyId}
             content={codeContent}
             historyId={codeInfo.historyId}
             difficulty={getDifficultyNumber(codeInfo.difficulty)}

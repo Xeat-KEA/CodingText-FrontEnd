@@ -22,6 +22,7 @@ export default function Home() {
   const { data: trendings } = useQuery({
     queryKey: ["trendingPosts"],
     queryFn: fetchTrendingPosts,
+    select: (data) => data.data?.articleList.slice(0, 3),
   });
 
   // 일반 게시글 API 호출
@@ -69,7 +70,7 @@ export default function Home() {
           <MainPostList
             title={POSTS_LIST[0].title}
             subTitle={POSTS_LIST[0].content}
-            sliderList={trendings?.data.articleList}
+            sliderList={trendings}
             hasRanking
           />
           {/* 최신 게시글 */}

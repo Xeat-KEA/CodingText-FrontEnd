@@ -9,6 +9,7 @@ import HistoryCard from "../../_components/HistoryCard";
 import { History } from "../../_interfaces/interfaces";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
+import Pagination from "@/app/_components/Pagination";
 
 export default function CodeHistoryPage() {
   // 로그인 여부 확인
@@ -62,24 +63,27 @@ export default function CodeHistoryPage() {
       {/* 문제 리스트 상단바 */}
       <HistoryTopBar />
       {/* 문제 */}
-      <div className="w-full flex flex-col divide-y divide-border-1">
-        {data?.length !== 0 ? (
-          <>
-            {data?.map((el: History) => (
-              <HistoryCard key={el.codeHistoryId} history={el} />
-            ))}
-          </>
-        ) : (
-          <div className="w-full h-[480px] flex flex-col items-center justify-center gap-2 bg-bg-1 rounded-b-lg">
-            <p className="text-body">아직 시도한 문제가 없어요</p>
-            <Link
-              href="/code/list"
-              className="text-sm font-semibold text-primary-1 hover:underline"
-            >
-              문제 풀러 가기
-            </Link>
-          </div>
-        )}
+      <div className="flex flex-col gap-6">
+        <div className="w-full flex flex-col divide-y divide-border-1">
+          {data?.length !== 0 ? (
+            <>
+              {data?.map((el: History) => (
+                <HistoryCard key={el.codeHistoryId} history={el} />
+              ))}
+            </>
+          ) : (
+            <div className="w-full h-[480px] flex flex-col items-center justify-center gap-2 bg-bg-1 rounded-b-lg">
+              <p className="text-body">아직 시도한 문제가 없어요</p>
+              <Link
+                href="/code/list"
+                className="text-sm font-semibold text-primary-1 hover:underline"
+              >
+                문제 풀러 가기
+              </Link>
+            </div>
+          )}
+        </div>
+        {data && data.length !== 0 && <Pagination />}
       </div>
     </div>
   );
