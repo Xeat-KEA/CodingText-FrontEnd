@@ -1,24 +1,34 @@
 import Image from "next/image";
 import { BpEditIcon, BpFollowerIcon } from "./Icons";
-import { useEffect, useState } from "react"; // useState 훅 임포트
+import { useEffect, useRef, useState } from "react";
 import Dialog from "@/app/_components/Dialog";
 import { DialogCheckIcon, DialogReportIcon } from "@/app/_components/Icons";
 import Link from "next/link";
-import { useBlogStore, useTokenStore } from "@/app/stores";
+import { useBlogStore, useTokenStore, useWindowSizeStore } from "@/app/stores";
 import { REPORT_REASONS } from "../_constants/constants";
 import DropDown from "@/app/_components/DropDown";
 import IconBtn from "@/app/_components/IconBtn";
 import api from "@/app/_api/config";
-import { useQueryClient } from "@tanstack/react-query";
+import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { profileProps } from "@/app/_interfaces/interfaces";
 import ProfileImgContainer from "@/app/_components/ProfileImgContainer";
 import { motion } from "framer-motion";
+import { useInView } from "react-intersection-observer";
+import { usePathname, useRouter } from "next/navigation";
+import { useOutsideClick } from "@/app/_hooks/useOutsideClick";
+import { handleWindowResize } from "@/app/utils";
+import LoadingAnimation from "@/app/_components/LoadingAnimation";
+import LikeListCard from "./LikeListCard";
 
 export default function BlogProfile({ profile }: profileProps) {
   // 로그인 여부 확인
   const { accessToken, isTokenSet } = useTokenStore();
 
   const queryClient = useQueryClient();
+  const router = useRouter();
+  const { windowSize } = useWindowSizeStore();
+  handleWindowResize();
+  const maxWidth = 1000;
 
   const { userBlogId, currentBlogId, isOwnBlog } = useBlogStore();
   const [blogToReport, setBlogToReport] = useState<number | null>(null);
@@ -27,13 +37,34 @@ export default function BlogProfile({ profile }: profileProps) {
   const [isReportDialogOpen, setIsReportDialogOpen] = useState(false);
   const [isReportConfirmDialogOpen, setIsReportConfirmDialogOpen] =
     useState(false);
+  const [isLoginRequiredDialogOpen, setIsLoginRequiredDialogOpen] =
+    useState(false);
 
-    const buttonVariants = {
-      rest: { scale: 1 },
-      clicked: { scale: 0.95, transition: { type: "spring", stiffness: 300 } },
-    };
+  const popUpLocation = `calc( ${Math.max((windowSize - maxWidth) / 12, 0)}px)`;
+
+  // 팔로우 리스트와 팝업 상태 관리
+  const [isOpen, setIsOpen] = useState(false);
+  const [followList, setFollowList] = useState([]);
+
+  const followerRef = useRef(null);
+
+  // 바깥 영역 클릭 감지용 hook 선언
+  const followerPopupRef = useOutsideClick(
+    () => onClickFollowerList(false),
+    followerRef
+  );
+
+  const buttonVariants = {
+    rest: { scale: 1 },
+    clicked: { scale: 0.95, transition: { type: "spring", stiffness: 300 } },
+  };
 
   const onClickFollow = async () => {
+    if (!accessToken) {
+      setIsLoginRequiredDialogOpen(true);
+      return;
+    }
+
     try {
       // 팔로우/언팔로우 API 요청 보내기
       const response = await api.put(
@@ -49,7 +80,60 @@ export default function BlogProfile({ profile }: profileProps) {
     } catch (error) {}
   };
 
+  const onClickFollowerList = (state?: boolean) => {
+    setIsOpen((prev) => (state !== undefined ? state : !prev));
+  };
+
+  // 팔로워 리스트 API 호출
+  const fetchFollowerList = async ({ pageParam }: { pageParam?: number }) => {
+    if (currentBlogId === -1) return null;
+    const response = await api.get(
+      `/blog-service/blog/home/follow/list/${currentBlogId}`,
+      { params: { page: pageParam, size: 5 } }
+    );
+    console.log(response);
+    return response.data.data;
+  };
+
+  const {
+    data: followers,
+    fetchNextPage,
+    hasNextPage,
+    isLoading,
+  } = useInfiniteQuery({
+    queryKey: ["followers", isOpen],
+    queryFn: fetchFollowerList,
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, allPages) => {
+      if (lastPage?.pageInfo.totalPageNum === 0) {
+        return undefined;
+      }
+      if (
+        lastPage?.pageInfo.totalPageNum === lastPage?.pageInfo.currentPageNum
+      ) {
+        return undefined;
+      } else {
+        return lastPage?.pageInfo.currentPageNum;
+      }
+    },
+    // 데이터 평탄화
+    select: (data) => data.pages.flatMap((page) => page?.followerList),
+  });
+
+  // 무한스크롤 트리거
+  const { ref, inView } = useInView();
+  useEffect(() => {
+    if (inView && !isLoading) {
+      fetchNextPage();
+    }
+  }, [inView]);
+
   const onClickReportBlog = (id: number) => {
+    if (!accessToken) {
+      setIsLoginRequiredDialogOpen(true);
+      return;
+    }
+
     setBlogToReport(id);
     setIsReportDialogOpen(true);
   };
@@ -104,44 +188,92 @@ export default function BlogProfile({ profile }: profileProps) {
             {/* 프로필 정보 */}
             <div className="profile-info w-[428px] h-26">
               <p className="text-body text-xs font-bold">{profile.tier}</p>
-              <h2 className="text-xl text-black font-semibold">
+              <p className="text-xl text-black font-semibold">
                 {profile.userName}
-              </h2>
+              </p>
+
               <p className="text-sm text-body font-regular mt-2">
                 {profile.profileMessage}
               </p>
-              <div className="flex items-center gap-4 mt-2">
-                {isOwnBlog || (!isOwnBlog && !accessToken) ? (
-                  <>
-                    <button className="flex items-center gap-1">
-                      <BpFollowerIcon isFilled={true} />
-                      <p className="text-primary-1 text-xs font-semibold">{`팔로워 ${profile.followCount}`}</p>
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    <motion.button
-                      className="flex items-center gap-1"
-                      onClick={onClickFollow}
-                      variants={buttonVariants}
-                      initial="rest"
-                      whileTap="clicked">
-                      <BpFollowerIcon isFilled={profile.followCheck} />
-                      <p className="text-primary-1 text-xs font-semibold">{`팔로워 ${profile.followCount}`}</p>
-                    </motion.button>
 
-                    <IconBtn
-                      type="report"
-                      content="신고"
-                      onClick={() => onClickReportBlog(profile.blogId)}
-                    />
-                  </>
+              <div className="flex items-center gap-4 mt-2">
+                <div className="flex gap-1 items-center">
+                  <motion.button
+                    className="flex items-center gap-1"
+                    onClick={isOwnBlog ? undefined : onClickFollow}
+                    variants={buttonVariants}
+                    initial="rest"
+                    whileTap="clicked">
+                    <BpFollowerIcon isFilled={profile.followCheck} />
+                  </motion.button>
+                  <motion.button
+                    ref={followerRef}
+                    className="relative flex items-center gap-1"
+                    onClick={() => onClickFollowerList()}
+                    variants={buttonVariants}
+                    initial="rest"
+                    whileTap="clicked">
+                    <p className="text-primary-1 text-xs font-semibold whitespace-nowrap hover:underline decoration-primary-1">{`팔로워 ${profile.followCount}`}</p>
+
+                    {/* 팔로워 리스트 팝업 */}
+                    {isOpen && (
+                      <div
+                        ref={followerPopupRef}
+                        style={{
+                          left: 0,
+                        }}
+                        className="absolute bg-white top-[calc(100%+10px)] w-[200px] h-[200px] flex flex-col items-center rounded-lg shadow-2 divide-y divide-border-1 overflow-y-auto z-10">
+                        {followers !== undefined && followers.length !== 0 ? (
+                          followers?.map((el) => (
+                            <LikeListCard key={el?.blogId} liker={el!} />
+                          ))
+                        ) : (
+                          <span className="text-sm text-body h-full flex items-center">
+                            팔로워 목록이 비어있어요!
+                          </span>
+                        )}
+                        {!isLoading && hasNextPage && (
+                          // 노출 시 다음 데이터 fetch
+                          <div
+                            ref={ref}
+                            className={`w-full flex-center shrink-0 ${
+                              isLoading ? "h-full" : "h-10"
+                            }`}>
+                            <LoadingAnimation />
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </motion.button>
+                </div>
+
+                {!isOwnBlog && (
+                  <IconBtn
+                    type="report"
+                    content="신고"
+                    onClick={() => onClickReportBlog(profile.blogId)}
+                  />
                 )}
               </div>
             </div>
           </div>
         )}
       </div>
+
+      {/* 로그인 필요 다이얼로그 */}
+      {isLoginRequiredDialogOpen && (
+        <Dialog
+          title="로그인이 필요합니다"
+          content={`이 기능을 사용하려면 로그인이 필요합니다.\n로그인하시겠습니까?`}
+          backBtn="취소"
+          onBackBtnClick={() => setIsLoginRequiredDialogOpen(false)}
+          primaryBtn="로그인"
+          onBtnClick={() => {
+            setIsLoginRequiredDialogOpen(false);
+            router.push("/sign-in");
+          }}
+        />
+      )}
 
       {/* 사용자 정보 수정 버튼 */}
       {isOwnBlog && (

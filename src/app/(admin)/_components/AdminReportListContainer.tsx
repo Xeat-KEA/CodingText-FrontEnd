@@ -40,9 +40,9 @@ export default function AdminReportListContainer() {
       const { data } = response.data;
 
       // 페이지 정보 초기화
-      const lastPage = response.data.data.pageInfo.totalPageNum - 1;
+      const lastPage = response.data.data.pageInfo.totalPageNum;
       if (page > lastPage) {
-        setPage(lastPage);
+        setPage(lastPage - 1);
       }
       setLastPage(lastPage);
       return data.reportList;
