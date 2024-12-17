@@ -30,9 +30,6 @@ export default function PostAction() {
   const { currentPost, isCodingPost } = usePostStore();
   const { currentBlogId, isOwnBlog } = useBlogStore();
   const router = useRouter();
-  const { windowSize } = useWindowSizeStore();
-  handleWindowResize();
-  const maxWidth = 1000;
 
   const [isShareDialogOpen, setIsShareDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -93,7 +90,6 @@ export default function PostAction() {
       `/blog-service/blog/board/article/like/list/${currentPost.articleId}`,
       { params: { page: pageParam, size: 5 } }
     );
-    console.log(response);
     return response.data.data;
   };
 

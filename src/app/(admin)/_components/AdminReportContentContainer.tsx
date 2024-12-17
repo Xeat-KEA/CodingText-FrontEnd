@@ -80,7 +80,7 @@ export default function AdminReportContentContainer() {
         <div className="w-full">{reportPostData && <PostHeader />}</div>
 
         {/* 구분선 */}
-        <hr className="division" />
+        <hr className="w-full border-t-1 border-border-2" />
 
         {/* 게시물 내용 */}
         <div className="w-full">{reportPostData && <PostContent />}</div>

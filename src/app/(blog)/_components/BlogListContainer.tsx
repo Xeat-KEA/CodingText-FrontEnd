@@ -62,8 +62,6 @@ export default function BlogListContainer() {
 
   // 블로그 게시글 목록 조회
   const fetchPostListData = async () => {
-    // if (page === -1) return { data: [] };
-
     const boardType = getBoardType(
       Number(params.categoryId) || Number(params.codeId)
     );
@@ -154,8 +152,7 @@ export default function BlogListContainer() {
             result.map((el, index) => (
               <div
                 key={index}
-                className={`${index >= 2 && "border-t border-border-2"}`}
-              >
+                className={`${index >= 2 && "border-t border-border-2"}`}>
                 <PostCard post={el} />
               </div>
             ))

@@ -26,9 +26,6 @@ export default function BlogProfile({ profile }: profileProps) {
 
   const queryClient = useQueryClient();
   const router = useRouter();
-  const { windowSize } = useWindowSizeStore();
-  handleWindowResize();
-  const maxWidth = 1000;
 
   const { userBlogId, currentBlogId, isOwnBlog } = useBlogStore();
   const [blogToReport, setBlogToReport] = useState<number | null>(null);
@@ -40,7 +37,6 @@ export default function BlogProfile({ profile }: profileProps) {
   const [isLoginRequiredDialogOpen, setIsLoginRequiredDialogOpen] =
     useState(false);
 
-  const popUpLocation = `calc( ${Math.max((windowSize - maxWidth) / 12, 0)}px)`;
 
   // 팔로우 리스트와 팝업 상태 관리
   const [isOpen, setIsOpen] = useState(false);
@@ -91,7 +87,6 @@ export default function BlogProfile({ profile }: profileProps) {
       `/blog-service/blog/home/follow/list/${currentBlogId}`,
       { params: { page: pageParam, size: 5 } }
     );
-    console.log(response);
     return response.data.data;
   };
 

@@ -24,7 +24,6 @@ export default function EditPostContainer() {
 
   const params = useParams();
   const router = useRouter();
-  // const [post, setPost] = useState<PostForm>(); // 현재 게시글 상태
   const [isCancelDialogOpen, setIsCancelDialogOpen] = useState(false);
   const [isPostedDialogOpen, setIsPostedDialogOpen] = useState(false);
 
