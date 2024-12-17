@@ -29,6 +29,9 @@ textarea {
   .shadow-1 {
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   }
+  .shadow-2 {
+    box-shadow: 0px 4px 4px 4px rgba(0, 0, 0, 0.25);
+  }
   /* max-width 400px인 컨테이너 (로그인, 회원가입 등) */
   .max-w-400 {
     @apply w-full max-w-[400px] px-12;

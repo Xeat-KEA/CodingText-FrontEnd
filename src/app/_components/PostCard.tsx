@@ -12,14 +12,10 @@ import DOMPurify from "isomorphic-dompurify";
 import { useTokenStore } from "../stores";
 import ProfileImgContainer from "./ProfileImgContainer";
 import Image from "next/image";
-import Dialog from "./Dialog";
 import { useState } from "react";
-import api from "../_api/config";
 import { motion } from "framer-motion";
 
 export default function PostCard({ post }: { post: Post }) {
-  const { accessToken, isTokenSet } = useTokenStore();
-
   const pathname = usePathname();
   const router = useRouter();
   const isSearchPage = pathname.includes("/search");
@@ -34,52 +30,15 @@ export default function PostCard({ post }: { post: Post }) {
     ? post.content
     : useBase64("decode", post.content);
 
-  const [isSecret, setIsSecret] = useState(false);
-  const [password, setPassword] = useState<string>("");
-  const [passwordDialog, setPasswordDialog] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string>("");
-
-  const onClickPost = () => {
-    if (!post.isSecret) {
-      router.push(`/post/${post.articleId}`);
-    } else {
-      setPasswordDialog(true);
-    }
-  };
-  const checkPassword = async () => {
-    try {
-      const response = await api.get(
-        `/blog-service/blog/board/password/${post.articleId}`,
-        {
-          params: { password },
-          headers: { Authorization: accessToken },
-        }
-      );
-      if (response.data.statusCode === 200) {
-        setPassword("");
-        setErrorMessage("");
-        setPasswordDialog(false);
-        setIsSecret(false);
-        router.push(`/post/${post.articleId}`);
-      } else if (response.data.statusCode === 404) {
-        setPassword("");
-        setErrorMessage("비밀번호가 일치하지 않습니다.");
-      }
-    } catch (error) {
-      setErrorMessage("오류가 발생했습니다. 다시 시도해주세요.");
-    }
-  };
-
   const [isHovered, setIsHovered] = useState(false);
 
   return (
     <>
       <div
-        onClick={onClickPost}
+        onClick={() => router.push(`/post/${post.articleId}`)}
         className="w-full flex flex-col gap-2 py-6 cursor-pointer"
         onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-      >
+        onMouseLeave={() => setIsHovered(false)}>
         <div className="post-card-top-container">
           {post.nickName && post.profileUrl && (
             <>
@@ -90,8 +49,7 @@ export default function PostCard({ post }: { post: Post }) {
                   e.stopPropagation();
                   // 사용자 클릭 시 해당 사용자 블로그로 이동
                 }}
-                className="post-card-profile-container"
-              >
+                className="post-card-profile-container">
                 <ProfileImgContainer
                   width={24}
                   height={24}
@@ -130,8 +88,7 @@ export default function PostCard({ post }: { post: Post }) {
                       { scroll: false }
                     );
                   }}
-                  className="post-card-code-number"
-                >
+                  className="post-card-code-number">
                   #{post.codeId}&nbsp;
                 </button>
               )}
@@ -150,8 +107,7 @@ export default function PostCard({ post }: { post: Post }) {
               <motion.div
                 initial={{ scale: 1 }}
                 animate={{ scale: isHovered ? 1.1 : 1 }}
-                transition={{ type: "tween", duration: 0.2 }}
-              >
+                transition={{ type: "tween", duration: 0.2 }}>
                 <Image
                   src={post.thumbnailImageUrl}
                   width={160}
@@ -180,25 +136,6 @@ export default function PostCard({ post }: { post: Post }) {
           <span className="post-card-views">조회수 {post.viewCount}</span>
         </div>
       </div>
-      {passwordDialog && (
-        <Dialog
-          title="비밀번호를 입력해 주세요"
-          content={errorMessage}
-          isWarning={passwordDialog}
-          backBtn="취소"
-          onBackBtnClick={() => setPasswordDialog(false)}
-          redBtn="확인"
-          onBtnClick={() => checkPassword()}
-        >
-          <input
-            type="password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            placeholder={"비밀번호를 입력해주세요."}
-            className="w-full border pl-4 p-2 rounded-md text-sm font-regular"
-          />
-        </Dialog>
-      )}
     </>
   );
 }

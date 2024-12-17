@@ -43,19 +43,22 @@ export default function PostEditor({
   const [firstRendering, setFirstRendering] = useState(true);
 
   // Form 데이터 관리
-  const { register, handleSubmit, setValue, watch } = useForm<PostForm>({
-    defaultValues:
-      initialData && isEditing
-        ? {
-            title: initialData.title,
-            password: initialData.password,
-            isSecret: initialData.isSecret,
-            parentCategoryId: initialData.parentCategoryId,
-            childCategoryId: initialData.childCategoryId,
-            originalImageList: initialData.originalImageList,
-          }
-        : {},
+  const { register, handleSubmit, setValue, watch, reset } = useForm<PostForm>({
+    defaultValues: {},
   });
+
+  useEffect(() => {
+    if (initialData && isEditing) {
+      reset({
+        title: initialData.title,
+        password: initialData.password,
+        isSecret: initialData.isSecret,
+        parentCategoryId: initialData.parentCategoryId,
+        childCategoryId: initialData.childCategoryId,
+        originalImageList: initialData.originalImageList,
+      });
+    }
+  }, [initialData, isEditing, reset]);
 
   const { content, setContent } = useTiptapStore();
 
@@ -180,8 +183,7 @@ export default function PostEditor({
       {isLoaded && (
         <form
           onSubmit={handleSubmit(onValid)}
-          className="w-full h-full flex flex-col gap-4"
-        >
+          className="w-full h-full flex flex-col gap-4">
           <div className="flex gap-4">
             {/* 제목 입력 */}
             <input
@@ -194,15 +196,16 @@ export default function PostEditor({
             <div className="flex w-[256px] items-center gap-4">
               <div
                 onClick={() => setValue("isSecret", !watch("isSecret"))}
-                className="flex gap-2 items-center cursor-pointer"
-              >
+                className="flex gap-2 items-center cursor-pointer">
                 <LgCheckBoxIcon isActive={watch("isSecret")} />
                 <span className="text-sm text-black whitespace-nowrap">
                   비밀글
                 </span>
               </div>
               <input
-                {...register("password")}
+                {...register("password", {
+                  required: isSecret ? "비밀번호를 입력해주세요" : false,
+                })}
                 type="password"
                 className="grow w-full post-input"
                 placeholder="비밀번호를 입력해주세요"
@@ -218,15 +221,13 @@ export default function PostEditor({
                 <>
                   <div className="relative flex items-center w-full px-4 py-2 border border-border-2 rounded-lg bg-white">
                     <span
-                      className={`grow flex justify-center text-xs text-black whitespace-nowrap `}
-                    >
+                      className={`grow flex justify-center text-xs text-black whitespace-nowrap `}>
                       코딩 테스트 풀이
                     </span>
                   </div>
                   <div className="flex items-center w-full px-4 py-2 border border-border-2 rounded-lg bg-white">
                     <span
-                      className={`grow flex justify-center text-xs text-black whitespace-nowrap `}
-                    >
+                      className={`grow flex justify-center text-xs text-black whitespace-nowrap `}>
                       {initialData.childName}
                     </span>
                   </div>
@@ -267,8 +268,7 @@ export default function PostEditor({
               whileHover="hover"
               type="button"
               onClick={onCancelClick}
-              className="btn-default"
-            >
+              className="btn-default">
               취소
             </motion.button>
             <motion.button
@@ -276,8 +276,7 @@ export default function PostEditor({
               initial="initial"
               whileHover="hover"
               type="submit"
-              className="btn-primary"
-            >
+              className="btn-primary">
               {isEditing && initialData ? "수정" : "새 게시글 등록"}
             </motion.button>
           </div>

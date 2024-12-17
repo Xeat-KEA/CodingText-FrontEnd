@@ -22,7 +22,7 @@ export interface Report {
   title: string; // 신고된 게시글 제목
   content: string; // 신고된 댓글 내용
   replyId?: number; // 신고된 댓글
-  userId?: string; // 신고된 블로그 userId 
+  userId?: string; // 신고된 블로그 userId
 
   reportUserId: number; // 신고자 아이디
   reportedBlogId: number; // 신고된 블로그 아이디
@@ -61,6 +61,7 @@ export interface CodeDetail {
   nickName?: string;
   code: Code;
   testcases: Testcase[];
+  onDeny: () => void;
 }
 
 export interface EditCodeDetail {

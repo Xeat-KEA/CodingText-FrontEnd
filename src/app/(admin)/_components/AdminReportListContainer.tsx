@@ -40,11 +40,11 @@ export default function AdminReportListContainer() {
       const { data } = response.data;
 
       // 페이지 정보 초기화
-      const lastPage = response.data.data.pageInfo.totalPageNum - 1;
+      const lastPage = response.data.data.pageInfo.totalPageNum;
       if (page > lastPage) {
         setPage(lastPage);
       }
-      setLastPage(lastPage);
+      setLastPage(lastPage - 1);
       return data.reportList;
     } catch (error) {
       return null;
@@ -66,7 +66,7 @@ export default function AdminReportListContainer() {
       <ReportTopBar />
 
       {/* 신고 리스트 */}
-      <div className="w-full flex flex-col mb-6 divide-y divide-border-2 border-b border-border-2">
+      <div className="w-full min-h-[480px] flex flex-col mb-6 divide-y divide-border-2">
         {data &&
           data
             .filter((el) => {

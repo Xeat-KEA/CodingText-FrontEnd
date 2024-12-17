@@ -148,11 +148,11 @@ export default function AdminNoticeDetailContainer() {
             </div>
 
             {/* 구분선 */}
-            <hr className="division" />
+            <hr className="w-full border-t-1 border-border-2" />
 
             {/* 공지사항 내용 */}
             {!isEditing ? (
-              <div className="w-full text-black border border-border-2 rounded-xl p-4">
+              <div className="w-full h-80 text-black border border-border-2 rounded-xl p-4 shrink-0">
                 <div
                   className="prose"
                   dangerouslySetInnerHTML={{

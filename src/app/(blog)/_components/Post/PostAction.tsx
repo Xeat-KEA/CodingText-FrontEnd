@@ -1,6 +1,11 @@
-import { useBlogStore, useCategoryStore, usePostStore } from "@/app/stores";
+import {
+  useBlogStore,
+  useCategoryStore,
+  usePostStore,
+  useWindowSizeStore,
+} from "@/app/stores";
 import { BpFollowerIcon, ShareIcon } from "../Icons";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Dialog from "@/app/_components/Dialog";
 import { DialogCheckIcon, DialogReportIcon } from "@/app/_components/Icons";
 import { useRouter } from "next/navigation";
@@ -8,9 +13,14 @@ import DropDown from "@/app/_components/DropDown";
 import { REPORT_REASONS } from "../../_constants/constants";
 import IconBtn from "@/app/_components/IconBtn";
 import api from "@/app/_api/config";
-import { useQueryClient } from "@tanstack/react-query";
+import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { useCheckToken } from "@/app/_hooks/useCheckToken";
 import { motion } from "framer-motion";
+import { useOutsideClick } from "@/app/_hooks/useOutsideClick";
+import { useInView } from "react-intersection-observer";
+import { handleWindowResize } from "@/app/utils";
+import LikeListCard from "../LikeListCard";
+import LoadingAnimation from "@/app/_components/LoadingAnimation";
 
 export default function PostAction() {
   const { accessToken, isTokenSet } = useCheckToken();
@@ -21,7 +31,6 @@ export default function PostAction() {
   const { currentBlogId, isOwnBlog } = useBlogStore();
   const router = useRouter();
 
-  const [isLiking, setIsLiking] = useState<boolean>(false);
   const [isShareDialogOpen, setIsShareDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isReportDialogOpen, setIsReportDialogOpen] = useState(false);
@@ -34,6 +43,15 @@ export default function PostAction() {
   const [postToReport, setPostToReport] = useState<number | null>(null);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [customInput, setCustomInput] = useState("");
+
+  const [isOpen, setIsOpen] = useState(false);
+  const likerRef = useRef(null);
+
+  // 바깥 영역 클릭 감지용 hook 선언
+  const followerPopupRef = useOutsideClick(
+    () => onClickLikerList(false),
+    likerRef
+  );
 
   const buttonVariants = {
     rest: { scale: 1 },
@@ -61,18 +79,56 @@ export default function PostAction() {
     } catch (error) {}
   };
 
-  // 공유 -> URL 복사
-  // const onClickCopyLink = () => {
-  //   const currentUrl = window.location.href;
-  //   navigator.clipboard.writeText(currentUrl).then(() => {
-  //     setIsShareDialogOpen(true);
-  //   });
-  // };
+  const onClickLikerList = (state?: boolean) => {
+    setIsOpen((prev) => (state !== undefined ? state : !prev));
+  };
+
+  // 좋아요 리스트 API 호출
+  const fetchLikerList = async ({ pageParam }: { pageParam?: number }) => {
+    if (currentPost.articleId === -1) return null;
+    const response = await api.get(
+      `/blog-service/blog/board/article/like/list/${currentPost.articleId}`,
+      { params: { page: pageParam, size: 5 } }
+    );
+    return response.data.data;
+  };
+
+  const {
+    data: likers,
+    fetchNextPage,
+    hasNextPage,
+    isLoading,
+  } = useInfiniteQuery({
+    queryKey: ["likers", isOpen],
+    queryFn: fetchLikerList,
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, allPages) => {
+      if (lastPage?.pageInfo.totalPageNum === 0) {
+        return undefined;
+      }
+      if (
+        lastPage?.pageInfo.totalPageNum === lastPage?.pageInfo.currentPageNum
+      ) {
+        return undefined;
+      } else {
+        return lastPage?.pageInfo.currentPageNum;
+      }
+    },
+    // 데이터 평탄화
+    select: (data) => data.pages.flatMap((page) => page?.recommendList),
+  });
+
+  // 무한스크롤 트리거
+  const { ref, inView } = useInView();
+  useEffect(() => {
+    if (inView && !isLoading) {
+      fetchNextPage();
+    }
+  }, [inView]);
 
   // http에서는 navigator.clipboard.writeText 지원 안함 -> 추후 가능하면 수정
   const onClickCopyLink = () => {
     const currentUrl = window.location.href;
-
     const textarea = document.createElement("textarea");
     textarea.value = currentUrl;
     document.body.appendChild(textarea);
@@ -148,27 +204,68 @@ export default function PostAction() {
 
   return (
     <div className="flex w-full h-5 justify-between">
-      <motion.button
-        className="flex items-center gap-1"
-        onClick={onClickLike}
-        variants={buttonVariants}
-        initial="rest"
-        whileTap="clicked"
-      >
-        <BpFollowerIcon isFilled={currentPost.checkRecommend} />
-        <p className="text-primary-1 text-xs font-semibold">{`좋아요 ${currentPost?.likeCount}`}</p>
-      </motion.button>
+      {/* 좋아요 */}
+      <div className="flex gap-1 items-center">
+        <motion.button
+          className="flex items-center gap-1"
+          onClick={onClickLike}
+          variants={buttonVariants}
+          initial="rest"
+          whileTap="clicked">
+          <BpFollowerIcon isFilled={currentPost.checkRecommend} />
+        </motion.button>
+        <motion.button
+          ref={likerRef}
+          className="relative flex items-center gap-1 hover:underline decoration-primary-1"
+          onClick={() => onClickLikerList()}
+          variants={buttonVariants}
+          initial="rest"
+          whileTap="clicked">
+          <p className="text-primary-1 text-xs font-semibold">{`좋아요 ${currentPost?.likeCount}`}</p>
+          {/* 좋아요 리스트 팝업 */}
+          {isOpen && (
+            <div
+              ref={followerPopupRef}
+              style={{
+                left: 0,
+              }}
+              className="absolute bg-white top-[calc(100%+10px)] w-[200px] h-[200px] flex flex-col items-center rounded-lg shadow-2 divide-y divide-border-1 overflow-y-auto z-10">
+              {likers !== undefined && likers.length !== 0 ? (
+                likers?.map((el) => (
+                  <LikeListCard key={el?.blogId} liker={el!} />
+                ))
+              ) : (
+                <span className="text-sm text-body h-full flex items-center">
+                  좋아요 목록이 비어있어요!
+                </span>
+              )}
+              {!isLoading && hasNextPage && (
+                // 노출 시 다음 데이터 fetch
+                <div
+                  ref={ref}
+                  className={`w-full flex-center shrink-0 ${
+                    isLoading ? "h-full" : "h-10"
+                  }`}>
+                  <LoadingAnimation />
+                </div>
+              )}
+            </div>
+          )}
+        </motion.button>
+      </div>
+
+      {/* 공유 */}
       <div className="flex gap-4">
         <motion.button
           className="flex items-center gap-1"
           onClick={onClickCopyLink}
           variants={buttonVariants}
           initial="rest"
-          whileTap="clicked"
-        >
+          whileTap="clicked">
           <ShareIcon />
           <p className="text-black text-xs font-semibold">{`공유`}</p>
         </motion.button>
+
         {isOwnBlog ? (
           <>
             <IconBtn
@@ -246,8 +343,7 @@ export default function PostAction() {
           backBtn="취소"
           onBackBtnClick={cancelReportPost}
           redBtn="신고"
-          onBtnClick={confirmReportPost}
-        >
+          onBtnClick={confirmReportPost}>
           <DropDown
             isSmall={false}
             selection={selectedOption || ""}
@@ -275,8 +371,7 @@ export default function PostAction() {
           title="감사합니다"
           content="신고가 정상적으로 접수되었어요"
           backBtn="확인"
-          onBackBtnClick={() => setIsReportConfirmDialogOpen(false)}
-        ></Dialog>
+          onBackBtnClick={() => setIsReportConfirmDialogOpen(false)}></Dialog>
       )}
     </div>
   );

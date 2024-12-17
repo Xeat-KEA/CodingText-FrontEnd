@@ -19,6 +19,11 @@ export default function SearchBar({
   const { setPage } = usePaginationStore();
   const { register, handleSubmit, setValue } = useForm<SearchForm>();
   const onValid = (data: SearchForm) => {
+    if (!data.keyword || data.keyword.trim() === "") {
+      alert("검색어를 입력해주세요.");
+      return;
+    }
+
     const newParams = new URLSearchParams(searchParams.toString());
     newParams.set("keyword", data.keyword);
     newParams.set("filter", data.filter || "title");
@@ -67,8 +72,7 @@ export default function SearchBar({
       )}
       <form
         onSubmit={handleSubmit(onValid)}
-        className="flex gap-2 w-full border border-border-2 rounded-full px-6 py-3 overflow-hidden"
-      >
+        className="flex gap-2 w-full border border-border-2 rounded-full px-6 py-3 overflow-hidden">
         <input
           {...register("keyword", {
             required: baseURL ? false : true,
