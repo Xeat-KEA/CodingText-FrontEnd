@@ -11,9 +11,9 @@ export default function NoticeCard({ push }: { push: Push }) {
     );
 
     const reasonMessage =
-      directCategory !== null
+      directCategory !== undefined
         ? `${reasonCategory} ( ${directCategory} )`
-        : reasonCategory;
+        : `reasonCategory`;
 
     switch (noticeCategory) {
       case "댓글 알림":
@@ -30,7 +30,7 @@ export default function NoticeCard({ push }: { push: Push }) {
             {userMessage} 님이 '{reasonMessage}' 사유로 댓글을 삭제했어요.
           </>
         );
-      case "삭제 처리 알림":
+      case "게시글 삭제 처리 알림":
         return (
           <>
             {userMessage} 님이 '{reasonMessage}' 사유로 게시글을 삭제했어요.
