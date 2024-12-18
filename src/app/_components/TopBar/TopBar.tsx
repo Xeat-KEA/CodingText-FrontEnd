@@ -1,0 +1,331 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useOutsideClick } from "@/app/_hooks/useOutsideClick";
+import { HamburgerIcon, LogoIcon, NoticeIcon } from "../Icons";
+import ProfilePopup from "../ProfilePopup";
+import NoticeCard from "./NoticeCard";
+import ProfileImgContainer from "../ProfileImgContainer";
+import { motion } from "framer-motion";
+import TopBarMenu from "./TopBarMenu";
+import {
+  useCodingTestStore,
+  useTokenStore,
+  useWindowSizeStore,
+} from "@/app/stores";
+import api from "@/app/_api/config";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { PushesResponse, UserInfo } from "@/app/_interfaces/interfaces";
+import { useInView } from "react-intersection-observer";
+import LoadingAnimation from "../LoadingAnimation";
+import {
+  DEFAULT_BUTTON_VARIANTS,
+  PRIMARY_BUTTON_VARIANTS,
+  PROGRAMMING_LANGUAGES,
+} from "@/app/_constants/constants";
+import TopBarSearchBar from "../TopBarSearchBar";
+import { handleWindowResize } from "@/app/utils";
+
+export default function TopBar() {
+  const pathname = usePathname();
+
+  // 로그인 여부 확인
+  const { accessToken, isTokenSet } = useTokenStore();
+
+  // 팝업 상태 관리 state
+  const [isOpen, setIsOpen] = useState({
+    notice: false,
+    profile: false,
+    menu: false,
+  });
+
+  // 알림 읽음 여부 확인
+  const [checkedNotice, setcheckedNotice] = useState(true);
+  useEffect(() => {
+    if (accessToken) {
+      api
+        .get("/blog-service/blog/notice/check", {
+          headers: { Authorization: accessToken },
+        })
+        .then((res) => {
+          setcheckedNotice(res.data.data.noticeCheck);
+        })
+        .catch((err) => console.error(err));
+    }
+  }, [isTokenSet]);
+
+  const onIconClick = (
+    type: "notice" | "profile" | "menu",
+    state?: boolean
+  ) => {
+    // 알림 아이콘 클릭 시 알림 클릭 PUT 실행 및 state 변화
+    if (type === "notice" && !checkedNotice) {
+      api.put(
+        "/blog-service/blog/notice/submit",
+        {},
+        { headers: { Authorization: accessToken } }
+      );
+      setcheckedNotice(true);
+    }
+    setIsOpen((prev) => ({ ...prev, [type]: state || !prev[type] }));
+  };
+
+  // useOutsideClick 예외 ref
+  const noticeRef = useRef(null);
+  const profileRef = useRef(null);
+
+  // 바깥 영역 클릭 감지용 hook 선언
+  const noticePopupRef = useOutsideClick(
+    () => onIconClick("notice", false),
+    noticeRef
+  );
+  const profilePopupRef = useOutsideClick(
+    () => onIconClick("profile", false),
+    profileRef
+  );
+  const topBarRef = useOutsideClick(() => {
+    if (isOpen.menu) onIconClick("menu", false);
+  });
+
+  const { setLanguage } = useCodingTestStore();
+  // 사용자 정보 API 호출
+  const fetchUserInfo = async () => {
+    const response = await api.get("/user-service/users/userInfo", {
+      headers: { Authorization: accessToken },
+    });
+    const userLanguage = PROGRAMMING_LANGUAGES.find(
+      (el) => el.selection === response.data.codeLanguage
+    );
+    setLanguage(userLanguage || { content: "Java", selection: "java" });
+    return response.data;
+  };
+  const { data: userInfo } = useQuery<UserInfo>({
+    queryKey: ["userInfo", isTokenSet],
+    queryFn: fetchUserInfo,
+    enabled: !!accessToken,
+  });
+
+  // 알림 목록 API 호출
+  const fetchPushes = async ({
+    pageParam,
+  }: {
+    pageParam?: number;
+  }): Promise<PushesResponse | null> => {
+    if (accessToken) {
+      const response = await api.get("/blog-service/blog/notice/list", {
+        // 사용자에게 알림 더미 데이터가 없어 임시 토큰 사용 중
+        headers: { Authorization: accessToken },
+        params: { page: pageParam, size: 5 },
+      });
+      return response.data.data;
+    } else {
+      return null;
+    }
+  };
+  // 무한스크롤 데이터 가져오기
+  const {
+    data: pushes,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
+  } = useInfiniteQuery({
+    queryKey: ["pushes", isTokenSet, isOpen.notice],
+    queryFn: fetchPushes,
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, allPages) => {
+      if (lastPage?.pageInfo.totalPageNum === 0) {
+        return undefined;
+      }
+      if (
+        lastPage?.pageInfo.totalPageNum === lastPage?.pageInfo.currentPageNum
+      ) {
+        return undefined;
+      } else {
+        return lastPage?.pageInfo.currentPageNum;
+      }
+    },
+    // 데이터 평탄화
+    select: (data) => data.pages.flatMap((page) => page?.noticeList),
+  });
+
+  // 무한스크롤 트리거
+  const { ref, inView } = useInView();
+  useEffect(() => {
+    if (inView && !isLoading) {
+      fetchNextPage();
+    }
+  }, [inView]);
+
+  const { windowSize } = useWindowSizeStore();
+  handleWindowResize();
+  const maxWidth =
+    pathname.startsWith("/recent-post") || pathname.startsWith("/code-post")
+      ? 1000
+      : 1200;
+  const popUpLocation = pathname.startsWith("/coding-test")
+    ? "8px"
+    : `calc(8px + ${Math.max((windowSize - maxWidth) / 2, 0)}px)`;
+
+  return (
+    <div className="fixed w-full h-16 z-50">
+      <motion.nav
+        ref={topBarRef}
+        initial={{ height: 64 }}
+        animate={{ height: isOpen.menu ? "auto" : 64 }}
+        transition={{ duration: 0.3, type: "tween" }}
+        className="w-full h-full bg-white border-b border-border-1 flex max-lg:flex-col lg:justify-center overflow-hidden"
+      >
+        {/* 상단바 */}
+        <div
+          className={`relative w-full h-16 shrink-0 flex justify-between ${
+            pathname.startsWith("/coding-test")
+              ? "px-6"
+              : pathname.startsWith("/recent-post") ||
+                pathname.startsWith("/code-post")
+              ? "max-w-1000 max-sm:px-6"
+              : "max-w-1200"
+          }`}
+        >
+          {/* 탑바 좌측 요소 */}
+          <div className="flex items-center gap-14">
+            <Link href="/" scroll={false}>
+              <LogoIcon />
+            </Link>
+            {/* 메뉴 (화면 크기 lg 이상) */}
+            {isTokenSet && (
+              <ul className="flex h-full items-center gap-2 max-lg:hidden">
+                <TopBarMenu
+                  token={accessToken}
+                  blogId={userInfo?.blogId ?? null}
+                />
+              </ul>
+            )}
+          </div>
+
+          {/* 탑바 우측 요소 */}
+          {isTokenSet && (
+            <div className="flex items-center gap-4">
+              {/* 검색창 (화면 크기 lg 이상) */}
+              <div className="w-[240px] max-lg:hidden">
+                <TopBarSearchBar baseURL="/search" />
+              </div>
+              {/* 로그인 : 알림, 프로필 / 비로그인 : 로그인 버튼 */}
+              {accessToken ? (
+                <>
+                  <motion.button
+                    variants={DEFAULT_BUTTON_VARIANTS}
+                    initial="initial"
+                    whileHover="hover"
+                    ref={noticeRef}
+                    className="relative p-2 rounded-full"
+                    onClick={() => onIconClick("notice")}
+                  >
+                    {!checkedNotice && (
+                      <div className="absolute w-1 h-1 rounded-full bg-red right-2 top-2"></div>
+                    )}
+                    <NoticeIcon />
+                  </motion.button>
+                  <button
+                    ref={profileRef}
+                    onClick={() => onIconClick("profile")}
+                  >
+                    <ProfileImgContainer
+                      width={36}
+                      height={36}
+                      src={userInfo?.profileUrl}
+                    />
+                  </button>
+                </>
+              ) : (
+                <Link href="/sign-in" className="flex">
+                  <motion.span
+                    variants={PRIMARY_BUTTON_VARIANTS}
+                    initial="initial"
+                    whileHover="hover"
+                    className="sm-btn-primary !rounded-full"
+                  >
+                    로그인
+                  </motion.span>
+                </Link>
+              )}
+              {/* 메뉴 더보기 버튼 (화면 크기 lg 이하) */}
+              <motion.button
+                variants={DEFAULT_BUTTON_VARIANTS}
+                initial="initial"
+                whileHover="hover"
+                onClick={() => onIconClick("menu")}
+                className="lg:hidden p-2 rounded-full"
+              >
+                <HamburgerIcon />
+              </motion.button>
+            </div>
+          )}
+        </div>
+        {/* 메뉴 (화면 크기 lg 이하) */}
+        <div className="w-full flex flex-col bg-white lg:hidden">
+          <div className="px-12 pt-4 pb-6 border-b border-border-1">
+            <TopBarSearchBar
+              baseURL="/search"
+              placeholder="검색어를 입력해주세요"
+            />
+          </div>
+          <TopBarMenu token={accessToken} blogId={userInfo?.blogId ?? null} />
+        </div>
+      </motion.nav>
+      {/* 알림 팝업 */}
+      {isOpen.notice && (
+        <div
+          ref={noticePopupRef}
+          style={{
+            right: popUpLocation,
+          }}
+          className="absolute bg-white top-[calc(100%+8px)] w-[396px] h-[300px] flex flex-col items-center rounded-lg shadow-1 divide-y divide-border-1 overflow-y-auto"
+        >
+          {pushes !== undefined && pushes.length !== 0 ? (
+            pushes?.map((el) => <NoticeCard key={el?.noticeId} push={el!} />)
+          ) : (
+            <span className="text-sm text-body h-full flex items-center">
+              전달 받은 알림이 없어요!
+            </span>
+          )}
+          {!isLoading && hasNextPage && (
+            // 노출 시 다음 데이터 fetch
+            <div
+              ref={ref}
+              className={`w-full flex-center shrink-0 ${
+                isLoading ? "h-full" : "h-10"
+              }`}
+            >
+              <LoadingAnimation />
+            </div>
+          )}
+        </div>
+      )}
+      {/* 프로필 팝업 */}
+      {isOpen.profile && (
+        <div
+          ref={profilePopupRef}
+          style={{
+            right: popUpLocation,
+          }}
+          className="absolute bg-white top-[calc(100%+8px)] w-[160px] flex flex-col rounded-lg overflow-hidden shadow-1 divide-y divide-border-1"
+        >
+          {/* 사용자 정보 */}
+          <div className="flex flex-col gap-[2px] px-6 py-4">
+            <span className="text-body text-xs font-bold">
+              {userInfo?.tier}
+            </span>
+            <span className="text-base font-bold text-black">
+              {userInfo?.nickName}
+            </span>
+          </div>
+          {/* 프로필 메뉴 */}
+          <ProfilePopup />
+        </div>
+      )}
+    </div>
+  );
+}

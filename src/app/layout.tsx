@@ -5,6 +5,7 @@ import "./globals.css";
 // PrimeReact 초기 설정
 import { PrimeReactProvider } from "primereact/api";
 import "primereact/resources/themes/lara-light-cyan/theme.css";
+import TanStackProvider from "./_components/TanstackQueryProvider";
 
 const pretendard = localFont({
   src: "./fonts/PretendardVariable.woff2",
@@ -26,7 +27,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${pretendard.variable}`}>
       <body className={`${pretendard.className}`}>
-        <PrimeReactProvider>{children}</PrimeReactProvider>
+        <PrimeReactProvider>
+          <TanStackProvider>{children}</TanStackProvider>
+        </PrimeReactProvider>
       </body>
     </html>
   );

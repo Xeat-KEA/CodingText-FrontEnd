@@ -1,9 +1,15 @@
+import {
+  DEFAULT_BUTTON_VARIANTS,
+  PRIMARY_BUTTON_VARIANTS,
+} from "../_constants/constants";
 import { useOutsideClick } from "../_hooks/useOutsideClick";
-import { IDialog } from "../_interfaces/interfaces";
+import { DialogProps } from "../_interfaces/interfaces";
+import { motion } from "framer-motion";
 
 export default function Dialog({
   icon,
   title,
+  isTitleSm,
   content,
   isWarning,
   backBtn,
@@ -13,54 +19,88 @@ export default function Dialog({
   primaryBtn,
   redBtn,
   onBtnClick,
-}: IDialog) {
-  const ref = useOutsideClick(onBackBtnClick);
+  children,
+  blockOutsideClick,
+}: DialogProps) {
+  const ref = !blockOutsideClick ? useOutsideClick(onBackBtnClick) : null;
   return (
     <div className="overlay">
-      <div
-        ref={ref}
-        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] flex flex-col gap-6 bg-white p-6 rounded-2xl shadow-1"
+      <motion.div
+        initial={{ y: 100 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.2, type: "spring", damping: 15 }}
+        className="absolute w-full h-full px-12 flex-center"
       >
-        <div className="flex flex-col items-center gap-4 py-6">
-          {icon && icon}
-          <div className="flex flex-col gap-2 text-center">
-            <span className="whitespace-pre-wrap text-black text-xl font-semibold">
-              {title}
-            </span>
-            <span
-              className={`whitespace-pre-wrap ${
-                isWarning ? "font-bold text-red" : "text-body"
-              }`}
+        <div
+          ref={ref}
+          className="w-full max-w-[400px] flex flex-col gap-6 bg-white p-6 rounded-2xl shadow-1"
+        >
+          <div>
+            <div className="flex flex-col items-center gap-4 py-6">
+              {icon && icon}
+              <div className="flex flex-col gap-2 text-center">
+                <span
+                  className={`whitespace-pre-wrap text-black font-semibold ${
+                    isTitleSm ? "text-lg" : "text-xl"
+                  }`}
+                >
+                  {title}
+                </span>
+                <span
+                  className={`whitespace-pre-wrap ${
+                    isWarning ? "font-bold text-red" : "text-body"
+                  }`}
+                >
+                  {content}
+                </span>
+              </div>
+            </div>
+            {children}
+          </div>
+          <div className="flex gap-4">
+            {/* 뒤로가기 버튼 */}
+            <motion.button
+              variants={DEFAULT_BUTTON_VARIANTS}
+              initial="initial"
+              whileHover="hover"
+              onClick={onBackBtnClick}
+              className="btn-default w-full"
             >
-              {content}
-            </span>
+              {backBtn}
+            </motion.button>
+            {/* 중간 버튼 (코딩 테스트 정답) */}
+            {subBtn && (
+              <motion.button
+                variants={DEFAULT_BUTTON_VARIANTS}
+                initial="initial"
+                whileHover="hover"
+                onClick={onSubBtnClick}
+                className="btn-default w-full"
+              >
+                {subBtn}
+              </motion.button>
+            )}
+            {/* Primary 색상 버튼 */}
+            {primaryBtn && (
+              <motion.button
+                variants={PRIMARY_BUTTON_VARIANTS}
+                initial="initial"
+                whileHover="hover"
+                onClick={onBtnClick}
+                className="btn-primary w-full"
+              >
+                {primaryBtn}
+              </motion.button>
+            )}
+            {/* Red 색상 버튼 */}
+            {redBtn && (
+              <button onClick={onBtnClick} className="btn-red w-full">
+                {redBtn}
+              </button>
+            )}
           </div>
         </div>
-        <div className="flex gap-4">
-          {/* 뒤로가기 버튼 */}
-          <button onClick={onBackBtnClick} className="btn-default w-full">
-            {backBtn}
-          </button>
-          {/* 중간 버튼 (코딩 테스트 정답) */}
-          {subBtn && (
-            <button onClick={onSubBtnClick} className="btn-default w-full">
-              {subBtn}
-            </button>
-          )}
-          {/* Primary 색상 버튼 */}
-          {primaryBtn && (
-            <button onClick={onBtnClick} className="btn-primary w-full">
-              {primaryBtn}
-            </button>
-          )}
-          {/* Red 색상 버튼 */}
-          {redBtn && (
-            <button onClick={onBtnClick} className="btn-red w-full">
-              {redBtn}
-            </button>
-          )}
-        </div>
-      </div>
+      </motion.div>
     </div>
   );
 }

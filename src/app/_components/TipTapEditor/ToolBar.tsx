@@ -1,4 +1,4 @@
-import { IToolBar } from "@/app/_interfaces/interfaces";
+import { ToolBarProps } from "@/app/_interfaces/interfaces";
 import {
   BoldIcon,
   BulletListIcon,
@@ -14,8 +14,16 @@ import {
   OrderedListIcon,
   StrikeIcon,
 } from "./icons";
+import { useImageHandler } from "@/app/_hooks/useImageHandler";
+import { useTokenStore } from "@/app/stores";
+import { usePathname } from "next/navigation";
 
-export default function ToolBar({ editor }: IToolBar) {
+export default function ToolBar({ editor }: ToolBarProps) {
+  const { accessToken, isTokenSet } = useTokenStore();
+  const pathname = usePathname();
+
+  const role = pathname.startsWith("/admin") ? "ADMIN" : "";
+
   if (!editor) {
     return null;
   }
@@ -55,22 +63,17 @@ export default function ToolBar({ editor }: IToolBar) {
       return;
     }
 
-    const file = files[0];
-    const formData = new FormData();
-    formData.append("file", file);
-
-    // 백엔드에 이미지 post
-    /* const imgHash = await postManager.uploadImage(formData, accessToken); // 백엔드에게 이미지 Post요청 후 URL 받기
-    const IMG_URL = `${BASE_URL}${imgHash}`; */
+    // 이미지 업로드 및 주소 반환
+    const IMG_URL = await useImageHandler(files, accessToken, role);
 
     // 반환받은 이미지 주소를 통해 editor에 이미지 삽입
     editor.commands.setImage({
-      src: "https://picsum.photos/id/237/300/200" /* IMG_URL */,
+      src: IMG_URL,
     });
   };
 
   return (
-    <div className="border-b border-border-2 w-full h-[44px] shrink-0 overflow-x-auto relative">
+    <div className="border-b border-border-2 w-full h-[44px] shrink-0 overflow-x-auto overflow-y-hidden relative">
       <div className="absolute top-0 left-0 flex items-center gap-4 p-2">
         <div className="flex gap-2">
           <button
@@ -79,8 +82,7 @@ export default function ToolBar({ editor }: IToolBar) {
               editor.chain().focus().toggleBold().run();
             }}
             disabled={!editor.can().chain().focus().toggleBold().run()}
-            className={`toolbar-btn ${editor.isActive("bold") && "is-active"}`}
-          >
+            className={`toolbar-btn ${editor.isActive("bold") && "is-active"}`}>
             <BoldIcon />
           </button>
           <button
@@ -91,8 +93,7 @@ export default function ToolBar({ editor }: IToolBar) {
             disabled={!editor.can().chain().focus().toggleItalic().run()}
             className={`toolbar-btn ${
               editor.isActive("italic") && "is-active"
-            }`}
-          >
+            }`}>
             <ItalicIcon />
           </button>
           <button
@@ -103,8 +104,7 @@ export default function ToolBar({ editor }: IToolBar) {
             disabled={!editor.can().chain().focus().toggleStrike().run()}
             className={`toolbar-btn ${
               editor.isActive("strike") && "is-active"
-            }`}
-          >
+            }`}>
             <StrikeIcon />
           </button>
         </div>
@@ -116,8 +116,7 @@ export default function ToolBar({ editor }: IToolBar) {
               editor.chain().focus().toggleCode().run();
             }}
             disabled={!editor.can().chain().focus().toggleCode().run()}
-            className={`toolbar-btn ${editor.isActive("code") && "is-active"}`}
-          >
+            className={`toolbar-btn ${editor.isActive("code") && "is-active"}`}>
             <CodeIcon />
           </button>
           <button
@@ -127,8 +126,7 @@ export default function ToolBar({ editor }: IToolBar) {
             }}
             className={`toolbar-btn ${
               editor.isActive("codeBlock") && "is-active"
-            }`}
-          >
+            }`}>
             <CodeBlockIcon />
           </button>
         </div>
@@ -141,8 +139,7 @@ export default function ToolBar({ editor }: IToolBar) {
             }}
             className={`toolbar-btn ${
               editor.isActive("heading", { level: 1 }) && "is-active"
-            }`}
-          >
+            }`}>
             <H1Icon />
           </button>
           <button
@@ -152,8 +149,7 @@ export default function ToolBar({ editor }: IToolBar) {
             }}
             className={`toolbar-btn ${
               editor.isActive("heading", { level: 2 }) && "is-active"
-            }`}
-          >
+            }`}>
             <H2Icon />
           </button>
           <button
@@ -163,8 +159,7 @@ export default function ToolBar({ editor }: IToolBar) {
             }}
             className={`toolbar-btn ${
               editor.isActive("heading", { level: 3 }) && "is-active"
-            }`}
-          >
+            }`}>
             <H3Icon />
           </button>
         </div>
@@ -175,8 +170,7 @@ export default function ToolBar({ editor }: IToolBar) {
             onClick={(e) => {
               e.preventDefault();
               handleLink();
-            }}
-          >
+            }}>
             <LinkIcon />
           </button>
           <input
@@ -202,8 +196,7 @@ export default function ToolBar({ editor }: IToolBar) {
             }}
             className={`toolbar-btn ${
               editor.isActive("bulletList") && "is-active"
-            }`}
-          >
+            }`}>
             <BulletListIcon />
           </button>
           <button
@@ -213,8 +206,7 @@ export default function ToolBar({ editor }: IToolBar) {
             }}
             className={`toolbar-btn ${
               editor.isActive("orderedList") && "is-active"
-            }`}
-          >
+            }`}>
             <OrderedListIcon />
           </button>
           <button
@@ -222,8 +214,7 @@ export default function ToolBar({ editor }: IToolBar) {
               e.preventDefault();
               editor.chain().focus().setHorizontalRule().run();
             }}
-            className="toolbar-btn"
-          >
+            className="toolbar-btn">
             <HorizontalRuleIcon />
           </button>
         </div>

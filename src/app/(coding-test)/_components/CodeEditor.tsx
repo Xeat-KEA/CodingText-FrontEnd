@@ -1,11 +1,19 @@
-import { ICodeEditor } from "@/app/_interfaces/interfaces";
+import LoadingSpinner from "@/app/_components/LoadingSpinner";
+import { CodeEditorProps } from "@/app/_interfaces/interfaces";
 import { useCodingTestStore } from "@/app/stores";
-import { langs } from "@uiw/codemirror-extensions-langs";
-import { xcodeDark } from "@uiw/codemirror-theme-xcode";
-import ReactCodeMirror, { EditorView } from "@uiw/react-codemirror";
+import { Extension } from "@uiw/react-codemirror";
+import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 
-export default function CodeEditor({ isViewer, defaultValue }: ICodeEditor) {
+// 초기 페이지 로딩 속도 향상을 위해 CodeMirror Dynamic Import
+const ReactCodeMirror = dynamic(() => import("@uiw/react-codemirror"), {
+  ssr: false,
+});
+
+export default function CodeEditor({
+  isViewer,
+  defaultValue,
+}: CodeEditorProps) {
   const { value, setValue, language } = useCodingTestStore();
   useEffect(() => {
     if (defaultValue !== undefined) {
@@ -13,30 +21,35 @@ export default function CodeEditor({ isViewer, defaultValue }: ICodeEditor) {
     }
   }, []);
 
+  // 언어 설정 및 테마 설정을 위한 state 선언
   const [lang, setLang] = useState<any>();
-  useEffect(() => {
-    if (language === "java") {
-      setLang(langs.java());
-    } else if (language === "python") {
-      setLang(langs.python());
-    } else if (language === "javascript") {
-      setLang(langs.javascript());
-    } else if (language === "c") {
-      setLang(langs.cpp());
-    }
-  }, [language]);
+  const [theme, setTheme] = useState<Extension>();
+  const [editorExtensions, setEditorExtensions] = useState<any[]>([]);
 
-  return (
-    <ReactCodeMirror
-      className="w-full"
-      value={value}
-      onChange={(e) => {
-        setValue(e);
-      }}
-      basicSetup={{ autocompletion: false }}
-      theme={xcodeDark}
-      editable={!isViewer}
-      extensions={[
+  useEffect(() => {
+    async function loadExtensions() {
+      // 초기 페이지 로딩 속도 향상을 위해 CodeMirror 관련 extension Dynamic Import
+      const { langs } = await import("@uiw/codemirror-extensions-langs");
+      const { xcodeDark } = await import("@uiw/codemirror-theme-xcode");
+      const { EditorView } = await import("@uiw/react-codemirror");
+
+      // 언어 설정
+      if (language?.selection === "java") {
+        setLang(langs.java());
+      } else if (language?.selection === "python") {
+        setLang(langs.python());
+      } else if (language?.selection === "javascript") {
+        setLang(langs.javascript());
+      } else if (language?.selection === "c_plus_plus" || "c") {
+        setLang(langs.cpp());
+      } else if (language?.selection === "json") {
+        setLang(langs.json());
+      }
+
+      setTheme(xcodeDark);
+
+      // EditorView 확장을 배열로 설정
+      setEditorExtensions([
         EditorView.theme({
           // 코드 에디터 높이 100%
           "&": {
@@ -48,8 +61,27 @@ export default function CodeEditor({ isViewer, defaultValue }: ICodeEditor) {
           },
         }),
         EditorView.lineWrapping,
-        lang,
-      ]}
+      ]);
+    }
+
+    loadExtensions();
+  }, [language]);
+
+  if (!lang || !theme || editorExtensions.length === 0) {
+    return <LoadingSpinner textColor="white" />; // 확장이 로드될 때까지 로딩 상태를 표시
+  }
+
+  return (
+    <ReactCodeMirror
+      className="w-full"
+      value={!isViewer ? value : defaultValue}
+      onChange={(e) => {
+        setValue(e);
+      }}
+      basicSetup={{ autocompletion: false }}
+      theme={theme}
+      editable={!isViewer}
+      extensions={[...editorExtensions, lang]}
     />
   );
 }

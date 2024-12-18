@@ -1,84 +1,141 @@
-import TabBar from "@/app/_components/TabBar";
-import CodeEditor from "./CodeEditor";
-import { CODING_BUTTONS, CODING_TAB_BAR_MENU } from "../_constants/constants";
-import { PROGRAMMING_LANGUAGES } from "@/app/_constants/constants";
-import { useCodingTestStore, useTabStore } from "@/app/stores";
+import {
+  useCodingTestStore,
+  useTokenStore,
+  useWindowSizeStore,
+} from "@/app/stores";
 import { useState } from "react";
 import Dialog from "@/app/_components/Dialog";
 import { DialogCheckIcon, DialogXIcon } from "@/app/_components/Icons";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { usePageHandler } from "@/app/_hooks/usePageHandler";
+import { useBase64 } from "@/app/_hooks/useBase64";
+import api from "@/app/_api/config";
+import CodePart from "./CodePart";
+import SplittedCodePart from "./SplittedCodePart";
+import CodePartBtns from "./CodePartBtns";
+import { isAxiosError } from "axios";
+import { SubmitResult } from "../_interface/interfaces";
 
 export default function CodeEditPanel() {
   const router = useRouter();
+  const { id } = useParams();
 
-  // 현재 탭 전역 변수
-  const { tab } = useTabStore();
-  const { hasSolved, setHasSolved, setIsPosting, setMemo } =
-    useCodingTestStore();
+  const { accessToken } = useTokenStore();
 
-  const [isCorrect, setIsCorrect] = useState(true);
+  // 코딩 테스트 관련 전역 변수
+  const {
+    value,
+    setIsPosting,
+    language,
+    isRunning,
+    setIsRunning,
+    setCompiledResult,
+    setCompileError,
+    setSubmitResult,
+    setHasSolved,
+  } = useCodingTestStore();
+
+  const [isCorrect, setIsCorrect] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isPageChanging, setIsPageChanging] = useState(false);
+
+  // 코드 컴파일 시
+  const onCompile = async () => {
+    // 코드를 base64로 인코딩하여 백에 전달
+    const encodedCode = useBase64("encode", value);
+    const data = {
+      codeId: Number(id),
+      language: language.selection,
+      code: encodedCode,
+    };
+    if (!isRunning) {
+      try {
+        setIsRunning(true);
+        setSubmitResult([]);
+        setCompileError("");
+        const response = await api.post(
+          "/code-compile-service/code/compile",
+          data,
+          {
+            headers: {
+              Authorization: accessToken,
+            },
+          }
+        );
+        if (response.status === 200) {
+          const result = response.data.data.result;
+          setCompiledResult(result);
+        }
+        setIsRunning(false);
+      } catch (err: any) {
+        if (isAxiosError(err)) {
+          // 컴파일 에러 메세지 저장
+          setCompileError(err.response?.data.message);
+        }
+        setIsRunning(false);
+      }
+    }
+  };
+
+  // 코드 제출 시
+  const onSubmit = async () => {
+    // 코드를 base64로 인코딩하여 백에 전달
+    const encodedCode = useBase64("encode", value);
+    const data = {
+      codeId: Number(id),
+      language: language.selection,
+      code: encodedCode,
+    };
+    if (!isRunning) {
+      try {
+        setIsRunning(true);
+        setCompileError("");
+        const response = await api.post(
+          "/code-compile-service/code/submit",
+          data,
+          {
+            headers: {
+              Authorization: accessToken,
+            },
+          }
+        );
+        if (response.status === 200) {
+          const result: SubmitResult[] = response.data.data.result;
+          setSubmitResult(result);
+          const isAnswer =
+            result.filter((el) => el.result === false).length === 0;
+          if (isAnswer) {
+            setIsCorrect(true);
+            setIsDialogOpen((prev) => !prev);
+            setHasSolved(true);
+          } else {
+            setIsCorrect(false);
+            setIsDialogOpen((prev) => !prev);
+          }
+        }
+        setIsRunning(false);
+      } catch (err: any) {
+        if (isAxiosError(err)) {
+          setCompileError(err.response?.data.message);
+          setIsDialogOpen((prev) => !prev);
+        }
+        setIsRunning(false);
+      }
+    }
+  };
 
   // 새로고침, 페이지 닫기, 뒤로가기 방지
   usePageHandler();
 
+  const { windowSize } = useWindowSizeStore();
+
   return (
     <>
-      <div className="w-full flex flex-col px-6 py-8 gap-4">
-        {/* 코드 에디터 */}
-        <div className="flex h-full rounded-2xl overflow-hidden">
-          <CodeEditor />
-        </div>
-        {/* 탭바 */}
-        <TabBar
-          menuList={CODING_TAB_BAR_MENU}
-          dropDownList={PROGRAMMING_LANGUAGES}
-        />
-        {/* 컴파일러 / 메모장 */}
-        <div className="w-full h-[200px] flex shrink-0 border border-border-2 rounded-2xl overflow-hidden">
-          {/* 컴파일러 */}
-          <div></div>
-          {/* 메모장 */}
-          <textarea
-            onChange={(e) => setMemo(e.target.value)}
-            className={`${
-              tab === "메모장" ? "block" : "hidden"
-            } w-full h-full px-4 py-3 text-black resize-none`}
-          />
-        </div>
-        {/* 구분선 */}
-        <div className="division" />
+      <div className="w-full flex flex-col max-md:h-screen">
+        {/* 화면 크기 클 경우 Splitter 있는 코드 작성 부분 렌더링 */}
+        {windowSize > 768 ? <SplittedCodePart /> : <CodePart />}
         {/* 하단 버튼 */}
-        <div className="flex gap-4 self-end">
-          <button
-            onClick={() => setIsPosting(true)}
-            className={`${!hasSolved ? "btn-disabled" : "btn-default"}`}
-            disabled={!hasSolved}
-          >
-            {CODING_BUTTONS[0].content}
-          </button>
-          <button onClick={() => {}} className="btn-default">
-            {CODING_BUTTONS[1].content}
-          </button>
-          <button onClick={() => {}} className="btn-default">
-            {CODING_BUTTONS[2].content}
-          </button>
-          <button
-            onClick={() => {
-              if (isCorrect) {
-                setHasSolved(true);
-                setIsDialogOpen((prev) => !prev);
-              } else {
-                setIsDialogOpen((prev) => !prev);
-              }
-            }}
-            className="btn-primary"
-          >
-            {CODING_BUTTONS[3].content}
-          </button>
-        </div>
+        <CodePartBtns onCompile={onCompile} onSubmit={onSubmit} />
       </div>
       {isCorrect && isDialogOpen && (
         <Dialog
@@ -88,7 +145,7 @@ export default function CodeEditPanel() {
           backBtn="돌아가기"
           onBackBtnClick={() => setIsDialogOpen((prev) => !prev)}
           subBtn="다른 문제 풀기"
-          onSubBtnClick={() => {}}
+          onSubBtnClick={() => router.push("/code/list", { scroll: false })}
           primaryBtn="글 쓰기"
           onBtnClick={() => setIsPosting(true)}
         />
@@ -112,7 +169,7 @@ export default function CodeEditPanel() {
           backBtn="돌아가기"
           onBackBtnClick={() => setIsPageChanging((prev) => !prev)}
           redBtn="문제 풀이 그만두기"
-          onBtnClick={() => router.push("/")}
+          onBtnClick={() => router.push("/", { scroll: false })}
         />
       )}
     </>
