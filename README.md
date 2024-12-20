@@ -21,10 +21,10 @@
 ## 팀원 구성
 
 <div align="center">
+
 | **윤장호** | **김규리** | **김민서** | **박재학** | **최효성** | **이규동** | **박정재** | **이동석** |
 | :------: |  :------: | :------: | :------: | :------: |  :------: | :------: | :------: |
-| [<img width="184" src="https://github.com/user-attachments/assets/ac79c0fe-ba46-4151-9c15-ce57dd728e0e"> <br/> @seorang42](https://github.com/seorang42) | [<img width="196" alt="image" src="https://github.com/user-attachments/assets/77e141e9-0107-4832-9165-f5769eb3f929"> <br/> @lamiiiii](https://github.com/lamiiiii) | [<img width="169" alt="image" src="https://github.com/user-attachments/assets/c460e508-0d27-4363-826d-b4717e03db11" /> <br/> @hurrayPersimmon](https://github.com/hurrayPersimmon) | [<img width="146" alt="image" src="https://github.com/user-attachments/assets/f6de1872-d90b-4c26-8e5f-82a7bb2ef809" /> <br/> @parkjaehak
-](https://github.com/parkjaehak) | [<img width="178" alt="image" src="https://github.com/user-attachments/assets/aa05746b-7037-4a7b-a92c-ed6727821855" /> <br/> @hyoseong-Choi](https://github.com/hyoseong-Choi) | [<img width="165" alt="image" src="https://github.com/user-attachments/assets/ca8db8cc-ecc0-44e2-b357-064f3dca67e2" /> <br/> @starboxxxx](https://github.com/starboxxxx) | [<img width="176" alt="image" src="https://github.com/user-attachments/assets/ad3857c3-cb2c-4b66-9305-b2f981d45334" /> <br/> @j-ash0224](https://github.com/j-ash0224) | [<img width="158" alt="image" src="https://github.com/user-attachments/assets/68ab5587-8f4e-4c94-a22b-393a3a33650d" /> <br/> @DaveLee-b](https://github.com/DaveLee-b) |
+| [<img width="150" src="https://github.com/user-attachments/assets/ac79c0fe-ba46-4151-9c15-ce57dd728e0e"> <br/> @seorang42](https://github.com/seorang42) | [<img width="150" alt="image" src="https://github.com/user-attachments/assets/77e141e9-0107-4832-9165-f5769eb3f929"> <br/> @lamiiiii](https://github.com/lamiiiii) | [<img width="150" alt="image" src="https://github.com/user-attachments/assets/c460e508-0d27-4363-826d-b4717e03db11" /> <br/> @hurrayPersimmon](https://github.com/hurrayPersimmon) | [<img width="150" alt="image" src="https://github.com/user-attachments/assets/f6de1872-d90b-4c26-8e5f-82a7bb2ef809" /> <br/> @parkjaehak](https://github.com/parkjaehak) | [<img width="150" alt="image" src="https://github.com/user-attachments/assets/aa05746b-7037-4a7b-a92c-ed6727821855" /> <br/> @hyoseong-Choi](https://github.com/hyoseong-Choi) | [<img width="150" alt="image" src="https://github.com/user-attachments/assets/ca8db8cc-ecc0-44e2-b357-064f3dca67e2" /> <br/> @starboxxxx](https://github.com/starboxxxx) | [<img width="150" alt="image" src="https://github.com/user-attachments/assets/ad3857c3-cb2c-4b66-9305-b2f981d45334" /> <br/> @j-ash0224](https://github.com/j-ash0224) | [<img width="150" alt="image" src="https://github.com/user-attachments/assets/68ab5587-8f4e-4c94-a22b-393a3a33650d" /> <br/> @DaveLee-b](https://github.com/DaveLee-b) |
 
 </div>
 
@@ -68,9 +68,6 @@
 
 <br>
 
-## 3. 프로젝트 구조
-
-<br>
 
 ## 4. 역할 분담
 
@@ -104,7 +101,39 @@
 
 ## 6. 페이지별 기능
 
-### [초기화면]
+### [회원가입]
+
+| 소셜 로그인 |
+|----------|
+|<img width="258" alt="image" src="https://github.com/user-attachments/assets/48cbe1c9-f0a7-45e9-9603-99be904aebbe" />|
+
+| 회원가입 |
+|----------|
+|<img width="257" alt="image" src="https://github.com/user-attachments/assets/4111ed96-e05d-4ea5-b7b7-fed083436626" />|
+
+<br>
+
+### [메인페이지]
+| 배너/상단바 |
+|----------|
+|![image](https://github.com/user-attachments/assets/d5e99a70-c1ae-4423-b9a2-c62743ec9e55)|
+
+| 인기 게시글 |
+|----------|
+|![image](https://github.com/user-attachments/assets/561553f8-a1fa-40cf-b887-e51bbb4af104)|
+
+<br>
+
+| 초기화면 (데스크탑) |
+|----------------|
+|<img width="529" alt="image" src="https://github.com/user-attachments/assets/348974d6-a29d-4c47-b25a-e2dd4381e60a" />|
+
+| 초기화면 (모바일) |
+|---------------|
+|<img width="201" alt="image" src="https://github.com/user-attachments/assets/c94a6569-8221-4c8e-9220-ba5919aece06" />|
+
+<br>
+
 
 ## 7. 트러블 슈팅
 
