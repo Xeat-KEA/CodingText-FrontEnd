@@ -42,6 +42,36 @@
 
 <br>
 
+### 프론트엔드 기술 스택
+
+#### 기본 프레임워크 및 라이브러리  
+![Next.js](https://img.shields.io/badge/Next.js-14.2.14-black?style=flat&logo=next.js)  
+![React](https://img.shields.io/badge/React-18-blue?style=flat&logo=react)
+
+#### 상태 관리  
+![Zustand](https://img.shields.io/badge/Zustand-5.0.0-orange?style=flat)  
+![TanStack Query](https://img.shields.io/badge/TanStack%20Query-5.59.16-yellow?style=flat&logo=react-query)  
+
+#### UI 및 애니메이션  
+![Framer Motion](https://img.shields.io/badge/Framer%20Motion-11.11.11-pink?style=flat&logo=framer)  
+
+#### 에디터 및 코드 하이라이팅  
+![TipTap](https://img.shields.io/badge/TipTap-2.8.0-red?style=flat)  
+![CodeMirror](https://img.shields.io/badge/CodeMirror-4.23.3-lightgrey?style=flat)  
+
+#### HTTP 요청 및 데이터 관리  
+![Axios](https://img.shields.io/badge/Axios-1.7.7-blue?style=flat&logo=axios)  
+
+#### 날짜 및 시간 관리  
+![Day.js](https://img.shields.io/badge/Day.js-1.11.13-red?style=flat)  
+
+#### 기타 유틸리티  
+![React Hook Form](https://img.shields.io/badge/React%20Hook%20Form-7.53.0-green?style=flat)  
+![React Intersection Observer](https://img.shields.io/badge/Intersection%20Observer-9.13.1-lightgrey?style=flat)  
+![Isomorphic DOMPurify](https://img.shields.io/badge/DOMPurify-2.16.0-darkgreen?style=flat)  
+
+<br>
+
 ## 2. 채택한 개발 기술과 브랜치 전략
 
 ### Next.js
@@ -72,20 +102,10 @@
 ## 4. 역할 분담
 
 ### 윤장호
+- 코딩 테스트
 
 ### 김규리
-
-### 김민서
-
-### 박재학
-
-### 최효성
-
-### 이규동
-
-### 박정재
-
-### 이동석
+- 블로그
 
 <br>
 
