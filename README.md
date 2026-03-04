@@ -38,7 +38,7 @@
 - CI/CD : Github, Jenkins
 - 협업 툴 : Notion, Jira, Github, Slack
 - 서비스 배포 환경: On-premises, Spring Cloud
-- 디자인 : [Figma](https://www.figma.com/ko-kr/)
+- 디자인 : Figma
 
 <br>
 
