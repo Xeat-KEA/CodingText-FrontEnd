@@ -3,7 +3,7 @@
 ![image](https://github.com/user-attachments/assets/3c7b0591-87bd-476a-aac6-6c9ac1d0d059)
 ![image](https://github.com/user-attachments/assets/9e3dea35-3c08-47fe-94c1-e7f6982c6ed7)
 
-- 배포 URL :   [CodingText.com](http://172.16.211.54/)
+- 배포 URL :   ~~CodingText.com~~ (배포 중단)
 
 <br>
 
@@ -121,11 +121,23 @@
 
 ## 6. 페이지별 기능
 
+### [코딩테스트]
+![1  코딩 테스트 (2)](https://github.com/user-attachments/assets/5e790b0c-e958-492b-8ef3-998cea31fc1f)
+
+<br>
+
+### [게시글 작성]
+![2  코딩 테스트 게시글 작성](https://github.com/user-attachments/assets/e2963e53-ad16-4768-835c-d0d1451033aa)
+
+<br>
+
 ### [회원가입]
 
 | 소셜 로그인 |
 |----------|
 |<img width="258" alt="image" src="https://github.com/user-attachments/assets/48cbe1c9-f0a7-45e9-9603-99be904aebbe" />|
+
+<br>
 
 | 회원가입 |
 |----------|
